@@ -1,0 +1,8 @@
+/home/tomek/RiderProjects/GeneticAlgorithm/GeneticAlgorithm/bin/Debug/netcoreapp3.1/GeneticAlgorithm.deps.json
+/home/tomek/RiderProjects/GeneticAlgorithm/GeneticAlgorithm/bin/Debug/netcoreapp3.1/GeneticAlgorithm.dll
+/home/tomek/RiderProjects/GeneticAlgorithm/GeneticAlgorithm/bin/Debug/netcoreapp3.1/GeneticAlgorithm.pdb
+/home/tomek/RiderProjects/GeneticAlgorithm/GeneticAlgorithm/obj/Debug/netcoreapp3.1/GeneticAlgorithm.csprojAssemblyReference.cache
+/home/tomek/RiderProjects/GeneticAlgorithm/GeneticAlgorithm/obj/Debug/netcoreapp3.1/GeneticAlgorithm.AssemblyInfoInputs.cache
+/home/tomek/RiderProjects/GeneticAlgorithm/GeneticAlgorithm/obj/Debug/netcoreapp3.1/GeneticAlgorithm.AssemblyInfo.cs
+/home/tomek/RiderProjects/GeneticAlgorithm/GeneticAlgorithm/obj/Debug/netcoreapp3.1/GeneticAlgorithm.dll
+/home/tomek/RiderProjects/GeneticAlgorithm/GeneticAlgorithm/obj/Debug/netcoreapp3.1/GeneticAlgorithm.pdb
