@@ -9,8 +9,11 @@ namespace Optimization
 
         private readonly CityDistances _cityDistances;
 
-        public NearestNeighbor(CityDistances cityDistances)
+        private readonly OptimizationParameters _optimizationParameters;
+
+        public NearestNeighbor(CityDistances cityDistances, OptimizationParameters optimizationParameters)
         {
+            _optimizationParameters = optimizationParameters;
             _cityDistances = cityDistances;
             _cityOrder = new List<int>();
             AvailableCities = new List<int>();
@@ -20,52 +23,10 @@ namespace Optimization
             }
         }
         
-        public List<int> Optimize(List<int> cityOrder)
-        {
-            _cityOrder = cityOrder;
-            int improvements;
-            var iterations = 0;
-            var log = new Log("/Users/rtry/log.txt");
-            do
-            {
-                improvements = 0;
-                for (int i = 1; i < _cityOrder.Count - 1; i++)
-                {
-                    for (int j = i + 1; j < _cityOrder.Count - 2; j++)
-                    {
-                        if (TryOrderImprovement(i, j))
-                        {
-                            log.AddToLog($"Swapped {_cityOrder[i] + 1} with {_cityOrder[j] + 1}");
-                            improvements++;
-                        }
-                    }
-                }
-                log.AddToLog($"Made {improvements} improvements on iteration {++iterations}");
-            } while (improvements > 0);
+        
 
-            return _cityOrder;
-        }
-
-        private bool TryOrderImprovement(int firstId, int secondId)
-        {
-            var sumBefore = 0;
-            var sumAfter = 0;
-            
-            for (int i = 0; i < _cityOrder.Count - 1; i++)
-                sumBefore += _cityDistances.GetDistanceBetweenCities(_cityOrder[i], _cityOrder[i + 1]);
-            
-            _cityOrder.Reverse(firstId, secondId - firstId + 1);
-            
-            for (int i = 0; i < _cityOrder.Count - 1; i++)
-                sumAfter += _cityDistances.GetDistanceBetweenCities(_cityOrder[i], _cityOrder[i + 1]);
-            
-            if (sumAfter < sumBefore) 
-                return true;
-            
-            _cityOrder.Reverse(firstId, secondId - firstId + 1);
-            return false;
-        }
-        public override List<int> FindShortestPath(int startingId)
+        
+        public override int[] FindShortestPath(int startingId)
         {
             AvailableCities.RemoveAt(AvailableCities.IndexOf(startingId));
             _cityOrder.Add(startingId);
@@ -78,10 +39,11 @@ namespace Optimization
             }
             _cityOrder.Add(AvailableCities[0]);
             _cityOrder.Add(startingId);
-            return Optimize(_cityOrder);
+            Optimizer optimizer = new Optimizer(_cityDistances, _optimizationParameters);
+            return optimizer.Optimize_2opt(_cityOrder.ToArray());
         }
 
-        public int FindNearestNeighbor(int id)
+        private int FindNearestNeighbor(int id)
         {
             if (AvailableCities.Count == 1) return -1;
             int nearestCityId;

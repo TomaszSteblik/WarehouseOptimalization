@@ -4,6 +4,6 @@ namespace Optimization
 {
     public abstract class Optimization
     {
-        public abstract List<int> FindShortestPath(int startingId);
+        public abstract int[] FindShortestPath(int startingId);
     }
 }

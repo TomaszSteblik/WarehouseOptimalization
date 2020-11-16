@@ -10,6 +10,10 @@ namespace Optimization
         public OptimizationMethod OptimizationMethod { get; set; }
         public int StartingId { get; set; }
 
+        public string LogPath { get; set; }
+        public string DataPath { get; set; }
+        public string ResultPath { get; set; }
+
         public OptimizationParameters()
         {
         }
