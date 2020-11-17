@@ -1,9 +1,0 @@
-/Users/rtry/RiderProjects/Optimization/Optimization/bin/Debug/netcoreapp3.1/Optimization.deps.json
-/Users/rtry/RiderProjects/Optimization/Optimization/bin/Debug/netcoreapp3.1/Optimization.dll
-/Users/rtry/RiderProjects/Optimization/Optimization/bin/Debug/netcoreapp3.1/Optimization.pdb
-/Users/rtry/RiderProjects/Optimization/Optimization/obj/Debug/netcoreapp3.1/Optimization.csprojAssemblyReference.cache
-/Users/rtry/RiderProjects/Optimization/Optimization/obj/Debug/netcoreapp3.1/Optimization.AssemblyInfoInputs.cache
-/Users/rtry/RiderProjects/Optimization/Optimization/obj/Debug/netcoreapp3.1/Optimization.AssemblyInfo.cs
-/Users/rtry/RiderProjects/Optimization/Optimization/obj/Debug/netcoreapp3.1/Optimization.csproj.CoreCompileInputs.cache
-/Users/rtry/RiderProjects/Optimization/Optimization/obj/Debug/netcoreapp3.1/Optimization.dll
-/Users/rtry/RiderProjects/Optimization/Optimization/obj/Debug/netcoreapp3.1/Optimization.pdb
