@@ -8,6 +8,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\GeneticAlgorithm\GeneticAlgorithm.csproj" />
       <ProjectReference Include="..\..\NNOptimization\NNOptimization.csproj" />
+      <ProjectReference Include="..\..\OptimizationIO\OptimizationIO.csproj" />
     </ItemGroup>
 
 </Project>
