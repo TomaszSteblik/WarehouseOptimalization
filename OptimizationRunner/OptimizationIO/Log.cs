@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace Optimization
+namespace OptimizationIO
 {
     public class Log
     {

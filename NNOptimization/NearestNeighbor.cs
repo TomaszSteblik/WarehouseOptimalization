@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using OptimizationIO;
 
 namespace Optimization
 {
@@ -23,9 +24,6 @@ namespace Optimization
             }
         }
         
-        
-
-        
         public override int[] FindShortestPath(int startingId)
         {
             AvailableCities.RemoveAt(AvailableCities.IndexOf(startingId));
@@ -39,8 +37,13 @@ namespace Optimization
             }
             _cityOrder.Add(AvailableCities[0]);
             _cityOrder.Add(startingId);
-            Optimizer optimizer = new Optimizer(_cityDistances, _optimizationParameters);
-            return optimizer.Optimize_2opt(_cityOrder.ToArray());
+            if (_optimizationParameters.Use2opt)
+            {
+                Optimizer optimizer = new Optimizer(_cityDistances, _optimizationParameters);
+                return optimizer.Optimize_2opt(_cityOrder.ToArray());
+            }
+
+            return _cityOrder.ToArray();
         }
 
         private int FindNearestNeighbor(int id)
