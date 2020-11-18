@@ -14,7 +14,11 @@ namespace OptimizationIO
         public string LogPath { get; set; }
         public string DataPath { get; set; }
         public string ResultPath { get; set; }
-
+        //genethic algorithm parameters
+        public string SelectionMethod { get; set; }
+        public string CrossoverMethod { get; set }
+        public string EliminationMethod { get; set; }
+        
         public OptimizationParameters()
         {
         }
