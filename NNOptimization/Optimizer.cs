@@ -12,10 +12,16 @@ namespace Optimization
 
         public CityDistances _cityDistances;
 
+        private Log log;
+
+        private int improvementsSum;
+
         public Optimizer(CityDistances cityDistances,OptimizationParameters optimizationParameters)
         {
             _optimizationParameters = optimizationParameters;
             _cityDistances = cityDistances;
+            log = new Log(optimizationParameters.LogPath);
+            improvementsSum = 0;
         }
 
         public int[] Optimize_2opt(int[] cityOrder)
@@ -23,7 +29,6 @@ namespace Optimization
             _cityOrder = cityOrder.ToList();
             int improvements;
             var iterations = 0;
-            var log = new Log(_optimizationParameters.LogPath);
             do
             {
                 improvements = 0;
@@ -33,13 +38,13 @@ namespace Optimization
                     {
                         if (TryOrderImprovement(i, j))
                         {
-                            log.AddToLog($"Swapped {_cityOrder[i] + 1} with {_cityOrder[j] + 1}");
                             improvements++;
                         }
                     }
                 }
                 log.AddToLog($"Made {improvements} improvements on iteration {++iterations}");
             } while (improvements > 0);
+            log.AddToLog($"Sum of improvements: {improvementsSum}");
 
             return _cityOrder.ToArray();
         }
@@ -56,10 +61,14 @@ namespace Optimization
             
             for (int i = 0; i < _cityOrder.Count - 1; i++)
                 sumAfter += _cityDistances.GetDistanceBetweenCities(_cityOrder[i], _cityOrder[i + 1]);
-            
-            if (sumAfter < sumBefore) 
+
+            if (sumAfter < sumBefore)
+            {
+                log.AddToLog($"Swapped {_cityOrder[firstId] + 1} with {_cityOrder[secondId] + 1} - improved by {sumBefore - sumAfter}");
+                improvementsSum += sumBefore - sumAfter;
                 return true;
-            
+            }
+
             _cityOrder.Reverse(firstId, secondId - firstId + 1);
             return false;
         }

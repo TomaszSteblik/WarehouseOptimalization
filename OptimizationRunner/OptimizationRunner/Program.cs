@@ -14,9 +14,9 @@ namespace OptimizationRunner
                 {
                     OptimizationMethod = OptimizationMethod.NearestNeighbor,
                     Use2opt = true,
-                    DataPath = "/home/rtry/WarehouseOptimization/distances-usa.txt",
-                    ResultPath = "/home/rtry/WarehouseOptimization/result.txt",
-                    LogPath = "/home/rtry/WarehouseOptimization/log.txt",
+                    DataPath = "../../../../../distances-usa.txt",
+                    ResultPath = "../../../../../result.txt",
+                    LogPath = "../../../../../log.txt",
                     StartingId = 0
                 });
         }

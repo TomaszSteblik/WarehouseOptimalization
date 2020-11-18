@@ -7,7 +7,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\OptimizationIO\OptimizationIO.csproj" />
-      <ProjectReference Include="..\OptimizationRunner\OptimizationIO\OptimizationIO.csproj" />
     </ItemGroup>
 
 </Project>
