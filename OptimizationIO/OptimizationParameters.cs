@@ -18,7 +18,6 @@ namespace OptimizationIO
         public string SelectionMethod { get; set; }
         public string CrossoverMethod { get; set; }
         public string EliminationMethod { get; set; }
-        
         public OptimizationParameters()
         {
         }

@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NNOptimization", "NNOptimiz
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptimizationIO", "OptimizationIO\OptimizationIO.csproj", "{331ED15D-84BA-4107-93FD-B08AB9758311}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptimizationRunner", "OptimizationRunner\OptimizationRunner\OptimizationRunner.csproj", "{550B8C6E-941A-440B-9595-217AE2DA6444}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptimizationRunner", "OptimizationRunner\OptimizationRunner.csproj", "{550B8C6E-941A-440B-9595-217AE2DA6444}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
