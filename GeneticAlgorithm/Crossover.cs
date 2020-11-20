@@ -102,65 +102,87 @@ namespace GeneticAlgorithm
         {
             var length = parent1.Length;
             var offspring = new int[length];
-            for (int i = 0; i < length; i++)
-            {
-                offspring[i] = -1;
-            }
-            int[] currentParent;
-            int[] nextParent;
+            int[] firstParent = parent1;
+            int[] secondParent = parent2;
+
             if (Random.Next(0, 1) == 1)
             {
-                currentParent = parent1;
-                nextParent = parent2;
+                offspring[0] = firstParent[0];
+                offspring[1] = firstParent[1];
             }
             else
             {
-                currentParent = parent2;
-                nextParent = parent1;
+                offspring[0] = secondParent[0];
+                offspring[1] = secondParent[1];
             }
-            var count = -1;
-            offspring[0] = currentParent[0];
-            count++;
-            offspring[1] = currentParent[1];
-            count++;
 
-            while (count < length-1)
+            var count = 2;
+            var currentAlle = offspring[count];
+
+            while (count<length)
             {
-                int indexInCurrent;
-                int indexInNext;
-                
-                //sprawdzenie indeksow czy nie sa spoza puli oraz obliczenie odleglosci
-                int nextParentDistanceToNextAlle =3;
-                int currentParentDistanceToNextAlle = 3;
 
-                if (nextParentDistanceToNextAlle<currentParentDistanceToNextAlle)
+                int firstParentCurrentAlleIndex = Array.IndexOf(firstParent,currentAlle);
+                int secondParentCurrentAlleIndex = Array.IndexOf(secondParent, currentAlle);
+
+
+                double firstDistance;
+                double secondDistance;
+                if (firstParentCurrentAlleIndex + 1 < length)
                 {
-                    int nextAlle = 3;
-                    if (!Helper.IsThereGene(offspring,nextAlle))
-                    {
-                        //wymiana
-                    }
-                    else
-                    {
-                        //losowanko
-                    }
+                    firstDistance = Helper.GetDistance(currentAlle, firstParentCurrentAlleIndex + 1);
                 }
                 else
                 {
-                    int nextAlle = 3;
-                    if (!Helper.IsThereGene(offspring,nextAlle))
-                    {
-                        //wymiana
-                    }
-                    else
-                    {
-                        //losowanko
-                    }
+                    firstDistance = -1;
                 }
+
+                if (secondParentCurrentAlleIndex + 1 < length)
+                {
+                    secondDistance = Helper.GetDistance(currentAlle, secondParentCurrentAlleIndex + 1);
+                }
+                else
+                {
+                    secondDistance = -1;
+                }
+
+                 
+
+                int nextAlle;
+                
+                if (firstDistance > secondDistance)
+                {
+                    nextAlle = firstParent[firstParentCurrentAlleIndex + 1];
+                }
+                else if(secondDistance > firstDistance)
+                {
+                    nextAlle = secondParent[secondParentCurrentAlleIndex + 1];
+                }
+                else
+                {
+                    nextAlle = GenerateNewAlle(length, offspring);
+                }
+                
+                offspring[count] = nextAlle;
+                currentAlle = nextAlle;
                 count++;
             }
+            
 
+            
             return offspring;
+        }
+
+        private int GenerateNewAlle(int length,int[] offspring)
+        {
+            while (true)
+            {
+                int index = Random.Next(0, length);
+                if (!Helper.IsThereGene(offspring, index))
+                {
+                    return index;
+                }
+            }
         }
 
         public override int[][] GenerateOffsprings(int[][] parents)

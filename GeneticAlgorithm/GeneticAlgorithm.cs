@@ -18,7 +18,7 @@ namespace GeneticAlgorithm
         public void Go(int populationSize,int childrenPerGeneration,string path)
         {
             Source = new TxtFileSource(path);
-            _crossover = new AexCrossover();
+            _crossover = new HGreXCrossover();
             
             
             int[][] population = new int[populationSize][];

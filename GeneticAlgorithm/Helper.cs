@@ -49,6 +49,11 @@ namespace GeneticAlgorithm
             return sum/population.Length;
         }
 
+        public static double GetDistance(int pointA,int pointB)
+        {
+            return Cities[pointA][pointB];
+        }
+
         
     }
 }
