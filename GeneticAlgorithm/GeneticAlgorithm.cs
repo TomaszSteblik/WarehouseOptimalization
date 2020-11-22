@@ -18,7 +18,7 @@ namespace GeneticAlgorithm
         public void Go(int populationSize,int childrenPerGeneration,string path)
         {
             Source = new TxtFileSource(path);
-            _crossover = new HGreXCrossover();
+            _crossover = new AexCrossover();
             
             
             int[][] population = new int[populationSize][];
@@ -29,9 +29,12 @@ namespace GeneticAlgorithm
 
             bool canIncreaseStrictness = true;
             bool canMutate = true;
+            int terminateAfterCount = 10000;
             
-            Queue<double> archive = new Queue<double>(10);
-            archive.Enqueue(-5);
+            
+            int lastBestFitness = population.Min(p => Helper.Fitness(p));
+            int[] bestGene = population.First(p => Helper.Fitness(p) == lastBestFitness);
+            int countToTerminate = terminateAfterCount;
             
             do
             {
@@ -55,26 +58,24 @@ namespace GeneticAlgorithm
                         }
                     }
                 }
+
+
+                int currentBestFitness = population.Min(p => Helper.Fitness(p));
                 
-                
-                
-                //Array.Sort(population,(a,b)=>Helper.Fitness(a) - Helper.Fitness(b));
-                //Helper.PrintChromosome(population[0]);
-                Console.Write(" {0}  ",Helper.GetAverageOfPopulation(population));
-                Console.WriteLine(Helper.Fitness(population[0]));
-                
-                archive.Enqueue(Helper.GetAverageOfPopulation(population));
-                Console.WriteLine(archive.Average());
-                if (archive.Max() - archive.Average() <= 5)
+                if (lastBestFitness <= currentBestFitness)
                 {
-                    break;
+                    countToTerminate--;
+                }
+                else
+                {
+                    lastBestFitness = currentBestFitness;
+                    bestGene = population.First(p => Helper.Fitness(p) == lastBestFitness);
+                    countToTerminate = terminateAfterCount;
                 }
 
-            } while (true);
+            } while (countToTerminate >0);
 
-            Array.Sort(population,(a,b)=>Helper.Fitness(a) - Helper.Fitness(b));
-            Helper.PrintChromosome(population[0]);
-            Console.WriteLine(Helper.Fitness(population[0]));
+            Console.WriteLine(lastBestFitness);
         }
 
         private void InitializePopulation(int[][] population)

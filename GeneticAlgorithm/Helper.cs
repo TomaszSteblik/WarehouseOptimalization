@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace GeneticAlgorithm
@@ -53,7 +55,5 @@ namespace GeneticAlgorithm
         {
             return Cities[pointA][pointB];
         }
-
-        
     }
 }
