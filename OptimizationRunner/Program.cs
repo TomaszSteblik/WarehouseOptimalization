@@ -8,8 +8,7 @@ namespace OptimizationRunner
     {
         static void Main(string[] args)
         {
-            //GeneticAlgorithm.GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm.GeneticAlgorithm();
-            //geneticAlgorithm.Go(100, 20, "/home/rtry/WarehouseOptimization/distances-usa.txt");
+            /*
             FindShortestPath.Find(new OptimizationParameters()
                 {
                     OptimizationMethod = OptimizationMethod.NearestNeighbor,
@@ -19,6 +18,7 @@ namespace OptimizationRunner
                     LogPath = "/home/rtry/WarehouseOptimization/log.txt",
                     StartingId = 0
                 });
+            */
         }
     }
 }

@@ -14,7 +14,6 @@ namespace Optimization
                 case OptimizationMethod.NearestNeighbor:
                     optimization = new NearestNeighbor(cityDistances, optimizationParameters);
                     break;
-                
                 default:
                     optimization = new NearestNeighbor(cityDistances, optimizationParameters);
                     break;
