@@ -6,7 +6,7 @@ using OptimizationIO;
 
 namespace GeneticAlgorithm
 {
-    public class GeneticAlgorithm : Optimization.Optimization
+    public class GeneticAlgorithm : OptimizationIO.Optimization
     {
         public static Source Source;
         private Selection _selection;

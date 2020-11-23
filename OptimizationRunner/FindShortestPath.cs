@@ -1,5 +1,5 @@
-using System;
 using OptimizationIO;
+using GeneticAlgorithm = GeneticAlgorithm.GeneticAlgorithm;
 
 namespace Optimization
 {
@@ -8,15 +8,17 @@ namespace Optimization
         public static void Find(OptimizationParameters optimizationParameters)
         {
             var cityDistances = CityDistances.Create(optimizationParameters.DataPath);
-            Optimization optimization;
+            OptimizationIO.Optimization optimization;
             switch (optimizationParameters.OptimizationMethod)
             {
                 case OptimizationMethod.NearestNeighbor:
                     optimization = new NearestNeighbor(cityDistances, optimizationParameters);
                     break;
-                default:
-                    optimization = new NearestNeighbor(cityDistances, optimizationParameters);
+                case OptimizationMethod.GeneticAlgorithm:
+                    optimization = new GeneticAlgorithm(optimizationParameters);
                     break;
+                default:
+                    return;
             }
             
             var result = new Result(optimization.FindShortestPath(optimizationParameters.StartingId), cityDistances,

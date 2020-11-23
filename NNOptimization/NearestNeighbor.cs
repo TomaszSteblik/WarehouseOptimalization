@@ -3,7 +3,7 @@ using OptimizationIO;
 
 namespace Optimization
 {
-    public class NearestNeighbor : Optimization
+    public class NearestNeighbor : OptimizationIO.Optimization
     {
         private List<int> _cityOrder;
         private List<int> AvailableCities { get; set; }

@@ -2,11 +2,10 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
-        <RootNamespace>Optimization</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\OptimizationIO\OptimizationIO.csproj" />
+      <ProjectReference Include="../OptimizationIO/OptimizationIO.csproj" />
     </ItemGroup>
 
 </Project>

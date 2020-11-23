@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Optimization
+namespace OptimizationIO
 {
     public abstract class Optimization
     {
