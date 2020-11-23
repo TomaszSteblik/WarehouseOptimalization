@@ -1,5 +1,4 @@
 using OptimizationIO;
-using GeneticAlgorithm = GeneticAlgorithm.GeneticAlgorithm;
 
 namespace Optimization
 {
@@ -15,7 +14,7 @@ namespace Optimization
                     optimization = new NearestNeighbor(cityDistances, optimizationParameters);
                     break;
                 case OptimizationMethod.GeneticAlgorithm:
-                    optimization = new GeneticAlgorithm(optimizationParameters);
+                    optimization = new GeneticAlgorithm.GeneticAlgorithm(optimizationParameters);
                     break;
                 default:
                     return;
