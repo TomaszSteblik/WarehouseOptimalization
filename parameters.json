@@ -1,0 +1,16 @@
+{
+  "OptimizationMethod": "GeneticAlgorithm",
+  "Use2opt": true,
+  "StartingId": 0,
+  "LogPath": "/home/tomek/RiderProjects/log.txt",
+  "DataPath": "/home/tomek/RiderProjects/WarehouseOptimization/distances-usa.txt",
+  "ResultPath": "/home/tomek/RiderProjects/WarehouseOptimization/result.txt",
+  "SelectionMethod": "Tournament",
+  "CrossoverMethod": "HGreX",
+  "EliminationMethod": "Elitism",
+  "CanMutate": true,
+  "MutationProbability": 5,
+  "PopulationSize": 1000,
+  "ChildrenPerGeneration": 20,
+  "TerminationValue": 1000
+}

@@ -19,12 +19,13 @@ namespace OptimizationIO
         public string CrossoverMethod { get; set; }
         public string EliminationMethod { get; set; }
         public bool CanMutate { get; set; }
-        public double MutationProbability { get; set; }
+        public int MutationProbability { get; set; }
         public int PopulationSize { get; set; }
         public int ChildrenPerGeneration { get; set; }
         public int TerminationValue { get; set; }
         public OptimizationParameters()
         {
+            
         }
     }
 }

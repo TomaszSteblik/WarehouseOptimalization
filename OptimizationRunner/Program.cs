@@ -1,5 +1,5 @@
-﻿using System;
-using Optimization;
+﻿using System.IO;
+using Newtonsoft.Json;
 using OptimizationIO;
 
 namespace OptimizationRunner
@@ -8,17 +8,10 @@ namespace OptimizationRunner
     {
         static void Main(string[] args)
         {
-            /*
-            FindShortestPath.Find(new OptimizationParameters()
-                {
-                    OptimizationMethod = OptimizationMethod.NearestNeighbor,
-                    Use2opt = true,
-                    DataPath = "/home/rtry/WarehouseOptimization/distances-usa.txt",
-                    ResultPath = "/home/rtry/WarehouseOptimization/result.txt",
-                    LogPath = "/home/rtry/WarehouseOptimization/log.txt",
-                    StartingId = 0
-                });
-            */
+            OptimizationParameters optimizationParameters =
+                JsonConvert.DeserializeObject<OptimizationParameters>(File.ReadAllText(args[0]));
+            
+            Optimization.FindShortestPath.Find(optimizationParameters);
         }
     }
 }
