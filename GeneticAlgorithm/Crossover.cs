@@ -100,91 +100,123 @@ namespace GeneticAlgorithm
     {
         protected override int[] GenerateOffspring(int[] parent1, int[] parent2)
         {
-            var length = parent1.Length;
-            var offspring = new int[length];
-            int[] firstParent = parent1;
-            int[] secondParent = parent2;
+            int length = parent1.Length;
+            int[] offspring = new int[length];
 
-            if (Random.Next(0, 1) == 1)
+
+            offspring[0] = parent1[0];
+            int currentAlle = offspring[0];
+            
+            for (int i = 1; i < length; i++)
             {
-                offspring[0] = firstParent[0];
-                offspring[1] = firstParent[1];
-            }
-            else
-            {
-                offspring[0] = secondParent[0];
-                offspring[1] = secondParent[1];
+                offspring[i] = -1;
             }
 
-            var count = 2;
-            var currentAlle = offspring[count];
+            for (int i = 1; i < length; i++)
+            { 
+                int indexOfCurrentAlleParent1 = Array.IndexOf(parent1, currentAlle);
+                int indexOfCurrentAlleParent2 = Array.IndexOf(parent2, currentAlle);
 
-            while (count<length)
-            {
-
-                int firstParentCurrentAlleIndex = Array.IndexOf(firstParent,currentAlle);
-                int secondParentCurrentAlleIndex = Array.IndexOf(secondParent, currentAlle);
-
-
-                double firstDistance;
-                double secondDistance;
-                if (firstParentCurrentAlleIndex + 1 < length)
+                int nextAlleParent1, nextAlleParent2;
+                double distancePanent1=0, distanceParent2=0;
+                bool isParent1Feasible, isParent2Feasible;
+                
+                
+                if (indexOfCurrentAlleParent1+1 < length)
                 {
-                    firstDistance = Helper.GetDistance(currentAlle, firstParentCurrentAlleIndex + 1);
+                    nextAlleParent1 = parent1[indexOfCurrentAlleParent1 + 1];
+                    distancePanent1 = Helper.GetDistance(currentAlle, nextAlleParent1);
+                    if (Helper.IsThereGene(offspring, nextAlleParent1))
+                    {
+                        isParent1Feasible = false;
+                    }
+                    else
+                    {
+                        isParent1Feasible = true;
+                    }
                 }
                 else
                 {
-                    firstDistance = -1;
+                    nextAlleParent1 = 0;
+                    isParent1Feasible = false;
                 }
 
-                if (secondParentCurrentAlleIndex + 1 < length)
+                if (indexOfCurrentAlleParent2 + 1 < length)
                 {
-                    secondDistance = Helper.GetDistance(currentAlle, secondParentCurrentAlleIndex + 1);
+                    nextAlleParent2 = parent2[indexOfCurrentAlleParent2 + 1];
+                    distanceParent2 = Helper.GetDistance(currentAlle, nextAlleParent2);
+                    if (Helper.IsThereGene(offspring, nextAlleParent2))
+                    {
+                        isParent2Feasible = false;
+                    }
+                    else
+                    {
+                        isParent2Feasible = true;
+                    }
                 }
                 else
                 {
-                    secondDistance = -1;
+                    nextAlleParent2 = 0;
+                    isParent2Feasible = false;
                 }
 
-                 
-
+                
                 int nextAlle;
                 
-                if (firstDistance > secondDistance)
+                switch (isParent1Feasible,isParent2Feasible)
                 {
-                    nextAlle = firstParent[firstParentCurrentAlleIndex + 1];
-                }
-                else if(secondDistance > firstDistance)
-                {
-                    nextAlle = secondParent[secondParentCurrentAlleIndex + 1];
-                }
-                else
-                {
-                    nextAlle = GenerateNewAlle(length, offspring);
-                }
-                
-                offspring[count] = nextAlle;
-                currentAlle = nextAlle;
-                count++;
-            }
-            
+                    case (isParent1Feasible:true,isParent2Feasible:true):
 
+                        if (distancePanent1 < distanceParent2)
+                        {
+                            nextAlle = nextAlleParent1;
+                        }
+                        else
+                        {
+                            nextAlle = nextAlleParent2;
+                        }
+                        
+                        break;
+                    case (isParent1Feasible:true,isParent2Feasible:false):
+                        
+                        nextAlle = nextAlleParent1;
+                        
+                        break;
+                    case(isParent1Feasible:false,isParent2Feasible:true):
+                        
+                        nextAlle = nextAlleParent2;
+                        
+                        break;
+                    case(isParent1Feasible:false,isParent2Feasible:false):
+
+                        //generuj losowe i wez najlepszy
+
+                        //int alle1, alle2;
+                        //double distanceAlle1, distanceAlle2;
+
+                        int lght = length - i;
+                        int[] avaibleAlles = new int[lght];
+                        int count = 0;
+                        for (int j = 0; j < length; j++)
+                        {
+                            if (!Helper.IsThereGene(offspring, j))
+                            {
+                                avaibleAlles[count] = j;
+                                count++;
+                            }
+                        }
+
+                        nextAlle = avaibleAlles[Random.Next(0,lght)];
+                        
+                        break;
+                }
+
+                offspring[i] = nextAlle;
+                currentAlle = nextAlle;
+            }
             
             return offspring;
         }
-
-        private int GenerateNewAlle(int length,int[] offspring)
-        {
-            while (true)
-            {
-                int index = Random.Next(0, length);
-                if (!Helper.IsThereGene(offspring, index))
-                {
-                    return index;
-                }
-            }
-        }
-
         public override int[][] GenerateOffsprings(int[][] parents)
         {
             var parentsLength = parents.Length;
