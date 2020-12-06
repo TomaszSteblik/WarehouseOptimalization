@@ -1,21 +1,19 @@
 using System;
 
-namespace GeneticAlgorithm {
+namespace Optimization {
     public abstract class Selection
     {
         public abstract int[][] GenerateParents(int numberOfParents);
-        protected int[][] Population;
-        protected int[][] Cities;
-        protected int NumberOfCities;
-        protected int PopulationSize;
-        protected Random Random;
-        public int Strictness = 1;
+        protected readonly int[][] Population;
+        protected readonly CityDistances CityDistances;
+        protected readonly int PopulationSize;
+        protected readonly Random Random;
+        protected int Strictness = 1;
 
-        public Selection(int[][] population)
+        public Selection(int[][] population, CityDistances cityDistances)
         {
             Population = population;
-            Cities = GeneticAlgorithm.Source.Data;
-            NumberOfCities = Cities.Length;
+            CityDistances = cityDistances;
             PopulationSize = population.Length;
             Random = new Random();
         }
@@ -57,10 +55,9 @@ namespace GeneticAlgorithm {
             int lenght = contenders.Length * (int) Math.Pow(2,Strictness);
             int halfLenght = contenders.Length / 2;
             int[][] winners = new int[halfLenght][];
-            //Array.Sort(contenders,(x,y)=>Helper.Fitness(x)-Helper.Fitness(y));
             for (int i = 0,c=0; i < halfLenght; i++,c+=2) 
             {
-                if (Helper.Fitness(contenders[c])<Helper.Fitness(contenders[c+1]))
+                if (CityDistances.CalculatePathLength(contenders[c])<CityDistances.CalculatePathLength(contenders[c+1]))
                 {
                     winners[i] = contenders[c];
                 }
@@ -73,20 +70,20 @@ namespace GeneticAlgorithm {
         }
 
 
-        public TournamentSelection(int[][] population) : base(population)
+        public TournamentSelection(int[][] population, CityDistances cityDistances) : base(population, cityDistances)
         {
         }
     }
 
     public class ElitismSelection : Selection
     {
-        public ElitismSelection(int[][] population) : base(population)
+        public ElitismSelection(int[][] population, CityDistances cityDistances) : base(population, cityDistances)
         {
             
         }
         public override int[][] GenerateParents(int numberOfParents)
         {
-            Array.Sort(Population,(x,y)=>Helper.Fitness(x)-Helper.Fitness(y));
+            Array.Sort(Population,(x,y)=>CityDistances.CalculatePathLength(x)-CityDistances.CalculatePathLength(y));
             int[][] parents = new int[numberOfParents][];
 
             for (int i = 0; i < numberOfParents; i++)
@@ -103,7 +100,7 @@ namespace GeneticAlgorithm {
 
     public class RouletteWheelSelection : Selection
     {
-        public RouletteWheelSelection(int[][] population) : base(population)
+        public RouletteWheelSelection(int[][] population, CityDistances cityDistances) : base(population, cityDistances)
         {
             
         }
@@ -124,12 +121,12 @@ namespace GeneticAlgorithm {
             double fitnessSum = 0;
             foreach (var gene in Population)
             {
-                fitnessSum += Helper.Fitness(gene);
+                fitnessSum += CityDistances.CalculatePathLength(gene);
             }
 
             for (int i = 0; i < PopulationSize; i++)
             {
-                fitnessSum += (1.0 / Helper.Fitness(Population[i]));
+                fitnessSum += (1.0 / CityDistances.CalculatePathLength(Population[i]));
                 if (fitnessSum >= 1)
                 {
                     return Population[i];

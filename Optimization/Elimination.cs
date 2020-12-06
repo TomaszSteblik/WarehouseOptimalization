@@ -1,15 +1,17 @@
 using System;
 
-namespace GeneticAlgorithm
+namespace Optimization
 {
     public abstract class Elimination
     {
         public abstract void EliminateAndReplace(int[][] offsprings);
-        protected int[][] Population;
-        protected int PopulationSize;
+        protected readonly int[][] Population;
+        protected readonly int PopulationSize;
         protected readonly Random Random= new Random();
-        public Elimination(ref int[][] population)
+        protected readonly CityDistances CityDistances;
+        protected Elimination(ref int[][] population, CityDistances cityDistances)
         {
+            CityDistances = cityDistances;
             Population = population;
             PopulationSize = population.Length;
         }
@@ -17,7 +19,7 @@ namespace GeneticAlgorithm
 
     public class RouletteWheelElimination : Elimination
     {
-        public RouletteWheelElimination(ref int[][] population) : base(ref population)
+        public RouletteWheelElimination(ref int[][] population, CityDistances cityDistances) : base(ref population, cityDistances)
         {
             
         }
@@ -26,7 +28,7 @@ namespace GeneticAlgorithm
             int fitnessTotal =0;
             foreach (var chromosome in Population)
             {
-                fitnessTotal += Helper.Fitness(chromosome);
+                fitnessTotal += CityDistances.CalculatePathLength(chromosome);
             }
             int[] toDie = new int[offsprings.Length];
             for (int j = 0; j < offsprings.Length; j++)
@@ -34,7 +36,7 @@ namespace GeneticAlgorithm
                 int approx = Random.Next(0, fitnessTotal);
                 for (int k = 0; k < PopulationSize; k++)
                 {
-                    approx += Helper.Fitness(Population[k]);
+                    approx += CityDistances.CalculatePathLength(Population[k]);
                     if (approx >= fitnessTotal)
                     {
                         toDie[j] = k;
@@ -51,14 +53,14 @@ namespace GeneticAlgorithm
 
     public class ElitismElimination : Elimination
     {
-        public ElitismElimination(ref int[][] pop) : base(ref pop)
+        public ElitismElimination(ref int[][] pop, CityDistances cityDistances) : base(ref pop, cityDistances)
         {
             
         }
         public override void EliminateAndReplace(int[][] offsprings)
         {
             int numberToEliminate = offsprings.Length;
-            Array.Sort(Population,(x,y)=>Helper.Fitness(x)-Helper.Fitness(y));
+            Array.Sort(Population,(x,y)=>CityDistances.CalculatePathLength(x)-CityDistances.CalculatePathLength(y));
             for (int i = 0; i < numberToEliminate; i++)
             {
                 Population[PopulationSize - 1 - i] = offsprings[i];

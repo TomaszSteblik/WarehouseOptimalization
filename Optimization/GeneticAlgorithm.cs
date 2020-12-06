@@ -1,90 +1,88 @@
 ﻿using System;
 using System.Linq;
-using OptimizationIO;
 
-namespace GeneticAlgorithm
+
+namespace Optimization
 {
-    public class GeneticAlgorithm : OptimizationIO.Optimization
+    public class GeneticAlgorithm : Optimization
     {
-        public static Source Source;
         private Selection _selection;
         private Crossover _crossover;
         private Elimination _elimination;
         private readonly Random _random = new Random();
-        private readonly OptimizationParameters _parameters;
 
-        public GeneticAlgorithm(OptimizationParameters parameters)
+        public GeneticAlgorithm(CityDistances cityDistances, OptimizationParameters optimizationParameters)
         {
-            _parameters = parameters;
+            CityDistances = cityDistances;
+            OptimizationParameters = optimizationParameters;
         }
 
 
         public override int[] FindShortestPath(int start)
         {
-            Source = new TxtFileSource(_parameters.DataPath);
 
-            _crossover = _parameters.CrossoverMethod switch
+            _crossover = OptimizationParameters.CrossoverMethod switch
             {
-                "Aex" => new AexCrossover(),
-                "HGreX" => new HGreXCrossover(),
+                "Aex" => new AexCrossover(CityDistances),
+                "HGreX" => new HGreXCrossover(CityDistances),
                 _ => throw new ArgumentException("Wrong crossover name in parameters json file")
             };
 
-            int[][] population = new int[_parameters.PopulationSize][];
+            int[][] population = new int[OptimizationParameters.PopulationSize][];
             InitializePopulation(population,start);
             
-            switch (_parameters.SelectionMethod)
+            switch (OptimizationParameters.SelectionMethod)
             {
                 case "Tournament":
-                    _selection = new TournamentSelection(population);
+                    _selection = new TournamentSelection(population, CityDistances);
                     break;
                 case "Elitism":
-                    _selection = new ElitismSelection(population);
+                    _selection = new ElitismSelection(population, CityDistances);
                     break;
                 case "RouletteWheel":
-                    _selection = new RouletteWheelSelection(population);
+                    _selection = new RouletteWheelSelection(population, CityDistances);
                     break;
                 default:
                     throw new ArgumentException("Wrong selection name in parameters json file");
             }
             
-            switch (_parameters.EliminationMethod)
+            switch (OptimizationParameters.EliminationMethod)
             {
                 case "Elitism":
-                    _elimination = new ElitismElimination(ref population);
+                    _elimination = new ElitismElimination(ref population, CityDistances);
                     break;
                 case "RouletteWheel":
-                    _elimination = new RouletteWheelElimination(ref population);
+                    _elimination = new RouletteWheelElimination(ref population, CityDistances);
                     break;
                 default:
                     throw new ArgumentException("Wrong elimination name in parameters json file");
             }
             
             bool canIncreaseStrictness = true;
-            bool canMutate = _parameters.CanMutate; //true
-            int terminateAfterCount = _parameters.TerminationValue; //10000
+            bool canMutate = OptimizationParameters.CanMutate; //true
+            int terminateAfterCount = OptimizationParameters.TerminationValue; //10000
             
             
-            int lastBestFitness = population.Min(p => Helper.Fitness(p));
-            int[] bestGene = population.First(p => Helper.Fitness(p) == lastBestFitness);
+            int lastBestFitness = population.Min(p => CityDistances.CalculatePathLength(p));
+            int[] bestGene = population.First(p => CityDistances.CalculatePathLength(p) == lastBestFitness);
             int countToTerminate = terminateAfterCount;
             
             do
             {
-                int[][] parents = _selection.GenerateParents(_parameters.ChildrenPerGeneration*2);
+                int[][] parents = _selection.GenerateParents(OptimizationParameters.ChildrenPerGeneration*2);
                 int[][] offsprings = _crossover.GenerateOffsprings(parents);
                 _elimination.EliminateAndReplace(offsprings);
 
-                if (canIncreaseStrictness) canIncreaseStrictness = _selection.IncreaseStrictness(_parameters.ChildrenPerGeneration);
+                if (canIncreaseStrictness) canIncreaseStrictness = _selection.IncreaseStrictness(OptimizationParameters.ChildrenPerGeneration);
 
                 if (canMutate)
                 {
                     foreach (var chromosome in population)
                     {
-                        if (_random.Next(0, 1000) <= _parameters.MutationProbability)
+                        if (_random.Next(0, 1000) <= OptimizationParameters.MutationProbability)
                         {
-                            var a = _random.Next(1, Source.Size);
-                            var b = _random.Next(1, Source.Size);
+                            var a = _random.Next(1, CityDistances.CityCount);
+                            var b = _random.Next(1, CityDistances.CityCount);
                             var temp = chromosome[a];
                             chromosome[a] = chromosome[b];
                             chromosome[b] = temp;
@@ -93,7 +91,7 @@ namespace GeneticAlgorithm
                 }
 
 
-                int currentBestFitness = population.Min(p => Helper.Fitness(p));
+                int currentBestFitness = population.Min(p => CityDistances.CalculatePathLength(p));
                 
                 if (lastBestFitness <= currentBestFitness)
                 {
@@ -102,7 +100,7 @@ namespace GeneticAlgorithm
                 else
                 {
                     lastBestFitness = currentBestFitness;
-                    bestGene = population.First(p => Helper.Fitness(p) == lastBestFitness);
+                    bestGene = population.First(p => CityDistances.CalculatePathLength(p) == lastBestFitness);
                     countToTerminate = terminateAfterCount;
                 }
                 
@@ -114,8 +112,17 @@ namespace GeneticAlgorithm
                 result[i] = bestGene[i];
             }
             result[result.Length - 1] = bestGene[0];
-            
+            if (OptimizationParameters.Use2opt)
+            {
+                Optimizer optimizer = new Optimizer(CityDistances.Create(OptimizationParameters.DataPath), OptimizationParameters);
+                return optimizer.Optimize_2opt(result);
+            }
             return result;
+        }
+        
+        private bool IsThereGene(int[] chromosome, int a)
+        {
+            return chromosome.Any(t => t == a);
         }
 
         private void InitializePopulation(int[][] population,int start)
@@ -123,8 +130,8 @@ namespace GeneticAlgorithm
             int populationSize = population.Length;
             for (int i = 0; i < populationSize; i++)
             {
-                int[] temp = new int[Source.Size];
-                for (int z = 0; z < Source.Size; z++)
+                int[] temp = new int[CityDistances.CityCount];
+                for (int z = 0; z < CityDistances.CityCount; z++)
                 {
                     temp[z] = -1;
                 }
@@ -133,19 +140,16 @@ namespace GeneticAlgorithm
                 count++;
                 do
                 {
-                    int a = _random.Next(0,Source.Size);
-                    if (!Helper.IsThereGene(temp,a))
+                    int a = _random.Next(0,CityDistances.CityCount);
+                    if (!IsThereGene(temp,a))
                     {
                         temp[count] = a;
                         count++;
                     }
-                } while (count<Source.Size);
+                } while (count<CityDistances.CityCount);
                 population[i] = temp;
             }
         }
         
     }
 }
-
-
-//

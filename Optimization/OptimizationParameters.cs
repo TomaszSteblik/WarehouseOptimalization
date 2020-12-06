@@ -1,4 +1,4 @@
-namespace OptimizationIO
+namespace Optimization
 {
     public enum OptimizationMethod
     {

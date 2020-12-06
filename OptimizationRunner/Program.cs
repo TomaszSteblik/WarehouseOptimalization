@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
-using OptimizationIO;
+using Optimization;
 
 namespace OptimizationRunner
 {
@@ -8,10 +8,7 @@ namespace OptimizationRunner
     {
         static void Main(string[] args)
         {
-            OptimizationParameters optimizationParameters =
-                JsonConvert.DeserializeObject<OptimizationParameters>(File.ReadAllText(args[0]));
-            
-            Optimization.FindShortestPath.Find(optimizationParameters);
+            FindShortestPath.Find(JsonConvert.DeserializeObject<OptimizationParameters>(File.ReadAllText(args[0])));
         }
     }
 }

@@ -1,12 +1,12 @@
 using System;
 using System.IO;
 
-namespace OptimizationIO
+namespace Optimization
 {
     public class CityDistances
     {
-        public int CityCount { get; set; }
-        public int[][] Distances { get; set; }
+        public int CityCount { get; private set; }
+        private int[][] Distances { get; set; }
 
         private CityDistances()
         {
@@ -31,6 +31,14 @@ namespace OptimizationIO
         {
             if (firstId > secondId) return Distances[firstId][secondId];
             return Distances[secondId][firstId];
+        }
+
+        public int CalculatePathLength(int[] path)
+        {
+            var sum = 0;
+            for (int i = 0; i < path.Length - 1; i++)
+                sum += GetDistanceBetweenCities(path[i], path[i + 1]);
+            return sum;
         }
     }
 }

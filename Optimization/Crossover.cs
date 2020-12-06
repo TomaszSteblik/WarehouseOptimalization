@@ -1,17 +1,28 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace GeneticAlgorithm
+namespace Optimization
 {
     public abstract class Crossover
     {
         protected abstract int[] GenerateOffspring(int[] parent1, int[] parent2);
         public abstract int[][] GenerateOffsprings(int[][] parents);
         protected readonly Random Random = new Random();
+        protected CityDistances CityDistances;
+        
+        protected bool IsThereGene(int[] chromosome, int a)
+        {
+            return chromosome.Any(t => t == a);
+        }
     }
 
     public class AexCrossover : Crossover
     {
+        public AexCrossover(CityDistances cityDistances)
+        {
+            CityDistances = cityDistances;
+        }
         protected override int[] GenerateOffspring(int[] parent1, int[] parent2)
         {
             var length = parent1.Length;
@@ -55,13 +66,13 @@ namespace GeneticAlgorithm
                 int alle = -1;
                 if (index < length)
                 {
-                    if (!Helper.IsThereGene(offspring,currentParent[index]))
+                    if (!IsThereGene(offspring,currentParent[index]))
                     {
                         alle = currentParent[index];
                     }
                     else
                     {
-                        while (Helper.IsThereGene(offspring,alle)) //losowac z niewykorzystanych
+                        while (IsThereGene(offspring,alle)) //losowac z niewykorzystanych
                         {
                             alle = Random.Next(0, length);
                         }
@@ -69,7 +80,7 @@ namespace GeneticAlgorithm
                 }
                 else
                 {
-                    while (Helper.IsThereGene(offspring,alle))
+                    while (IsThereGene(offspring,alle))
                     {
                         alle = Random.Next(0, length);
                     }
@@ -98,6 +109,10 @@ namespace GeneticAlgorithm
 
     public class HGreXCrossover : Crossover
     {
+        public HGreXCrossover(CityDistances cityDistances)
+        {
+            CityDistances = cityDistances;
+        }
         protected override int[] GenerateOffspring(int[] parent1, int[] parent2)
         {
             int length = parent1.Length;
@@ -125,8 +140,8 @@ namespace GeneticAlgorithm
                 if (indexOfCurrentAlleParent1+1 < length)
                 {
                     nextAlleParent1 = parent1[indexOfCurrentAlleParent1 + 1];
-                    distancePanent1 = Helper.GetDistance(currentAlle, nextAlleParent1);
-                    if (Helper.IsThereGene(offspring, nextAlleParent1))
+                    distancePanent1 = CityDistances.GetDistanceBetweenCities(currentAlle, nextAlleParent1);
+                    if (IsThereGene(offspring, nextAlleParent1))
                     {
                         isParent1Feasible = false;
                     }
@@ -144,8 +159,8 @@ namespace GeneticAlgorithm
                 if (indexOfCurrentAlleParent2 + 1 < length)
                 {
                     nextAlleParent2 = parent2[indexOfCurrentAlleParent2 + 1];
-                    distanceParent2 = Helper.GetDistance(currentAlle, nextAlleParent2);
-                    if (Helper.IsThereGene(offspring, nextAlleParent2))
+                    distanceParent2 = CityDistances.GetDistanceBetweenCities(currentAlle, nextAlleParent2);
+                    if (IsThereGene(offspring, nextAlleParent2))
                     {
                         isParent2Feasible = false;
                     }
@@ -199,7 +214,7 @@ namespace GeneticAlgorithm
                         int count = 0;
                         for (int j = 0; j < length; j++)
                         {
-                            if (!Helper.IsThereGene(offspring, j))
+                            if (!IsThereGene(offspring, j))
                             {
                                 avaibleAlles[count] = j;
                                 count++;
