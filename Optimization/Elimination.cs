@@ -8,10 +8,8 @@ namespace Optimization
         protected readonly int[][] Population;
         protected readonly int PopulationSize;
         protected readonly Random Random= new Random();
-        protected readonly CityDistances CityDistances;
-        protected Elimination(ref int[][] population, CityDistances cityDistances)
+        protected Elimination(ref int[][] population)
         {
-            CityDistances = cityDistances;
             Population = population;
             PopulationSize = population.Length;
         }
@@ -19,7 +17,7 @@ namespace Optimization
 
     public class RouletteWheelElimination : Elimination
     {
-        public RouletteWheelElimination(ref int[][] population, CityDistances cityDistances) : base(ref population, cityDistances)
+        public RouletteWheelElimination(ref int[][] population) : base(ref population)
         {
             
         }
@@ -53,7 +51,7 @@ namespace Optimization
 
     public class ElitismElimination : Elimination
     {
-        public ElitismElimination(ref int[][] pop, CityDistances cityDistances) : base(ref pop, cityDistances)
+        public ElitismElimination(ref int[][] pop) : base(ref pop)
         {
             
         }

@@ -11,9 +11,8 @@ namespace Optimization
         private Elimination _elimination;
         private readonly Random _random = new Random();
 
-        public GeneticAlgorithm(CityDistances cityDistances, OptimizationParameters optimizationParameters)
+        public GeneticAlgorithm(OptimizationParameters optimizationParameters)
         {
-            CityDistances = cityDistances;
             OptimizationParameters = optimizationParameters;
         }
 
@@ -23,8 +22,8 @@ namespace Optimization
 
             _crossover = OptimizationParameters.CrossoverMethod switch
             {
-                "Aex" => new AexCrossover(CityDistances),
-                "HGreX" => new HGreXCrossover(CityDistances),
+                "Aex" => new AexCrossover(),
+                "HGreX" => new HGreXCrossover(),
                 _ => throw new ArgumentException("Wrong crossover name in parameters json file")
             };
 
@@ -34,13 +33,13 @@ namespace Optimization
             switch (OptimizationParameters.SelectionMethod)
             {
                 case "Tournament":
-                    _selection = new TournamentSelection(population, CityDistances);
+                    _selection = new TournamentSelection(population);
                     break;
                 case "Elitism":
-                    _selection = new ElitismSelection(population, CityDistances);
+                    _selection = new ElitismSelection(population);
                     break;
                 case "RouletteWheel":
-                    _selection = new RouletteWheelSelection(population, CityDistances);
+                    _selection = new RouletteWheelSelection(population);
                     break;
                 default:
                     throw new ArgumentException("Wrong selection name in parameters json file");
@@ -49,10 +48,10 @@ namespace Optimization
             switch (OptimizationParameters.EliminationMethod)
             {
                 case "Elitism":
-                    _elimination = new ElitismElimination(ref population, CityDistances);
+                    _elimination = new ElitismElimination(ref population);
                     break;
                 case "RouletteWheel":
-                    _elimination = new RouletteWheelElimination(ref population, CityDistances);
+                    _elimination = new RouletteWheelElimination(ref population);
                     break;
                 default:
                     throw new ArgumentException("Wrong elimination name in parameters json file");
@@ -114,7 +113,7 @@ namespace Optimization
             result[result.Length - 1] = bestGene[0];
             if (OptimizationParameters.Use2opt)
             {
-                Optimizer optimizer = new Optimizer(CityDistances.Create(OptimizationParameters.DataPath), OptimizationParameters);
+                Optimizer optimizer = new Optimizer(OptimizationParameters);
                 return optimizer.Optimize_2opt(result);
             }
             return result;

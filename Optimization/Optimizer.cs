@@ -6,13 +6,11 @@ namespace Optimization
     public class Optimizer
     {
         private List<int> _cityOrder;
-        private readonly CityDistances _cityDistances;
         private readonly Log _log;
         private int _improvementsSum;
 
-        public Optimizer(CityDistances cityDistances, OptimizationParameters optimizationParameters)
+        public Optimizer(OptimizationParameters optimizationParameters)
         {
-            _cityDistances = cityDistances;
             _log = new Log(optimizationParameters.LogPath);
             _improvementsSum = 0;
         }
@@ -44,11 +42,11 @@ namespace Optimization
         
         private bool TryOrderImprovement(int firstId, int secondId)
         {
-            var sumBefore = _cityDistances.CalculatePathLength(_cityOrder.ToArray());
+            var sumBefore = CityDistances.CalculatePathLength(_cityOrder.ToArray());
             
             _cityOrder.Reverse(firstId, secondId - firstId + 1);
             
-            var sumAfter = _cityDistances.CalculatePathLength(_cityOrder.ToArray());
+            var sumAfter = CityDistances.CalculatePathLength(_cityOrder.ToArray());
 
             if (sumAfter < sumBefore)
             {

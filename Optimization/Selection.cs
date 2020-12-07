@@ -5,15 +5,13 @@ namespace Optimization {
     {
         public abstract int[][] GenerateParents(int numberOfParents);
         protected readonly int[][] Population;
-        protected readonly CityDistances CityDistances;
         protected readonly int PopulationSize;
         protected readonly Random Random;
         protected int Strictness = 1;
 
-        public Selection(int[][] population, CityDistances cityDistances)
+        public Selection(int[][] population)
         {
             Population = population;
-            CityDistances = cityDistances;
             PopulationSize = population.Length;
             Random = new Random();
         }
@@ -70,14 +68,14 @@ namespace Optimization {
         }
 
 
-        public TournamentSelection(int[][] population, CityDistances cityDistances) : base(population, cityDistances)
+        public TournamentSelection(int[][] population) : base(population)
         {
         }
     }
 
     public class ElitismSelection : Selection
     {
-        public ElitismSelection(int[][] population, CityDistances cityDistances) : base(population, cityDistances)
+        public ElitismSelection(int[][] population) : base(population)
         {
             
         }
@@ -100,7 +98,7 @@ namespace Optimization {
 
     public class RouletteWheelSelection : Selection
     {
-        public RouletteWheelSelection(int[][] population, CityDistances cityDistances) : base(population, cityDistances)
+        public RouletteWheelSelection(int[][] population) : base(population)
         {
             
         }

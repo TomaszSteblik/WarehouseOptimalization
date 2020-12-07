@@ -6,22 +6,20 @@ namespace Optimization
     public class Result
     {
         private readonly int[] _cityOrder;
-        private readonly CityDistances _cityDistances;
         private readonly string _path;
 
-        public Result(int[] cityOrder, CityDistances cityDistances, string path)
+        public Result(int[] cityOrder, string path)
         {
             _cityOrder = cityOrder;
-            _cityDistances = cityDistances;
             _path = path;
         }
 
         public void Save()
         {
-            int size = _cityDistances.CityCount;
+            int size = CityDistances.CityCount;
             int sum = 0;
             for (int i = 0; i < size - 1; i++)
-                sum += _cityDistances.GetDistanceBetweenCities(_cityOrder[i], _cityOrder[i + 1]);
+                sum += CityDistances.GetDistanceBetweenCities(_cityOrder[i], _cityOrder[i + 1]);
 
             var result = new string[_cityOrder.Length + 1];
             result[0] = "Shortest path length = " + sum;

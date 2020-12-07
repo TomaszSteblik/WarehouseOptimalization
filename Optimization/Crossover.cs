@@ -9,7 +9,6 @@ namespace Optimization
         protected abstract int[] GenerateOffspring(int[] parent1, int[] parent2);
         public abstract int[][] GenerateOffsprings(int[][] parents);
         protected readonly Random Random = new Random();
-        protected CityDistances CityDistances;
         
         protected bool IsThereGene(int[] chromosome, int a)
         {
@@ -19,10 +18,6 @@ namespace Optimization
 
     public class AexCrossover : Crossover
     {
-        public AexCrossover(CityDistances cityDistances)
-        {
-            CityDistances = cityDistances;
-        }
         protected override int[] GenerateOffspring(int[] parent1, int[] parent2)
         {
             var length = parent1.Length;
@@ -109,10 +104,6 @@ namespace Optimization
 
     public class HGreXCrossover : Crossover
     {
-        public HGreXCrossover(CityDistances cityDistances)
-        {
-            CityDistances = cityDistances;
-        }
         protected override int[] GenerateOffspring(int[] parent1, int[] parent2)
         {
             int length = parent1.Length;

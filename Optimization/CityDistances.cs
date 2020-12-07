@@ -5,35 +5,52 @@ namespace Optimization
 {
     public class CityDistances
     {
-        public int CityCount { get; private set; }
-        private int[][] Distances { get; set; }
+
+        private int _cityCount;
+        private int[][] _distances;
+
+        public static int CityCount
+        {
+            get => _instance._cityCount;
+            private set => _instance._cityCount = value;
+        }
+
+        private static CityDistances _instance;
 
         private CityDistances()
         {
-            CityCount = 0;
+            _cityCount = 0;
         }
 
-        public static CityDistances Create(string dataSource)
+        public static CityDistances GetInstance()
         {
-            var cityDistances = new CityDistances();
+            return _instance;
+        }
+
+        public static void Create(string dataSource)
+        {
+            _instance = new CityDistances();
             var fileLines = File.ReadAllLines(dataSource);
-            cityDistances.CityCount = fileLines.GetLength(0);
-            cityDistances.Distances = new int[cityDistances.CityCount][];
-            for (int i = 0; i < cityDistances.CityCount; i++)
+            _instance._cityCount = fileLines.GetLength(0);
+            _instance._distances = new int[_instance._cityCount][];
+            for (int i = 0; i < _instance._cityCount; i++)
             {
-                cityDistances.Distances[i] = Array.ConvertAll(fileLines[i].Split(" "
+                _instance._distances[i] = Array.ConvertAll(fileLines[i].Split(" "
                     , StringSplitOptions.RemoveEmptyEntries), int.Parse);
             }
-            return cityDistances;
         }
         
-        public int GetDistanceBetweenCities(int firstId, int secondId)
+        public static int GetDistanceBetweenCities(int firstId, int secondId)
         {
-            if (firstId > secondId) return Distances[firstId][secondId];
-            return Distances[secondId][firstId];
+            if (_instance != null)
+            {
+                if (firstId > secondId) return _instance._distances[firstId][secondId];
+                return _instance._distances[secondId][firstId];
+            }
+            throw new Exception();
         }
 
-        public int CalculatePathLength(int[] path)
+        public static int CalculatePathLength(int[] path)
         {
             var sum = 0;
             for (int i = 0; i < path.Length - 1; i++)

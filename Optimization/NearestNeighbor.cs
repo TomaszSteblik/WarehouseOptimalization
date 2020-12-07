@@ -6,16 +6,14 @@ namespace Optimization
     {
         private readonly List<int> _cityOrder;
         private readonly List<int> _availableCities;
-        private readonly CityDistances _cityDistances;
         //private readonly OptimizationParameters _optimizationParameters;
 
-        public NearestNeighbor(CityDistances cityDistances, OptimizationParameters optimizationParameters)
+        public NearestNeighbor(OptimizationParameters optimizationParameters)
         {
             OptimizationParameters = optimizationParameters;
-            _cityDistances = cityDistances;
             _cityOrder = new List<int>();
             _availableCities = new List<int>();
-            for (int i = 0; i < cityDistances.CityCount; i++)
+            for (int i = 0; i < CityDistances.CityCount; i++)
             {
                 _availableCities.Add(i);
             }
@@ -36,7 +34,7 @@ namespace Optimization
             _cityOrder.Add(startingId);
             if (OptimizationParameters.Use2opt)
             {
-                Optimizer optimizer = new Optimizer(_cityDistances, OptimizationParameters);
+                Optimizer optimizer = new Optimizer(OptimizationParameters);
                 return optimizer.Optimize_2opt(_cityOrder.ToArray());
             }
 
@@ -47,13 +45,13 @@ namespace Optimization
         {
             if (_availableCities.Count == 1) return -1;
             int nearestCityId;
-            if(_cityDistances.GetDistanceBetweenCities(id, _availableCities[0]) == 0) 
+            if(CityDistances.GetDistanceBetweenCities(id, _availableCities[0]) == 0) 
                 nearestCityId = _availableCities[1];
             else nearestCityId = _availableCities[0];
-            int lowestDistance = _cityDistances.GetDistanceBetweenCities(id, nearestCityId);
+            int lowestDistance = CityDistances.GetDistanceBetweenCities(id, nearestCityId);
             for (int i = 0; i < _availableCities.Count; i++)
             {
-                int currentDistance = _cityDistances.GetDistanceBetweenCities(id, _availableCities[i]);
+                int currentDistance = CityDistances.GetDistanceBetweenCities(id, _availableCities[i]);
                 if (currentDistance > 0 && currentDistance < lowestDistance)
                 {
                     lowestDistance = currentDistance;
