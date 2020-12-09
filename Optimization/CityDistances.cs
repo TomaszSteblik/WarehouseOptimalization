@@ -42,12 +42,7 @@ namespace Optimization
         
         public static int GetDistanceBetweenCities(int firstId, int secondId)
         {
-            if (_instance != null)
-            {
-                if (firstId > secondId) return _instance._distances[firstId][secondId];
-                return _instance._distances[secondId][firstId];
-            }
-            throw new Exception();
+            return _instance._distances[firstId][secondId];
         }
 
         public static int CalculatePathLength(int[] path)

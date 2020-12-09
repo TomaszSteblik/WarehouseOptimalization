@@ -9,11 +9,11 @@ namespace Optimization
         protected abstract int[] GenerateOffspring(int[] parent1, int[] parent2);
         public abstract int[][] GenerateOffsprings(int[][] parents);
         protected readonly Random Random = new Random();
-        
         protected bool IsThereGene(int[] chromosome, int a)
         {
             return chromosome.Any(t => t == a);
         }
+        
     }
 
     public class AexCrossover : Crossover
