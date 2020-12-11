@@ -88,16 +88,13 @@ namespace Optimization
                     {
                         if (_random.Next(0, 1000) <= OptimizationParameters.MutationProbability)
                         {
-                            Log.AddToLog($"MUTATION\nBEFORE MUTATION({CityDistances.CalculatePathLength(chromosome)}): {string.Join(";",chromosome)}");
-                            
-                            var a = _random.Next(1, CityDistances.CityCount);
-                            var b = _random.Next(1, CityDistances.CityCount);
-                            var temp = chromosome[a];
-                            chromosome[a] = chromosome[b];
-                            chromosome[b] = temp;
-                            
-                            
-                            Log.AddToLog($"AFTER MUTATION({CityDistances.CalculatePathLength(chromosome)}): {string.Join(";",chromosome)}\n");
+                            Log.AddToLog($"MUTATION RSM\nBEFORE MUTATION({CityDistances.CalculatePathLength(chromosome)}): {string.Join(";",chromosome)}");
+
+                            var j = _random.Next(1, CityDistances.CityCount);
+                            var i = _random.Next(1, j);
+                            Array.Reverse(chromosome,i,j-i);
+
+                            Log.AddToLog($"AFTER MUTATION({CityDistances.CalculatePathLength(chromosome)}):  {string.Join(";",chromosome)}\n");
 
                         }
                     }
