@@ -7,7 +7,7 @@ namespace Optimization
     {
 
         private int _cityCount;
-        private int[][] _distances;
+        public int[][] _distances;
 
         public static int CityCount
         {

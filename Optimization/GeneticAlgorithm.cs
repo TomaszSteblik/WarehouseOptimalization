@@ -11,24 +11,23 @@ namespace Optimization
         private Elimination _elimination;
         private readonly Random _random = new Random();
 
+        private bool canIncreaseStrictness = true;
+        private bool canMutate;
+        private int terminateAfterCount;
+        private int[][] population;
+        
         public GeneticAlgorithm(OptimizationParameters optimizationParameters)
         {
             OptimizationParameters = optimizationParameters;
-        }
-
-
-        public override int[] FindShortestPath(int start)
-        {
-
+            
             _crossover = OptimizationParameters.CrossoverMethod switch
             {
-                "Aex" => new AexCrossover(),
-                "HGreX" => new HGreXCrossover(),
+                "Aex" => new Crossover.AexCrossover(),
+                "HGreX" => new Crossover.HGreXCrossover(),
                 _ => throw new ArgumentException("Wrong crossover name in parameters json file")
             };
 
-            int[][] population = new int[OptimizationParameters.PopulationSize][];
-            InitializePopulation(population,start);
+            population = new int[OptimizationParameters.PopulationSize][];
             
             switch (OptimizationParameters.SelectionMethod)
             {
@@ -57,11 +56,16 @@ namespace Optimization
                     throw new ArgumentException("Wrong elimination name in parameters json file");
             }
             
-            bool canIncreaseStrictness = true;
-            bool canMutate = OptimizationParameters.CanMutate; //true
-            int terminateAfterCount = OptimizationParameters.TerminationValue; //10000
+            canMutate = OptimizationParameters.CanMutate; //true
+            terminateAfterCount = OptimizationParameters.TerminationValue; //10000
             
             
+        }
+
+
+        public override int[] FindShortestPath(int start)
+        {
+            InitializePopulation(population,start);
             int lastBestFitness = population.Min(p => CityDistances.CalculatePathLength(p));
             int[] bestGene = population.First(p => CityDistances.CalculatePathLength(p) == lastBestFitness);
             int countToTerminate = terminateAfterCount;
