@@ -6,12 +6,10 @@ namespace Optimization
     public class Optimizer
     {
         private List<int> _cityOrder;
-        private readonly Log _log;
         private int _improvementsSum;
 
-        public Optimizer(OptimizationParameters optimizationParameters)
+        public Optimizer()
         {
-            _log = new Log(optimizationParameters.LogPath);
             _improvementsSum = 0;
         }
 
@@ -33,9 +31,9 @@ namespace Optimization
                         }
                     }
                 }
-                _log.AddToLog($"Made {improvements} improvements on iteration {++iterations}");
+                Log.AddToLog($"Made {improvements} improvements on iteration {++iterations}");
             } while (improvements > 0);
-            _log.AddToLog($"Sum of improvements: {_improvementsSum}");
+            Log.AddToLog($"Sum of improvements: {_improvementsSum}");
 
             return _cityOrder.ToArray();
         }
@@ -50,7 +48,7 @@ namespace Optimization
 
             if (sumAfter < sumBefore)
             {
-                _log.AddToLog($"Swapped {_cityOrder[firstId] + 1} with {_cityOrder[secondId] + 1} - improved by {sumBefore - sumAfter}");
+                Log.AddToLog($"Swapped {_cityOrder[firstId] + 1} with {_cityOrder[secondId] + 1} - improved by {sumBefore - sumAfter}");
                 _improvementsSum += sumBefore - sumAfter;
                 return true;
             }

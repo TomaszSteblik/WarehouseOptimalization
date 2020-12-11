@@ -34,7 +34,7 @@ namespace Optimization
             _cityOrder.Add(startingId);
             if (OptimizationParameters.Use2opt)
             {
-                Optimizer optimizer = new Optimizer(OptimizationParameters);
+                Optimizer optimizer = new Optimizer();
                 return optimizer.Optimize_2opt(_cityOrder.ToArray());
             }
 

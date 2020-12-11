@@ -113,7 +113,7 @@ namespace Optimization
             result[result.Length - 1] = bestGene[0];
             if (OptimizationParameters.Use2opt)
             {
-                Optimizer optimizer = new Optimizer(OptimizationParameters);
+                Optimizer optimizer = new Optimizer();
                 return optimizer.Optimize_2opt(result);
             }
             return result;
