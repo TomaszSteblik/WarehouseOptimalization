@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 
 
 namespace Optimization
@@ -69,9 +70,12 @@ namespace Optimization
             int lastBestFitness = population.Min(p => CityDistances.CalculatePathLength(p));
             int[] bestGene = population.First(p => CityDistances.CalculatePathLength(p) == lastBestFitness);
             int countToTerminate = terminateAfterCount;
-            
+            int numberOfIterations = 0;
             do
             {
+                Log.AddToLog($"--------------------------  ERA NR.{numberOfIterations}  --------------------------");
+                numberOfIterations++;
+                
                 int[][] parents = _selection.GenerateParents(OptimizationParameters.ChildrenPerGeneration*2);
                 int[][] offsprings = _crossover.GenerateOffsprings(parents);
                 _elimination.EliminateAndReplace(offsprings);
@@ -84,11 +88,17 @@ namespace Optimization
                     {
                         if (_random.Next(0, 1000) <= OptimizationParameters.MutationProbability)
                         {
+                            Log.AddToLog($"MUTATION\nBEFORE MUTATION({CityDistances.CalculatePathLength(chromosome)}): {string.Join(";",chromosome)}");
+                            
                             var a = _random.Next(1, CityDistances.CityCount);
                             var b = _random.Next(1, CityDistances.CityCount);
                             var temp = chromosome[a];
                             chromosome[a] = chromosome[b];
                             chromosome[b] = temp;
+                            
+                            
+                            Log.AddToLog($"AFTER MUTATION({CityDistances.CalculatePathLength(chromosome)}): {string.Join(";",chromosome)}\n");
+
                         }
                     }
                 }
@@ -117,6 +127,7 @@ namespace Optimization
             result[result.Length - 1] = bestGene[0];
             if (OptimizationParameters.Use2opt)
             {
+                Log.AddToLog("USING 2-OPT");
                 Optimizer optimizer = new Optimizer();
                 return optimizer.Optimize_2opt(result);
             }
@@ -128,9 +139,9 @@ namespace Optimization
             return chromosome.Any(t => t == a);
         }
 
-        private void InitializePopulation(int[][] population,int start)
+        private void InitializePopulation(int[][] pop,int start)
         {
-            int populationSize = population.Length;
+            int populationSize = pop.Length;
             for (int i = 0; i < populationSize; i++)
             {
                 int[] temp = new int[CityDistances.CityCount];
@@ -150,7 +161,7 @@ namespace Optimization
                         count++;
                     }
                 } while (count<CityDistances.CityCount);
-                population[i] = temp;
+                pop[i] = temp;
             }
         }
         
