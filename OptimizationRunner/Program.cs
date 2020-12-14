@@ -8,6 +8,7 @@ namespace OptimizationRunner
     {
         static void Main(string[] args)
         {
+            Warehouse.Optimizer(JsonConvert.DeserializeObject<OptimizationParameters>(File.ReadAllText(args[0])));
             FindShortestPath.Find(JsonConvert.DeserializeObject<OptimizationParameters>(File.ReadAllText(args[0])));
         }
     }
