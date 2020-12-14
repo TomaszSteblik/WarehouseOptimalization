@@ -130,7 +130,12 @@ namespace Optimization
             }
             return result;
         }
-        
+
+        public override int[] FindShortestPath(int[] order)
+        {
+            throw new NotImplementedException();
+        }
+
         private bool IsThereGene(int[] chromosome, int a)
         {
             return chromosome.Any(t => t == a);
