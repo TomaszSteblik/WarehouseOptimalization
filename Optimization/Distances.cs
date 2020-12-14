@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Optimization
 {
-    public class Distances
+    public sealed class Distances
     {
 
         private int _objectCount;
@@ -34,6 +34,8 @@ namespace Optimization
 
         private static Distances _instance;
 
+        private static readonly Lazy<Distances> lazy
+            = new Lazy<Distances>(() => new Distances());
         private Distances()
         {
             _objectCount = 0;
@@ -41,7 +43,7 @@ namespace Optimization
 
         public static Distances GetInstance()
         {
-            return _instance;
+            return lazy.Value;
         }
 
         public static void CreateWarehouse(string warehouseSource)
