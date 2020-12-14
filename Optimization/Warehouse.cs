@@ -33,23 +33,23 @@ namespace Optimization
             double[] FitnessProductPlacement;
 
             //AEX
-            //for (int e = 0; e < maxEpoch; e++) //opt. rozkładu produktów
-            //{
+            for (int e = 0; e < optimizationParameters.TerminationValue; e++) //opt. rozkładu produktów
+            {
 
            
 
 
             //fiteness
-            //Parallel.For(0, liczbaOsobnikow_RoznychRozkladowMagazynu, i =>
-            //{
+            Parallel.For(0, liczbaOsobnikow_RoznychRozkladowMagazynu, i =>
+            {
 
-            //   for (int k = 0; k < numberOfOrders; k++)
-            //  {
-            //      int dl_sciezki =  //znajdz najkrótsza ścieżke albo przez NN albo przez HGrex opcjonalnie z 2-opt albo Permutations.FindShortetsRoute();
-            //         FitnessProductPlacement[i] += dl_sciezki * ile_razy_bylo_takie_samo_zam;
-            //  }
+               for (int k = 0; k < numberOfOrders; k++)
+              {
+                  int dl_sciezki =  //znajdz najkrótsza ścieżke albo przez NN albo przez HGrex opcjonalnie z 2-opt albo Permutations.FindShortetsRoute();
+                     FitnessProductPlacement[i] += dl_sciezki * ile_razy_bylo_takie_samo_zam;
+              }
 
-            // });
+             });
 
             //selekcja
             Selection selection;
