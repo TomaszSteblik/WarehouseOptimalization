@@ -14,6 +14,11 @@ namespace Optimization
             Population = population;
             PopulationSize = population.Length;
         }
+
+        public virtual void EliminateAndReplace(int[][] offsprings, double[] fitnessProductPlacement)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class RouletteWheelElimination : Elimination
@@ -48,7 +53,7 @@ namespace Optimization
                 Population[toDie[j]] = offsprings[j];
             }
         }
-        public void EliminateAndReplace(int[][] offsprings,double[] fitness)
+        public override void EliminateAndReplace(int[][] offsprings,double[] fitness)
         {
             double fitnessTotal = fitness.Sum();
             int[] toDie = new int[offsprings.Length];

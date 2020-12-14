@@ -63,8 +63,8 @@ namespace Optimization
                 int[][] offsprings = crossover.GenerateOffsprings(parents);
 
                 //eliminacja
-                Elimination elimination = new ElitismElimination(ref population); // NA TEN MOMENT DZIAŁA TYLKO ELITYZM TODO: Pozostałe eliminacje 
-
+                Elimination elimination = new RouletteWheelElimination(ref population); // NA TEN MOMENT DZIAŁA TYLKO RWE TODO: Pozostałe eliminacje 
+                elimination.EliminateAndReplace(offsprings,FitnessProductPlacement);
                 //mutacja
 
                 foreach (var chromosome in population)
