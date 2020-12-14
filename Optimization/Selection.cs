@@ -55,7 +55,7 @@ namespace Optimization {
             int[][] winners = new int[halfLenght][];
             for (int i = 0,c=0; i < halfLenght; i++,c+=2) 
             {
-                if (CityDistances.CalculatePathLength(contenders[c])<CityDistances.CalculatePathLength(contenders[c+1]))
+                if (Distances.CalculatePathLength(contenders[c])<Distances.CalculatePathLength(contenders[c+1]))
                 {
                     winners[i] = contenders[c];
                 }
@@ -81,7 +81,7 @@ namespace Optimization {
         }
         public override int[][] GenerateParents(int numberOfParents)
         {
-            Array.Sort(Population,(x,y)=>CityDistances.CalculatePathLength(x)-CityDistances.CalculatePathLength(y));
+            Array.Sort(Population,(x,y)=>Distances.CalculatePathLength(x)-Distances.CalculatePathLength(y));
             int[][] parents = new int[numberOfParents][];
 
             for (int i = 0; i < numberOfParents; i++)
@@ -119,12 +119,12 @@ namespace Optimization {
             double fitnessSum = 0;
             foreach (var gene in Population)
             {
-                fitnessSum += CityDistances.CalculatePathLength(gene);
+                fitnessSum += Distances.CalculatePathLength(gene);
             }
 
             for (int i = 0; i < PopulationSize; i++)
             {
-                fitnessSum += (1.0 / CityDistances.CalculatePathLength(Population[i]));
+                fitnessSum += (1.0 / Distances.CalculatePathLength(Population[i]));
                 if (fitnessSum >= 1)
                 {
                     return Population[i];

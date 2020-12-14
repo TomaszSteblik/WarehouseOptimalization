@@ -10,6 +10,9 @@ namespace Optimization
         public static void Optimizer(OptimizationParameters optimizationParameters)
         {
             
+            Distances.CreateWarehouse(optimizationParameters.WarehousePath); //wczytanie struktury i utworzenie macierzy Distances._warehouseDistances[][]
+            Distances.LoadOrders(optimizationParameters.OrdersPath); //zaladowanie orderow z pliku -> Distances.orders[][] jest dostep
+            
             //odczytać strukturę magazynu (mag.txt) i na jej podstawie wyznaczyć macierz odległości
             //double[][] warehouseStructure = OdczytPliku("mag.txt");
             //int[][] distances = Dijkstra.GenerateDistanceArray(warehouseStructure);

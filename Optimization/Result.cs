@@ -16,10 +16,10 @@ namespace Optimization
 
         public void Save()
         {
-            int size = CityDistances.CityCount;
+            int size = Distances.ObjectCount;
             int sum = 0;
             for (int i = 0; i < size - 1; i++)
-                sum += CityDistances.GetDistanceBetweenCities(_cityOrder[i], _cityOrder[i + 1]);
+                sum += Distances.GetDistanceBetweenObjects(_cityOrder[i], _cityOrder[i + 1]);
 
             var result = new string[_cityOrder.Length + 1];
             result[0] = "Shortest path length = " + sum;

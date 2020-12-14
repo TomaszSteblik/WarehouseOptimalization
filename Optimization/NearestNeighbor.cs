@@ -13,7 +13,7 @@ namespace Optimization
             OptimizationParameters = optimizationParameters;
             _cityOrder = new List<int>();
             _availableCities = new List<int>();
-            for (int i = 0; i < CityDistances.WarehouseSize; i++)
+            for (int i = 0; i < Distances.ObjectCount; i++)
             {
                 _availableCities.Add(i);
             }
@@ -45,13 +45,13 @@ namespace Optimization
         {
             if (_availableCities.Count == 1) return -1;
             int nearestCityId;
-            if(CityDistances.GetDistanceBetweenCities(id, _availableCities[0]) == 0) 
+            if(Distances.GetDistanceBetweenObjects(id, _availableCities[0]) == 0) 
                 nearestCityId = _availableCities[1];
             else nearestCityId = _availableCities[0];
-            int lowestDistance = CityDistances.GetDistanceBetweenCities(id, nearestCityId);
+            int lowestDistance = Distances.GetDistanceBetweenObjects(id, nearestCityId);
             for (int i = 0; i < _availableCities.Count; i++)
             {
-                int currentDistance = CityDistances.GetDistanceBetweenCities(id, _availableCities[i]);
+                int currentDistance = Distances.GetDistanceBetweenObjects(id, _availableCities[i]);
                 if (currentDistance > 0 && currentDistance < lowestDistance)
                 {
                     lowestDistance = currentDistance;

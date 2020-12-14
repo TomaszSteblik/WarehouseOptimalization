@@ -1,10 +1,12 @@
 {
-  "OptimizationMethod": "GeneticAlgorithm",
+  "Mode": "DistancesMode",
+  "OptimizationMethod": "NearestNeighbor",
   "Use2opt": true,
   "StartingId": 0,
   "LogPath": "/Users/rtry/RiderProjects/WarehouseOptimization/log.txt",
   "DataPath": "/Users/rtry/RiderProjects/WarehouseOptimization/usa48_dist.txt",
   "WarehousePath": "/Users/rtry/RiderProjects/WarehouseOptimization/mag1.txt",
+  "OrdersPath": "/Users/rtry/RiderProjects/WarehouseOptimization/orders1.txt",
   "ResultPath": "/Users/rtry/RiderProjects/WarehouseOptimization/result.txt",
   "SelectionMethod": "Tournament",
   "CrossoverMethod": "HGreX",

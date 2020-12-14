@@ -5,6 +5,12 @@ namespace Optimization
         NearestNeighbor,
         GeneticAlgorithm
     }
+
+    public enum Mode
+    {
+        WarehouseMode,
+        DistancesMode
+    }
     public class OptimizationParameters
     {
         public OptimizationMethod OptimizationMethod { get; set; }
@@ -14,8 +20,11 @@ namespace Optimization
         public string LogPath { get; set; }
         public string DataPath { get; set; }
         
+        public Mode Mode { get; set; }
         public string WarehousePath { get; set; }
         public string ResultPath { get; set; }
+        
+        public string OrdersPath { get; set; }
         //genethic algorithm parameters
         public string SelectionMethod { get; set; }
         public string CrossoverMethod { get; set; }

@@ -1,4 +1,5 @@
 using System;
+using System.Xml;
 
 namespace Optimization
 {
@@ -6,7 +7,7 @@ namespace Optimization
     {
         public static void Find(OptimizationParameters optimizationParameters)
         {
-            CityDistances.Create(optimizationParameters.DataPath, optimizationParameters.WarehousePath);
+            Distances.LoadDistances(optimizationParameters.DataPath);
             Log.Create(optimizationParameters.LogPath);
             
             Optimization optimization = optimizationParameters.OptimizationMethod switch

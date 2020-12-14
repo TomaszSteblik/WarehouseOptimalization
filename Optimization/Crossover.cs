@@ -15,15 +15,15 @@ namespace Optimization
             return chromosome.Any(t => t == a);
         }
 
-        protected CityDistances _cityDistances = CityDistances.GetInstance();
+        protected Distances Distances = Distances.GetInstance();
 
         public class AexCrossover : Crossover
         {
             protected override int[] GenerateOffspring(int[] parent1, int[] parent2)
             {
                 
-                Log.AddToLog($"AeX Crossover:\nParent 1({CityDistances.CalculatePathLength(parent1)}): {string.Join(";", parent1)}");
-                Log.AddToLog($"Parent 2({CityDistances.CalculatePathLength(parent2)}): {string.Join(";", parent2)}");
+                Log.AddToLog($"AeX Crossover:\nParent 1({Distances.CalculatePathLength(parent1)}): {string.Join(";", parent1)}");
+                Log.AddToLog($"Parent 2({Distances.CalculatePathLength(parent2)}): {string.Join(";", parent2)}");
                 
                 var length = parent1.Length;
                 var offspring = new int[length];
@@ -94,7 +94,7 @@ namespace Optimization
                     offspring[count] = alle;
                 }
 
-                Log.AddToLog($"Offspring({CityDistances.CalculatePathLength(offspring)}): {string.Join(";", offspring)} \n");
+                Log.AddToLog($"Offspring({Distances.CalculatePathLength(offspring)}): {string.Join(";", offspring)} \n");
 
                 return offspring;
             }
@@ -118,8 +118,8 @@ namespace Optimization
         {
             protected override int[] GenerateOffspring(int[] parent1, int[] parent2)
             {
-                Log.AddToLog($"HGreX Crossover:\nParent 1({CityDistances.CalculatePathLength(parent1)}): {string.Join(";", parent1)}");
-                Log.AddToLog($"Parent 2({CityDistances.CalculatePathLength(parent2)}): {string.Join(";", parent2)}");
+                Log.AddToLog($"HGreX Crossover:\nParent 1({Distances.CalculatePathLength(parent1)}): {string.Join(";", parent1)}");
+                Log.AddToLog($"Parent 2({Distances.CalculatePathLength(parent2)}): {string.Join(";", parent2)}");
 
                 int length = parent1.Length;
                 int[] offspring = new int[length];
@@ -146,7 +146,7 @@ namespace Optimization
                     if (indexOfCurrentAlleParent1 + 1 < length)
                     {
                         nextAlleParent1 = parent1[indexOfCurrentAlleParent1 + 1];
-                        distancePanent1 = _cityDistances._distances[currentAlle][nextAlleParent1];
+                        distancePanent1 = Distances._distances[currentAlle][nextAlleParent1];
                         if (IsThereGene(offspring, nextAlleParent1))
                         {
                             isParent1Feasible = false;
@@ -165,7 +165,7 @@ namespace Optimization
                     if (indexOfCurrentAlleParent2 + 1 < length)
                     {
                         nextAlleParent2 = parent2[indexOfCurrentAlleParent2 + 1];
-                        distanceParent2 = _cityDistances._distances[currentAlle][nextAlleParent2];
+                        distanceParent2 = Distances._distances[currentAlle][nextAlleParent2];
                         if (IsThereGene(offspring, nextAlleParent2))
                         {
                             isParent2Feasible = false;
@@ -235,7 +235,7 @@ namespace Optimization
                     offspring[i] = nextAlle;
                     currentAlle = nextAlle;
                 }
-                Log.AddToLog($"Offspring({CityDistances.CalculatePathLength(offspring)}): {string.Join(";", offspring)} \n");
+                Log.AddToLog($"Offspring({Distances.CalculatePathLength(offspring)}): {string.Join(";", offspring)} \n");
                 return offspring;
             }
 

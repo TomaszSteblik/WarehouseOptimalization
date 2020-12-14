@@ -67,8 +67,8 @@ namespace Optimization
         public override int[] FindShortestPath(int start)
         {
             InitializePopulation(population,start);
-            int lastBestFitness = population.Min(p => CityDistances.CalculatePathLength(p));
-            int[] bestGene = population.First(p => CityDistances.CalculatePathLength(p) == lastBestFitness);
+            int lastBestFitness = population.Min(p => Distances.CalculatePathLength(p));
+            int[] bestGene = population.First(p => Distances.CalculatePathLength(p) == lastBestFitness);
             int countToTerminate = terminateAfterCount;
             int numberOfIterations = 0;
             do
@@ -88,20 +88,20 @@ namespace Optimization
                     {
                         if (_random.Next(0, 1000) <= OptimizationParameters.MutationProbability)
                         {
-                            Log.AddToLog($"MUTATION RSM\nBEFORE MUTATION({CityDistances.CalculatePathLength(chromosome)}): {string.Join(";",chromosome)}");
+                            Log.AddToLog($"MUTATION RSM\nBEFORE MUTATION({Distances.CalculatePathLength(chromosome)}): {string.Join(";",chromosome)}");
 
-                            var j = _random.Next(1, CityDistances.CityCount);
+                            var j = _random.Next(1, Distances.ObjectCount);
                             var i = _random.Next(1, j);
                             Array.Reverse(chromosome,i,j-i);
 
-                            Log.AddToLog($"AFTER MUTATION({CityDistances.CalculatePathLength(chromosome)}):  {string.Join(";",chromosome)}\n");
+                            Log.AddToLog($"AFTER MUTATION({Distances.CalculatePathLength(chromosome)}):  {string.Join(";",chromosome)}\n");
 
                         }
                     }
                 }
 
 
-                int currentBestFitness = population.Min(p => CityDistances.CalculatePathLength(p));
+                int currentBestFitness = population.Min(p => Distances.CalculatePathLength(p));
                 
                 if (lastBestFitness <= currentBestFitness)
                 {
@@ -110,7 +110,7 @@ namespace Optimization
                 else
                 {
                     lastBestFitness = currentBestFitness;
-                    bestGene = population.First(p => CityDistances.CalculatePathLength(p) == lastBestFitness);
+                    bestGene = population.First(p => Distances.CalculatePathLength(p) == lastBestFitness);
                     countToTerminate = terminateAfterCount;
                 }
                 
@@ -141,8 +141,8 @@ namespace Optimization
             int populationSize = pop.Length;
             for (int i = 0; i < populationSize; i++)
             {
-                int[] temp = new int[CityDistances.CityCount];
-                for (int z = 0; z < CityDistances.CityCount; z++)
+                int[] temp = new int[Distances.ObjectCount];
+                for (int z = 0; z < Distances.ObjectCount; z++)
                 {
                     temp[z] = -1;
                 }
@@ -151,13 +151,13 @@ namespace Optimization
                 count++;
                 do
                 {
-                    int a = _random.Next(0,CityDistances.CityCount);
+                    int a = _random.Next(0,Distances.ObjectCount);
                     if (!IsThereGene(temp,a))
                     {
                         temp[count] = a;
                         count++;
                     }
-                } while (count<CityDistances.CityCount);
+                } while (count<Distances.ObjectCount);
                 pop[i] = temp;
             }
         }

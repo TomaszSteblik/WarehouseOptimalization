@@ -40,11 +40,11 @@ namespace Optimization
         
         private bool TryOrderImprovement(int firstId, int secondId)
         {
-            var sumBefore = CityDistances.CalculatePathLength(_cityOrder.ToArray());
+            var sumBefore = Distances.CalculatePathLength(_cityOrder.ToArray());
             
             _cityOrder.Reverse(firstId, secondId - firstId + 1);
             
-            var sumAfter = CityDistances.CalculatePathLength(_cityOrder.ToArray());
+            var sumAfter = Distances.CalculatePathLength(_cityOrder.ToArray());
 
             if (sumAfter < sumBefore)
             {
