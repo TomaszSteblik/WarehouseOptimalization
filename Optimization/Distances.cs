@@ -73,7 +73,7 @@ namespace Optimization
 
         public static void LoadOrders(string ordersPath)
         {
-            if (_instance is not null)
+            if (_instance != null)
             {
                 var fileLines = File.ReadAllLines(ordersPath);
                 _instance._ordersCount = fileLines.Length;
