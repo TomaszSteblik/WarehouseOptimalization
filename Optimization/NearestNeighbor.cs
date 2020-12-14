@@ -6,6 +6,8 @@ namespace Optimization
     {
         private readonly List<int> _cityOrder;
         private readonly List<int> _availableCities;
+
+        private readonly List<int> _orderPieces;
         //private readonly OptimizationParameters _optimizationParameters;
 
         public NearestNeighbor(OptimizationParameters optimizationParameters)
@@ -13,10 +15,44 @@ namespace Optimization
             OptimizationParameters = optimizationParameters;
             _cityOrder = new List<int>();
             _availableCities = new List<int>();
-            for (int i = 0; i < Distances.ObjectCount; i++)
+            if (optimizationParameters.Mode == Mode.DistancesMode)
             {
-                _availableCities.Add(i);
+                for (int i = 0; i < Distances.ObjectCount; i++)
+                {
+                    _availableCities.Add(i);
+                }
             }
+        }
+
+        public NearestNeighbor(int[] order)
+        {
+            _cityOrder = new List<int>();
+            _orderPieces = new List<int>();
+            for (int i = 0; i < order.Length - 1; i++)
+            {
+                _orderPieces.Add(order[i]);
+            }
+        }
+
+        public override int[] FindShortestPath(int[] order)
+        {
+            _cityOrder.Add(0);
+            
+            var currentId = 0;
+            while (_orderPieces.Count > 1)
+            {
+                currentId = FindNearestNeighbor(currentId);
+                _orderPieces.Add(currentId);
+            }
+            _orderPieces.Add(_availableCities[0]);
+            _orderPieces.Add(0);
+            if (OptimizationParameters.Use2opt)
+            {
+                Optimizer optimizer = new Optimizer();
+                return optimizer.Optimize_2opt(_orderPieces.ToArray());
+            }
+
+            return _orderPieces.ToArray();
         }
         
         public override int[] FindShortestPath(int startingId)

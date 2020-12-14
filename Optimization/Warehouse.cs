@@ -40,13 +40,13 @@ namespace Optimization
 
 
             //fiteness
-            Parallel.For(0, liczbaOsobnikow_RoznychRozkladowMagazynu, i =>
+            Parallel.For((long) 0, populationSize, i =>
             {
 
-               for (int k = 0; k < numberOfOrders; k++)
-              {
-                  int dl_sciezki =  //znajdz najkrótsza ścieżke albo przez NN albo przez HGrex opcjonalnie z 2-opt albo Permutations.FindShortetsRoute();
-                     FitnessProductPlacement[i] += dl_sciezki * ile_razy_bylo_takie_samo_zam;
+               for (int k = 0; k < distances.OrdersCount; k++)
+               {
+                   double pathLength = FindShortestPath.Find(distances.orders[k], optimizationParameters);
+                   FitnessProductPlacement[i] += pathLength * distances.orders[k][distances.orders.GetLength(k) - 1];
               }
 
              });

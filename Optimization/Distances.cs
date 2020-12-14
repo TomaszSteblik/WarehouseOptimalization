@@ -20,7 +20,7 @@ namespace Optimization
             private set => _instance._objectCount = value;
         }
 
-        public static int OrdersCount
+        public int OrdersCount
         {
             get => _instance._ordersCount;
             private set => _instance._ordersCount = value;
@@ -91,6 +91,14 @@ namespace Optimization
         }
 
         public static int CalculatePathLength(int[] path)
+        {
+            var sum = 0;
+            for (int i = 0; i < path.Length - 1; i++)
+                sum += GetDistanceBetweenObjects(path[i], path[i + 1]);
+            return sum;
+        }
+        
+        public static double CalculatePathLengthDouble(int[] path)
         {
             var sum = 0;
             for (int i = 0; i < path.Length - 1; i++)
