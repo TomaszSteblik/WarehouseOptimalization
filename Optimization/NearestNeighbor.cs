@@ -13,7 +13,7 @@ namespace Optimization
             OptimizationParameters = optimizationParameters;
             _cityOrder = new List<int>();
             _availableCities = new List<int>();
-            for (int i = 0; i < CityDistances.CityCount; i++)
+            for (int i = 0; i < CityDistances.WarehouseSize; i++)
             {
                 _availableCities.Add(i);
             }

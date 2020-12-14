@@ -6,7 +6,7 @@ namespace Optimization
     {
         public static void Find(OptimizationParameters optimizationParameters)
         {
-            CityDistances.Create(optimizationParameters.DataPath);
+            CityDistances.Create(optimizationParameters.DataPath, optimizationParameters.WarehousePath);
             Log.Create(optimizationParameters.LogPath);
             
             Optimization optimization = optimizationParameters.OptimizationMethod switch
