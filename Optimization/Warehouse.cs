@@ -12,33 +12,31 @@ namespace Optimization
 
         public static void Optimizer(OptimizationParameters optimizationParameters)
         {
+
             
             Distances.CreateWarehouse(optimizationParameters.WarehousePath); //wczytanie struktury i utworzenie macierzy Distances._warehouseDistances[][]
             Distances.LoadOrders(optimizationParameters.OrdersPath); //zaladowanie orderow z pliku -> Distances.orders[][] jest dostep
             Distances distances = Distances.GetInstance();
-
+            
+            //genereracja losowej populacji; każdy osobnik reprezentuje rozkład towarów
             int populationSize = optimizationParameters.PopulationSize;
             int[][] population = new int[populationSize][];
             InitializePopulation(population, 0);
-            foreach (var VARIABLE in population[4])
-            {
-                Console.WriteLine(VARIABLE);
-            }
-            //genereracja losowej populacji; każdy osobnik reprezentuje rozkład towarów
+            
+            
+            
 
             //order.txt
             // 3 4 5 1 50
             // 4 5 1 
 
-            //double[] FitnessProductPlacement;
+            double[] FitnessProductPlacement;
 
             //AEX
             //for (int e = 0; e < maxEpoch; e++) //opt. rozkładu produktów
             //{
 
-            //selekcja
-
-            //krzyżowanie
+           
 
 
             //fiteness
@@ -53,8 +51,33 @@ namespace Optimization
 
             // });
 
+            //selekcja
+            Selection selection;
+            int[][] parents = new int[optimizationParameters.ChildrenPerGeneration*2][];
+            
+            //krzyżowanie
+            Crossover crossover = new Crossover.AexCrossover();
+            int[][] offsprings = crossover.GenerateOffsprings(parents);
+            
+            //eliminacja
+            Elimination elimination;
+            
+            //mutacja
+            
+            foreach (var chromosome in population)
+            {
+                if (_random.Next(0, 1000) <= optimizationParameters.MutationProbability)
+                {
+                    //Log.AddToLog($"MUTATION RSM\nBEFORE MUTATION({Distances.CalculatePathLength(chromosome)}): {string.Join(";",chromosome)}");
 
-            //mutacje 2        4
+                    var j = _random.Next(1, Distances.WarehouseSize);
+                    var i = _random.Next(1, j);
+                    Array.Reverse(chromosome,i,j-i);
+
+                    //Log.AddToLog($"AFTER MUTATION({Distances.CalculatePathLength(chromosome)}):  {string.Join(";",chromosome)}\n");
+                }
+            }
+            
 
             // }
 
