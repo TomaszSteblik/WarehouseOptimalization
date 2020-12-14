@@ -46,6 +46,7 @@ namespace Optimization
 
         public static void CreateWarehouse(string warehouseSource)
         {
+            _instance ??= new Distances();
             var warehouse = File.ReadAllLines(warehouseSource);
             _instance._warehouseSize = warehouse.GetLength(0);
             _instance._warehouseStructure = new double[_instance._warehouseSize][];
@@ -60,7 +61,7 @@ namespace Optimization
 
         public static void LoadDistances(string dataSource)
         {
-            _instance = new Distances();
+            _instance ??= new Distances();
             var fileLines = File.ReadAllLines(dataSource);
             _instance._objectCount = fileLines.GetLength(0);
             _instance._distances = new int[_instance._objectCount][];
