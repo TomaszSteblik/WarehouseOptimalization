@@ -38,34 +38,22 @@ namespace Optimization
             //AEX
             for (int e = 0; e < optimizationParameters.TerminationValue; e++) //opt. rozkładu produktów
             {
-
-
-                for (int i = 0; i < populationSize; i++)
+                //fiteness
+                Parallel.For((long) 0, populationSize, i =>
                 {
+
                     for (int k = 0; k < distances.OrdersCount; k++)
                     {
                         double pathLength = FindShortestPath.Find(distances.orders[k], optimizationParameters);
                         FitnessProductPlacement[i] +=
                             pathLength * distances.orders[k][distances.orders[k].Length - 1];
                     }
-                }
 
-                //fiteness
-                /*Parallel.For((long) 0, populationSize, i =>
-                {
-
-                    for (int k = 0; k < distances.OrdersCount; k++)
-                    {
-                        double pathLength = FindShortestPath.Find(distances.orders[k], optimizationParameters);
-                        FitnessProductPlacement[i] +=
-                            pathLength * distances.orders[k][distances.orders.GetLength(k) - 1];
-                    }
-
-                });*/
+                });
 
                 //selekcja
                 Selection selection = new RouletteWheelSelection(population); // NA TEN MOMENT DZIAŁA TYLKO SELEKCJA ROULETTE WHEEL TODO: Pozostałe selekcje 
-                int[][] parents = selection.GenerateParentsW(optimizationParameters.ChildrenPerGeneration*2, FitnessProductPlacement);
+                int[][] parents = selection.GenerateParents(optimizationParameters.ChildrenPerGeneration*2, FitnessProductPlacement);
 
                 //krzyżowanie
                 Crossover crossover = new Crossover.AexCrossover();
@@ -92,12 +80,6 @@ namespace Optimization
                 //miejsca w magazynie    0  1  2  3  4  5  6
                 //produkty              [0  3  4  1  5  6  2]
             }
-            foreach (var VARIABLE in population[0])
-            {
-                Console.WriteLine(VARIABLE);
-            }
-
-            
         }
         private static bool IsThereGene(int[] chromosome, int a)
         {

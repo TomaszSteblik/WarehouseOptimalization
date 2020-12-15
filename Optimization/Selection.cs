@@ -5,7 +5,6 @@ namespace Optimization {
     public abstract class Selection
     {
         public abstract int[][] GenerateParents(int numberOfParents);
-        public abstract int[][] GenerateParentsW(int numberOfParents, double[] fitness);
         protected readonly int[][] Population;
         protected readonly int PopulationSize;
         protected readonly Random Random;
@@ -25,6 +24,11 @@ namespace Optimization {
                 return true;
             }
             return false;
+        }
+
+        public virtual int[][] GenerateParents(int numberOfParents, double[] fitness)
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -49,11 +53,6 @@ namespace Optimization {
                 winner = Tournament(winner);
             }
             return winner;
-        }
-
-        public override int[][] GenerateParentsW(int numberOfParents, double[] fitness)
-        {
-            throw new NotImplementedException();
         }
 
         private int[][] Tournament(int[][] contenders)
@@ -100,11 +99,7 @@ namespace Optimization {
 
             return parents;
         }
-
-        public override int[][] GenerateParentsW(int numberOfParents, double[] fitness)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 
     public class RouletteWheelSelection : Selection
@@ -125,7 +120,7 @@ namespace Optimization {
             return parents;
         }
 
-        public override int[][] GenerateParentsW(int numberOfParents, double[] fitness)
+        public override int[][] GenerateParents(int numberOfParents, double[] fitness)
         {
             int[][] parents = new int[numberOfParents][];
             for (int i = 0; i < numberOfParents; i++)
