@@ -5,6 +5,7 @@ namespace Optimization {
     public abstract class Selection
     {
         public abstract int[][] GenerateParents(int numberOfParents);
+        public abstract int[][] GenerateParentsW(int numberOfParents, double[] fitness);
         protected readonly int[][] Population;
         protected readonly int PopulationSize;
         protected readonly Random Random;
@@ -49,6 +50,12 @@ namespace Optimization {
             }
             return winner;
         }
+
+        public override int[][] GenerateParentsW(int numberOfParents, double[] fitness)
+        {
+            throw new NotImplementedException();
+        }
+
         private int[][] Tournament(int[][] contenders)
         {
             int lenght = contenders.Length * (int) Math.Pow(2,Strictness);
@@ -94,7 +101,10 @@ namespace Optimization {
             return parents;
         }
 
-        
+        public override int[][] GenerateParentsW(int numberOfParents, double[] fitness)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class RouletteWheelSelection : Selection
@@ -115,7 +125,7 @@ namespace Optimization {
             return parents;
         }
 
-        public int[][] GenerateParents(int numberOfParents, double[] fitness)
+        public override int[][] GenerateParentsW(int numberOfParents, double[] fitness)
         {
             int[][] parents = new int[numberOfParents][];
             for (int i = 0; i < numberOfParents; i++)

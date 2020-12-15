@@ -1,7 +1,7 @@
 {
   "Mode": "WarehouseMode",
   "OptimizationMethod": "NearestNeighbor",
-  "Use2opt": true,
+  "Use2opt": false,
   "StartingId": 0,
   "LogPath": "/Users/rtry/RiderProjects/WarehouseOptimization/log.txt",
   "DataPath": "/Users/rtry/RiderProjects/WarehouseOptimization/distances-usa.txt",

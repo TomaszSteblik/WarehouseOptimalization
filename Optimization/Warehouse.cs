@@ -19,6 +19,7 @@ namespace Optimization
             Distances.LoadOrders(optimizationParameters
                 .OrdersPath); //zaladowanie orderow z pliku -> Distances.orders[][] jest dostep
             Distances distances = Distances.GetInstance();
+            
 
             //genereracja losowej populacji; każdy osobnik reprezentuje rozkład towarów
             int populationSize = optimizationParameters.PopulationSize;
@@ -39,10 +40,18 @@ namespace Optimization
             {
 
 
-
+                for (int i = 0; i < populationSize; i++)
+                {
+                    for (int k = 0; k < distances.OrdersCount; k++)
+                    {
+                        double pathLength = FindShortestPath.Find(distances.orders[k], optimizationParameters);
+                        FitnessProductPlacement[i] +=
+                            pathLength * distances.orders[k][distances.orders[k].Length - 1];
+                    }
+                }
 
                 //fiteness
-                Parallel.For((long) 0, populationSize, i =>
+                /*Parallel.For((long) 0, populationSize, i =>
                 {
 
                     for (int k = 0; k < distances.OrdersCount; k++)
@@ -52,11 +61,11 @@ namespace Optimization
                             pathLength * distances.orders[k][distances.orders.GetLength(k) - 1];
                     }
 
-                });
+                });*/
 
                 //selekcja
                 Selection selection = new RouletteWheelSelection(population); // NA TEN MOMENT DZIAŁA TYLKO SELEKCJA ROULETTE WHEEL TODO: Pozostałe selekcje 
-                int[][] parents = selection.GenerateParents(optimizationParameters.ChildrenPerGeneration*2);
+                int[][] parents = selection.GenerateParentsW(optimizationParameters.ChildrenPerGeneration*2, FitnessProductPlacement);
 
                 //krzyżowanie
                 Crossover crossover = new Crossover.AexCrossover();

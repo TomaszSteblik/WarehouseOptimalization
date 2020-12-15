@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Optimization
 {
@@ -7,11 +8,11 @@ namespace Optimization
         private readonly List<int> _cityOrder;
         private readonly List<int> _availableCities;
 
-        private readonly List<int> _orderPieces;
-        //private readonly OptimizationParameters _optimizationParameters;
+        private Distances _distances;
 
         public NearestNeighbor(OptimizationParameters optimizationParameters)
         {
+            _distances = Distances.GetInstance();
             OptimizationParameters = optimizationParameters;
             _cityOrder = new List<int>();
             _availableCities = new List<int>();
@@ -24,13 +25,15 @@ namespace Optimization
             }
         }
 
-        public NearestNeighbor(int[] order)
+        public NearestNeighbor(int[] order, OptimizationParameters optimizationParameters)
         {
+            _distances = Distances.GetInstance();
+            OptimizationParameters = optimizationParameters;
+            _availableCities = new List<int>();
             _cityOrder = new List<int>();
-            _orderPieces = new List<int>();
             for (int i = 0; i < order.Length - 1; i++)
             {
-                _orderPieces.Add(order[i]);
+                _availableCities.Add(order[i]);
             }
         }
 
@@ -39,20 +42,20 @@ namespace Optimization
             _cityOrder.Add(0);
             
             var currentId = 0;
-            while (_orderPieces.Count > 1)
+            while (_availableCities.Count > 1)
             {
                 currentId = FindNearestNeighbor(currentId);
-                _orderPieces.Add(currentId);
+                _cityOrder.Add(currentId);
             }
-            _orderPieces.Add(_availableCities[0]);
-            _orderPieces.Add(0);
+            _cityOrder.Add(_availableCities[0]);
+            _cityOrder.Add(0);
             if (OptimizationParameters.Use2opt)
             {
                 Optimizer optimizer = new Optimizer();
-                return optimizer.Optimize_2opt(_orderPieces.ToArray());
+                return optimizer.Optimize_2opt(_cityOrder.ToArray());
             }
 
-            return _orderPieces.ToArray();
+            return _cityOrder.ToArray();
         }
         
         public override int[] FindShortestPath(int startingId)
@@ -81,13 +84,13 @@ namespace Optimization
         {
             if (_availableCities.Count == 1) return -1;
             int nearestCityId;
-            if(Distances.GetDistanceBetweenObjects(id, _availableCities[0]) == 0) 
+            if(_distances._warehouseDistances[id][_availableCities[0]] == 0) 
                 nearestCityId = _availableCities[1];
             else nearestCityId = _availableCities[0];
-            int lowestDistance = Distances.GetDistanceBetweenObjects(id, nearestCityId);
+            double lowestDistance = _distances._warehouseDistances[id][nearestCityId];
             for (int i = 0; i < _availableCities.Count; i++)
             {
-                int currentDistance = Distances.GetDistanceBetweenObjects(id, _availableCities[i]);
+                double currentDistance = _distances._warehouseDistances[id][_availableCities[i]];
                 if (currentDistance > 0 && currentDistance < lowestDistance)
                 {
                     lowestDistance = currentDistance;

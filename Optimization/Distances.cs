@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Optimization
 {
-    public sealed class Distances
+    public class Distances
     {
 
         private int _objectCount;
@@ -33,9 +33,7 @@ namespace Optimization
         }
 
         private static Distances _instance;
-
-        private static readonly Lazy<Distances> lazy
-            = new Lazy<Distances>(() => new Distances());
+        
         private Distances()
         {
             _objectCount = 0;
@@ -43,7 +41,7 @@ namespace Optimization
 
         public static Distances GetInstance()
         {
-            return lazy.Value;
+            return _instance;
         }
 
         public static void CreateWarehouse(string warehouseSource)
@@ -96,15 +94,15 @@ namespace Optimization
         {
             var sum = 0;
             for (int i = 0; i < path.Length - 1; i++)
-                sum += GetDistanceBetweenObjects(path[i], path[i + 1]);
+                sum += _instance._distances[path[i]][path[i + 1]];
             return sum;
         }
         
         public static double CalculatePathLengthDouble(int[] path)
         {
-            var sum = 0;
+            var sum = 0d;
             for (int i = 0; i < path.Length - 1; i++)
-                sum += GetDistanceBetweenObjects(path[i], path[i + 1]);
+                sum += _instance._warehouseDistances[path[i]][path[i + 1]];
             return sum;
         }
     }

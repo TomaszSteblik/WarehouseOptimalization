@@ -22,8 +22,8 @@ namespace Optimization
             protected override int[] GenerateOffspring(int[] parent1, int[] parent2)
             {
                 
-                Log.AddToLog($"AeX Crossover:\nParent 1({Distances.CalculatePathLength(parent1)}): {string.Join(";", parent1)}");
-                Log.AddToLog($"Parent 2({Distances.CalculatePathLength(parent2)}): {string.Join(";", parent2)}");
+                //Log.AddToLog($"AeX Crossover:\nParent 1({Distances.CalculatePathLengthDouble(parent1)}): {string.Join(";", parent1)}");
+                //Log.AddToLog($"Parent 2({Distances.CalculatePathLengthDouble(parent2)}): {string.Join(";", parent2)}");
                 
                 var length = parent1.Length;
                 var offspring = new int[length];
@@ -94,7 +94,7 @@ namespace Optimization
                     offspring[count] = alle;
                 }
 
-                Log.AddToLog($"Offspring({Distances.CalculatePathLength(offspring)}): {string.Join(";", offspring)} \n");
+                //Log.AddToLog($"Offspring({Distances.CalculatePathLength(offspring)}): {string.Join(";", offspring)} \n");
 
                 return offspring;
             }
@@ -118,8 +118,8 @@ namespace Optimization
         {
             protected override int[] GenerateOffspring(int[] parent1, int[] parent2)
             {
-                Log.AddToLog($"HGreX Crossover:\nParent 1({Distances.CalculatePathLength(parent1)}): {string.Join(";", parent1)}");
-                Log.AddToLog($"Parent 2({Distances.CalculatePathLength(parent2)}): {string.Join(";", parent2)}");
+                //Log.AddToLog($"HGreX Crossover:\nParent 1({Distances.CalculatePathLength(parent1)}): {string.Join(";", parent1)}");
+                //Log.AddToLog($"Parent 2({Distances.CalculatePathLength(parent2)}): {string.Join(";", parent2)}");
 
                 int length = parent1.Length;
                 int[] offspring = new int[length];
@@ -235,7 +235,7 @@ namespace Optimization
                     offspring[i] = nextAlle;
                     currentAlle = nextAlle;
                 }
-                Log.AddToLog($"Offspring({Distances.CalculatePathLength(offspring)}): {string.Join(";", offspring)} \n");
+                //Log.AddToLog($"Offspring({Distances.CalculatePathLength(offspring)}): {string.Join(";", offspring)} \n");
                 return offspring;
             }
 
