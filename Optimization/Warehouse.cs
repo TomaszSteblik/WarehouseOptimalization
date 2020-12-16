@@ -9,15 +9,15 @@ namespace Optimization
     public class Warehouse
     {
         static Random _random = new Random();
+        static public event EventHandler Event1;
+        static public double E = 0;
 
         public static void Optimizer(OptimizationParameters optimizationParameters)
         {
 
 
-            Distances.CreateWarehouse(optimizationParameters
-                .WarehousePath); //wczytanie struktury i utworzenie macierzy Distances._warehouseDistances[][]
-            Distances.LoadOrders(optimizationParameters
-                .OrdersPath); //zaladowanie orderow z pliku -> Distances.orders[][] jest dostep
+            Distances.CreateWarehouse(optimizationParameters.WarehousePath); //wczytanie struktury i utworzenie macierzy Distances._warehouseDistances[][]
+            Distances.LoadOrders(optimizationParameters.OrdersPath); //zaladowanie orderow z pliku -> Distances.orders[][] jest dostep
             Distances distances = Distances.GetInstance();
             
 
@@ -33,18 +33,19 @@ namespace Optimization
             // 3 4 5 1 50
             // 4 5 1 
 
-            double[] FitnessProductPlacement = new double[populationSize];
 
             //AEX
             for (int e = 0; e < optimizationParameters.TerminationValue; e++) //opt. rozkładu produktów
             {
-                //fiteness
-                Parallel.For((long) 0, populationSize, i =>
-                {
+                double[] FitnessProductPlacement = new double[populationSize];
 
+                //fiteness
+                //for(int i =0; i<populationSize; i++)
+                Parallel.For(0, populationSize, i =>
+                {
                     for (int k = 0; k < distances.OrdersCount; k++)
                     {
-                        double pathLength = FindShortestPath.Find(distances.orders[k], optimizationParameters);
+                        double pathLength = FindShortestPath.Find(distances.orders[k], population[i], optimizationParameters);
                         FitnessProductPlacement[i] +=
                             pathLength * distances.orders[k][distances.orders[k].Length - 1];
                     }
@@ -63,6 +64,13 @@ namespace Optimization
                 Elimination elimination = new RouletteWheelElimination(ref population); // NA TEN MOMENT DZIAŁA TYLKO RWE TODO: Pozostałe eliminacje 
                 elimination.EliminateAndReplace(offsprings,FitnessProductPlacement);
                 //mutacja
+
+
+               
+                Array.Sort(FitnessProductPlacement);
+                E = FitnessProductPlacement[0];
+                Event1?.Invoke(null, null);
+
 
                 foreach (var chromosome in population)
                 {

@@ -9,6 +9,7 @@ namespace Optimization
         private readonly List<int> _availableCities;
 
         private Distances _distances;
+        private int[] _chromosome;
 
         public NearestNeighbor(OptimizationParameters optimizationParameters)
         {
@@ -25,8 +26,9 @@ namespace Optimization
             }
         }
 
-        public NearestNeighbor(int[] order, OptimizationParameters optimizationParameters)
+        public NearestNeighbor(int[] order, int[] chromosome, OptimizationParameters optimizationParameters)
         {
+            _chromosome = chromosome;
             _distances = Distances.GetInstance();
             OptimizationParameters = optimizationParameters;
             _availableCities = new List<int>();
@@ -87,10 +89,10 @@ namespace Optimization
             if(_distances._warehouseDistances[id][_availableCities[0]] == 0) 
                 nearestCityId = _availableCities[1];
             else nearestCityId = _availableCities[0];
-            double lowestDistance = _distances._warehouseDistances[id][nearestCityId];
+            double lowestDistance = _distances._warehouseDistances[_chromosome[id]][_chromosome[nearestCityId]];
             for (int i = 0; i < _availableCities.Count; i++)
             {
-                double currentDistance = _distances._warehouseDistances[id][_availableCities[i]];
+                double currentDistance = _distances._warehouseDistances[_chromosome[id]][_chromosome[_availableCities[i]]];
                 if (currentDistance > 0 && currentDistance < lowestDistance)
                 {
                     lowestDistance = currentDistance;
@@ -100,6 +102,17 @@ namespace Optimization
             _availableCities.RemoveAt(_availableCities.IndexOf(nearestCityId));
             
             return nearestCityId;
+        }
+
+        private int FindWarehouseLocationByProductId(int id)
+        {
+            int size = _chromosome.Length;
+            for (int i = 0; i < size; i++)
+            {
+                if (_chromosome[i] == id) return i;
+            }
+
+            return -1;
         }
     }
 }
