@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Optimization
 {
@@ -87,6 +89,15 @@ namespace Optimization
                 for (int i = 0; i < _instance._ordersCount; i++)
                     _instance.orders[i] = Array.ConvertAll(fileLines[i].Split(" "
                         , StringSplitOptions.RemoveEmptyEntries), int.Parse);
+                for (int i = 0; i < _instance._ordersCount; i++)
+                {
+                    List<int> tmp = _instance.orders[i].ToList();
+                    int orderRepeats = tmp[^1];
+                    tmp.RemoveAt(tmp.Count - 1);
+                    tmp = tmp.Distinct().ToList();
+                    tmp.Add(orderRepeats);
+                    _instance.orders[i] = tmp.ToArray();
+                }
             }
         }
         

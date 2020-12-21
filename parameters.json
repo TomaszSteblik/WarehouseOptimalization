@@ -15,5 +15,5 @@
   "MutationProbability": 5,
   "PopulationSize": 400,
   "ChildrenPerGeneration": 5,
-  "TerminationValue": 1000
+  "TerminationValue": 5000
 }
