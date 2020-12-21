@@ -46,17 +46,22 @@ namespace Optimization
 
         public static void CreateWarehouse(string warehouseSource)
         {
-            _instance ??= new Distances();
-            var warehouse = File.ReadAllLines(warehouseSource);
-            _instance._warehouseSize = warehouse.GetLength(0);
-            _instance._warehouseStructure = new double[_instance._warehouseSize][];
-            for (int i = 0; i < _instance._warehouseSize; i++)
+            _instance ??= new Distances();        
+           
+            _instance._warehouseStructure = Files.ReadArray(warehouseSource);
+            _instance._warehouseSize = _instance._warehouseStructure.GetLength(0);
+
+            if (System.IO.File.Exists(warehouseSource + ".dist.txt"))
             {
-                _instance._warehouseStructure[i] = Array.ConvertAll(warehouse[i].Split(" "
-                    , StringSplitOptions.RemoveEmptyEntries), double.Parse);
+                _instance._warehouseDistances = Files.ReadArray(warehouseSource + ".dist.txt");
+            }
+            else
+            {
+                _instance._warehouseDistances = Dijkstra.GenerateDistanceArray(_instance._warehouseStructure);
+                Files.WriteArray(warehouseSource + ".dist.txt", _instance._warehouseDistances);
             }
 
-            _instance._warehouseDistances = Dijkstra.GenerateDistanceArray(_instance._warehouseStructure);
+
         }
 
         public static void LoadDistances(string dataSource)
