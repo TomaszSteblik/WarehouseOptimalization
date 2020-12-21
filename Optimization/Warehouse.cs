@@ -14,7 +14,7 @@ namespace Optimization
 
         public static void Optimizer(OptimizationParameters optimizationParameters)
         {
-
+            Log.Create(optimizationParameters.LogPath);
 
             Distances.CreateWarehouse(optimizationParameters.WarehousePath); //wczytanie struktury i utworzenie macierzy Distances._warehouseDistances[][]
             Distances.LoadOrders(optimizationParameters.OrdersPath); //zaladowanie orderow z pliku -> Distances.orders[][] jest dostep
@@ -76,13 +76,13 @@ namespace Optimization
                 {
                     if (_random.Next(0, 1000) <= optimizationParameters.MutationProbability)
                     {
-                        //Log.AddToLog($"MUTATION RSM\nBEFORE MUTATION({Distances.CalculatePathLength(chromosome)}): {string.Join(";",chromosome)}");
+                        Log.AddToLog($"MUTATION RSM\nBEFORE MUTATION({Distances.CalculatePathLengthDouble(chromosome)}): {string.Join(";",chromosome)}");
 
                         var j = _random.Next(1, Distances.WarehouseSize);
                         var i = _random.Next(1, j);
                         Array.Reverse(chromosome, i, j - i);
 
-                        //Log.AddToLog($"AFTER MUTATION({Distances.CalculatePathLength(chromosome)}):  {string.Join(";",chromosome)}\n");
+                        Log.AddToLog($"AFTER MUTATION({Distances.CalculatePathLengthDouble(chromosome)}):  {string.Join(";",chromosome)}\n");
                     }
                 }
                 //miejsca w magazynie    0  1  2  3  4  5  6
