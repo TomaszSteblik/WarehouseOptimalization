@@ -38,7 +38,7 @@ namespace Optimization
             for (int e = 0; e < optimizationParameters.TerminationValue; e++) //opt. rozkładu produktów
             {
                 double[] FitnessProductPlacement = new double[populationSize];
-
+                
                 //fiteness
                 //for(int i =0; i<populationSize; i++)
                 Parallel.For(0, populationSize, i =>
@@ -52,6 +52,15 @@ namespace Optimization
 
                 });
 
+                
+                Log.AddToLog("Populacja nr."+e);
+                Log.AddToLog("avg: "+FitnessProductPlacement.Average());
+                Log.AddToLog("max: "+FitnessProductPlacement.Max());
+                Log.AddToLog("min: "+FitnessProductPlacement.Min());
+                for (int i = 0; i < populationSize ; i++)
+                {
+                    Log.AddToLog($"Chromosome({FitnessProductPlacement[i]}): {string.Join(";", population[i])} \n");
+                }
                 //selekcja
                 Selection selection = new RouletteWheelSelection(population); // NA TEN MOMENT DZIAŁA TYLKO SELEKCJA ROULETTE WHEEL TODO: Pozostałe selekcje 
                 int[][] parents = selection.GenerateParents(optimizationParameters.ChildrenPerGeneration*2, FitnessProductPlacement);
@@ -64,9 +73,10 @@ namespace Optimization
                 Elimination elimination = new ElitismElimination(ref population); // NA TEN MOMENT DZIAŁA TYLKO RWE TODO: Pozostałe eliminacje 
                 elimination.EliminateAndReplace(offsprings,FitnessProductPlacement);
                 //mutacja
+                
+                
 
 
-               
                 Array.Sort(FitnessProductPlacement);
                 E = FitnessProductPlacement[0];
                 Event1?.Invoke(null, null);
@@ -76,15 +86,18 @@ namespace Optimization
                 {
                     if (_random.Next(0, 1000) <= optimizationParameters.MutationProbability)
                     {
-                        Log.AddToLog($"MUTATION RSM\nBEFORE MUTATION({Distances.CalculatePathLengthDouble(chromosome)}): {string.Join(";",chromosome)}");
+                        //Log.AddToLog($"MUTATION RSM\nBEFORE MUTATION({Distances.CalculatePathLengthDouble(chromosome)}): {string.Join(";",chromosome)}");
 
                         var j = _random.Next(1, Distances.WarehouseSize);
                         var i = _random.Next(1, j);
                         Array.Reverse(chromosome, i, j - i);
 
-                        Log.AddToLog($"AFTER MUTATION({Distances.CalculatePathLengthDouble(chromosome)}):  {string.Join(";",chromosome)}\n");
+                        //Log.AddToLog($"AFTER MUTATION({Distances.CalculatePathLengthDouble(chromosome)}):  {string.Join(";",chromosome)}\n");
                     }
                 }
+                
+                
+                
                 //miejsca w magazynie    0  1  2  3  4  5  6
                 //produkty              [0  3  4  1  5  6  2]
             }
