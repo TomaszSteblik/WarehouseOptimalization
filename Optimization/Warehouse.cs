@@ -25,7 +25,12 @@ namespace Optimization
             int populationSize = optimizationParameters.PopulationSize;
             int[][] population = new int[populationSize][];
             InitializePopulation(population, 0);
-            
+            for (int i = 0; i < populationSize; i++)
+            {
+                population[i] = new[] {0, 10, 11, 12, 13, 14, 15, 1, 2, 3, 4, 5, 6, 7, 8, 9, 16, 17, 18, 19, 20, 21, 22, 23};
+
+            }
+
 
 
             //order.txt
@@ -101,21 +106,18 @@ namespace Optimization
                     E = FitnessProductPlacement.Min();
                     Console.WriteLine(E);
                     //Event1?.Invoke(null, null);
+                    //Console.WriteLine(newFitness[x]+"     10-11-12-13-14-15");
                     
+                    Console.Write(GetProductByLocation(2, population[x]) + " " + GetProductByLocation(4, population[x]) + " " + GetProductByLocation(5, population[x]) + " " + GetProductByLocation(7, population[x]) + " " + GetProductByLocation(9, population[x]) + " " + GetProductByLocation(11, population[x]) + "       ");
+                    Console.WriteLine(GetProductByLocation(13, population[x]) + " " + GetProductByLocation(15, population[x]) + " " + GetProductByLocation(17, population[x]) + " " + GetProductByLocation(19, population[x]) + " " + GetProductByLocation(21, population[x]) + " " + GetProductByLocation(23, population[x]));
 
-                Console.Write(population[x][2] + " " + population[x][4] + " " + population[x][5] + " " +
-                              population[x][9] + " " + population[x][11] + "       ");
-                Console.WriteLine(population[x][13] + " " + population[x][15] + " " + population[x][17] + " " +
-                                  population[x][19] + " " + population[x][21] + " " + population[x][23]);
+                    Console.Write(GetProductByLocation(1, population[x]) + " " + GetProductByLocation(3, population[x]) + "     " + GetProductByLocation(6, population[x]) + " " + GetProductByLocation(8, population[x]) + " " + GetProductByLocation(10, population[x]) + "       ");
+                    Console.WriteLine(GetProductByLocation(12, population[x]) + " " + GetProductByLocation(14, population[x]) + " " + GetProductByLocation(16, population[x]) + " " + population[x][18] + " " + GetProductByLocation(20, population[x]) + " " + GetProductByLocation(22, population[x]));
+                    Console.WriteLine();
+               
+                }
 
-                Console.Write(population[x][1] + " " + population[x][3] + " " + population[x][6] + " " +
-                              population[x][8] + " " + population[x][10] + "       ");
-                Console.WriteLine(population[x][12] + " " + population[x][14] + " " + population[x][16] + " " +
-                                  population[x][18] + " " + population[x][20] + " " + population[x][22]);
-                Console.WriteLine();
-            }
-
-            //Array.Sort(FitnessProductPlacement);
+                //Array.Sort(FitnessProductPlacement);
                 
 
 
@@ -142,6 +144,17 @@ namespace Optimization
         private static bool IsThereGene(int[] chromosome, int a)
         {
             return chromosome.Any(t => t == a);
+        }
+
+        private static int GetProductByLocation(int id, int[] chromosome)
+        {
+            int size = chromosome.Length;
+            for (int i = 0; i < size; i++)
+            {
+                if (chromosome[i] == id) return i;
+            }
+
+            return -1;
         }
 
         private static void InitializePopulation(int[][] pop, int start)

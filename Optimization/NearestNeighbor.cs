@@ -99,7 +99,7 @@ namespace Optimization
         {
             if (_availableCities.Count == 1) return -1;
             int nearestCityId;
-            if(_distances._warehouseDistances[id][_availableCities[0]] == 0) 
+            if(_distances._warehouseDistances[_chromosome[id]][_chromosome[_availableCities[0]]] == 0) 
                 nearestCityId = _availableCities[1];
             else nearestCityId = _availableCities[0];
             double lowestDistance = _distances._warehouseDistances[_chromosome[id]][_chromosome[nearestCityId]];
