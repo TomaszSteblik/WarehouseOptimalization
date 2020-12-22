@@ -104,9 +104,6 @@ namespace Optimization {
         {
             Array.Sort(fitness,Population);
             
-            Array.Reverse(fitness);
-            Array.Reverse(Population);
-            
             int[][] parents = new int[numberOfParents][];
 
             for (int i = 0; i < numberOfParents; i++)

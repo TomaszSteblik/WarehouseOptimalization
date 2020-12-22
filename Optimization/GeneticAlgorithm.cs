@@ -73,14 +73,17 @@ namespace Optimization
             int numberOfIterations = 0;
 
             double[] fitness = new double[population.Length];
-            for (int i = 0; i < population.Length; i++)
-            {
-                fitness[i] = Distances.CalculatePathLength(population[i]);
-            }
+            
             
             
             do
             {
+                for (int i = 0; i < population.Length; i++)
+                {
+                    fitness[i] = Distances.CalculatePathLength(population[i]);
+                }
+                
+                
                 Log.AddToLog($"--------------------------  ERA NR.{numberOfIterations}  --------------------------");
                 numberOfIterations++;
                 

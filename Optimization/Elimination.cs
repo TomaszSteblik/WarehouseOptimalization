@@ -44,6 +44,7 @@ namespace Optimization
                 Population[toDie[j]] = offsprings[j];
             }
         }
+        
     }
 
     public class ElitismElimination : Elimination
@@ -56,9 +57,6 @@ namespace Optimization
         public override void EliminateAndReplace(int[][] offsprings, double[] fitnessProductPlacement)
         {
             int numberToEliminate = offsprings.Length;
-            Array.Sort(fitnessProductPlacement, Population);
-            Array.Reverse(offsprings);
-            Array.Reverse(fitnessProductPlacement);
             for (int i = 0; i < numberToEliminate; i++)
             {
                 Population[PopulationSize - 1 - i] = offsprings[i];
