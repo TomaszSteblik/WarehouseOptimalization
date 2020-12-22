@@ -65,7 +65,7 @@ namespace Optimization
 
                 //selekcja
                 Selection
-                    selection = new RouletteWheelSelection(
+                    selection = new ElitismSelection(
                         population); // NA TEN MOMENT DZIAŁA TYLKO SELEKCJA ROULETTE WHEEL TODO: Pozostałe selekcje 
                 int[][] parents = selection.GenerateParents(optimizationParameters.ChildrenPerGeneration * 2,
                     FitnessProductPlacement);
