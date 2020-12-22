@@ -71,11 +71,11 @@ namespace Optimization
             _instance ??= new Distances();
             var fileLines = File.ReadAllLines(dataSource);
             _instance._objectCount = fileLines.GetLength(0);
-            _instance._distances = new int[_instance._objectCount][];
+            _instance._warehouseDistances = new double[_instance._objectCount][];
             for (int i = 0; i < _instance._objectCount; i++)
             {
-                _instance._distances[i] = Array.ConvertAll(fileLines[i].Split(" "
-                    , StringSplitOptions.RemoveEmptyEntries), int.Parse);
+                _instance._warehouseDistances[i] = Array.ConvertAll(fileLines[i].Split(" "
+                    , StringSplitOptions.RemoveEmptyEntries), double.Parse);
             }
         }
 
@@ -101,9 +101,9 @@ namespace Optimization
             }
         }
         
-        public static int GetDistanceBetweenObjects(int firstId, int secondId)
+        public static double GetDistanceBetweenObjects(int firstId, int secondId)
         {
-            return _instance._distances[firstId][secondId];
+            return _instance._warehouseDistances[firstId][secondId];
         }
 
         public static int CalculatePathLength(int[] path)

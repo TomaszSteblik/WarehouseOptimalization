@@ -38,48 +38,77 @@ namespace Optimization
             for (int e = 0; e < optimizationParameters.TerminationValue; e++) //opt. rozkładu produktów
             {
                 double[] FitnessProductPlacement = new double[populationSize];
-                
+
                 //fiteness
                 //for(int i =0; i<populationSize; i++)
                 Parallel.For(0, populationSize, i =>
                 {
                     for (int k = 0; k < distances.OrdersCount; k++)
                     {
-                        double pathLength = FindShortestPath.Find(distances.orders[k], population[i], optimizationParameters);
+                        double pathLength =
+                            FindShortestPath.Find(distances.orders[k], population[i], optimizationParameters);
                         FitnessProductPlacement[i] +=
                             pathLength * distances.orders[k][distances.orders[k].Length - 1];
                     }
 
                 });
 
-                
-                Log.AddToLog("Populacja nr."+e);
-                Log.AddToLog("avg: "+FitnessProductPlacement.Average());
-                Log.AddToLog("max: "+FitnessProductPlacement.Max());
-                Log.AddToLog("min: "+FitnessProductPlacement.Min());
-                for (int i = 0; i < populationSize ; i++)
+
+                Log.AddToLog("Populacja nr." + e);
+                Log.AddToLog("avg: " + FitnessProductPlacement.Average());
+                Log.AddToLog("max: " + FitnessProductPlacement.Max());
+                Log.AddToLog("min: " + FitnessProductPlacement.Min());
+                for (int i = 0; i < populationSize; i++)
                 {
                     Log.AddToLog($"Chromosome({FitnessProductPlacement[i]}): {string.Join(";", population[i])} \n");
                 }
+
                 //selekcja
-                Selection selection = new RouletteWheelSelection(population); // NA TEN MOMENT DZIAŁA TYLKO SELEKCJA ROULETTE WHEEL TODO: Pozostałe selekcje 
-                int[][] parents = selection.GenerateParents(optimizationParameters.ChildrenPerGeneration*2, FitnessProductPlacement);
+                Selection
+                    selection = new RouletteWheelSelection(
+                        population); // NA TEN MOMENT DZIAŁA TYLKO SELEKCJA ROULETTE WHEEL TODO: Pozostałe selekcje 
+                int[][] parents = selection.GenerateParents(optimizationParameters.ChildrenPerGeneration * 2,
+                    FitnessProductPlacement);
 
                 //krzyżowanie
                 Crossover crossover = new Crossover.AexCrossover();
                 int[][] offsprings = crossover.GenerateOffsprings(parents);
 
                 //eliminacja
-                Elimination elimination = new ElitismElimination(ref population); // NA TEN MOMENT DZIAŁA TYLKO RWE TODO: Pozostałe eliminacje 
-                elimination.EliminateAndReplace(offsprings,FitnessProductPlacement);
+                Elimination
+                    elimination =
+                        new ElitismElimination(
+                            ref population); // NA TEN MOMENT DZIAŁA TYLKO RWE TODO: Pozostałe eliminacje 
+                elimination.EliminateAndReplace(offsprings, FitnessProductPlacement);
                 //mutacja
-                
-                
 
 
-                Array.Sort(FitnessProductPlacement);
-                E = FitnessProductPlacement[0];
-                Event1?.Invoke(null, null);
+                int x = 0;
+                // E = newFitness.Min();
+                // Event1?.Invoke(null, null);
+                //  optimizationParameters.MutationProbability *= 1.1;
+                //Console.WriteLine(newFitness[x]+"     10-11-12-13-14-15");
+                if (e % 1000 == 0)
+                {
+                    E = FitnessProductPlacement.Min();
+                    Console.WriteLine(E);
+                    //Event1?.Invoke(null, null);
+                    
+
+                Console.Write(population[x][2] + " " + population[x][4] + " " + population[x][5] + " " +
+                              population[x][9] + " " + population[x][9] + " " + population[x][11] + "       ");
+                Console.WriteLine(population[x][13] + " " + population[x][15] + " " + population[x][17] + " " +
+                                  population[x][19] + " " + population[x][21] + " " + population[x][23]);
+
+                Console.Write(population[x][1] + " " + population[x][3] + "     " + population[x][6] + " " +
+                              population[x][8] + " " + population[x][10] + "       ");
+                Console.WriteLine(population[x][12] + " " + population[x][14] + " " + population[x][16] + " " +
+                                  population[x][18] + " " + population[x][20] + " " + population[x][22]);
+                Console.WriteLine();
+            }
+
+            //Array.Sort(FitnessProductPlacement);
+                
 
 
                 foreach (var chromosome in population)

@@ -17,7 +17,7 @@ namespace Optimization
         public void Save()
         {
             int size = Distances.ObjectCount;
-            int sum = 0;
+            double sum = 0;
             for (int i = 0; i < size - 1; i++)
                 sum += Distances.GetDistanceBetweenObjects(_cityOrder[i], _cityOrder[i + 1]);
 

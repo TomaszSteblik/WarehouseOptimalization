@@ -5,8 +5,8 @@
   "StartingId": 0,
   "LogPath": "/home/rtry/RiderProjects/WarehouseOptimization/log.txt",
   "DataPath": "/home/rtry/RiderProjects/WarehouseOptimization/distances-usa.txt",
-  "WarehousePath": "/home/rtry/RiderProjects/WarehouseOptimization/mag1.txt",
-  "OrdersPath": "/home/rtry/RiderProjects/WarehouseOptimization/orders1.txt",
+  "WarehousePath": "/home/rtry/RiderProjects/WarehouseOptimization/mag23.txt",
+  "OrdersPath": "/home/rtry/RiderProjects/WarehouseOptimization/orders23.txt",
   "ResultPath": "/home/rtry/RiderProjects/WarehouseOptimization/result.txt",
   "SelectionMethod": "Tournament",
   "CrossoverMethod": "HGreX",
@@ -15,5 +15,5 @@
   "MutationProbability": 5,
   "PopulationSize": 400,
   "ChildrenPerGeneration": 5,
-  "TerminationValue": 5000
+  "TerminationValue": 10000
 }

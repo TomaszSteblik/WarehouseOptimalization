@@ -8,6 +8,7 @@ namespace Optimization
         private readonly List<int> _cityOrder;
         private readonly List<int> _availableCities;
 
+        private int[] cityOrder;
         private Distances _distances;
         private int[] _chromosome;
 
@@ -15,6 +16,11 @@ namespace Optimization
         {
             _distances = Distances.GetInstance();
             OptimizationParameters = optimizationParameters;
+            _chromosome = new int[Distances.ObjectCount + 1];
+            for (int i = 0; i < Distances.ObjectCount + 1; i++)
+            {
+                _chromosome[i] = i;
+            }
             _cityOrder = new List<int>();
             _availableCities = new List<int>();
             if (optimizationParameters.Mode == Mode.DistancesMode)
@@ -32,7 +38,8 @@ namespace Optimization
             _distances = Distances.GetInstance();
             OptimizationParameters = optimizationParameters;
             _availableCities = new List<int>();
-            _cityOrder = new List<int>();
+            //_cityOrder = new List<int>();
+            cityOrder = new int[order.Length + 1];
             for (int i = 0; i < order.Length - 1; i++)
             {
                 _availableCities.Add(order[i]);
@@ -41,23 +48,29 @@ namespace Optimization
 
         public override int[] FindShortestPath(int[] order)
         {
-            _cityOrder.Add(0);
-            
+            //_cityOrder.Add(0);
+            cityOrder[0] = 0;
+            int i = 0;
             var currentId = 0;
             while (_availableCities.Count > 1)
             {
                 currentId = FindNearestNeighbor(currentId);
-                _cityOrder.Add(currentId);
+                //_cityOrder.Add(currentId);
+                cityOrder[++i] = currentId;
             }
-            _cityOrder.Add(_availableCities[0]);
-            _cityOrder.Add(0);
+
+            cityOrder[++i] = _availableCities[0];
+            cityOrder[++i] = 0;
+            //_cityOrder.Add(_availableCities[0]);
+            //_cityOrder.Add(0);
             if (OptimizationParameters.Use2opt)
             {
                 Optimizer optimizer = new Optimizer();
-                return optimizer.Optimize_2opt(_cityOrder.ToArray());
+                return optimizer.Optimize_2opt(cityOrder);
             }
 
-            return _cityOrder.ToArray();
+            return cityOrder;
+            //return _cityOrder.ToArray();
         }
         
         public override int[] FindShortestPath(int startingId)
