@@ -75,10 +75,19 @@ namespace Optimization
                 int[][] offsprings = crossover.GenerateOffsprings(parents);
 
                 //eliminacja
-                Elimination
-                    elimination =
-                        new ElitismElimination(
-                            ref population); // NA TEN MOMENT DZIAŁA TYLKO RWE TODO: Pozostałe eliminacje 
+                Elimination elimination;
+                switch (optimizationParameters.EliminationMethod)
+                {
+                    case "Elitism":
+                        elimination = new ElitismElimination(ref population);
+                        break;
+                    case "RouletteWheel":
+                        elimination = new RouletteWheelElimination(ref population);
+                        break;
+                    default:
+                        throw new ArgumentException("Wrong elimination name in parameters json file");
+                }
+                        
                 elimination.EliminateAndReplace(offsprings, FitnessProductPlacement);
                 //mutacja
 
@@ -96,7 +105,7 @@ namespace Optimization
                     
 
                 Console.Write(population[x][2] + " " + population[x][4] + " " + population[x][5] + " " +
-                              population[x][9] + " " + population[x][9] + " " + population[x][11] + "       ");
+                              population[x][9] + " " + population[x][11] + "       ");
                 Console.WriteLine(population[x][13] + " " + population[x][15] + " " + population[x][17] + " " +
                                   population[x][19] + " " + population[x][21] + " " + population[x][23]);
 

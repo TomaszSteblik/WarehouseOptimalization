@@ -5,7 +5,7 @@ namespace Optimization
 {
     public abstract class Elimination
     {
-        public abstract void EliminateAndReplace(int[][] offsprings);
+        public abstract void EliminateAndReplace(int[][] offsprings, double[] fitnessProductPlacement);
         protected readonly int[][] Population;
         protected readonly int PopulationSize;
         protected readonly Random Random= new Random();
@@ -14,11 +14,6 @@ namespace Optimization
             Population = population;
             PopulationSize = population.Length;
         }
-
-        public virtual void EliminateAndReplace(int[][] offsprings, double[] fitnessProductPlacement)
-        {
-            throw new NotImplementedException();
-        }
     }
 
     public class RouletteWheelElimination : Elimination
@@ -26,32 +21,6 @@ namespace Optimization
         public RouletteWheelElimination(ref int[][] population) : base(ref population)
         {
             
-        }
-        public override void EliminateAndReplace(int[][] offsprings)
-        {
-            int fitnessTotal =0;
-            foreach (var chromosome in Population)
-            {
-                fitnessTotal += Distances.CalculatePathLength(chromosome);
-            }
-            int[] toDie = new int[offsprings.Length];
-            for (int j = 0; j < offsprings.Length; j++)
-            {
-                int approx = Random.Next(0, fitnessTotal);
-                for (int k = 0; k < PopulationSize; k++)
-                {
-                    approx += Distances.CalculatePathLength(Population[k]);
-                    if (approx >= fitnessTotal)
-                    {
-                        toDie[j] = k;
-                        break;
-                    }
-                }
-            }
-            for (int j = 0; j < offsprings.Length; j++)
-            {
-                Population[toDie[j]] = offsprings[j];
-            }
         }
         public override void EliminateAndReplace(int[][] offsprings,double[] fitness)
         {
@@ -83,20 +52,13 @@ namespace Optimization
         {
             
         }
-        public override void EliminateAndReplace(int[][] offsprings)
-        {
-            int numberToEliminate = offsprings.Length;
-            Array.Sort(Population,(x,y)=>Distances.CalculatePathLength(x)-Distances.CalculatePathLength(y));
-            for (int i = 0; i < numberToEliminate; i++)
-            {
-                Population[PopulationSize - 1 - i] = offsprings[i];
-            }
-        }
 
         public override void EliminateAndReplace(int[][] offsprings, double[] fitnessProductPlacement)
         {
             int numberToEliminate = offsprings.Length;
             Array.Sort(fitnessProductPlacement, Population);
+            Array.Reverse(offsprings);
+            Array.Reverse(fitnessProductPlacement);
             for (int i = 0; i < numberToEliminate; i++)
             {
                 Population[PopulationSize - 1 - i] = offsprings[i];
