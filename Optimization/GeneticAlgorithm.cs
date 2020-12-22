@@ -71,14 +71,22 @@ namespace Optimization
             int[] bestGene = population.First(p => Distances.CalculatePathLength(p) == lastBestFitness);
             int countToTerminate = terminateAfterCount;
             int numberOfIterations = 0;
+
+            double[] fitness = new double[population.Length];
+            for (int i = 0; i < population.Length; i++)
+            {
+                fitness[i] = Distances.CalculatePathLength(population[i]);
+            }
+            
+            
             do
             {
                 Log.AddToLog($"--------------------------  ERA NR.{numberOfIterations}  --------------------------");
                 numberOfIterations++;
                 
-                int[][] parents = _selection.GenerateParents(OptimizationParameters.ChildrenPerGeneration*2);
+                int[][] parents = _selection.GenerateParents(OptimizationParameters.ChildrenPerGeneration*2,fitness);
                 int[][] offsprings = _crossover.GenerateOffsprings(parents);
-                _elimination.EliminateAndReplace(offsprings);
+                _elimination.EliminateAndReplace(offsprings,fitness);
 
                 if (canIncreaseStrictness) canIncreaseStrictness = _selection.IncreaseStrictness(OptimizationParameters.ChildrenPerGeneration);
 
