@@ -13,7 +13,7 @@
   "EliminationMethod": "Elitism",
   "CanMutate": true,
   "MutationProbability": 5,
-  "PopulationSize": 500,
-  "ChildrenPerGeneration": 20,
-  "TerminationValue": 5000
+  "PopulationSize": 1000,
+  "ChildrenPerGeneration": 15,
+  "TerminationValue": 4000
 }

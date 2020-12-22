@@ -108,7 +108,7 @@ namespace Optimization
                     Console.WriteLine(GetProductByLocation(13, population[x]) + " " + GetProductByLocation(15, population[x]) + " " + GetProductByLocation(17, population[x]) + " " + GetProductByLocation(19, population[x]) + " " + GetProductByLocation(21, population[x]) + " " + GetProductByLocation(23, population[x]));
 
                     Console.Write(GetProductByLocation(1, population[x]) + " " + GetProductByLocation(3, population[x]) + "     " + GetProductByLocation(6, population[x]) + " " + GetProductByLocation(8, population[x]) + " " + GetProductByLocation(10, population[x]) + "       ");
-                    Console.WriteLine(GetProductByLocation(12, population[x]) + " " + GetProductByLocation(14, population[x]) + " " + GetProductByLocation(16, population[x]) + " " + population[x][18] + " " + GetProductByLocation(20, population[x]) + " " + GetProductByLocation(22, population[x]));
+                    Console.WriteLine(GetProductByLocation(12, population[x]) + " " + GetProductByLocation(14, population[x]) + " " + GetProductByLocation(16, population[x]) + " " + GetProductByLocation(18, population[x]) + " " + GetProductByLocation(20, population[x]) + " " + GetProductByLocation(22, population[x]));
                     Console.WriteLine();
                
                 }
