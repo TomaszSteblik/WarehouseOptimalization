@@ -97,7 +97,7 @@ namespace Optimization
                 // Event1?.Invoke(null, null);
                 //  optimizationParameters.MutationProbability *= 1.1;
                 //Console.WriteLine(newFitness[x]+"     10-11-12-13-14-15");
-                if (e % 1000 == 0)
+                if (e % 10 == 0)
                 {
                     E = FitnessProductPlacement.Min();
                     Console.WriteLine(E);

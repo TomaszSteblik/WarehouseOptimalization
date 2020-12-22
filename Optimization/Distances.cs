@@ -72,10 +72,13 @@ namespace Optimization
             var fileLines = File.ReadAllLines(dataSource);
             _instance._objectCount = fileLines.GetLength(0);
             _instance._warehouseDistances = new double[_instance._objectCount][];
+            _instance._distances = new int[_instance._objectCount][];
             for (int i = 0; i < _instance._objectCount; i++)
             {
                 _instance._warehouseDistances[i] = Array.ConvertAll(fileLines[i].Split(" "
                     , StringSplitOptions.RemoveEmptyEntries), double.Parse);
+                _instance._distances[i] = Array.ConvertAll(fileLines[i].Split(" "
+                    , StringSplitOptions.RemoveEmptyEntries), int.Parse);
             }
         }
 
