@@ -25,8 +25,7 @@ namespace Optimization
             int populationSize = optimizationParameters.PopulationSize;
             int[][] population = new int[populationSize][];
             InitializePopulation(population, 0);
-
-
+            
 
 
             //order.txt
@@ -109,7 +108,7 @@ namespace Optimization
                 Console.WriteLine(population[x][13] + " " + population[x][15] + " " + population[x][17] + " " +
                                   population[x][19] + " " + population[x][21] + " " + population[x][23]);
 
-                Console.Write(population[x][1] + " " + population[x][3] + "     " + population[x][6] + " " +
+                Console.Write(population[x][1] + " " + population[x][3] + " " + population[x][6] + " " +
                               population[x][8] + " " + population[x][10] + "       ");
                 Console.WriteLine(population[x][12] + " " + population[x][14] + " " + population[x][16] + " " +
                                   population[x][18] + " " + population[x][20] + " " + population[x][22]);

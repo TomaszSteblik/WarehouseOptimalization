@@ -37,7 +37,7 @@ namespace Optimization
                 _ => throw new ArgumentException("Incorrect optimization method in config file")
             };
             
-            return Distances.CalculatePathLengthDouble(optimization.FindShortestPath(order));
+            return Distances.CalculatePathLengthDouble(optimization.FindShortestPath(order), chromosome);
 
         }
     }
