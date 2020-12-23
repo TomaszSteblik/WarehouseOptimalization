@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 
 namespace Optimization
@@ -78,19 +79,18 @@ namespace Optimization
             
             do
             {
-                for (int i = 0; i < population.Length; i++)
+                Parallel.For(0, population.Length, i =>
                 {
                     fitness[i] = Distances.CalculatePathLength(population[i]);
-                }
-                
-                
+                });
+
+
                 Log.AddToLog($"--------------------------  ERA NR.{numberOfIterations}  --------------------------");
                 numberOfIterations++;
-                
                 int[][] parents = _selection.GenerateParents(OptimizationParameters.ChildrenPerGeneration*2,fitness);
                 int[][] offsprings = _crossover.GenerateOffsprings(parents);
                 _elimination.EliminateAndReplace(offsprings,fitness);
-
+                
                 if (canIncreaseStrictness) canIncreaseStrictness = _selection.IncreaseStrictness(OptimizationParameters.ChildrenPerGeneration);
 
                 if (canMutate)

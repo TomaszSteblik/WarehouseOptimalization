@@ -64,9 +64,21 @@ namespace Optimization
                 }
 
                 //selekcja
-                Selection
-                    selection = new ElitismSelection(
-                        population); // NA TEN MOMENT DZIAŁA TYLKO SELEKCJA ROULETTE WHEEL TODO: Pozostałe selekcje 
+                Selection selection;
+                switch (optimizationParameters.SelectionMethod)
+                {
+                    case "Tournament":
+                        selection = new TournamentSelection(population);
+                        break;
+                    case "Elitism":
+                        selection = new ElitismSelection(population);
+                        break;
+                    case "RouletteWheel":
+                        selection = new RouletteWheelSelection(population);
+                        break;
+                    default:
+                        throw new ArgumentException("Wrong selection name in parameters json file");
+                }
                 int[][] parents = selection.GenerateParents(optimizationParameters.ChildrenPerGeneration * 2,
                     FitnessProductPlacement);
 

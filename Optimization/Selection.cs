@@ -4,7 +4,6 @@ using System.Linq;
 namespace Optimization {
     public abstract class Selection
     {
-        public abstract int[][] GenerateParents(int numberOfParents);
         protected readonly int[][] Population;
         protected readonly int PopulationSize;
         protected readonly Random Random;
@@ -26,53 +25,59 @@ namespace Optimization {
             return false;
         }
 
-        public virtual int[][] GenerateParents(int numberOfParents, double[] fitness)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract int[][] GenerateParents(int numberOfParents, double[] fitness);
     }
 
     public class TournamentSelection : Selection {
         
         
-        public override int[][] GenerateParents(int numberOfParents)
+
+        public override int[][] GenerateParents(int numberOfParents, double[] fitness)
         {
             var tournamentSize = numberOfParents*2*2;
             //losowo wybrac x z aktualnej populacji
             int[][] contenders = new int[tournamentSize][];
+            double[] tournamentFitness = new double[tournamentSize];
             //wypelnic
             for (int k = 0; k < tournamentSize; k++)
             {
                 var index = Random.Next(0, PopulationSize);
                 contenders[k] = Population[index];
+                tournamentFitness[k] = fitness[index];
             }
             //rozegrac az nie bedzie jeden
-            int[][] winner = Tournament(contenders);
+            int[][] winner = Tournament(contenders,ref tournamentFitness);
             while (winner.Length>numberOfParents)
             {
-                winner = Tournament(winner);
+                winner = Tournament(winner,ref tournamentFitness);
             }
             return winner;
         }
 
-        private int[][] Tournament(int[][] contenders)
+        private int[][] Tournament(int[][] contenders, ref double[] tournamentFitness)
         {
-            int lenght = contenders.Length * (int) Math.Pow(2,Strictness);
+            //int lenght = contenders.Length * (int) Math.Pow(2,Strictness);
             int halfLenght = contenders.Length / 2;
             int[][] winners = new int[halfLenght][];
+            double[] newFitness = new double[halfLenght];
             for (int i = 0,c=0; i < halfLenght; i++,c+=2) 
             {
-                if (Distances.CalculatePathLength(contenders[c])<Distances.CalculatePathLength(contenders[c+1]))
+                if (tournamentFitness[c]<tournamentFitness[c+1])
                 {
                     winners[i] = contenders[c];
+                    newFitness[i] = tournamentFitness[c];
                 }
                 else
                 {
                     winners[i] = contenders[c + 1];
+                    newFitness[i] = tournamentFitness[c + 1];
                 }
             }
+
+            tournamentFitness = newFitness;
             return winners;
         }
+        
 
 
         public TournamentSelection(int[][] population) : base(population)
@@ -85,19 +90,6 @@ namespace Optimization {
         public ElitismSelection(int[][] population) : base(population)
         {
             
-        }
-        public override int[][] GenerateParents(int numberOfParents)
-        {
-            Array.Sort(Population,(x,y)=>Distances.CalculatePathLength(x)-Distances.CalculatePathLength(y));
-            int[][] parents = new int[numberOfParents][];
-
-            for (int i = 0; i < numberOfParents; i++)
-            {
-                parents[i] = (int[]) Population[i].Clone();
-                
-            }
-
-            return parents;
         }
 
         public override int[][] GenerateParents(int numberOfParents, double[] fitness)
@@ -122,17 +114,6 @@ namespace Optimization {
         public RouletteWheelSelection(int[][] population) : base(population)
         {
             
-        }
-
-        public override int[][] GenerateParents(int numberOfParents)
-        {
-            int[][] parents = new int[numberOfParents][];
-            for (int i = 0; i < numberOfParents; i++)
-            {
-                parents[i] = GenerateSingleParent();
-            }
-
-            return parents;
         }
 
         public override int[][] GenerateParents(int numberOfParents, double[] fitness)
@@ -161,25 +142,6 @@ namespace Optimization {
 
             return Population[PopulationSize - 1];
         }
-
-        private int[] GenerateSingleParent()
-        {
-            double fitnessSum = 0;
-            foreach (var gene in Population)
-            {
-                fitnessSum += Distances.CalculatePathLength(gene);
-            }
-
-            for (int i = 0; i < PopulationSize; i++)
-            {
-                fitnessSum += (1.0 / Distances.CalculatePathLength(Population[i]));
-                if (fitnessSum >= 1)
-                {
-                    return Population[i];
-                }
-            }
-
-            return Population[PopulationSize - 1];
-        }
+        
     }
 }
