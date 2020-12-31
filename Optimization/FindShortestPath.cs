@@ -28,16 +28,16 @@ namespace Optimization
             
         }
 
-        public static double Find(int[] order, int[] chromosome,  OptimizationParameters optimizationParameters)
+        public static double Find(int[] order,  OptimizationParameters optimizationParameters)
         {
             Optimization optimization = optimizationParameters.OptimizationMethod switch
             {
-                OptimizationMethod.NearestNeighbor => new NearestNeighbor(order, chromosome, optimizationParameters),
+                OptimizationMethod.NearestNeighbor => new NearestNeighbor(order, optimizationParameters),
                 OptimizationMethod.GeneticAlgorithm => null, // Genetic co zwraca dlugosc trasy
                 _ => throw new ArgumentException("Incorrect optimization method in config file")
             };
             
-            return Distances.CalculatePathLengthDouble(optimization.FindShortestPath(order), chromosome);
+            return Distances.CalculatePathLengthDouble(optimization.FindShortestPath(order));
 
         }
     }

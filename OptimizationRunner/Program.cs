@@ -15,7 +15,7 @@ namespace OptimizationRunner
             stopwatch.Start();
             Warehouse.Event1 += Warehouse_Event1;
 
-            string jsonS = File.ReadAllText(args.Length > 0 ? args[0] : @"E:\Warehouse\WarehouseOptimization-master\parameters2.json") ;
+            string jsonS = File.ReadAllText(args.Length > 0 ? args[0] : @"E:\Warehouse\WarehouseOptimization\parameters23.json") ;
             OptimizationParameters optimizationParameters = JsonConvert.DeserializeObject<OptimizationParameters>(jsonS);
             switch (optimizationParameters.Mode)
             {

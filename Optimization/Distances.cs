@@ -124,13 +124,6 @@ namespace Optimization
                 sum += _instance._warehouseDistances[path[i]][path[i + 1]];
             return sum;
         }
-        
-        public static double CalculatePathLengthDouble(int[] path, int[] chromosome)
-        {
-            var sum = 0d;
-            for (int i = 0; i < path.Length - 1; i++)
-                sum += _instance._warehouseDistances[chromosome[path[i]]][chromosome[path[i + 1]]];
-            return sum;
-        }
+
     }
 }
