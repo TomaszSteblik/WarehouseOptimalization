@@ -82,6 +82,19 @@ namespace Optimization
             }
         }
 
+        public static int[] GenerateObjectIdList(int size)
+        {
+            int[] result = new int[size];
+            for (int i = 1; i < size; i++)
+            {
+                result[i - 1] = i;
+            }
+
+            result[size - 1] = 1;
+
+            return result;
+        }
+
         public static void LoadOrders(string ordersPath)
         {
             if (_instance != null)

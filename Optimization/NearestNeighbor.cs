@@ -6,41 +6,31 @@ namespace Optimization
     public class NearestNeighbor : Optimization
     {
         private readonly List<int> _objectOrder;
-        private readonly List<int> _availableObjects;
+        private List<int> _availableObjects;
 
         private int[] objectOrder;
         private Distances _distances;
-
+        
         public NearestNeighbor(OptimizationParameters optimizationParameters)
         {
             _distances = Distances.GetInstance();
             OptimizationParameters = optimizationParameters;
-            
-            _objectOrder = new List<int>();
-            _availableObjects = new List<int>();
-            if (optimizationParameters.Mode == Mode.DistancesMode)
-            {
-                for (int i = 0; i < Distances.ObjectCount; i++)
-                {
-                    _availableObjects.Add(i);
-                }
-            }
         }
 
-        public NearestNeighbor(int[] order, OptimizationParameters optimizationParameters)
+        public override int[] FindShortestPath(int startingId)
         {
-            _distances = Distances.GetInstance();
-            OptimizationParameters = optimizationParameters;
-            _availableObjects = new List<int>();
-            objectOrder = new int[order.Length + 1];
-            for (int i = 0; i < order.Length - 1; i++)
-            {
-                _availableObjects.Add(order[i]);
-            }
+            throw new System.NotImplementedException();
         }
 
         public override int[] FindShortestPath(int[] order)
         {
+            objectOrder = new int[order.Length + 1];
+            _availableObjects = new List<int>();
+            for (int j = 0; j < order.Length - 1; j++)
+            {
+                _availableObjects.Add(order[j]);
+            }
+            
             objectOrder[0] = 0;
             int i = 0;
             var currentId = 0;
@@ -61,27 +51,6 @@ namespace Optimization
             return objectOrder;
         }
         
-        public override int[] FindShortestPath(int startingId)
-        {
-            _availableObjects.RemoveAt(_availableObjects.IndexOf(startingId));
-            _objectOrder.Add(startingId);
-            
-            var currentId = startingId;
-            while (_availableObjects.Count > 1)
-            {
-                currentId = FindNearestNeighbor(currentId);
-                _objectOrder.Add(currentId);
-            }
-            _objectOrder.Add(_availableObjects[0]);
-            _objectOrder.Add(startingId);
-            if (OptimizationParameters.Use2opt)
-            {
-                Optimizer optimizer = new Optimizer();
-                return optimizer.Optimize_2opt(_objectOrder.ToArray());
-            }
-
-            return _objectOrder.ToArray();
-        }
 
         private int FindNearestNeighbor(int id)
         {
