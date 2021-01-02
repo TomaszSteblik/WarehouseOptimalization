@@ -144,7 +144,105 @@ namespace Optimization
 
         public override int[] FindShortestPath(int[] order)
         {
-            throw new NotImplementedException();
+            population = new int[100][];
+            OptimizationParameters.PopulationSize = 100;
+            int populationSize = 100;
+            for (int i = 0; i < populationSize; i++)
+            {
+                int[] temp = new int[order.Length+1];
+                for (int z = 0; z <= order.Length; z++)
+                {
+                    temp[z] = -1;
+                }
+                int count = 0;
+                temp[0] = 0;
+                count++;
+                do
+                {
+                    int a = _random.Next(0,order.Length);
+                    if (!IsThereGene(temp,order[a]))
+                    {
+                        temp[count] = order[a];
+                        count++;
+                    }
+                } while (count<=order.Length);
+                population[i] = temp;
+            }
+            
+            
+            int lastBestFitness = population.Min(p => Distances.CalculatePathLength(p));
+            int[] bestGene = population.First(p => Distances.CalculatePathLength(p) == lastBestFitness);
+            int countToTerminate = terminateAfterCount;
+            int numberOfIterations = 0;
+
+            double[] fitness = new double[population.Length];
+
+            _crossover = new Crossover.HGreXCrossover();
+            
+            
+            do
+            {
+                Parallel.For(0, population.Length, i =>
+                {
+                    fitness[i] = Distances.CalculatePathLength(population[i]);
+                });
+
+
+                Log.AddToLog($"--------------------------  ERA NR.{numberOfIterations}  --------------------------");
+                numberOfIterations++;
+                int[][] parents = _selection.GenerateParents(OptimizationParameters.ChildrenPerGeneration*2,fitness);
+                int[][] offsprings = _crossover.GenerateOffsprings(parents);
+                _elimination.EliminateAndReplace(offsprings,fitness);
+                
+                if (canIncreaseStrictness) canIncreaseStrictness = _selection.IncreaseStrictness(OptimizationParameters.ChildrenPerGeneration);
+
+                if (canMutate)
+                {
+                    foreach (var chromosome in population)
+                    {
+                        if (_random.Next(0, 1000) <= OptimizationParameters.MutationProbability)
+                        {
+                            Log.AddToLog($"MUTATION RSM\nBEFORE MUTATION({Distances.CalculatePathLength(chromosome)}): {string.Join(";",chromosome)}");
+
+                            var j = _random.Next(1, Distances.ObjectCount);
+                            var i = _random.Next(1, j);
+                            Array.Reverse(chromosome,i,j-i);
+
+                            Log.AddToLog($"AFTER MUTATION({Distances.CalculatePathLength(chromosome)}):  {string.Join(";",chromosome)}\n");
+
+                        }
+                    }
+                }
+
+
+                int currentBestFitness = population.Min(p => Distances.CalculatePathLength(p));
+                
+                if (lastBestFitness <= currentBestFitness)
+                {
+                    countToTerminate--;
+                }
+                else
+                {
+                    lastBestFitness = currentBestFitness;
+                    bestGene = population.First(p => Distances.CalculatePathLength(p) == lastBestFitness);
+                    countToTerminate = terminateAfterCount;
+                }
+                
+            } while (countToTerminate >0);
+            
+            int[] result = new int[bestGene.Length+1];
+            for (int i = 0; i < bestGene.Length; i++)
+            {
+                result[i] = bestGene[i];
+            }
+            result[result.Length - 1] = bestGene[0];
+            if (OptimizationParameters.Use2opt)
+            {
+                Log.AddToLog("USING 2-OPT");
+                Optimizer optimizer = new Optimizer();
+                return optimizer.Optimize_2opt(result);
+            }
+            return result;
         }
 
         private bool IsThereGene(int[] chromosome, int a)

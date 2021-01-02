@@ -35,8 +35,8 @@ namespace Optimization
                 double[] FitnessProductPlacement = new double[populationSize];
 
                 //fiteness
-               // for (int i = 0; i < populationSize; i++)
-                  Parallel.For(0, populationSize, i =>
+                for (int i = 0; i < populationSize; i++)
+                 // Parallel.For(0, populationSize, i =>
                 {
                     for (int k = 0; k < distances.OrdersCount; k++)
                     {
@@ -45,7 +45,7 @@ namespace Optimization
                         FitnessProductPlacement[i] += pathLength * distances.orders[k][distances.orders[k].Length - 1];
                     }
 
-                });
+                }//);
 
                 if (e == 0)
                 {
