@@ -1,5 +1,5 @@
 {
-  "Mode": "WarehouseMode",
+  "Mode": "DistancesMode",
   "OptimizationMethod": "GeneticAlgorithm",
   "Use2opt": true,
   "StartingId": 0,
