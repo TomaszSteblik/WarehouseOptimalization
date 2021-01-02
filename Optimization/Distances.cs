@@ -11,10 +11,10 @@ namespace Optimization
         private int _objectCount;
         private int _warehouseSize;
         private int _ordersCount;
-        public int[][] _distances;
         public double[][] _warehouseStructure;
-        public double[][] _warehouseDistances;
+        public double[][] _distances;
         public int[][] orders;
+        public int[] orderRepeats;
 
         public static int ObjectCount
         {
@@ -55,12 +55,12 @@ namespace Optimization
 
             if (System.IO.File.Exists(warehouseSource + ".dist.txt"))
             {
-                _instance._warehouseDistances = Files.ReadArray(warehouseSource + ".dist.txt");
+                _instance._distances = Files.ReadArray(warehouseSource + ".dist.txt");
             }
             else
             {
-                _instance._warehouseDistances = Dijkstra.GenerateDistanceArray(_instance._warehouseStructure);
-                Files.WriteArray(warehouseSource + ".dist.txt", _instance._warehouseDistances);
+                _instance._distances = Dijkstra.GenerateDistanceArray(_instance._warehouseStructure);
+                Files.WriteArray(warehouseSource + ".dist.txt", _instance._distances);
             }
 
 
@@ -71,26 +71,21 @@ namespace Optimization
             _instance ??= new Distances();
             var fileLines = File.ReadAllLines(dataSource);
             _instance._objectCount = fileLines.GetLength(0);
-            _instance._warehouseDistances = new double[_instance._objectCount][];
-            _instance._distances = new int[_instance._objectCount][];
+            _instance._distances = new double[_instance._objectCount][];
             for (int i = 0; i < _instance._objectCount; i++)
             {
-                _instance._warehouseDistances[i] = Array.ConvertAll(fileLines[i].Split(" "
-                    , StringSplitOptions.RemoveEmptyEntries), double.Parse);
                 _instance._distances[i] = Array.ConvertAll(fileLines[i].Split(" "
-                    , StringSplitOptions.RemoveEmptyEntries), int.Parse);
+                    , StringSplitOptions.RemoveEmptyEntries), double.Parse);
             }
         }
 
         public static int[] GenerateObjectIdList(int size)
         {
             int[] result = new int[size];
-            for (int i = 1; i < size; i++)
+            for (int i = 0; i < size; i++)
             {
-                result[i - 1] = i;
+                result[i] = i;
             }
-
-            result[size - 1] = 1;
 
             return result;
         }
@@ -102,16 +97,16 @@ namespace Optimization
                 var fileLines = File.ReadAllLines(ordersPath);
                 _instance._ordersCount = fileLines.Length;
                 _instance.orders = new int[_instance._ordersCount][];
+                _instance.orderRepeats = new int[_instance._ordersCount];
                 for (int i = 0; i < _instance._ordersCount; i++)
                     _instance.orders[i] = Array.ConvertAll(fileLines[i].Split(" "
                         , StringSplitOptions.RemoveEmptyEntries), int.Parse);
                 for (int i = 0; i < _instance._ordersCount; i++)
                 {
                     List<int> tmp = _instance.orders[i].ToList();
-                    int orderRepeats = tmp[^1];
+                    _instance.orderRepeats[i] = tmp[^1];
                     tmp.RemoveAt(tmp.Count - 1);
                     tmp = tmp.Distinct().ToList();
-                    tmp.Add(orderRepeats);
                     _instance.orders[i] = tmp.ToArray();
                 }
             }
@@ -119,22 +114,14 @@ namespace Optimization
         
         public static double GetDistanceBetweenObjects(int firstId, int secondId)
         {
-            return _instance._warehouseDistances[firstId][secondId];
-        }
-
-        public static int CalculatePathLength(int[] path)
-        {
-            var sum = 0;
-            for (int i = 0; i < path.Length - 1; i++)
-                sum += _instance._distances[path[i]][path[i + 1]];
-            return sum;
+            return _instance._distances[firstId][secondId];
         }
         
         public static double CalculatePathLengthDouble(int[] path)
         {
             var sum = 0d;
             for (int i = 0; i < path.Length - 1; i++)
-                sum += _instance._warehouseDistances[path[i]][path[i + 1]];
+                sum += _instance._distances[path[i]][path[i + 1]];
             return sum;
         }
 

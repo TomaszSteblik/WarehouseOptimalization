@@ -146,7 +146,7 @@ namespace Optimization
                     if (indexOfCurrentAlleParent1 + 1 < length)
                     {
                         nextAlleParent1 = parent1[indexOfCurrentAlleParent1 + 1];
-                        distancePanent1 = Distances._warehouseDistances[currentAlle][nextAlleParent1];
+                        distancePanent1 = Distances._distances[currentAlle][nextAlleParent1];
                         if (IsThereGene(offspring, nextAlleParent1))
                         {
                             isParent1Feasible = false;
@@ -165,7 +165,7 @@ namespace Optimization
                     if (indexOfCurrentAlleParent2 + 1 < length)
                     {
                         nextAlleParent2 = parent2[indexOfCurrentAlleParent2 + 1];
-                        distanceParent2 = Distances._warehouseDistances[currentAlle][nextAlleParent2];
+                        distanceParent2 = Distances._distances[currentAlle][nextAlleParent2];
                         if (IsThereGene(offspring, nextAlleParent2))
                         {
                             isParent2Feasible = false;

@@ -42,7 +42,7 @@ namespace Optimization
                     {
                         int[] order = Translator.TranslateWithChromosome(distances.orders[k], population[i]);
                         double pathLength = FindShortestPath.Find(order, optimizationParameters);
-                        FitnessProductPlacement[i] += pathLength * distances.orders[k][distances.orders[k].Length - 1];
+                        FitnessProductPlacement[i] += pathLength * distances.orderRepeats[k];
                     }
 
                 });
