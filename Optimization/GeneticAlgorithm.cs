@@ -144,9 +144,7 @@ namespace Optimization
 
         public override int[] FindShortestPath(int[] order)
         {
-            population = new int[100][];
-            OptimizationParameters.PopulationSize = 100;
-            int populationSize = 100;
+            int populationSize = OptimizationParameters.PopulationSize;
             for (int i = 0; i < populationSize; i++)
             {
                 int[] temp = new int[order.Length+1];
@@ -170,8 +168,8 @@ namespace Optimization
             }
             
             
-            int lastBestFitness = population.Min(p => Distances.CalculatePathLength(p));
-            int[] bestGene = population.First(p => Distances.CalculatePathLength(p) == lastBestFitness);
+            double lastBestFitness = population.Min(p => Distances.CalculatePathLengthDouble(p));
+            int[] bestGene = population.First(p => Distances.CalculatePathLengthDouble(p) == lastBestFitness);
             int countToTerminate = terminateAfterCount;
             int numberOfIterations = 0;
 
@@ -184,7 +182,7 @@ namespace Optimization
             {
                 Parallel.For(0, population.Length, i =>
                 {
-                    fitness[i] = Distances.CalculatePathLength(population[i]);
+                    fitness[i] = Distances.CalculatePathLengthDouble(population[i]);
                 });
 
 
@@ -215,7 +213,7 @@ namespace Optimization
                 }
 
 
-                int currentBestFitness = population.Min(p => Distances.CalculatePathLength(p));
+                double currentBestFitness = population.Min(p => Distances.CalculatePathLengthDouble(p));
                 
                 if (lastBestFitness <= currentBestFitness)
                 {
@@ -224,7 +222,7 @@ namespace Optimization
                 else
                 {
                     lastBestFitness = currentBestFitness;
-                    bestGene = population.First(p => Distances.CalculatePathLength(p) == lastBestFitness);
+                    bestGene = population.First(p => Distances.CalculatePathLengthDouble(p) == lastBestFitness);
                     countToTerminate = terminateAfterCount;
                 }
                 
