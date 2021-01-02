@@ -9,7 +9,7 @@
   "OrdersPath": "/home/tomek/RiderProjects/WarehouseOptimization/orders23b.txt",
   "ResultPath": "/home/tomek/RiderProjects/WarehouseOptimization/result.txt",
   "SelectionMethod": "Elitism",
-  "CrossoverMethod": "Aex",
+  "CrossoverMethod": "HGreX",
   "EliminationMethod": "Elitism",
   "CanMutate": true,
   "MutationProbability": 20,

@@ -77,7 +77,7 @@ namespace Optimization
                         {
                             while (IsThereGene(offspring, alle)) //losowac z niewykorzystanych
                             {
-                                alle = Random.Next(0, length);
+                                alle = parent1[Random.Next(0, parent1.Length)];
                             }
                         }
                     }
@@ -85,7 +85,7 @@ namespace Optimization
                     {
                         while (IsThereGene(offspring, alle))
                         {
-                            alle = Random.Next(0, length);
+                            alle = parent1[Random.Next(0, parent1.Length)];
                         }
 
                     }
@@ -146,7 +146,7 @@ namespace Optimization
                     if (indexOfCurrentAlleParent1 + 1 < length)
                     {
                         nextAlleParent1 = parent1[indexOfCurrentAlleParent1 + 1];
-                        distancePanent1 = Distances._distances[currentAlle][nextAlleParent1];
+                        distancePanent1 = Distances._warehouseDistances[currentAlle][nextAlleParent1];
                         if (IsThereGene(offspring, nextAlleParent1))
                         {
                             isParent1Feasible = false;
@@ -165,7 +165,7 @@ namespace Optimization
                     if (indexOfCurrentAlleParent2 + 1 < length)
                     {
                         nextAlleParent2 = parent2[indexOfCurrentAlleParent2 + 1];
-                        distanceParent2 = Distances._distances[currentAlle][nextAlleParent2];
+                        distanceParent2 = Distances._warehouseDistances[currentAlle][nextAlleParent2];
                         if (IsThereGene(offspring, nextAlleParent2))
                         {
                             isParent2Feasible = false;
@@ -220,9 +220,9 @@ namespace Optimization
                             int count = 0;
                             for (int j = 0; j < length; j++)
                             {
-                                if (!IsThereGene(offspring, j))
+                                if (!IsThereGene(offspring, parent1[j]))
                                 {
-                                    avaibleAlles[count] = j;
+                                    avaibleAlles[count] = parent1[j];
                                     count++;
                                 }
                             }

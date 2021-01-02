@@ -175,10 +175,9 @@ namespace Optimization
 
             double[] fitness = new double[population.Length];
 
-            _crossover = new Crossover.HGreXCrossover();
-            
-            
-            do
+
+
+            for (int b = 0; b < 100; b++)
             {
                 Parallel.For(0, population.Length, i =>
                 {
@@ -191,7 +190,6 @@ namespace Optimization
                 int[][] parents = _selection.GenerateParents(OptimizationParameters.ChildrenPerGeneration*2,fitness);
                 int[][] offsprings = _crossover.GenerateOffsprings(parents);
                 _elimination.EliminateAndReplace(offsprings,fitness);
-                
                 if (canIncreaseStrictness) canIncreaseStrictness = _selection.IncreaseStrictness(OptimizationParameters.ChildrenPerGeneration);
 
                 if (canMutate)
@@ -200,13 +198,11 @@ namespace Optimization
                     {
                         if (_random.Next(0, 1000) <= OptimizationParameters.MutationProbability)
                         {
-                            Log.AddToLog($"MUTATION RSM\nBEFORE MUTATION({Distances.CalculatePathLength(chromosome)}): {string.Join(";",chromosome)}");
 
-                            var j = _random.Next(1, Distances.ObjectCount);
+                            var j = _random.Next(1, chromosome.Length);
                             var i = _random.Next(1, j);
                             Array.Reverse(chromosome,i,j-i);
 
-                            Log.AddToLog($"AFTER MUTATION({Distances.CalculatePathLength(chromosome)}):  {string.Join(";",chromosome)}\n");
 
                         }
                     }
@@ -226,7 +222,7 @@ namespace Optimization
                     countToTerminate = terminateAfterCount;
                 }
                 
-            } while (countToTerminate >0);
+            }
             
             int[] result = new int[bestGene.Length+1];
             for (int i = 0; i < bestGene.Length; i++)
