@@ -70,8 +70,8 @@ namespace Optimization
             int populationSize = OptimizationParameters.PopulationSize;
             for (int i = 0; i < populationSize; i++)
             {
-                int[] temp = new int[order.Length+1];
-                for (int z = 0; z <= order.Length; z++)
+                int[] temp = new int[order.Length];
+                for (int z = 0; z < order.Length; z++)
                 {
                     temp[z] = -1;
                 }
@@ -86,7 +86,8 @@ namespace Optimization
                         temp[count] = order[a];
                         count++;
                     }
-                } while (count<=order.Length);
+
+                } while (count<order.Length);
                 population[i] = temp;
             }
             
@@ -100,7 +101,7 @@ namespace Optimization
 
 
 
-            for (int b = 0; b < 100; b++)
+            for (int b = 0; b < OptimizationParameters.TerminationValue; b++)
             {
                 Parallel.For(0, population.Length, i =>
                 {
