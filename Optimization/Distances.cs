@@ -99,8 +99,17 @@ namespace Optimization
                 _instance.orders = new int[_instance._ordersCount][];
                 _instance.orderRepeats = new int[_instance._ordersCount];
                 for (int i = 0; i < _instance._ordersCount; i++)
-                    _instance.orders[i] = Array.ConvertAll(fileLines[i].Split(" "
+                {
+                    int[] tmp = Array.ConvertAll(fileLines[i].Split(" "
                         , StringSplitOptions.RemoveEmptyEntries), int.Parse);
+                    _instance.orders[i] = new int[tmp.Length + 1];
+                    _instance.orders[i][0] = 0;
+                    for (int j = 1; j < tmp.Length + 1; j++)
+                    {
+                        _instance.orders[i][j] = tmp[j - 1];
+                    }
+                }
+
                 for (int i = 0; i < _instance._ordersCount; i++)
                 {
                     List<int> tmp = _instance.orders[i].ToList();

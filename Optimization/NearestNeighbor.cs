@@ -24,12 +24,13 @@ namespace Optimization
             _availableObjects = new List<int>();
             for (int j = 0; j < order.Length; j++)
             {
-                if(order[j] != startingId)
-                    _availableObjects.Add(order[j]);
+                _availableObjects.Add(order[j]);
             }
 
-            objectOrder = new int[_availableObjects.Count + 2];
+            objectOrder = new int[_availableObjects.Count + 1];
             objectOrder[0] = startingId;
+            
+            _availableObjects.RemoveAt(_availableObjects.IndexOf(startingId));
             
             int i = 0;
             var currentId = 0;
@@ -40,7 +41,7 @@ namespace Optimization
             }
 
             objectOrder[++i] = _availableObjects[0];
-            objectOrder[++i] = 0;
+            objectOrder[++i] = startingId;
             if (OptimizationParameters.Use2opt)
             {
                 Optimizer optimizer = new Optimizer();
