@@ -6,6 +6,7 @@ namespace Optimization
     public class Optimizer
     {
         private List<int> _cityOrder;
+        private double[][] _distances;
         private double _improvementsSum;
 
         public Optimizer()
@@ -13,9 +14,10 @@ namespace Optimization
             _improvementsSum = 0;
         }
 
-        public int[] Optimize_2opt(int[] cityOrder)
+        public int[] Optimize_2opt(int[] cityOrder, double[][] distances)
         {
             _cityOrder = cityOrder.ToList();
+            _distances = distances;
             int improvements;
             var iterations = 0;
             do
@@ -40,11 +42,11 @@ namespace Optimization
         
         private bool TryOrderImprovement(int firstId, int secondId)
         {
-            var sumBefore = Distances.CalculatePathLengthDouble(_cityOrder.ToArray());
+            var sumBefore = Distances.CalculatePathLengthDouble(_cityOrder.ToArray(), _distances);
             
             _cityOrder.Reverse(firstId, secondId - firstId + 1);
             
-            var sumAfter = Distances.CalculatePathLengthDouble(_cityOrder.ToArray());
+            var sumAfter = Distances.CalculatePathLengthDouble(_cityOrder.ToArray(), _distances);
 
             if (sumAfter < sumBefore)
             {

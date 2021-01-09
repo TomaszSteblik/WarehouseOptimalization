@@ -20,7 +20,8 @@ namespace OptimizationRunner
             switch (optimizationParameters.Mode)
             {
                 case Mode.DistancesMode:
-                    FindShortestPath.Find(optimizationParameters);
+                    var matrix = Files.ReadArray(optimizationParameters.DataPath);
+                    FindShortestPath.Find(Distances.GenerateObjectIdList(matrix.Length), matrix, optimizationParameters);
                     break;
                 case Mode.WarehouseMode:                   
                     Warehouse.Optimizer(optimizationParameters);

@@ -5,40 +5,26 @@ namespace Optimization
 {
     public static class FindShortestPath
     {
-        public static void Find(OptimizationParameters optimizationParameters)
-        {
-            Log.Create(optimizationParameters.LogPath);
-
-            if (optimizationParameters.Mode == Mode.DistancesMode)
-            {
-                Distances.LoadDistances(optimizationParameters.DataPath);
-
-                Optimization optimization = optimizationParameters.OptimizationMethod switch
-                {
-                    OptimizationMethod.NearestNeighbor => new NearestNeighbor(optimizationParameters),
-                    OptimizationMethod.GeneticAlgorithm => new GeneticAlgorithm(optimizationParameters),
-                    _ => throw new ArgumentException("Incorrect optimization method in config file")
-                };
-                
-                var result = new Result(optimization.FindShortestPath(
-                        Distances.GenerateObjectIdList(Distances.ObjectCount)),
-                    optimizationParameters.ResultPath);
-                result.Save();
-                
-            }
-            
-        }
-
-        public static double Find(int[] order,  OptimizationParameters optimizationParameters)
+        public static double Find(int[] order, double[][] distancesMatrix,  OptimizationParameters optimizationParameters)
         {
             Optimization optimization = optimizationParameters.OptimizationMethod switch
             {
-                OptimizationMethod.NearestNeighbor => new NearestNeighbor(optimizationParameters),
-                OptimizationMethod.GeneticAlgorithm => new GeneticAlgorithm(optimizationParameters),
+                OptimizationMethod.NearestNeighbor => new NearestNeighbor(optimizationParameters, distancesMatrix),
+                OptimizationMethod.GeneticAlgorithm => new GeneticAlgorithm(optimizationParameters, distancesMatrix),
                 _ => throw new ArgumentException("Incorrect optimization method in config file")
             };
-            
-            return Distances.CalculatePathLengthDouble(optimization.FindShortestPath(order));
+            int[] objectOrder = optimization.FindShortestPath(order);
+            double pathLength = Distances.CalculatePathLengthDouble(objectOrder, distancesMatrix);
+
+            if (optimizationParameters.ResultToFile)
+            {
+                var result = new Result(objectOrder,
+                    pathLength,
+                    optimizationParameters.ResultPath);
+                result.Save();
+            }
+
+            return pathLength;
 
         }
     }

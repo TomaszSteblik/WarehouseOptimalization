@@ -22,6 +22,8 @@ namespace Optimization
         
         public Mode Mode { get; set; }
         public string WarehousePath { get; set; }
+        
+        public bool ResultToFile { get; set; }
         public string ResultPath { get; set; }
         
         public string OrdersPath { get; set; }

@@ -9,16 +9,22 @@ namespace Optimization
         protected abstract int[] GenerateOffspring(int[] parent1, int[] parent2);
         public abstract int[][] GenerateOffsprings(int[][] parents);
         protected readonly Random Random = new Random();
+        protected double[][] DistancesMatrix;
 
         protected bool IsThereGene(int[] chromosome, int a)
         {
             return chromosome.Any(t => t == a);
         }
 
-        protected Distances Distances = Distances.GetInstance();
+
+        
 
         public class AexCrossover : Crossover
         {
+            public AexCrossover(double[][] distancesMatrix)
+            {
+                DistancesMatrix = distancesMatrix;
+            }
             protected override int[] GenerateOffspring(int[] parent1, int[] parent2)
             {
                 
@@ -116,6 +122,10 @@ namespace Optimization
 
         public class HGreXCrossover : Crossover
         {
+            public HGreXCrossover(double[][] distancesMatrix)
+            {
+                DistancesMatrix = distancesMatrix;
+            }
             protected override int[] GenerateOffspring(int[] parent1, int[] parent2)
             {
                 //Log.AddToLog($"HGreX Crossover:\nParent 1({Distances.CalculatePathLength(parent1)}): {string.Join(";", parent1)}");
@@ -146,7 +156,7 @@ namespace Optimization
                     if (indexOfCurrentAlleParent1 + 1 < length)
                     {
                         nextAlleParent1 = parent1[indexOfCurrentAlleParent1 + 1];
-                        distancePanent1 = Distances._distances[currentAlle][nextAlleParent1];
+                        distancePanent1 = DistancesMatrix[currentAlle][nextAlleParent1];
                         if (IsThereGene(offspring, nextAlleParent1))
                         {
                             isParent1Feasible = false;
@@ -165,7 +175,7 @@ namespace Optimization
                     if (indexOfCurrentAlleParent2 + 1 < length)
                     {
                         nextAlleParent2 = parent2[indexOfCurrentAlleParent2 + 1];
-                        distanceParent2 = Distances._distances[currentAlle][nextAlleParent2];
+                        distanceParent2 = DistancesMatrix[currentAlle][nextAlleParent2];
                         if (IsThereGene(offspring, nextAlleParent2))
                         {
                             isParent2Feasible = false;

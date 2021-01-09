@@ -17,15 +17,17 @@ namespace Optimization
         private bool canMutate;
         private int terminateAfterCount;
         private int[][] population;
+        private double[][] _distancesMatrix;
         
-        public GeneticAlgorithm(OptimizationParameters optimizationParameters)
+        public GeneticAlgorithm(OptimizationParameters optimizationParameters, double[][] distancesMatrix)
         {
             OptimizationParameters = optimizationParameters;
+            _distancesMatrix = distancesMatrix;
             
             _crossover = OptimizationParameters.CrossoverMethod switch
             {
-                "Aex" => new Crossover.AexCrossover(),
-                "HGreX" => new Crossover.HGreXCrossover(),
+                "Aex" => new Crossover.AexCrossover(distancesMatrix),
+                "HGreX" => new Crossover.HGreXCrossover(distancesMatrix),
                 _ => throw new ArgumentException("Wrong crossover name in parameters json file")
             };
 
@@ -67,6 +69,7 @@ namespace Optimization
 
         public override int[] FindShortestPath(int[] order)
         {
+            
             int populationSize = OptimizationParameters.PopulationSize;
             for (int i = 0; i < populationSize; i++)
             {
@@ -92,8 +95,8 @@ namespace Optimization
             }
             
             
-            double lastBestFitness = population.Min(p => Distances.CalculatePathLengthDouble(p));
-            int[] bestGene = population.First(p => Distances.CalculatePathLengthDouble(p) == lastBestFitness);
+            double lastBestFitness = population.Min(p => Distances.CalculatePathLengthDouble(p, _distancesMatrix));
+            int[] bestGene = population.First(p => Distances.CalculatePathLengthDouble(p, _distancesMatrix) == lastBestFitness);
             int countToTerminate = terminateAfterCount;
             int numberOfIterations = 0;
 
@@ -105,7 +108,7 @@ namespace Optimization
             {
                 Parallel.For(0, population.Length, i =>
                 {
-                    fitness[i] = Distances.CalculatePathLengthDouble(population[i]);
+                    fitness[i] = Distances.CalculatePathLengthDouble(population[i], _distancesMatrix);
                 });
 
 
@@ -133,7 +136,7 @@ namespace Optimization
                 }
 
 
-                double currentBestFitness = population.Min(p => Distances.CalculatePathLengthDouble(p));
+                double currentBestFitness = population.Min(p => Distances.CalculatePathLengthDouble(p, _distancesMatrix));
                 
                 if (lastBestFitness <= currentBestFitness)
                 {
@@ -142,7 +145,7 @@ namespace Optimization
                 else
                 {
                     lastBestFitness = currentBestFitness;
-                    bestGene = population.First(p => Distances.CalculatePathLengthDouble(p) == lastBestFitness);
+                    bestGene = population.First(p => Distances.CalculatePathLengthDouble(p, _distancesMatrix) == lastBestFitness);
                     countToTerminate = terminateAfterCount;
                 }
                 
@@ -158,7 +161,7 @@ namespace Optimization
             {
                 Log.AddToLog("USING 2-OPT");
                 Optimizer optimizer = new Optimizer();
-                return optimizer.Optimize_2opt(result);
+                return optimizer.Optimize_2opt(result, _distancesMatrix);
             }
             return result;
         }
@@ -168,31 +171,5 @@ namespace Optimization
             return chromosome.Any(t => t == a);
         }
 
-        private void InitializePopulation(int[][] pop,int start)
-        {
-            int populationSize = pop.Length;
-            for (int i = 0; i < populationSize; i++)
-            {
-                int[] temp = new int[Distances.ObjectCount];
-                for (int z = 0; z < Distances.ObjectCount; z++)
-                {
-                    temp[z] = -1;
-                }
-                int count = 0;
-                temp[0] = start;
-                count++;
-                do
-                {
-                    int a = _random.Next(0,Distances.ObjectCount);
-                    if (!IsThereGene(temp,a))
-                    {
-                        temp[count] = a;
-                        count++;
-                    }
-                } while (count<Distances.ObjectCount);
-                pop[i] = temp;
-            }
-        }
-        
     }
 }

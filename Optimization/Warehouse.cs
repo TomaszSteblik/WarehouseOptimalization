@@ -16,10 +16,8 @@ namespace Optimization
         {
             Log.Create(optimizationParameters.LogPath);
 
-            Distances.CreateWarehouse(optimizationParameters.WarehousePath); //wczytanie struktury i utworzenie macierzy Distances._warehouseDistances[][]
-            Distances.LoadOrders(optimizationParameters.OrdersPath); //zaladowanie orderow z pliku -> Distances.orders[][] jest dostep
-            Distances distances = Distances.GetInstance();
-
+            var distancesMatrix = WarehouseManager.CreateWarehouse(optimizationParameters.WarehousePath);
+            Orders orders = new Orders(optimizationParameters.OrdersPath);
 
             //genereracja losowej populacji; każdy osobnik reprezentuje rozkład towarów
             int populationSize = optimizationParameters.PopulationSize;
@@ -38,11 +36,11 @@ namespace Optimization
                 //for (int i = 0; i < populationSize; i++) 
                 Parallel.For(0, populationSize, i =>
                 {
-                    for (int k = 0; k < distances.OrdersCount; k++)
+                    for (int k = 0; k < orders.OrdersCount; k++)
                     {
-                        int[] order = Translator.TranslateWithChromosome(distances.orders[k], population[i]);
-                        double pathLength = FindShortestPath.Find(order, optimizationParameters);
-                        FitnessProductPlacement[i] += pathLength * distances.orderRepeats[k];
+                        int[] order = Translator.TranslateWithChromosome(orders.OrdersList[k], population[i]);
+                        double pathLength = FindShortestPath.Find(order, distancesMatrix, optimizationParameters);
+                        FitnessProductPlacement[i] += pathLength * orders.OrderRepeats[k];
                     }
 
                 });
@@ -53,7 +51,7 @@ namespace Optimization
                     double E2 = FitnessProductPlacement.Average();  
                     string log1 = "\r\nepoch=start  minSumDist=" + E + " avgSumDist=" + E2 + "\r\n";
                     Console.WriteLine(log1);
-                    System.IO.File.AppendAllText(@"E:\Warehouse\WarehouseOptimization\logV2-b.txt", log1);
+                    //System.IO.File.AppendAllText(@"E:\Warehouse\WarehouseOptimization\logV2-b.txt", log1);
                 }
 
 
@@ -89,7 +87,7 @@ namespace Optimization
                 int[][] parents = selection.GenerateParents(optimizationParameters.ChildrenPerGeneration * 2, FitnessProductPlacement);
 
                 //krzyżowanie
-                Crossover crossover = new Crossover.AexCrossover();
+                Crossover crossover = new Crossover.AexCrossover(distancesMatrix);
                 int[][] offsprings = crossover.GenerateOffsprings(parents);
 
                 //eliminacja
@@ -141,14 +139,9 @@ namespace Optimization
                     + population[x][1] + " " + population[x][3] + "     " + population[x][6] + " " + population[x][8] + " " + population[x][10] + "       "
                     + population[x][12] + " " + population[x][14] + " " + population[x][16] + " " + population[x][18] + " " + population[x][20] + " " + population[x][22] + "\r\n";
                     //Console.WriteLine(log1);
-                    System.IO.File.AppendAllText(@"E:\Warehouse\WarehouseOptimization\logV2-b.txt", log1);
+                    //System.IO.File.AppendAllText(@"E:\Warehouse\WarehouseOptimization\logV2-b.txt", log1);
 
                 }
-
-
-
-
-
 
                 for (int m = (int)(0.1 * populationSize); m < populationSize; m++)
 
@@ -158,7 +151,7 @@ namespace Optimization
                     {
                         //Log.AddToLog($"MUTATION RSM\nBEFORE MUTATION({Distances.CalculatePathLengthDouble(chromosome)}): {string.Join(";",chromosome)}");
 
-                        var j = _random.Next(1, Distances.WarehouseSize);
+                        var j = _random.Next(1, WarehouseManager.GetInstance().WarehouseSize);
                         var i = _random.Next(1, j);
                         Array.Reverse(population[m], i, j - i);
 
@@ -191,11 +184,12 @@ namespace Optimization
 
         private static void InitializePopulation(int[][] pop, int start)
         {
+            WarehouseManager warehouseManager = WarehouseManager.GetInstance();
             int populationSize = pop.Length;
             for (int i = 0; i < populationSize; i++)
             {
-                int[] temp = new int[Distances.WarehouseSize];
-                for (int z = 0; z < Distances.WarehouseSize; z++)
+                int[] temp = new int[warehouseManager.WarehouseSize];
+                for (int z = 0; z < warehouseManager.WarehouseSize; z++)
                 {
                     temp[z] = -1;
                 }
@@ -205,13 +199,13 @@ namespace Optimization
                 count++;
                 do
                 {
-                    int a = _random.Next(0, Distances.WarehouseSize);
+                    int a = _random.Next(0, warehouseManager.WarehouseSize);
                     if (!IsThereGene(temp, a))
                     {
                         temp[count] = a;
                         count++;
                     }
-                } while (count < Distances.WarehouseSize);
+                } while (count < warehouseManager.WarehouseSize);
 
                 pop[i] = temp;
             }

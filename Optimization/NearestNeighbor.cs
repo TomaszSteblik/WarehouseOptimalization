@@ -9,12 +9,13 @@ namespace Optimization
         private List<int> _availableObjects;
 
         private int[] objectOrder;
-        private Distances _distances;
+        private double[][] _distances;
         
-        public NearestNeighbor(OptimizationParameters optimizationParameters)
+        public NearestNeighbor(OptimizationParameters optimizationParameters, double[][] distancesMatrix)
         {
-            _distances = Distances.GetInstance();
             OptimizationParameters = optimizationParameters;
+            _distances = distancesMatrix;
+
         }
         
         public override int[] FindShortestPath(int[] order)
@@ -45,7 +46,7 @@ namespace Optimization
             if (OptimizationParameters.Use2opt)
             {
                 Optimizer optimizer = new Optimizer();
-                return optimizer.Optimize_2opt(objectOrder);
+                return optimizer.Optimize_2opt(objectOrder, _distances);
             }
 
             return objectOrder;
@@ -62,18 +63,18 @@ namespace Optimization
             int p0 = _availableObjects[0];
             int point1b = p0;
 
-            if (_distances._distances[point1][point1b] == 0) 
+            if (_distances[point1][point1b] == 0) 
                 nearestObjectId = _availableObjects[1];
             else 
                 nearestObjectId = _availableObjects[0];
 
-            double lowestDistance = _distances._distances[point1][nearestObjectId];
+            double lowestDistance = _distances[point1][nearestObjectId];
 
             for (int i = 0; i < _availableObjects.Count; i++)
             {
                 int p2 = _availableObjects[i];
                 int point2 = p2;
-                double currentDistance = _distances._distances[point1][point2];
+                double currentDistance = _distances[point1][point2];
                 if (currentDistance > 0 && currentDistance < lowestDistance)
                 {
                     lowestDistance = currentDistance;

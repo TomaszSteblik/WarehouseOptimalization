@@ -25,7 +25,7 @@ namespace Optimization
 
         public static void AddToLog(string line)
         {
-            File.AppendAllText(_instance._path,line + Environment.NewLine);
+            //File.AppendAllText(_instance._path,line + Environment.NewLine);
         }
     }
 }
