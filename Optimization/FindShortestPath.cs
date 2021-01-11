@@ -1,5 +1,6 @@
 using System;
 using System.Xml;
+using Optimization.DistanceMode.GeneticAlgorithms;
 
 namespace Optimization
 {

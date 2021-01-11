@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Optimization.DistanceMode.GeneticAlgorithms.Crossovers;
+using Optimization.DistanceMode.GeneticAlgorithms.Eliminations;
+using Optimization.DistanceMode.GeneticAlgorithms.Selections;
 
 namespace Optimization
 {
@@ -87,7 +90,7 @@ namespace Optimization
                 int[][] parents = selection.GenerateParents(optimizationParameters.ChildrenPerGeneration * 2, FitnessProductPlacement);
 
                 //krzyżowanie
-                Crossover crossover = new Crossover.AexCrossover(distancesMatrix);
+                Crossover crossover = new AexCrossover(distancesMatrix);
                 int[][] offsprings = crossover.GenerateOffsprings(parents);
 
                 //eliminacja

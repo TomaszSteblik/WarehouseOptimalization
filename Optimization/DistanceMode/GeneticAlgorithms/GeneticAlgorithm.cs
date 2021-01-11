@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Optimization.DistanceMode.GeneticAlgorithms.Crossovers;
+using Optimization.DistanceMode.GeneticAlgorithms.Eliminations;
+using Optimization.DistanceMode.GeneticAlgorithms.Selections;
 
-
-namespace Optimization
+namespace Optimization.DistanceMode.GeneticAlgorithms
 {
     public class GeneticAlgorithm : Optimization
     {
@@ -26,8 +27,8 @@ namespace Optimization
             
             _crossover = OptimizationParameters.CrossoverMethod switch
             {
-                "Aex" => new Crossover.AexCrossover(distancesMatrix),
-                "HGreX" => new Crossover.HGreXCrossover(distancesMatrix),
+                "Aex" => new AexCrossover(distancesMatrix),
+                "HGreX" => new HGreXCrossover(distancesMatrix),
                 _ => throw new ArgumentException("Wrong crossover name in parameters json file")
             };
 
