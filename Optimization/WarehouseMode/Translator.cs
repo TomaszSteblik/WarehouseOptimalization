@@ -1,4 +1,4 @@
-namespace Optimization
+namespace Optimization.WarehouseMode
 {
     public class Translator
     {

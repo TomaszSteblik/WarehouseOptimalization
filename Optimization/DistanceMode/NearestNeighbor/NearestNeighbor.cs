@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
 
-namespace Optimization
+namespace Optimization.DistanceMode.NearestNeighbor
 {
     public class NearestNeighbor : Optimization
     {

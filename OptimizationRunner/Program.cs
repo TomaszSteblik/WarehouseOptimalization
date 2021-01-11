@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Optimization;
 using System;
 using System.Diagnostics;
+using Optimization.DistanceMode;
 
 namespace OptimizationRunner
 {

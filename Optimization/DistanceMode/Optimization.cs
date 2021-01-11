@@ -1,4 +1,4 @@
-namespace Optimization
+namespace Optimization.DistanceMode
 {
     public abstract class Optimization
     {

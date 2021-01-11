@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Optimization.DistanceMode;
 using Optimization.DistanceMode.GeneticAlgorithms.Crossovers;
 using Optimization.DistanceMode.GeneticAlgorithms.Eliminations;
 using Optimization.DistanceMode.GeneticAlgorithms.Selections;
+using Optimization.WarehouseMode;
 
 namespace Optimization
 {
@@ -21,7 +23,6 @@ namespace Optimization
 
             var distancesMatrix = WarehouseManager.CreateWarehouse(optimizationParameters.WarehousePath);
             Orders orders = new Orders(optimizationParameters.OrdersPath);
-
             //genereracja losowej populacji; każdy osobnik reprezentuje rozkład towarów
             int populationSize = optimizationParameters.PopulationSize;
             int[][] population = new int[populationSize][];

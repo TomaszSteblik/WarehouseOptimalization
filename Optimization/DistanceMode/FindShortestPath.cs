@@ -1,8 +1,7 @@
 using System;
-using System.Xml;
 using Optimization.DistanceMode.GeneticAlgorithms;
 
-namespace Optimization
+namespace Optimization.DistanceMode
 {
     public static class FindShortestPath
     {
@@ -10,7 +9,7 @@ namespace Optimization
         {
             Optimization optimization = optimizationParameters.OptimizationMethod switch
             {
-                OptimizationMethod.NearestNeighbor => new NearestNeighbor(optimizationParameters, distancesMatrix),
+                OptimizationMethod.NearestNeighbor => new NearestNeighbor.NearestNeighbor(optimizationParameters, distancesMatrix),
                 OptimizationMethod.GeneticAlgorithm => new GeneticAlgorithm(optimizationParameters, distancesMatrix),
                 _ => throw new ArgumentException("Incorrect optimization method in config file")
             };

@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-namespace Optimization
+namespace Optimization.DistanceMode
 {
     public class Distances
     {
