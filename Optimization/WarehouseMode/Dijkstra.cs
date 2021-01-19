@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 
-namespace Optimization
+namespace Optimization.WarehouseMode
 {
     //code from https://www.videlin.eu/2016/04/28/shortest-path-in-graph-dijkstras-algorithm-c-implementation/
 

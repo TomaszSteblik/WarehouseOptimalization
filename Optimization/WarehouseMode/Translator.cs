@@ -4,11 +4,14 @@ namespace Optimization.WarehouseMode
     {
         public static int[] TranslateWithChromosome(int[] order, int[] chromosome)
         {
-            int[] result = new int[order.Length - 1];
-            for (int i = 0; i < order.Length - 1; i++)
-            {
-                result[i] = chromosome[order[i]];
-            }
+            int[] result = new int[order.Length];
+            for (int i = 0; i < order.Length; i++)
+            for (int c = 0; c < chromosome.Length; c++)
+                if (order[i] == chromosome[c])
+                {
+                    result[i] = c;
+                    break;
+                }
 
             return result;
         }

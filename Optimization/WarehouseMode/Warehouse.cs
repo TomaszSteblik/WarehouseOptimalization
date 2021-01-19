@@ -1,15 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Optimization.DistanceMode;
 using Optimization.DistanceMode.GeneticAlgorithms.Crossovers;
 using Optimization.DistanceMode.GeneticAlgorithms.Eliminations;
 using Optimization.DistanceMode.GeneticAlgorithms.Selections;
-using Optimization.WarehouseMode;
 
-namespace Optimization
+namespace Optimization.WarehouseMode
 {
     public class Warehouse
     {
@@ -21,15 +18,11 @@ namespace Optimization
         {
             Log.Create(optimizationParameters.LogPath);
 
-            var distancesMatrix = WarehouseManager.CreateWarehouse(optimizationParameters.WarehousePath);
+            var distancesMatrix = WarehouseManager.CreateWarehouseDistancesMatrix(optimizationParameters.WarehousePath);
             Orders orders = new Orders(optimizationParameters.OrdersPath);
-            //genereracja losowej populacji; każdy osobnik reprezentuje rozkład towarów
             int populationSize = optimizationParameters.PopulationSize;
             int[][] population = new int[populationSize][];
             InitializePopulation(population, 0);
-
-
-
 
             //AEX
             for (int e = 0; e < optimizationParameters.TerminationValue; e++) //opt. rozkładu produktów
@@ -37,7 +30,6 @@ namespace Optimization
                 double[] FitnessProductPlacement = new double[populationSize];
 
                 //fiteness
-                //for (int i = 0; i < populationSize; i++) 
                 Parallel.For(0, populationSize, i =>
                 {
                     for (int k = 0; k < orders.OrdersCount; k++)
@@ -111,12 +103,6 @@ namespace Optimization
                 elimination.EliminateAndReplace(offsprings, FitnessProductPlacement);
                 //mutacja
 
-
-
-                // E = newFitness.Min();
-                // Event1?.Invoke(null, null);
-                //  optimizationParameters.MutationProbability *= 1.1;
-                //Console.WriteLine(newFitness[x]+"     10-11-12-13-14-15");
                 Array.Sort(FitnessProductPlacement, population);
                 if (e % 10 == 0 || e < 10)
                 {
@@ -130,19 +116,14 @@ namespace Optimization
                     //Event1?.Invoke(null, null);
                     //Console.WriteLine(newFitness[x]+"     10-11-12-13-14-15");
                     Console.WriteLine(E);
-                    Console.Write(GetProductByLocation(2, population[x]) + " " + GetProductByLocation(4, population[x]) + " " + GetProductByLocation(5, population[x]) + " " + GetProductByLocation(7, population[x]) + " " + GetProductByLocation(9, population[x]) + " " + GetProductByLocation(11, population[x]) + "       ");
-                    Console.WriteLine(GetProductByLocation(13, population[x]) + " " + GetProductByLocation(15, population[x]) + " " + GetProductByLocation(17, population[x]) + " " + GetProductByLocation(19, population[x]) + " " + GetProductByLocation(21, population[x]) + " " + GetProductByLocation(23, population[x]));
-
-                    Console.Write(GetProductByLocation(1, population[x]) + " " + GetProductByLocation(3, population[x]) + "     " + GetProductByLocation(6, population[x]) + " " + GetProductByLocation(8, population[x]) + " " + GetProductByLocation(10, population[x]) + "       ");
-                    Console.WriteLine(GetProductByLocation(12, population[x]) + " " + GetProductByLocation(14, population[x]) + " " + GetProductByLocation(16, population[x]) + " " + GetProductByLocation(18, population[x]) + " " + GetProductByLocation(20, population[x]) + " " + GetProductByLocation(22, population[x]));
-                    Console.WriteLine();
+                   
 
                     string log1 = "\r\nepoch=" + e + " minSumDist=" + E + " avgSumDist=" + E2 + "\r\n"
                     + population[x][2] + " " + population[x][4] + " " + population[x][5] + " " + population[x][7] + " " + population[x][9] + " " + population[x][11] + "       "
                     + population[x][13] + " " + population[x][15] + " " + population[x][17] + " " + population[x][19] + " " + population[x][21] + " " + population[x][23] + "\r\n"
                     + population[x][1] + " " + population[x][3] + "     " + population[x][6] + " " + population[x][8] + " " + population[x][10] + "       "
                     + population[x][12] + " " + population[x][14] + " " + population[x][16] + " " + population[x][18] + " " + population[x][20] + " " + population[x][22] + "\r\n";
-                    //Console.WriteLine(log1);
+                    Console.WriteLine(log1);
                     //System.IO.File.AppendAllText(@"E:\Warehouse\WarehouseOptimization\logV2-b.txt", log1);
 
                 }
@@ -162,28 +143,11 @@ namespace Optimization
                         //Log.AddToLog($"AFTER MUTATION({Distances.CalculatePathLengthDouble(chromosome)}):  {string.Join(";",chromosome)}\n");
                     }
                 }
-
-
-
-                //miejsca w magazynie    0  1  2  3  4  5  6
-                //produkty              [0  3  4  1  5  6  2]
             }
         }
         private static bool IsThereGene(int[] chromosome, int a)
         {
             return chromosome.Any(t => t == a);
-        }
-
-        private static int GetProductByLocation(int id, int[] chromosome)
-        {
-
-            int size = chromosome.Length;
-            for (int i = 0; i < size; i++)
-            {
-                if (chromosome[i] == id) return i;
-            }
-
-            return -1;
         }
 
         private static void InitializePopulation(int[][] pop, int start)

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Optimization
+namespace Optimization.WarehouseMode
 {
     public class WarehouseManager
     {
@@ -14,7 +14,7 @@ namespace Optimization
         
         private WarehouseManager(){}
 
-        public static double[][] CreateWarehouse(string warehouseSource)
+        public static double[][] CreateWarehouseDistancesMatrix(string warehouseSource)
         {
             _instance ??= new WarehouseManager();
             double[][] distances; 
