@@ -25,7 +25,7 @@ namespace Optimization
         public bool ResultToFile { get; set; }
         public string ResultPath { get; set; }
         public string OrdersPath { get; set; }
-        public string SelectionMethod { get; set; } = "Elitism";
+        public string SelectionMethod { get; set; } = "Random";
         public string CrossoverMethod { get; set; } = "Aex";
         public string EliminationMethod { get; set; } = "Elitism";
 

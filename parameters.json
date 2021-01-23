@@ -1,6 +1,6 @@
 {
   "Mode": "WarehouseMode",
-  "OptimizationMethod": "Permutations",
+  "OptimizationMethod": "NearestNeighbor",
   "Use2opt": true,
   "LogEnabled": false,
   "LogPath":"C:/Users/rtry/RiderProjects/WarehouseOptimization/log.txt",
