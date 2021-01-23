@@ -31,7 +31,6 @@ namespace Optimization
         public string SelectionMethod { get; set; }
         public string CrossoverMethod { get; set; }
         public string EliminationMethod { get; set; }
-        public bool CanMutate { get; set; }
         public double MutationProbability { get; set; }
         public int PopulationSize { get; set; }
         public int ChildrenPerGeneration { get; set; }

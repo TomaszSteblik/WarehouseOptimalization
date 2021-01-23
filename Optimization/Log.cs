@@ -1,31 +1,42 @@
 using System;
 using System.IO;
+using System.Text;
 
 namespace Optimization
 {
     public class Log
     {
-        private string _path;
-        private static Log _instance;
-        private Log(string path)
+        private readonly string _path;
+        private StringBuilder _stringBuilder;
+        
+        public Log(string path)
         {
+            _stringBuilder = new StringBuilder();
             _path = path;
             File.Delete(_path);
         }
-
-        public static void Create(string path)
+        
+        public void SaveResult(int[] pointOrder, double length)
         {
-            _instance = new Log(path);
+            int size = pointOrder.Length;
+            
+            var result = new string[size + 1];
+            result[0] = "Length = " + length;
+
+            for (int i = 0; i < size; i++)
+                result[i + 1] = pointOrder[i].ToString();
+
+            File.WriteAllLines(_path, result);                
         }
 
-        public static Log GetInstance()
+        public void AddToLog(string message)
         {
-            return _instance;
+            _stringBuilder.Append(message + Environment.NewLine);
         }
 
-        public static void AddToLog(string line)
+        public void Save()
         {
-            //File.AppendAllText(_instance._path,line + Environment.NewLine);
+            File.WriteAllText(_path, _stringBuilder.ToString());
         }
     }
 }

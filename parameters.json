@@ -1,5 +1,5 @@
 {
-  "Mode": "DistancesMode",
+  "Mode": "WarehouseMode",
   "OptimizationMethod": "NearestNeighbor",
   "Use2opt": true,
   "StartingId": 0,
@@ -7,14 +7,13 @@
   "DataPath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/distances-usa.txt",
   "WarehousePath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/mag23.txt",
   "OrdersPath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/orders23b.txt",
-  "ResultToFile": true,
+  "ResultToFile": false,
   "ResultPath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/result.txt",
   "SelectionMethod": "Elitism",
   "CrossoverMethod": "Aex",
   "EliminationMethod": "Elitism",
-  "CanMutate": true,
   "MutationProbability": 30,
   "PopulationSize": 500,
-  "ChildrenPerGeneration": 9,
+  "ChildrenPerGeneration": 50,
   "TerminationValue": 4000
 }

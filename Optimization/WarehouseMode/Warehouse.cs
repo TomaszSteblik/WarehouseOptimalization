@@ -2,8 +2,10 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Optimization.DistanceMode;
+using Optimization.DistanceMode.GeneticAlgorithms;
 using Optimization.DistanceMode.GeneticAlgorithms.Crossovers;
 using Optimization.DistanceMode.GeneticAlgorithms.Eliminations;
+using Optimization.DistanceMode.GeneticAlgorithms.Mutations;
 using Optimization.DistanceMode.GeneticAlgorithms.Selections;
 
 namespace Optimization.WarehouseMode
@@ -16,134 +18,53 @@ namespace Optimization.WarehouseMode
 
         public static void Optimizer(OptimizationParameters optimizationParameters)
         {
-            Log.Create(optimizationParameters.LogPath);
 
             var distancesMatrix = WarehouseManager.CreateWarehouseDistancesMatrix(optimizationParameters.WarehousePath);
+            WarehouseManager warehouseManager = WarehouseManager.GetInstance();
             Orders orders = new Orders(optimizationParameters.OrdersPath);
             int populationSize = optimizationParameters.PopulationSize;
             int[][] population = new int[populationSize][];
             InitializePopulation(population, 0);
-
-            //AEX
-            for (int e = 0; e < optimizationParameters.TerminationValue; e++) //opt. rozkładu produktów
+            
+            int[] itemsToSort = new int[warehouseManager.WarehouseSize];
+            for (int i = 1; i < warehouseManager.WarehouseSize; i++)
             {
-                double[] FitnessProductPlacement = new double[populationSize];
-
-                //fiteness
-                Parallel.For(0, populationSize, i =>
-                {
-                    for (int k = 0; k < orders.OrdersCount; k++)
-                    {
-                        int[] order = Translator.TranslateWithChromosome(orders.OrdersList[k], population[i]);
-                        double pathLength = FindShortestPath.Find(order, distancesMatrix, optimizationParameters);
-                        FitnessProductPlacement[i] += pathLength * orders.OrderRepeats[k];
-                    }
-
-                });
-
-                if (e == 0)
-                {
-                    E = FitnessProductPlacement.Min();
-                    double E2 = FitnessProductPlacement.Average();  
-                    string log1 = "\r\nepoch=start  minSumDist=" + E + " avgSumDist=" + E2 + "\r\n";
-                    Console.WriteLine(log1);
-                    //System.IO.File.AppendAllText(@"E:\Warehouse\WarehouseOptimization\logV2-b.txt", log1);
-                }
-
-
-
-                Log.AddToLog("Populacja nr." + e);
-                Log.AddToLog("avg: " + FitnessProductPlacement.Average());
-                Log.AddToLog("max: " + FitnessProductPlacement.Max());
-                Log.AddToLog("min: " + FitnessProductPlacement.Min());
-                for (int i = 0; i < populationSize; i++)
-                {
-                    Log.AddToLog($"Chromosome({FitnessProductPlacement[i]}): {string.Join(";", population[i])} \n");
-                }
-
-                //selekcja
-                Selection selection;
-                switch (optimizationParameters.SelectionMethod)
-                {
-                    case "Tournament":
-                        selection = new TournamentSelection(population);
-                        break;
-                    case "Random":
-                        selection = new RandomSelection(population);
-                        break;
-                    case "Elitism":
-                        selection = new ElitismSelection(population);
-                        break;
-                    case "RouletteWheel":
-                        selection = new RouletteWheelSelection(population);
-                        break;
-                    default:
-                        throw new ArgumentException("Wrong selection name in parameters json file");
-                }
-                int[][] parents = selection.GenerateParents(optimizationParameters.ChildrenPerGeneration * 2, FitnessProductPlacement);
-
-                //krzyżowanie
-                Crossover crossover = new AexCrossover(distancesMatrix);
-                int[][] offsprings = crossover.GenerateOffsprings(parents);
-
-                //eliminacja
-                Elimination elimination;
-                switch (optimizationParameters.EliminationMethod)
-                {
-                    case "Elitism":
-                        elimination = new ElitismElimination(ref population);
-                        break;
-                    case "RouletteWheel":
-                        elimination = new RouletteWheelElimination(ref population);
-                        break;
-                    default:
-                        throw new ArgumentException("Wrong elimination name in parameters json file");
-                }
-
-                elimination.EliminateAndReplace(offsprings, FitnessProductPlacement);
-                //mutacja
-
-                Array.Sort(FitnessProductPlacement, population);
-                if (e % 10 == 0 || e < 10)
-                {
-                    if (e > 10 && optimizationParameters.MutationProbability < 0.1)
-                        optimizationParameters.MutationProbability *= 1.2;
-
-                    E = FitnessProductPlacement.Min();
-                    double E2 = FitnessProductPlacement.Average();
-                    int x = 0;
-
-                    //Event1?.Invoke(null, null);
-                    //Console.WriteLine(newFitness[x]+"     10-11-12-13-14-15");
-                    Console.WriteLine(E);
-                   
-
-                    string log1 = "\r\nepoch=" + e + " minSumDist=" + E + " avgSumDist=" + E2 + "\r\n"
-                    + population[x][2] + " " + population[x][4] + " " + population[x][5] + " " + population[x][7] + " " + population[x][9] + " " + population[x][11] + "       "
-                    + population[x][13] + " " + population[x][15] + " " + population[x][17] + " " + population[x][19] + " " + population[x][21] + " " + population[x][23] + "\r\n"
-                    + population[x][1] + " " + population[x][3] + "     " + population[x][6] + " " + population[x][8] + " " + population[x][10] + "       "
-                    + population[x][12] + " " + population[x][14] + " " + population[x][16] + " " + population[x][18] + " " + population[x][20] + " " + population[x][22] + "\r\n";
-                    Console.WriteLine(log1);
-                    //System.IO.File.AppendAllText(@"E:\Warehouse\WarehouseOptimization\logV2-b.txt", log1);
-
-                }
-
-                for (int m = (int)(0.1 * populationSize); m < populationSize; m++)
-
-                //  foreach (var chromosome in population)
-                {
-                    if (_random.NextDouble() <= optimizationParameters.MutationProbability)
-                    {
-                        //Log.AddToLog($"MUTATION RSM\nBEFORE MUTATION({Distances.CalculatePathLengthDouble(chromosome)}): {string.Join(";",chromosome)}");
-
-                        var j = _random.Next(1, WarehouseManager.GetInstance().WarehouseSize);
-                        var i = _random.Next(1, j);
-                        Array.Reverse(population[m], i, j - i);
-
-                        //Log.AddToLog($"AFTER MUTATION({Distances.CalculatePathLengthDouble(chromosome)}):  {string.Join(";",chromosome)}\n");
-                    }
-                }
+                itemsToSort[i - 1] = i;
             }
+            
+            GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(optimizationParameters, distancesMatrix,
+                (population, matrix) =>
+                {
+                    double[] fitness = new double[population.Length];
+                    Parallel.For((long) 0, population.Length, i =>
+                    {
+                        for (int k = 0; k < orders.OrdersCount; k++)
+                        {
+                            int[] order = Translator.TranslateWithChromosome(orders.OrdersList[k], population[i]);
+                            double pathLength = FindShortestPath.Find(order, distancesMatrix, optimizationParameters);
+                            fitness[i] += pathLength * orders.OrderRepeats[k];
+                        }
+                    });
+                    Console.WriteLine(fitness.Min());
+                    string log1 = "\r\nepoch="  + " minSumDist=" + E + " avgSumDist="  + "\r\n"
+                                  + population[0][2] + " " + population[0][4] + " " + population[0][5] + " " + population[0][7] + " " + population[0][9] + " " + population[0][11] + "       "
+                                  + population[0][13] + " " + population[0][15] + " " + population[0][17] + " " + population[0][19] + " " + population[0][21] + " " + population[0][23] + "\r\n"
+                                  + population[0][1] + " " + population[0][3] + "     " + population[0][6] + " " + population[0][8] + " " + population[0][10] + "       "
+                                  + population[0][12] + " " + population[0][14] + " " + population[0][16] + " " + population[0][18] + " " + population[0][20] + " " + population[0][22] + "\r\n";
+                    Console.WriteLine(log1);
+                    return fitness;
+                });
+            
+            int[] z = geneticAlgorithm.FindShortestPath(itemsToSort);
+            string log1 = "\r\nepoch="  + " minSumDist=" + E + " avgSumDist="  + "\r\n"
+                          + z[2] + " " + z[4] + " " + z[5] + " " + z[7] + " " + z[9] + " " + z[11] + "       "
+                          + z[13] + " " + z[15] + " " + z[17] + " " + z[19] + " " + z[21] + " " + z[23] + "\r\n"
+                          + z[1] + " " + z[3] + "     " + z[6] + " " + z[8] + " " + z[10] + "       "
+                          + z[12] + " " + z[14] + " " + z[16] + " " + z[18] + " " + z[20] + " " + z[22] + "\r\n";
+            Console.WriteLine(log1);
+            Log log = new Log("C:/Users/rtry/res.txt");
+            log.SaveResult(z, 123);
+
         }
         private static bool IsThereGene(int[] chromosome, int a)
         {

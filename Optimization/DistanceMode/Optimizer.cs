@@ -33,9 +33,7 @@ namespace Optimization.DistanceMode
                         }
                     }
                 }
-                Log.AddToLog($"Made {improvements} improvements on iteration {++iterations}");
             } while (improvements > 0);
-            Log.AddToLog($"Sum of improvements: {_improvementsSum}");
 
             return _cityOrder.ToArray();
         }
@@ -50,7 +48,6 @@ namespace Optimization.DistanceMode
 
             if (sumAfter < sumBefore)
             {
-                Log.AddToLog($"Swapped {_cityOrder[firstId] + 1} with {_cityOrder[secondId] + 1} - improved by {sumBefore - sumAfter}");
                 _improvementsSum += sumBefore - sumAfter;
                 return true;
             }

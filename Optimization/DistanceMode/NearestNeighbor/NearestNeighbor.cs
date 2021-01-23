@@ -12,7 +12,7 @@ namespace Optimization.DistanceMode.NearestNeighbor
         
         public NearestNeighbor(OptimizationParameters optimizationParameters, double[][] distancesMatrix)
         {
-            OptimizationParameters = optimizationParameters;
+            _optimizationParameters = optimizationParameters;
             _distances = distancesMatrix;
 
         }
@@ -42,7 +42,7 @@ namespace Optimization.DistanceMode.NearestNeighbor
 
             objectOrder[++i] = _availableObjects[0];
             objectOrder[++i] = startingId;
-            if (OptimizationParameters.Use2opt)
+            if (_optimizationParameters.Use2opt)
             {
                 Optimizer optimizer = new Optimizer();
                 return optimizer.Optimize_2opt(objectOrder, _distances);
