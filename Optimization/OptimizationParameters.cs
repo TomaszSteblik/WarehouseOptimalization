@@ -3,7 +3,8 @@ namespace Optimization
     public enum OptimizationMethod
     {
         NearestNeighbor,
-        GeneticAlgorithm
+        GeneticAlgorithm,
+        Permutations
     }
 
     public enum Mode
