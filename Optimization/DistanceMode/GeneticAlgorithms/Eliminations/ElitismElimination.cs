@@ -4,7 +4,7 @@ namespace Optimization.DistanceMode.GeneticAlgorithms.Eliminations
 {
     public class ElitismElimination : Elimination
     {
-        public ElitismElimination(ref int[][] pop) : base(ref pop)
+        public ElitismElimination(int[][] pop) : base(pop)
         {
             
         }

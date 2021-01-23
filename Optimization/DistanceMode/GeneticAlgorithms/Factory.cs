@@ -1,6 +1,7 @@
 ﻿using System;
 using Optimization.DistanceMode.GeneticAlgorithms.Crossovers;
 using Optimization.DistanceMode.GeneticAlgorithms.Eliminations;
+using Optimization.DistanceMode.GeneticAlgorithms.Mutations;
 using Optimization.DistanceMode.GeneticAlgorithms.Selections;
 
 namespace Optimization.DistanceMode.GeneticAlgorithms
@@ -22,6 +23,7 @@ namespace Optimization.DistanceMode.GeneticAlgorithms
         {
             Selection selection = optimizationParameters.SelectionMethod switch
             {
+                "Random" => new RandomSelection(population),
                 "Tournament" => new TournamentSelection(population),
                 "Elitism" => new ElitismSelection(population),
                 "RouletteWheel" => new RouletteWheelSelection(population),
@@ -34,11 +36,21 @@ namespace Optimization.DistanceMode.GeneticAlgorithms
         {
             Elimination elimination = optimizationParameters.EliminationMethod switch
             {
-                "Elitism" => new ElitismElimination(ref population),
-                "RouletteWheel" => new RouletteWheelElimination(ref population),
+                "Elitism" => new ElitismElimination(population),
+                "RouletteWheel" => new RouletteWheelElimination(population),
                 _ => throw new ArgumentException("Wrong elimination name in parameters json file")
             };
             return elimination;
+        }
+
+        public static Mutation CreateMutation(OptimizationParameters optimizationParameters, int[][] population, double mutationProbability)
+        {
+            Mutation mutation = optimizationParameters.MutationMethod switch
+            {
+                "Inversion" => new InversionMutation(population, mutationProbability),
+                _ => throw new AggregateException("Wrong mutation method in parameters json file")
+            };
+            return mutation;
         }
     }
 }

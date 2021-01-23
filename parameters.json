@@ -2,18 +2,11 @@
   "Mode": "WarehouseMode",
   "OptimizationMethod": "NearestNeighbor",
   "Use2opt": true,
-  "StartingId": 0,
+  "LogEnabled": false,
   "LogPath":"C:/Users/rtry/RiderProjects/WarehouseOptimization/log.txt",
   "DataPath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/distances-usa.txt",
   "WarehousePath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/mag23.txt",
   "OrdersPath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/orders23b.txt",
   "ResultToFile": false,
-  "ResultPath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/result.txt",
-  "SelectionMethod": "Elitism",
-  "CrossoverMethod": "Aex",
-  "EliminationMethod": "Elitism",
-  "MutationProbability": 30,
-  "PopulationSize": 120,
-  "ChildrenPerGeneration": 60,
-  "TerminationValue": 400
+  "ResultPath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/result.txt"
 }

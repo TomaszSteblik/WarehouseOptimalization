@@ -8,7 +8,7 @@ namespace Optimization.DistanceMode.GeneticAlgorithms.Eliminations
         protected readonly int[][] Population;
         protected readonly int PopulationSize;
         protected readonly Random Random= new Random();
-        protected Elimination(ref int[][] population)
+        protected Elimination(int[][] population)
         {
             Population = population;
             PopulationSize = population.Length;

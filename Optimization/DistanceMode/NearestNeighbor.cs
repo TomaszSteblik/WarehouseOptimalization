@@ -19,7 +19,7 @@ namespace Optimization.DistanceMode
         
         public override int[] FindShortestPath(int[] order)
         {
-            int startingId = 0;
+            int startingId = _optimizationParameters.StartingId;
             
             _availableObjects = new List<int>();
             for (int j = 0; j < order.Length; j++)
@@ -44,8 +44,8 @@ namespace Optimization.DistanceMode
             objectOrder[++i] = startingId;
             if (_optimizationParameters.Use2opt)
             {
-                Optimizer optimizer = new Optimizer();
-                return optimizer.Optimize_2opt(objectOrder, _distances);
+                Optimizer2Opt optimizer2Opt = new Optimizer2Opt();
+                return optimizer2Opt.Optimize(objectOrder, _distances);
             }
 
             return objectOrder;

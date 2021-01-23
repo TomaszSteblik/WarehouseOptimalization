@@ -4,7 +4,7 @@ namespace Optimization.DistanceMode.GeneticAlgorithms.Mutations
 {
     public class InversionMutation : Mutation
     {
-        public InversionMutation(int[][] population, OptimizationParameters optimizationParameters) : base(population, optimizationParameters)
+        public InversionMutation(int[][] population, double mutationProbability) : base(population, mutationProbability)
         {
         }
 

@@ -3,18 +3,18 @@ using System.Linq;
 
 namespace Optimization.DistanceMode
 {
-    public class Optimizer
+    public class Optimizer2Opt
     {
         private List<int> _cityOrder;
         private double[][] _distances;
         private double _improvementsSum;
 
-        public Optimizer()
+        public Optimizer2Opt()
         {
             _improvementsSum = 0;
         }
 
-        public int[] Optimize_2opt(int[] cityOrder, double[][] distances)
+        public int[] Optimize(int[] cityOrder, double[][] distances)
         {
             _cityOrder = cityOrder.ToList();
             _distances = distances;

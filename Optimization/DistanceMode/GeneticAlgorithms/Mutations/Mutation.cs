@@ -7,10 +7,10 @@ namespace Optimization.DistanceMode.GeneticAlgorithms.Mutations
         protected int[][] _population;
         protected readonly Random _random;
         protected double _probability;
-        protected Mutation(int[][] population, OptimizationParameters optimizationParameters)
+        protected Mutation(int[][] population, double mutationProbability)
         {
             _population = population;
-            _probability = optimizationParameters.MutationProbability;
+            _probability = mutationProbability;
             _random = new Random();
         }
 

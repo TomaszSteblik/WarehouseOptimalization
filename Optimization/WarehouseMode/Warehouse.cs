@@ -42,13 +42,19 @@ namespace Optimization.WarehouseMode
                 });
             
             int[] z = geneticAlgorithm.FindShortestPath(itemsToSort);
+
+            if (optimizationParameters.ResultToFile)
+            {
+                Log log = new Log(optimizationParameters);
+                log.SaveResult(z, Distances.CalculatePathLengthDouble(z, distancesMatrix));
+            }
             
-            string log1 = "\r\nepoch="  + " minSumDist=" + E + " avgSumDist="  + "\r\n"
-                          + z[2] + " " + z[4] + " " + z[5] + " " + z[7] + " " + z[9] + " " + z[11] + "       "
+            string result =  z[2] + " " + z[4] + " " + z[5] + " " + z[7] + " " + z[9] + " " + z[11] + "       "
                           + z[13] + " " + z[15] + " " + z[17] + " " + z[19] + " " + z[21] + " " + z[23] + "\r\n"
                           + z[1] + " " + z[3] + "     " + z[6] + " " + z[8] + " " + z[10] + "       "
                           + z[12] + " " + z[14] + " " + z[16] + " " + z[18] + " " + z[20] + " " + z[22] + "\r\n";
-            Console.WriteLine(log1);
+
+            Console.WriteLine(result);
         }
     }
 }

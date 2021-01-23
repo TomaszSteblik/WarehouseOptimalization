@@ -26,9 +26,9 @@ namespace Optimization.DistanceMode
             int[] objectOrder = optimization.FindShortestPath(order);
             double pathLength = Distances.CalculatePathLengthDouble(objectOrder, distancesMatrix);
 
-            if (optimizationParameters.ResultToFile)
+            if (optimizationParameters.ResultToFile && optimizationParameters.Mode == Mode.DistancesMode)
             {
-                Log log = new Log(optimizationParameters.ResultPath);
+                Log log = new Log(optimizationParameters);
                 log.SaveResult(objectOrder, pathLength);
             }
 

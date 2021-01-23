@@ -7,12 +7,16 @@ namespace Optimization
     public class Log
     {
         private readonly string _path;
-        private StringBuilder _stringBuilder;
+        private readonly string _resultPath;
+        private readonly StringBuilder _stringBuilder;
+        private readonly bool _logEnabled;
         
-        public Log(string path)
+        public Log(OptimizationParameters optimizationParameters)
         {
             _stringBuilder = new StringBuilder();
-            _path = path;
+            _path = optimizationParameters.LogPath;
+            _resultPath = optimizationParameters.ResultPath;
+            _logEnabled = optimizationParameters.LogEnabled;
             File.Delete(_path);
         }
         
@@ -26,17 +30,17 @@ namespace Optimization
             for (int i = 0; i < size; i++)
                 result[i + 1] = pointOrder[i].ToString();
 
-            File.WriteAllLines(_path, result);                
+            File.WriteAllLines(_resultPath, result);                
         }
 
         public void AddToLog(string message)
         {
-            _stringBuilder.Append(message + Environment.NewLine);
+            if(_logEnabled) _stringBuilder.Append(message + Environment.NewLine);
         }
 
-        public void Save()
+        public void SaveLog()
         {
-            File.WriteAllText(_path, _stringBuilder.ToString());
+            if(_logEnabled) File.WriteAllText(_path, _stringBuilder.ToString());
         }
     }
 }

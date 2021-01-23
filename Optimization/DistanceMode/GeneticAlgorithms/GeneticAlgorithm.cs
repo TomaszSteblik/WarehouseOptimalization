@@ -17,9 +17,13 @@ namespace Optimization.DistanceMode.GeneticAlgorithms
         private readonly Random _random = new Random();
 
         private bool _canIncreaseStrictness = true;
-        private bool canMutate;
-        private int[][] _population;
-        private double[][] _distancesMatrix;
+        private readonly int[][] _population;
+        private readonly double[][] _distancesMatrix;
+
+        private readonly int _populationSize;
+        private readonly double _mutationProbability;
+        private readonly int _childrenPerGeneration;
+        private readonly int _terminationValue; 
         
         public delegate double[] CalcFitness(int[][] population, double[][] distancesMatrix);
         
@@ -28,13 +32,27 @@ namespace Optimization.DistanceMode.GeneticAlgorithms
         public GeneticAlgorithm(OptimizationParameters optimizationParameters, double[][] distancesMatrix, CalcFitness calcFitness)
         {
             _optimizationParameters = optimizationParameters;
+
+            _populationSize = optimizationParameters.CrossoverMethod == "Aex"
+                ? optimizationParameters.PopulationSizeAEX
+                : optimizationParameters.PopulationSizeHGreX;
+            _mutationProbability = optimizationParameters.CrossoverMethod == "Aex"
+                ? optimizationParameters.MutationProbabilityAEX
+                : optimizationParameters.MutationProbabilityHGreX;
+            _childrenPerGeneration = optimizationParameters.CrossoverMethod == "Aex"
+                ? optimizationParameters.ChildrenPerGenerationAEX
+                : optimizationParameters.ChildrenPerGenerationHGreX;
+            _terminationValue = optimizationParameters.CrossoverMethod == "Aex"
+                ? optimizationParameters.TerminationValueAEX
+                : optimizationParameters.TerminationValueHGreX;
+            
             _distancesMatrix = distancesMatrix;
-            _population = new int[_optimizationParameters.PopulationSize][];
+            _population = new int[_populationSize][];
 
             _crossover = Factory.CreateCrossover(optimizationParameters, _distancesMatrix);
             _selection = Factory.CreateSelection(optimizationParameters, _population);
             _elimination = Factory.CreateElimination(optimizationParameters, _population);
-            _mutation = new InversionMutation(_population, _optimizationParameters);
+            _mutation = Factory.CreateMutation(optimizationParameters, _population, _mutationProbability);
             
             _calculateFitness = calcFitness;
         }
@@ -49,14 +67,14 @@ namespace Optimization.DistanceMode.GeneticAlgorithms
 
             double[] fitness = new double[_population.Length];
 
-            for (int b = 0; b < _optimizationParameters.TerminationValue; b++)
+            for (int b = 0; b < _terminationValue; b++)
             {
                 fitness = _calculateFitness(_population, _distancesMatrix);
 
-                int[][] parents = _selection.GenerateParents(_optimizationParameters.ChildrenPerGeneration*2, fitness);
+                int[][] parents = _selection.GenerateParents(_childrenPerGeneration * 2, fitness);
                 int[][] offsprings = _crossover.GenerateOffsprings(parents);
                 _elimination.EliminateAndReplace(offsprings,fitness);
-                if (_canIncreaseStrictness) _canIncreaseStrictness = _selection.IncreaseStrictness(_optimizationParameters.ChildrenPerGeneration);
+                if (_canIncreaseStrictness) _canIncreaseStrictness = _selection.IncreaseStrictness(_childrenPerGeneration);
 
                 _mutation.Mutate();
                 bestGene = _population[0];
@@ -65,8 +83,8 @@ namespace Optimization.DistanceMode.GeneticAlgorithms
 
             if (_optimizationParameters.Use2opt && _optimizationParameters.Mode == Mode.DistancesMode)
             {
-                Optimizer optimizer = new Optimizer();
-                return optimizer.Optimize_2opt(bestGene, _distancesMatrix);
+                Optimizer2Opt optimizer2Opt = new Optimizer2Opt();
+                return optimizer2Opt.Optimize(bestGene, _distancesMatrix);
             }
 
             return bestGene;
@@ -74,7 +92,7 @@ namespace Optimization.DistanceMode.GeneticAlgorithms
 
         private void InitializePopulation(int[] order)
         {
-            for (int i = 0; i < _optimizationParameters.PopulationSize; i++)
+            for (int i = 0; i < _populationSize; i++)
             {
                 int[] temp = new int[order.Length];
                 for (int z = 0; z < order.Length; z++)
@@ -82,7 +100,7 @@ namespace Optimization.DistanceMode.GeneticAlgorithms
                     temp[z] = -1;
                 }
                 int count = 0;
-                temp[0] = 0;
+                temp[0] = _optimizationParameters.StartingId;
                 count++;
                 do
                 {

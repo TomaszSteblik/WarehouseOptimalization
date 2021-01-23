@@ -4,7 +4,7 @@ namespace Optimization.DistanceMode.GeneticAlgorithms.Eliminations
 {
     public class RouletteWheelElimination : Elimination
     {
-        public RouletteWheelElimination(ref int[][] population) : base(ref population)
+        public RouletteWheelElimination(int[][] population) : base(population)
         {
             
         }
