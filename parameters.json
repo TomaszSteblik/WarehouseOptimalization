@@ -13,7 +13,7 @@
   "CrossoverMethod": "Aex",
   "EliminationMethod": "Elitism",
   "MutationProbability": 30,
-  "PopulationSize": 500,
-  "ChildrenPerGeneration": 50,
-  "TerminationValue": 4000
+  "PopulationSize": 120,
+  "ChildrenPerGeneration": 60,
+  "TerminationValue": 400
 }
