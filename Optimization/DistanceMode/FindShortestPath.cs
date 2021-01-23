@@ -10,7 +10,7 @@ namespace Optimization.DistanceMode
         {
             Optimization optimization = optimizationParameters.OptimizationMethod switch
             {
-                OptimizationMethod.NearestNeighbor => new NearestNeighbor.NearestNeighbor(optimizationParameters, distancesMatrix),
+                OptimizationMethod.NearestNeighbor => new NearestNeighbor(optimizationParameters, distancesMatrix),
                 OptimizationMethod.GeneticAlgorithm => new GeneticAlgorithm(optimizationParameters, distancesMatrix,
                     (population, distances) =>
                     {
