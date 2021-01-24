@@ -10,13 +10,9 @@ namespace Optimization.DistanceMode.GeneticAlgorithms.Crossovers
             }
             protected override int[] GenerateOffspring(int[] parent1, int[] parent2)
             {
-                //Log.AddToLog($"HGreX Crossover:\nParent 1({Distances.CalculatePathLength(parent1)}): {string.Join(";", parent1)}");
-                //Log.AddToLog($"Parent 2({Distances.CalculatePathLength(parent2)}): {string.Join(";", parent2)}");
-
                 int length = parent1.Length;
                 int[] offspring = new int[length];
-
-
+                
                 offspring[0] = parent1[0];
                 int currentAlle = offspring[0];
 
@@ -127,7 +123,6 @@ namespace Optimization.DistanceMode.GeneticAlgorithms.Crossovers
                     offspring[i] = nextAlle;
                     currentAlle = nextAlle;
                 }
-                //Log.AddToLog($"Offspring({Distances.CalculatePathLength(offspring)}): {string.Join(";", offspring)} \n");
                 return offspring;
             }
 

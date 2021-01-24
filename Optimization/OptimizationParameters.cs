@@ -38,6 +38,6 @@ namespace Optimization
         public double MutationProbabilityAEX { get; set; } = 30;
         public int PopulationSizeAEX { get; set; } = 60;
         public int ChildrenPerGenerationAEX { get; set; } = 30;
-        public int TerminationValueAEX { get; set; } = 400;
+        public int TerminationValueAEX { get; set; } = 300;
     }
 }

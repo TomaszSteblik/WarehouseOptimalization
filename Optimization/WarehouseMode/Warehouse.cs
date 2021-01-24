@@ -8,13 +8,10 @@ namespace Optimization.WarehouseMode
 {
     public class Warehouse
     {
-        public static event EventHandler Event1;
-        public static double E = 0;
-
         public static void Optimizer(OptimizationParameters optimizationParameters)
         {
-            var distancesMatrix = WarehouseManager.CreateWarehouseDistancesMatrix(optimizationParameters.WarehousePath);
-            WarehouseManager warehouseManager = WarehouseManager.GetInstance();
+            WarehouseManager warehouseManager = new WarehouseManager();
+            double[][] distancesMatrix = warehouseManager.CreateWarehouseDistancesMatrix(optimizationParameters.WarehousePath);
             Orders orders = new Orders(optimizationParameters.OrdersPath);
 
             int[] itemsToSort = new int[warehouseManager.WarehouseSize];
@@ -29,12 +26,7 @@ namespace Optimization.WarehouseMode
                     double[] fitness = new double[population.Length];
                     Parallel.For((long) 0, population.Length, i =>
                     {
-                        for (int k = 0; k < orders.OrdersCount; k++)
-                        {
-                            int[] order = Translator.TranslateWithChromosome(orders.OrdersList[k], population[i]);
-                            double pathLength = FindShortestPath.Find(order, distancesMatrix, optimizationParameters);
-                            fitness[i] += pathLength * orders.OrderRepeats[k];
-                        }
+                        fitness[i] = Fitness.CalculateAllOrdersFitness(orders, population[i], distancesMatrix, optimizationParameters);
                     });
                     Console.WriteLine(fitness.Min());
                     
@@ -45,8 +37,9 @@ namespace Optimization.WarehouseMode
 
             if (optimizationParameters.ResultToFile)
             {
+                double fitness = Fitness.CalculateAllOrdersFitness(orders, z, distancesMatrix, optimizationParameters);
                 Log log = new Log(optimizationParameters);
-                log.SaveResult(z, Distances.CalculatePathLengthDouble(z, distancesMatrix));
+                log.SaveResult(z, fitness);
             }
             
             string result =  z[2] + " " + z[4] + " " + z[5] + " " + z[7] + " " + z[9] + " " + z[11] + "       "

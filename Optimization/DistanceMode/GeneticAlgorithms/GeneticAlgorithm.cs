@@ -56,14 +56,13 @@ namespace Optimization.DistanceMode.GeneticAlgorithms
             
             _calculateFitness = calcFitness;
         }
-        
 
         public override int[] FindShortestPath(int[] order)
         {
             InitializePopulation(order);
             
-            double lastBestFitness = _population.Min(p => Distances.CalculatePathLengthDouble(p, _distancesMatrix));
-            int[] bestGene = _population.First(p => Distances.CalculatePathLengthDouble(p, _distancesMatrix) == lastBestFitness);
+            double lastBestFitness = _population.Min(p => Fitness.CalculateFitness(p, _distancesMatrix));
+            int[] bestGene = _population.First(p => Fitness.CalculateFitness(p, _distancesMatrix) == lastBestFitness);
 
             double[] fitness = new double[_population.Length];
 
@@ -73,7 +72,7 @@ namespace Optimization.DistanceMode.GeneticAlgorithms
 
                 int[][] parents = _selection.GenerateParents(_childrenPerGeneration * 2, fitness);
                 int[][] offsprings = _crossover.GenerateOffsprings(parents);
-                _elimination.EliminateAndReplace(offsprings,fitness);
+                _elimination.EliminateAndReplace(offsprings, fitness);
                 if (_canIncreaseStrictness) _canIncreaseStrictness = _selection.IncreaseStrictness(_childrenPerGeneration);
 
                 _mutation.Mutate();
@@ -115,9 +114,6 @@ namespace Optimization.DistanceMode.GeneticAlgorithms
 
                 _population[i] = temp;
             }
-
         }
-
     }
-    
 }

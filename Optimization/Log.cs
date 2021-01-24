@@ -25,7 +25,7 @@ namespace Optimization
             int size = pointOrder.Length;
             
             var result = new string[size + 1];
-            result[0] = "Length = " + length;
+            result[0] = "Fitness = " + length;
 
             for (int i = 0; i < size; i++)
                 result[i + 1] = pointOrder[i].ToString();

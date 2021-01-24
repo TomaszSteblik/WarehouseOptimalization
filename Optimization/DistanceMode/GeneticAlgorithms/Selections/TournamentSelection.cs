@@ -25,7 +25,6 @@ namespace Optimization.DistanceMode.GeneticAlgorithms.Selections
 
         private int[][] Tournament(int[][] contenders, ref double[] tournamentFitness)
         {
-            //int lenght = contenders.Length * (int) Math.Pow(2,Strictness);
             int halfLenght = contenders.Length / 2;
             int[][] winners = new int[halfLenght][];
             double[] newFitness = new double[halfLenght];

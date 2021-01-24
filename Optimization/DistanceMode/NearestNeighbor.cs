@@ -4,7 +4,6 @@ namespace Optimization.DistanceMode
 {
     public class NearestNeighbor : Optimization
     {
-        private readonly List<int> _objectOrder;
         private List<int> _availableObjects;
 
         private int[] objectOrder;

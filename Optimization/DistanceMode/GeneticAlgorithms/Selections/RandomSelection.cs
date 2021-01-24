@@ -19,8 +19,6 @@ namespace Optimization.DistanceMode.GeneticAlgorithms.Selections
             return parents;
         }
 
-       
-
         public RandomSelection(int[][] population) : base(population)
         {
         }

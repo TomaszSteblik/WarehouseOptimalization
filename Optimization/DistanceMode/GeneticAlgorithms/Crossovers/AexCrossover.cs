@@ -8,10 +8,6 @@ namespace Optimization.DistanceMode.GeneticAlgorithms.Crossovers
             }
             protected override int[] GenerateOffspring(int[] parent1, int[] parent2)
             {
-                
-                //Log.AddToLog($"AeX Crossover:\nParent 1({Distances.CalculatePathLengthDouble(parent1)}): {string.Join(";", parent1)}");
-                //Log.AddToLog($"Parent 2({Distances.CalculatePathLengthDouble(parent2)}): {string.Join(";", parent2)}");
-                
                 var length = parent1.Length;
                 var offspring = new int[length];
                 for (int i = 0; i < length; i++)
@@ -80,8 +76,6 @@ namespace Optimization.DistanceMode.GeneticAlgorithms.Crossovers
                     count++;
                     offspring[count] = alle;
                 }
-
-                //Log.AddToLog($"Offspring({Distances.CalculatePathLength(offspring)}): {string.Join(";", offspring)} \n");
 
                 return offspring;
             }

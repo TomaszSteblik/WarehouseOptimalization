@@ -16,16 +16,14 @@ namespace Optimization.DistanceMode
                     (population, distances) =>
                     {
                         double[] fitness = new double[population.Length];
-                        Parallel.For(0, population.Length, i =>
-                        {
-                            fitness[i] = Distances.CalculatePathLengthDouble(population[i], distances);
-                        });
+                        for (int i = 0; i < population.Length; i++)
+                            fitness[i] = Fitness.CalculateFitness(population[i], distances);
                         return fitness;
                     }),
                 _ => throw new ArgumentException("Incorrect optimization method in config file")
             };
             int[] objectOrder = optimization.FindShortestPath(order);
-            double pathLength = Distances.CalculatePathLengthDouble(objectOrder, distancesMatrix);
+            double pathLength = Fitness.CalculateFitness(objectOrder, distancesMatrix);
 
             if (optimizationParameters.ResultToFile && optimizationParameters.Mode == Mode.DistancesMode)
             {
