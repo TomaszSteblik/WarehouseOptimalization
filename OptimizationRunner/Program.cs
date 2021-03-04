@@ -16,7 +16,7 @@ namespace OptimizationRunner
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            string jsonS = File.ReadAllText(args.Length > 0 ? args[0] : @"E:\Warehouse\WarehouseOptimization\parameters23.json") ;
+            string jsonS = File.ReadAllText(args.Length > 0 ? args[0] : @"/home/tomek/RiderProjects/WarehouseOptimization/parameters.json") ;
             OptimizationParameters optimizationParameters = JsonConvert.DeserializeObject<OptimizationParameters>(jsonS);
             switch (optimizationParameters.Mode)
             {
