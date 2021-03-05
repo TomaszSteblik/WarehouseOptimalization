@@ -1,4 +1,4 @@
-using Optimization.Parameters;
+using OptimizationMethods.Parameters;
 
 namespace OptimizationMethods.DistanceMode
 {

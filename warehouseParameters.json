@@ -1,0 +1,16 @@
+{
+  "WarehouseGeneticAlgorithmParameters" : {
+    "OptimizationMethod": "GeneticAlgorithm",
+    "Use2opt": false, 
+    "LogEnabled": false,
+    "ResultToFile": false
+  },
+  "FitnessGeneticAlgorithmParameters" : {
+    "OptimizationMethod": "NearestNeighbor",
+    "Use2opt": true,
+    "LogEnabled": false,
+    "ResultToFile": false
+  },
+  "WarehousePath" : "/home/tomek/RiderProjects/WarehouseOptimization/mag23.txt",
+  "OrdersPath" : "/home/tomek/RiderProjects/WarehouseOptimization/orders23b.txt"
+}

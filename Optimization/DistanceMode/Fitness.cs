@@ -1,4 +1,4 @@
-using Optimization.Parameters;
+using OptimizationMethods.Parameters;
 using OptimizationMethods.WarehouseMode;
 
 namespace OptimizationMethods.DistanceMode

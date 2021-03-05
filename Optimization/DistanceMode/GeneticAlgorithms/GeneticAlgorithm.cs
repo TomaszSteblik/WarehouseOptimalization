@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Optimization.Parameters;
+using OptimizationMethods.Parameters;
 using OptimizationMethods.DistanceMode.GeneticAlgorithms.Crossovers;
 using OptimizationMethods.DistanceMode.GeneticAlgorithms.Eliminations;
 using OptimizationMethods.DistanceMode.GeneticAlgorithms.Mutations;

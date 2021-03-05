@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
-using Optimization.Parameters;
+using OptimizationMethods.Parameters;
 
 namespace OptimizationMethods
 {

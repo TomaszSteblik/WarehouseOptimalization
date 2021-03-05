@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Optimization.Parameters;
 using OptimizationMethods.DistanceMode.GeneticAlgorithms;
 using OptimizationMethods.Parameters;
 

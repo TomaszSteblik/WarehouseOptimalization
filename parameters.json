@@ -1,5 +1,4 @@
 {
-  "Mode": "WarehouseMode",
   "OptimizationMethod": "NearestNeighbor",
   "Use2opt": true,
   "LogEnabled": true,

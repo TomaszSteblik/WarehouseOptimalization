@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Optimization.Parameters;
+using OptimizationMethods.Parameters;
+using OptimizationMethods.Parameters;
 
 //based on the source code from https://www.chadgolden.com/blog/finding-all-the-permutations-of-an-array-in-c-sharp
 
