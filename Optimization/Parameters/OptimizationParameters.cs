@@ -14,7 +14,7 @@ namespace OptimizationMethods.Parameters
     }
     public class OptimizationParameters
     {
-        public OptimizationMethod OptimizationMethod { get; set; } = OptimizationMethod.NearestNeighbor;
+        public OptimizationMethod OptimizationMethod { get; set; } = OptimizationMethod.Permutations;
         public bool Use2opt { get; set; } = false;
         public int StartingId { get; set; } = 0;
         public bool LogEnabled { get; set; }

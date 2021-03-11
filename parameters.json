@@ -1,11 +1,11 @@
 {
-  "OptimizationMethod": "NearestNeighbor",
+  "OptimizationMethod": "Permutations",
   "Use2opt": true,
   "LogEnabled": true,
-  "LogPath":"/home/tomek/RiderProjects/WarehouseOptimization/log.txt",
-  "DataPath": "/home/tomek/RiderProjects/WarehouseOptimization/distances-usa.txt",
-  "WarehousePath": "/home/tomek/RiderProjects/WarehouseOptimization/mag23.txt",
-  "OrdersPath": "/home/tomek/RiderProjects/WarehouseOptimization/orders23b.txt",
+  "LogPath":"C:/Users/rtry/RiderProjects/WarehouseOptimization/log.txt",
+  "DataPath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/distances-usa.txt",
+  "WarehousePath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/mag23.txt",
+  "OrdersPath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/orders23b.txt",
   "ResultToFile": true,
-  "ResultPath": "/home/tomek/RiderProjects/WarehouseOptimization/result.txt"
+  "ResultPath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/result.txt"
 }
