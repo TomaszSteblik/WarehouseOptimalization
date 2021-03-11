@@ -1,4 +1,6 @@
-﻿namespace OptimizationMethods.DistanceMode
+﻿using System.Linq;
+
+namespace OptimizationMethods.DistanceMode
 {
     public class ConvertedMatrix
     {
@@ -16,8 +18,9 @@
             for (int i = 0; i < size; i++)
             {
                 _convertedMatrix[i] = new double[size];
-                _translation[i] = order[i];
             }
+
+            _translation = order.OrderBy(x => x).ToArray();
 
             for (int i = 0; i < size; i++)
             {
