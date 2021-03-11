@@ -21,7 +21,7 @@ namespace OptimizationMethods.DistanceMode
         }
         public override int[] FindShortestPath(int[] locationsToVisit)
         {
-            ConvertedArray arr = new ConvertedArray(_distancesMatrix, locationsToVisit);
+            ConvertedMatrix arr = new ConvertedMatrix(_distancesMatrix, locationsToVisit);
             _distancesMatrix = arr.GetConvertedMatrix();
             int[][] routes = Permute(locationsToVisit).Select(Enumerable.ToArray).ToArray();
 

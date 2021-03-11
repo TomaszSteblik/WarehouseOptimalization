@@ -1,13 +1,14 @@
 ﻿namespace OptimizationMethods.DistanceMode
 {
-    public class ConvertedArray
+    public class ConvertedMatrix
     {
         private int[] _translation;
         private double[][] _convertedMatrix;
 
         public double[][] GetConvertedMatrix() => _convertedMatrix;
+        public int[] GetTranslation() => _translation;
 
-        public ConvertedArray(double[][] distancesMatrix, int[] order)
+        public ConvertedMatrix(double[][] distancesMatrix, int[] order)
         {
             int size = order.Length;
             _convertedMatrix = new double[size][];
