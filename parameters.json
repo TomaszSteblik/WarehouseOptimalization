@@ -1,6 +1,6 @@
 {
-  "OptimizationMethod": "GeneticAlgorithm",
-  "Use2opt": true,
+  "OptimizationMethod": "NearestNeighbor",
+  "Use2opt": false,
   "LogEnabled": true,
   "LogPath":"C:/Users/rtry/RiderProjects/WarehouseOptimization/log.txt",
   "DataPath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/distances-usa.txt",

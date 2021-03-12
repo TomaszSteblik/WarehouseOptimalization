@@ -27,7 +27,7 @@ namespace Optimization.DistanceMode.GeneticAlgorithms.Crossovers
 
 
 
-            int startPoint = Random.Next(offspring.Length);
+            int startPoint = 0;
             offspring[0] = parents[0][startPoint];
 
 
