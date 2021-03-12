@@ -14,7 +14,7 @@ namespace OptimizationMethods.Parameters
     }
     public class OptimizationParameters
     {
-        public OptimizationMethod OptimizationMethod { get; set; } = OptimizationMethod.Permutations;
+        public OptimizationMethod OptimizationMethod { get; set; } = OptimizationMethod.GeneticAlgorithm;
         public bool Use2opt { get; set; } = false;
         public int StartingId { get; set; } = 0;
         public bool LogEnabled { get; set; }
@@ -22,8 +22,8 @@ namespace OptimizationMethods.Parameters
         public string ResultPath { get; set; }
         public bool ResultToFile { get; set; }
         public string DataPath { get; set; }
-        public string SelectionMethod { get; set; } = "Random";
-        public string CrossoverMethod { get; set; } = "Aex";
+        public string SelectionMethod { get; set; } = "RouletteWheel";
+        public string CrossoverMethod { get; set; } = "HGreX";
         public string EliminationMethod { get; set; } = "Elitism";
         public string MutationMethod { get; set; } = "Inversion";
         public double MutationProbability { get; set; } = 30;

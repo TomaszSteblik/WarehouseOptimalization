@@ -10,6 +10,7 @@ namespace OptimizationMethods.DistanceMode
             var sum = 0d;
             for (int i = 0; i < path.Length - 1; i++)
                 sum += distancesMatrix[path[i]][path[i + 1]];
+            if (path[^1] != 0) sum += distancesMatrix[path[^1]][0];
             return sum;
         }
 

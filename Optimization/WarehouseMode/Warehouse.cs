@@ -25,7 +25,7 @@ namespace OptimizationMethods.WarehouseMode
                 (population, matrix) =>
                 {
                     double[] fitness = new double[population.Length];
-                    Parallel.For((long) 0, population.Length, i =>
+                    Parallel.For( 0, population.Length, i =>
                     {
                         fitness[i] = Fitness.CalculateAllOrdersFitness(orders, population[i], distancesMatrix, warehouseParameters.FitnessGeneticAlgorithmParameters);
                     });

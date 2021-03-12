@@ -6,7 +6,7 @@ namespace OptimizationMethods.DistanceMode.GeneticAlgorithms.Crossovers
             {
                 DistancesMatrix = distancesMatrix;
             }
-            protected override int[] GenerateOffspring(int[] parent1, int[] parent2)
+            protected int[] GenerateOffspring(int[] parent1, int[] parent2)
             {
                 var length = parent1.Length;
                 var offspring = new int[length];
@@ -80,7 +80,7 @@ namespace OptimizationMethods.DistanceMode.GeneticAlgorithms.Crossovers
                 return offspring;
             }
 
-            public override int[][] GenerateOffsprings(int[][] parents)
+            public override int[][] GenerateOffsprings(int[][] parents, int numParentsForOneChild = 2)
             {
                 var parentsLength = parents.Length;
                 var amountOfChildren = parentsLength / 2;

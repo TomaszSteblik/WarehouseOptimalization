@@ -1,4 +1,5 @@
 ﻿using System;
+using Optimization.DistanceMode.GeneticAlgorithms.Crossovers;
 using OptimizationMethods.Parameters;
 using OptimizationMethods.DistanceMode.GeneticAlgorithms.Crossovers;
 using OptimizationMethods.DistanceMode.GeneticAlgorithms.Eliminations;
@@ -15,6 +16,7 @@ namespace OptimizationMethods.DistanceMode.GeneticAlgorithms
             {
                 "Aex" => new AexCrossover(distancesMatrix),
                 "HGreX" => new HGreXCrossover(distancesMatrix),
+                "MPHGreX" => new MultiParentHGreXCrossover(distancesMatrix),
                 _ => throw new ArgumentException("Wrong crossover name in parameters json file")
             };
             return crossover;

@@ -1,5 +1,5 @@
 {
-  "OptimizationMethod": "Permutations",
+  "OptimizationMethod": "GeneticAlgorithm",
   "Use2opt": true,
   "LogEnabled": true,
   "LogPath":"C:/Users/rtry/RiderProjects/WarehouseOptimization/log.txt",

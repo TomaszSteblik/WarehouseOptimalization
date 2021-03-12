@@ -30,14 +30,15 @@ namespace OptimizationMethods.DistanceMode
             double distance, minDistance = Double.MaxValue;
             int minR = -1;
 
-
+            int[] translation = arr.GetTranslation();
             for (int r = 0; r < rSize - 1; r++)
             {
+                
                 distance = 0;
                 for (int p = 0; p < ltvSize - 1; p++)
-                    distance += _distancesMatrix[routes[r][p]][routes[r][p + 1]];
-
-                distance += _distancesMatrix[routes[r][0]][routes[r][ltvSize - 1]];
+                    distance += _distancesMatrix[translation[routes[r][p]]][translation[routes[r][p+1]]];
+                
+                distance += _distancesMatrix[translation[routes[r][0]]][translation[routes[r][ltvSize - 1]]];
 
                 if (distance < minDistance)
                 {
