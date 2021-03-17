@@ -2,10 +2,10 @@
   "OptimizationMethod": "NearestNeighbor",
   "Use2opt": false,
   "LogEnabled": true,
-  "LogPath":"C:/Users/rtry/RiderProjects/WarehouseOptimization/log.txt",
-  "DataPath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/distances-usa.txt",
-  "WarehousePath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/mag23.txt",
-  "OrdersPath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/orders23b.txt",
+  "LogPath":"/Users/rtry/RiderProjects/WarehouseOptimization/log.txt",
+  "DataPath": "/Users/rtry/RiderProjects/WarehouseOptimization/distances-usa.txt",
+  "WarehousePath": "/Users/rtry/RiderProjects/WarehouseOptimization/mag23.txt",
+  "OrdersPath": "/Users/rtry/RiderProjects/WarehouseOptimization/orders23b.txt",
   "ResultToFile": true,
-  "ResultPath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/result.txt"
+  "ResultPath": "/Users/rtry/RiderProjects/WarehouseOptimization/result.txt"
 }

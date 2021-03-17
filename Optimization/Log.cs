@@ -1,11 +1,11 @@
 using System;
 using System.IO;
 using System.Text;
-using OptimizationMethods.Parameters;
+using Optimization.Parameters;
 
-namespace OptimizationMethods
+namespace Optimization
 {
-    public class Log
+    internal class Log
     {
         private readonly string _path;
         private readonly string _resultPath;

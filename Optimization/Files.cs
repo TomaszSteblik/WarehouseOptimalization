@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace OptimizationMethods
+namespace Optimization
 {
-    public class Files
+    internal class Files
     {
         public static double[][] ReadArray(string fileName)
         {

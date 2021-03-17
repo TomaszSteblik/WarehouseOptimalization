@@ -1,6 +1,4 @@
-using OptimizationMethods.Parameters;
-
-namespace OptimizationMethods.Parameters
+namespace Optimization.Parameters
 {
     public class WarehouseParameters
     {

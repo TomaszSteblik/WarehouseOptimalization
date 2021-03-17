@@ -1,4 +1,4 @@
-namespace OptimizationMethods.Parameters
+namespace Optimization.Parameters
 {
     public enum OptimizationMethod
     {
