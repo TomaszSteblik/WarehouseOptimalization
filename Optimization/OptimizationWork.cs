@@ -1,5 +1,6 @@
-using Optimization.Distances;
+using Optimization.Helpers;
 using Optimization.Parameters;
+using Optimization.Warehouse;
 
 namespace Optimization
 {
@@ -8,19 +9,19 @@ namespace Optimization
         public static void FindShortestPath(OptimizationParameters optimizationParameters)
         {
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
-            global::Optimization.Distances.FindShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), matrix, optimizationParameters);
+            PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), matrix, optimizationParameters);
         }
 
         public static void FindShortestPath(OptimizationParameters optimizationParameters,
             DelegateFitness.CalcFitness calcFitness)
         {
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
-            global::Optimization.Distances.FindShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), matrix, optimizationParameters,calcFitness);
+            PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), matrix, optimizationParameters,calcFitness);
         }
 
         public static void WarehouseOptimization(WarehouseParameters warehouseParameters)
         {
-            Warehouse.Warehouse.Optimizer(warehouseParameters);
+            WarehouseOptimizer.Optimize(warehouseParameters);
         }
     }
 }
