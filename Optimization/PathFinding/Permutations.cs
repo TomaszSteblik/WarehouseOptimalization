@@ -8,7 +8,7 @@ using Optimization.Parameters;
 
 namespace Optimization.PathFinding
 {
-    internal class Permutations : Algorithm
+    internal class Permutations : AlgorithmPathFinding
     {
         private double[][] _distancesMatrix;
         

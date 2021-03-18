@@ -9,11 +9,11 @@ namespace Optimization.PathFinding
     {
         public static double Find(int[] order, double[][] distancesMatrix,  OptimizationParameters optimizationParameters)
         {
-            Algorithm algorithm = optimizationParameters.OptimizationMethod switch
+            AlgorithmPathFinding algorithmPathFinding = optimizationParameters.OptimizationMethod switch
             {
                 OptimizationMethod.Permutations => new Permutations(optimizationParameters, distancesMatrix),
                 OptimizationMethod.NearestNeighbor => new NearestNeighbor(optimizationParameters, distancesMatrix),
-                OptimizationMethod.GeneticAlgorithm => new GeneticAlgorithm(optimizationParameters, distancesMatrix,
+                OptimizationMethod.GeneticAlgorithm => new GeneticAlgorithmPathFinding(optimizationParameters, distancesMatrix,
                     (population, distances) =>
                     {
                         double[] fitness = new double[population.Length];
@@ -23,7 +23,7 @@ namespace Optimization.PathFinding
                     }),
                 _ => throw new ArgumentException("Incorrect optimization method in config file")
             };
-            int[] objectOrder = algorithm.FindShortestPath(order);
+            int[] objectOrder = algorithmPathFinding.FindShortestPath(order);
             double pathLength = Fitness.CalculateFitness(objectOrder, distancesMatrix);
 
             if (optimizationParameters.ResultToFile)
@@ -37,14 +37,14 @@ namespace Optimization.PathFinding
         }
         public static double Find(int[] order, double[][] distancesMatrix,  OptimizationParameters optimizationParameters,DelegateFitness.CalcFitness calcFitness)
         {
-            Algorithm algorithm = optimizationParameters.OptimizationMethod switch
+            AlgorithmPathFinding algorithmPathFinding = optimizationParameters.OptimizationMethod switch
             {
                 OptimizationMethod.Permutations => new Permutations(optimizationParameters, distancesMatrix),
                 OptimizationMethod.NearestNeighbor => new NearestNeighbor(optimizationParameters, distancesMatrix),
-                OptimizationMethod.GeneticAlgorithm => new GeneticAlgorithm(optimizationParameters, distancesMatrix,calcFitness),
+                OptimizationMethod.GeneticAlgorithm => new GeneticAlgorithmPathFinding(optimizationParameters, distancesMatrix,calcFitness),
                 _ => throw new ArgumentException("Incorrect optimization method in config file")
             };
-            int[] objectOrder = algorithm.FindShortestPath(order);
+            int[] objectOrder = algorithmPathFinding.FindShortestPath(order);
             double pathLength = Fitness.CalculateFitness(objectOrder, distancesMatrix);
 
             if (optimizationParameters.ResultToFile)

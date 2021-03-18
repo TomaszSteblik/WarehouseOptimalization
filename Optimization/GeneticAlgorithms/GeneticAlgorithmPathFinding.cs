@@ -10,7 +10,7 @@ using Optimization.PathFinding;
 
 namespace Optimization.GeneticAlgorithms
 {
-    internal class GeneticAlgorithm : Algorithm
+    internal class GeneticAlgorithmPathFinding : AlgorithmPathFinding
     {
         private readonly Selection _selection;
         private readonly Crossover _crossover;
@@ -29,7 +29,7 @@ namespace Optimization.GeneticAlgorithms
         
         private DelegateFitness.CalcFitness _calculateFitness;
         
-        public GeneticAlgorithm(OptimizationParameters optimizationParameters, double[][] distancesMatrix, DelegateFitness.CalcFitness calcFitness)
+        public GeneticAlgorithmPathFinding(OptimizationParameters optimizationParameters, double[][] distancesMatrix, DelegateFitness.CalcFitness calcFitness)
         {
             _optimizationParameters = optimizationParameters;
 

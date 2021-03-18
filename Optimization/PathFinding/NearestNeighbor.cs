@@ -4,7 +4,7 @@ using Optimization.Parameters;
 
 namespace Optimization.PathFinding
 {
-    internal class NearestNeighbor : Algorithm
+    internal class NearestNeighbor : AlgorithmPathFinding
     {
         private List<int> _availableObjects;
 
