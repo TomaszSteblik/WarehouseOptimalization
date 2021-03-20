@@ -69,6 +69,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                 if (parentsArcsFitnesses.Any())
                 {
                     var sum = parentsArcsFitnesses.Sum();
+                    var max = parentsArcsFitnesses.Max();
                     var target = Random.NextDouble();
                     double current = 0;
 
