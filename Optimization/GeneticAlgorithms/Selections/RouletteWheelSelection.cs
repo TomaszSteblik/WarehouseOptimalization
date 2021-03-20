@@ -22,11 +22,14 @@ namespace Optimization.GeneticAlgorithms.Selections
 
         private int[] GenerateSingleParent(double[] fitness)
         {
-            double fitnessSum = fitness.Sum();
+
+            double fitnessMin = fitness.Min();
+            double fitnessMax = fitness.Max();
+            double fitnessSum = Random.NextDouble();
             
             for (int i = 0; i < PopulationSize; i++)
             {
-                fitnessSum += (1.0 / fitness[i]);
+                fitnessSum += ((fitness[i] - fitnessMin)/(fitnessMax-fitnessMin));
                 if (fitnessSum >= 1)
                 {
                     return Population[i];
