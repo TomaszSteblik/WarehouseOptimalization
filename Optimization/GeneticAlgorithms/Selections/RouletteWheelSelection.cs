@@ -30,18 +30,20 @@ namespace Optimization.GeneticAlgorithms.Selections
         private int[] GenerateSingleParent(double[] fitness)
         {
             var fitnessSum = fitness.Sum();
-            Console.WriteLine(fitnessSum);
-            var target = Random.NextDouble();
+            //Console.WriteLine(fitnessSum);
+            var target = Random.NextDouble() * fitnessSum;
             var value = 0.0;
             
             for (int i = 0; i < PopulationSize; i++)
             {
-                value += (1/fitness[i])/fitnessSum;
-                Console.WriteLine(value);
-                Console.Read();
+                value += fitness[i];
+                //Console.WriteLine(value);
+                //Console.Read();
 
                 if (value >= target)
                 {
+                    //Console.WriteLine($"selected : {i}");
+
                     return Population[i];
                 }
             }
