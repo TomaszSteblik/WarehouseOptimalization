@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Optimization.GeneticAlgorithms.Crossovers
 {
-    internal abstract class Crossover
+    public abstract class Crossover
     {
         //protected abstract int[] GenerateOffspring(int[] parent1, int[] parent2);
         public abstract int[][] GenerateOffsprings(int[][] parents, int numParentsForOneChild = 2);
@@ -15,10 +15,10 @@ namespace Optimization.GeneticAlgorithms.Crossovers
             return chromosome.Any(t => t == a);
         }
 
+        protected Crossover(double[][] distancesMatrix)
+        {
+            DistancesMatrix = distancesMatrix;
+        }
 
-        
-
-
-        
     }
 }
