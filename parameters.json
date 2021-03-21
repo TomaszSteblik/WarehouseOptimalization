@@ -1,11 +1,10 @@
 {
-  "OptimizationMethod": "NearestNeighbor",
+  "OptimizationMethod": "GeneticAlgorithm",
   "Use2opt": false,
-  "LogEnabled": true,
-  "LogPath":"/Users/rtry/RiderProjects/WarehouseOptimization/log.txt",
-  "DataPath": "/Users/rtry/RiderProjects/WarehouseOptimization/distances-usa.txt",
-  "WarehousePath": "/Users/rtry/RiderProjects/WarehouseOptimization/mag23.txt",
-  "OrdersPath": "/Users/rtry/RiderProjects/WarehouseOptimization/orders23b.txt",
+  "LogEnabled": false,
+  "LogPath":"/home/tomek/RiderProjects/WarehouseOptimization/log.txt",
+  "DataPath": "/home/tomek/RiderProjects/WarehouseOptimization/distances-usa.txt",
   "ResultToFile": true,
-  "ResultPath": "/Users/rtry/RiderProjects/WarehouseOptimization/result.txt"
+  "ResultPath": "/home/tomek/RiderProjects/WarehouseOptimization/result.txt",
+  "CrossoverMethod" : "HRndX"
 }

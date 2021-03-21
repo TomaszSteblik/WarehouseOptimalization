@@ -5,14 +5,14 @@ using System.Linq;
 namespace Optimization.GeneticAlgorithms.Crossovers
 {
 
-    internal class MultiParentHGreXCrossover : Crossover
+    internal class MPHGreXCrossover : Crossover
     {
         Random rnd = new Random();
 
-        public MultiParentHGreXCrossover(double[][] distancesMatrix)
+        public MPHGreXCrossover(double[][] distancesMatrix) : base(distancesMatrix)
         {
-            DistancesMatrix = distancesMatrix;
         }
+
         protected int[] GenerateOffspring(int[][] parents)
         {
             int[] offspring = new int[parents[0].Length];
@@ -122,6 +122,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 
             return offsprings;
         }
+        
         
     }
 }

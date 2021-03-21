@@ -2,10 +2,10 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 {
     internal class AexCrossover : Crossover
         {
-            public AexCrossover(double[][] distancesMatrix)
+            public AexCrossover(double[][] distancesMatrix) : base(distancesMatrix)
             {
-                DistancesMatrix = distancesMatrix;
             }
+
             protected int[] GenerateOffspring(int[] parent1, int[] parent2)
             {
                 var length = parent1.Length;
