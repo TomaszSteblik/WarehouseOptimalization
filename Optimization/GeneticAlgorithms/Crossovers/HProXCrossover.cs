@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -37,54 +38,44 @@ namespace Optimization.GeneticAlgorithms.Crossovers
             var availableVertexes = new List<int>(parents[0]);
             availableVertexes.Remove(currentVertex);
             var counter = 1;
+
             while (counter < parentLength)
             {
-                var tempParents = new List<int[]>();
-
                 var feasibleParents = new List<int[]>(parents);
-                int nextVertex = -1;
+                var nextVertex = -1;
                 for (var i = 0; i < parents.Length; i++)
                 {
-                    var selectedParent = feasibleParents[i];
+                    var selectedParent = parents[i];
                     var selectedParentAsList = selectedParent.ToList();
                     var indexOfCurrentVertexInSelectedParent = selectedParentAsList.IndexOf(currentVertex);
                     if (indexOfCurrentVertexInSelectedParent >= parentLength - 1 ||
                         offspring.Contains(selectedParent[indexOfCurrentVertexInSelectedParent + 1]))
                     {
-                        continue;
-                    }
-                    tempParents.Add(selectedParent);
-                }
-
-                feasibleParents = tempParents;
-
-                List<double> parentsArcsFitnesses = new List<double>();
-                foreach (var parent in feasibleParents)
-                {
-                    var selectedParentAsList = parent.ToList();
-                    var indexOfCurrentVertexInSelectedParent = selectedParentAsList.IndexOf(currentVertex);
-                    parentsArcsFitnesses.Add(DistancesMatrix[currentVertex][parent[indexOfCurrentVertexInSelectedParent+1]]);
-                }
-
-                if (parentsArcsFitnesses.Any())
-                {
-                    var sum = parentsArcsFitnesses.Sum();
-                    var max = parentsArcsFitnesses.Max();
-                    var target = Random.NextDouble();
-                    double current = 0;
-
-                    for (int i = 0; i < parentsArcsFitnesses.Count; i++)
-                    {
-                        current += parentsArcsFitnesses[i]/sum;
-                        if (current >= target)
-                        {
-                            var selectedParentAsList = feasibleParents[i].ToList();
-                            var indexOfCurrentVertexInSelectedParent = selectedParentAsList.IndexOf(currentVertex);
-                            nextVertex = feasibleParents[i][indexOfCurrentVertexInSelectedParent + 1];
-                        }
+                        feasibleParents.Remove(selectedParent);
                     }
                 }
-                else
+
+
+                double[] fitness = new double[feasibleParents.Count];
+
+                
+                for (int i = 0; i < feasibleParents.Count; i++)
+                {
+                    fitness[i] =
+                        1/DistancesMatrix[currentVertex][
+                            feasibleParents[i][feasibleParents[i].ToList().IndexOf(currentVertex) + 1]];
+                }
+
+                var sum = fitness.Sum();
+                var approx = Random.NextDouble() * sum;
+                for (int i = 0; i < fitness.Length; i++)
+                {
+                    approx += fitness[i];
+                    if (approx >= sum)
+                        nextVertex = feasibleParents[i][feasibleParents[i].ToList().IndexOf(currentVertex) + 1];
+                }
+
+                if (nextVertex == -1)
                 {
                     nextVertex = availableVertexes[Random.Next(0, availableVertexes.Count)];
                 }

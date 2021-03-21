@@ -8,6 +8,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
         
         public override int[][] GenerateOffsprings(int[][] parents, int numParentsForOneChild = 8)
         {
+            numParentsForOneChild = 8;
             var parentsLength = parents.Length;
             var amountOfChildren = parentsLength / 2;
             int[][] offsprings = new int[amountOfChildren][];

@@ -13,12 +13,13 @@ namespace Optimization.GeneticAlgorithms.Selections
         public override int[][] GenerateParents(int numberOfParents, double[] fitness)
         {
             double[] reversedFitness = new double[fitness.Length];
+            var max = fitness.Max();
+            var min = fitness.Min();
             for (int i = 0; i < fitness.Length; i++)
             {
-                reversedFitness[i] = 1 / fitness[i];
+                reversedFitness[i] = (1-((fitness[i] - min) / (max - min)));
             }
-            
-            
+
             int[][] parents = new int[numberOfParents][];
             for (int i = 0; i < numberOfParents; i++)
             {
@@ -30,20 +31,12 @@ namespace Optimization.GeneticAlgorithms.Selections
         private int[] GenerateSingleParent(double[] fitness)
         {
             var fitnessSum = fitness.Sum();
-            //Console.WriteLine(fitnessSum);
             var target = Random.NextDouble() * fitnessSum;
-            var value = 0.0;
-            
             for (int i = 0; i < PopulationSize; i++)
             {
-                value += fitness[i];
-                //Console.WriteLine(value);
-                //Console.Read();
-
-                if (value >= target)
+                target += fitness[i];
+                if (target >= fitnessSum)
                 {
-                    //Console.WriteLine($"selected : {i}");
-
                     return Population[i];
                 }
             }
