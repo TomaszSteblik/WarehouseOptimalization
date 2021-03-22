@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Optimization.Warehouse
+namespace Optimization.GeneticAppliances.Warehouse
 {
     internal class Orders
     {

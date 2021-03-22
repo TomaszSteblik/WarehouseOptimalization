@@ -1,4 +1,4 @@
-﻿namespace Optimization.GeneticAlgorithms
+﻿namespace Optimization.GeneticAppliances
 {
     public interface IGeneticAppliance
     {

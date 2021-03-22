@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 //code from https://www.videlin.eu/2016/04/28/shortest-path-in-graph-dijkstras-algorithm-c-implementation/
 
-namespace Optimization.Warehouse
+namespace Optimization.GeneticAppliances.Warehouse
 {
     internal class Dijkstra
     {

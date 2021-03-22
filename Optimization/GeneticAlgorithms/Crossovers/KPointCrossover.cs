@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Optimization.Parameters;
 
 namespace Optimization.GeneticAlgorithms.Crossovers
 {
@@ -15,7 +16,6 @@ namespace Optimization.GeneticAlgorithms.Crossovers
             var geneLength = parents[0].Length;
             var rnd = new Random();
             var offsprings = new int[parents.Length / 2][];
-            var startingPoint = 0;
             for (int i = 0; i < parents.Length / 2; i++)
             {
                 offsprings[i] = new int[geneLength];
@@ -23,10 +23,12 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 
             Parallel.ForEach(Enumerable.Range(0, parents.Length / 2).Select(i => 2 * i), i => {
                 var available = parents[i].ToList();
-                available.Remove(startingPoint);
+                
+                available.Remove(parents[i][0]);
+                offsprings[i / 2][0] = parents[i][0];
+                
                 int iterator = 1;
-                offsprings[i / 2][0] = startingPoint;
-
+                
                 for (int j = 1; j < parents[i].Length; j++)
                 {
                     if (offsprings[i/2].Contains(parents[i + j%2][j]))

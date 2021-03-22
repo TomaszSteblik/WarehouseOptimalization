@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Optimization.GeneticAlgorithms;
 using Optimization.GeneticAlgorithms.Crossovers;
 using Optimization.GeneticAlgorithms.Eliminations;
 using Optimization.GeneticAlgorithms.Mutations;
@@ -7,7 +8,7 @@ using Optimization.GeneticAlgorithms.Selections;
 using Optimization.Helpers;
 using Optimization.Parameters;
 
-namespace Optimization.GeneticAlgorithms
+namespace Optimization.GeneticAppliances.Warehouse
 {
     internal class GeneticWarehouse : IGeneticAppliance
     {

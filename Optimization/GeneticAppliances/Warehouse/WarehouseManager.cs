@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Optimization.Helpers;
 
-namespace Optimization.Warehouse
+namespace Optimization.GeneticAppliances.Warehouse
 {
     internal class WarehouseManager
     {

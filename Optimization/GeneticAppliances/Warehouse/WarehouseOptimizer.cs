@@ -5,7 +5,7 @@ using Optimization.GeneticAlgorithms;
 using Optimization.Helpers;
 using Optimization.Parameters;
 
-namespace Optimization.Warehouse
+namespace Optimization.GeneticAppliances.Warehouse
 {
     internal class WarehouseOptimizer
     {

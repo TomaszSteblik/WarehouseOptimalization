@@ -11,6 +11,7 @@ namespace Optimization.GeneticAlgorithms
     {
         public static Crossover CreateCrossover(OptimizationParameters optimizationParameters, double[][] distancesMatrix)
         {
+            int startingPoint = optimizationParameters.StartingId;
             Crossover crossover = optimizationParameters.CrossoverMethod switch
             {
                 "Aex" => new AexCrossover(distancesMatrix),

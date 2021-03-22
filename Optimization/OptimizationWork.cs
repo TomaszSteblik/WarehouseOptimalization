@@ -1,6 +1,8 @@
+using Optimization.GeneticAlgorithms;
+using Optimization.GeneticAppliances;
+using Optimization.GeneticAppliances.Warehouse;
 using Optimization.Helpers;
 using Optimization.Parameters;
-using Optimization.Warehouse;
 
 namespace Optimization
 {
@@ -22,6 +24,13 @@ namespace Optimization
         public static void WarehouseOptimization(WarehouseParameters warehouseParameters)
         {
             WarehouseOptimizer.Optimize(warehouseParameters);
+        }
+
+        public static void KeyboardOptimization(OptimizationParameters optimizationParameters)
+        {
+            var keyboardOptimizer = new GeneticKeyboard(optimizationParameters);
+            var result = keyboardOptimizer.Run();
+            keyboardOptimizer.WriteResult(result);
         }
     }
 }
