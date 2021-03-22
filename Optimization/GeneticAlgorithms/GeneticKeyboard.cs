@@ -54,6 +54,7 @@ namespace Optimization.GeneticAlgorithms
         }
         public int[] Run()
         {
+            int[] bestGene = new int[_geneLength];
             
             for (int i = 0; i < _terminationValue; i++)
             {
@@ -63,6 +64,8 @@ namespace Optimization.GeneticAlgorithms
                 {
                     fitness[j] = Fitness.CalculateFitness(_population[j], _frequency, _weights);
                 });
+                var lastBestFitness = fitness.Min();
+                bestGene = _population.First(p => Fitness.CalculateFitness(p, _frequency, _weights) == lastBestFitness);
                 //_population = _population.OrderByDescending(x => fitness[Array.IndexOf(_population, x)]).ToArray();
                 //fitness = fitness.OrderByDescending(x => x).ToArray();
                 
@@ -73,7 +76,8 @@ namespace Optimization.GeneticAlgorithms
                 _mutation.Mutate();
             }
 
-            return _population[^1];
+            Console.WriteLine(Fitness.CalculateFitness(bestGene, _frequency, _weights));
+            return bestGene;
 
         }
 
