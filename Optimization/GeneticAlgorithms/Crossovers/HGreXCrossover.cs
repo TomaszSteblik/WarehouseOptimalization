@@ -4,7 +4,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 {
     internal class HGreXCrossover : Crossover
         {
-            public HGreXCrossover(double[][] distancesMatrix, int startingPoint) : base(distancesMatrix, startingPoint)
+            public HGreXCrossover(double[][] distancesMatrix) : base(distancesMatrix)
             {
             }
 

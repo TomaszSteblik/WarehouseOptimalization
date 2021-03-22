@@ -2,7 +2,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 {
     internal class AexCrossover : Crossover
         {
-            public AexCrossover(double[][] distancesMatrix, int startingPoint) : base(distancesMatrix, startingPoint)
+            public AexCrossover(double[][] distancesMatrix) : base(distancesMatrix)
             {
             }
 

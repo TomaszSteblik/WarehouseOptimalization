@@ -9,7 +9,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
     {
         Random rnd = new Random();
 
-        public MPHGreXCrossover(double[][] distancesMatrix, int startingPoint) : base(distancesMatrix, startingPoint)
+        public MPHGreXCrossover(double[][] distancesMatrix) : base(distancesMatrix)
         {
         }
 
