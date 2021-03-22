@@ -10,7 +10,7 @@ using Optimization.PathFinding;
 
 namespace Optimization.GeneticAlgorithms
 {
-    internal class GeneticAlgorithmPathFinding : AlgorithmPathFinding
+    internal class GeneticAlgorithmPathFinding : IGeneticAlgorithm, IPathFinder
     {
         private readonly Selection _selection;
         private readonly Crossover _crossover;
@@ -28,6 +28,8 @@ namespace Optimization.GeneticAlgorithms
         private readonly int _terminationValue; 
         
         private DelegateFitness.CalcFitness _calculateFitness;
+
+        private OptimizationParameters _optimizationParameters;
         
         public GeneticAlgorithmPathFinding(OptimizationParameters optimizationParameters, double[][] distancesMatrix, DelegateFitness.CalcFitness calcFitness)
         {
@@ -48,8 +50,12 @@ namespace Optimization.GeneticAlgorithms
             
             _calculateFitness = calcFitness;
         }
+        
+        public void Run()
+        {
+        }
 
-        public override int[] FindShortestPath(int[] order)
+        public int[] FindShortestPath(int[] order)
         {
             InitializePopulation(order);
             
@@ -107,5 +113,7 @@ namespace Optimization.GeneticAlgorithms
                 _population[i] = temp;
             }
         }
+
+       
     }
 }

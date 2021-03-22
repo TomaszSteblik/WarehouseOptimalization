@@ -9,7 +9,7 @@ namespace Optimization.PathFinding
     {
         public static double Find(int[] order, double[][] distancesMatrix,  OptimizationParameters optimizationParameters)
         {
-            AlgorithmPathFinding algorithmPathFinding = optimizationParameters.OptimizationMethod switch
+            IPathFinder algorithmPathFinding = optimizationParameters.OptimizationMethod switch
             {
                 OptimizationMethod.Permutations => new Permutations(optimizationParameters, distancesMatrix),
                 OptimizationMethod.NearestNeighbor => new NearestNeighbor(optimizationParameters, distancesMatrix),
@@ -37,7 +37,7 @@ namespace Optimization.PathFinding
         }
         public static double Find(int[] order, double[][] distancesMatrix,  OptimizationParameters optimizationParameters,DelegateFitness.CalcFitness calcFitness)
         {
-            AlgorithmPathFinding algorithmPathFinding = optimizationParameters.OptimizationMethod switch
+            IPathFinder algorithmPathFinding = optimizationParameters.OptimizationMethod switch
             {
                 OptimizationMethod.Permutations => new Permutations(optimizationParameters, distancesMatrix),
                 OptimizationMethod.NearestNeighbor => new NearestNeighbor(optimizationParameters, distancesMatrix),
