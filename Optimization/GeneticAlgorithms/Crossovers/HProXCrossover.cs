@@ -65,6 +65,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                         1/DistancesMatrix[currentVertex][
                             feasibleParents[i][feasibleParents[i].ToList().IndexOf(currentVertex) + 1]];
                 }
+                
 
                 var sum = fitness.Sum();
                 var approx = Random.NextDouble() * sum;
@@ -72,7 +73,11 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                 {
                     approx += fitness[i];
                     if (approx >= sum)
+                    {
                         nextVertex = feasibleParents[i][feasibleParents[i].ToList().IndexOf(currentVertex) + 1];
+                        break;
+
+                    }
                 }
 
                 if (nextVertex == -1)
