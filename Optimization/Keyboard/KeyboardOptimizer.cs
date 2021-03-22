@@ -8,7 +8,8 @@ namespace Optimization.Keyboard
         public static void Optimize(OptimizationParameters optimizationParameters)
         {
             var keyboardOptimizer = new GeneticKeyboard(optimizationParameters);
-            keyboardOptimizer.Run();
+            var result = keyboardOptimizer.Run();
+            keyboardOptimizer.WriteResult(result);
         }
     }
 }

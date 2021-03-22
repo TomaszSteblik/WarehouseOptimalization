@@ -6,6 +6,6 @@
   "DataPath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/distances-usa.txt",
   "ResultToFile": true,
   "ResultPath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/result.txt",
-  "CrossoverMethod" : "Aex",
+  "CrossoverMethod" : "KPoint",
   "StartingId" : -1
 }

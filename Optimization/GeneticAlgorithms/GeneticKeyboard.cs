@@ -93,14 +93,14 @@ namespace Optimization.GeneticAlgorithms
             return population;
         }
         
-        private void WriteResult(int[][] population)
+        public void WriteResult(int[] gene)
         {
             var sb = new StringBuilder();
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 10; j++)
                 {
-                    switch (population[^1][10 * i + j])
+                    switch (gene[10 * i + j])
                     {
                         case 91: sb.Append(". ");
                             break;
@@ -110,7 +110,7 @@ namespace Optimization.GeneticAlgorithms
                             break;
                         case 94: sb.Append("/ ");
                             break;
-                        default: sb.Append((char) population[^1][10 * i + j] + " ");
+                        default: sb.Append((char) gene[10 * i + j] + " ");
                             break;
                     }
                 }
