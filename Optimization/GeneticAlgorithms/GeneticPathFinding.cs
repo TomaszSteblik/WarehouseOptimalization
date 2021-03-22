@@ -10,7 +10,7 @@ using Optimization.PathFinding;
 
 namespace Optimization.GeneticAlgorithms
 {
-    internal class GeneticAlgorithmPathFinding : IGeneticAlgorithm, IPathFinder
+    internal class GeneticPathFinding : IPathFinder
     {
         private readonly Selection _selection;
         private readonly Crossover _crossover;
@@ -19,7 +19,7 @@ namespace Optimization.GeneticAlgorithms
         private readonly Random _random = new Random();
 
         private bool _canIncreaseStrictness = true;
-        private readonly int[][] _population;
+        private int[][] _population;
         private readonly double[][] _distancesMatrix;
 
         private readonly int _populationSize;
@@ -31,7 +31,7 @@ namespace Optimization.GeneticAlgorithms
 
         private OptimizationParameters _optimizationParameters;
         
-        public GeneticAlgorithmPathFinding(OptimizationParameters optimizationParameters, double[][] distancesMatrix, DelegateFitness.CalcFitness calcFitness)
+        public GeneticPathFinding(OptimizationParameters optimizationParameters, int[] order, double[][] distancesMatrix, DelegateFitness.CalcFitness calcFitness)
         {
             _optimizationParameters = optimizationParameters;
 
@@ -50,15 +50,10 @@ namespace Optimization.GeneticAlgorithms
             
             _calculateFitness = calcFitness;
         }
-        
-        public int[] Run()
-        {
-            return null;
-        }
 
         public int[] FindShortestPath(int[] order)
         {
-            InitializePopulation(order);
+            GeneticHelper.InitializePopulation(_population,order, 0, _populationSize);
             
             double lastBestFitness = _population.Min(p => Fitness.CalculateFitness(p, _distancesMatrix));
             int[] bestGene = _population.First(p => Fitness.CalculateFitness(p, _distancesMatrix) == lastBestFitness);
@@ -88,33 +83,5 @@ namespace Optimization.GeneticAlgorithms
             return bestGene;
         }
 
-        private void InitializePopulation(int[] order)
-        {
-            for (int i = 0; i < _populationSize; i++)
-            {
-                int[] temp = new int[order.Length];
-                for (int z = 0; z < order.Length; z++)
-                {
-                    temp[z] = -1;
-                }
-                int count = 0;
-                temp[0] = _optimizationParameters.StartingId;
-                count++;
-                do
-                {
-                    int a = _random.Next(0,order.Length);
-                    if (temp.All(t => t != order[a]))
-                    {
-                        temp[count] = order[a];
-                        count++;
-                    }
-
-                } while (count<order.Length);
-
-                _population[i] = temp;
-            }
-        }
-
-       
     }
 }

@@ -22,7 +22,7 @@ namespace Optimization.Parameters
         public string ResultPath { get; set; }
         public bool ResultToFile { get; set; }
         public string DataPath { get; set; }
-        public string SelectionMethod { get; set; } = "Tournament";
+        public string SelectionMethod { get; set; } = "Random";
         public string CrossoverMethod { get; set; } = "KPoint";
         public string EliminationMethod { get; set; } = "Elitism";
         public string MutationMethod { get; set; } = "Inversion";

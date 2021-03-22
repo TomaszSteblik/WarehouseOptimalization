@@ -5,11 +5,10 @@ namespace Optimization.GeneticAlgorithms
 {
     public class GeneticHelper
     {
-        public static int[][] InitializePopulation(int[] order, int startingId, int populationSize)
+        public static void InitializePopulation(int[][] population, int[] order, int startingId, int populationSize)
         {
             Random random = new Random();
-            int[][] population = new int[populationSize][];
-            
+
             for (int i = 0; i < populationSize; i++)
             {
                 int[] temp = new int[order.Length];
@@ -35,7 +34,6 @@ namespace Optimization.GeneticAlgorithms
                 population[i] = temp;
             }
 
-            return population;
         }
     }
 }

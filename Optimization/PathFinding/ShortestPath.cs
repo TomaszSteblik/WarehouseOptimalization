@@ -13,7 +13,7 @@ namespace Optimization.PathFinding
             {
                 OptimizationMethod.Permutations => new Permutations(optimizationParameters, distancesMatrix),
                 OptimizationMethod.NearestNeighbor => new NearestNeighbor(optimizationParameters, distancesMatrix),
-                OptimizationMethod.GeneticAlgorithm => new GeneticAlgorithmPathFinding(optimizationParameters, distancesMatrix,
+                OptimizationMethod.GeneticAlgorithm => new GeneticPathFinding(optimizationParameters, order, distancesMatrix,
                     (population, distances) =>
                     {
                         double[] fitness = new double[population.Length];
@@ -41,7 +41,7 @@ namespace Optimization.PathFinding
             {
                 OptimizationMethod.Permutations => new Permutations(optimizationParameters, distancesMatrix),
                 OptimizationMethod.NearestNeighbor => new NearestNeighbor(optimizationParameters, distancesMatrix),
-                OptimizationMethod.GeneticAlgorithm => new GeneticAlgorithmPathFinding(optimizationParameters, distancesMatrix,calcFitness),
+                OptimizationMethod.GeneticAlgorithm => new GeneticPathFinding(optimizationParameters,order, distancesMatrix,calcFitness),
                 _ => throw new ArgumentException("Incorrect optimization method in config file")
             };
             int[] objectOrder = algorithmPathFinding.FindShortestPath(order);

@@ -21,7 +21,7 @@ namespace Optimization.Warehouse
                 itemsToSort[i - 1] = i;
             }
             
-            IGeneticAlgorithm geneticWarehouse = new GeneticWarehouse(warehouseParameters.WarehouseGeneticAlgorithmParameters,
+            IGeneticAppliance geneticWarehouse = new GeneticWarehouse(warehouseParameters.WarehouseGeneticAlgorithmParameters,
                 warehouseManager.WarehouseSize, distancesMatrix,
                 (population, matrix) =>
                 {

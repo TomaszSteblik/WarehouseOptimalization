@@ -9,7 +9,7 @@ using Optimization.Parameters;
 
 namespace Optimization.GeneticAlgorithms
 {
-    internal class GeneticWarehouse : IGeneticAlgorithm
+    internal class GeneticWarehouse : IGeneticAppliance
     {
 
         private readonly Selection _selection;
@@ -44,13 +44,7 @@ namespace Optimization.GeneticAlgorithms
             _terminationValue = optimizationParameters.TerminationValue;
 
             _distancesMatrix = distancesMatrix;
-            
-            int[] itemsToSort = new int[_warehouseSize];
-            for (int i = 1; i < _warehouseSize; i++)
-            {
-                itemsToSort[i - 1] = i;
-            }
-            _population = GeneticHelper.InitializePopulation(itemsToSort, 0, _populationSize);
+            _population = new int[_populationSize][];
 
             _crossover = GeneticFactory.CreateCrossover(optimizationParameters, _distancesMatrix);
             _selection = GeneticFactory.CreateSelection(optimizationParameters, _population);
@@ -62,8 +56,13 @@ namespace Optimization.GeneticAlgorithms
 
         public int[] Run()
         {
+            int[] itemsToSort = new int[_warehouseSize];
+            for (int i = 1; i < _warehouseSize; i++)
+            {
+                itemsToSort[i - 1] = i;
+            }
+            GeneticHelper.InitializePopulation(_population, itemsToSort, 0, _populationSize);
             
-
             double lastBestFitness = _population.Min(p => Fitness.CalculateFitness(p, _distancesMatrix));
             int[] bestGene = _population.First(p => Fitness.CalculateFitness(p, _distancesMatrix) == lastBestFitness);
 
