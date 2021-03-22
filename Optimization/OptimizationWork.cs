@@ -21,9 +21,9 @@ namespace Optimization
             return PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), matrix, optimizationParameters,calcFitness);
         }
 
-        public static void WarehouseOptimization(WarehouseParameters warehouseParameters)
+        public static double WarehouseOptimization(WarehouseParameters warehouseParameters)
         {
-            WarehouseOptimizer.Optimize(warehouseParameters);
+            return WarehouseOptimizer.Optimize(warehouseParameters);
         }
 
         public static void KeyboardOptimization(OptimizationParameters optimizationParameters)

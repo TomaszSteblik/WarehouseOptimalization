@@ -29,19 +29,22 @@ namespace OptimizationUI
 
         private void Button_OnClick(object? sender, RoutedEventArgs e)
         {
-            Optimization.Parameters.OptimizationParameters optimizationParameters = new OptimizationParameters();
-            optimizationParameters.OptimizationMethod =
-                (OptimizationMethod) this.FindControl<ComboBox>("OptimizationBox").SelectedIndex;
-            optimizationParameters.CrossoverMethod = (Crossover.CrossoverType) this.FindControl<ComboBox>("CrossoverBox").SelectedIndex;
-            optimizationParameters.MutationMethod = (Mutation.MutationType) this.FindControl<ComboBox>("MutationBox").SelectedIndex;
-            optimizationParameters.EliminationMethod = (Elimination.EliminationType) this.FindControl<ComboBox>("EliminationBox").SelectedIndex;
-            optimizationParameters.SelectionMethod = (Selection.SelectionType) this.FindControl<ComboBox>("SelectionBox").SelectedIndex;
-            optimizationParameters.Use2opt = (bool) this.FindControl<CheckBox>("2optBox").IsChecked;
-            optimizationParameters.MutationProbability = Int32.Parse(this.FindControl<TextBox>("MutationTextBox").Text);
-            optimizationParameters.PopulationSize = Int32.Parse(this.FindControl<TextBox>("PopulationTextBox").Text);
-            optimizationParameters.ChildrenPerGeneration = Int32.Parse(this.FindControl<TextBox>("ChildrenTextBox").Text);
-            optimizationParameters.TerminationValue = Int32.Parse(this.FindControl<TextBox>("TerminationTextBox").Text);
-            optimizationParameters.DataPath = this.FindControl<TextBox>("DataTextBox").Text;
+            Optimization.Parameters.OptimizationParameters optimizationParameters = new OptimizationParameters
+            {
+                OptimizationMethod = (OptimizationMethod) this.FindControl<ComboBox>("OptimizationBox").SelectedIndex,
+                CrossoverMethod = (Crossover.CrossoverType) this.FindControl<ComboBox>("CrossoverBox").SelectedIndex,
+                MutationMethod = (Mutation.MutationType) this.FindControl<ComboBox>("MutationBox").SelectedIndex,
+                EliminationMethod =
+                    (Elimination.EliminationType) this.FindControl<ComboBox>("EliminationBox").SelectedIndex,
+                SelectionMethod = (Selection.SelectionType) this.FindControl<ComboBox>("SelectionBox").SelectedIndex,
+                Use2opt = (bool) this.FindControl<CheckBox>("2OptBox")!.IsChecked!,
+                MutationProbability = Int32.Parse(this.FindControl<TextBox>("MutationTextBox").Text),
+                PopulationSize = Int32.Parse(this.FindControl<TextBox>("PopulationTextBox").Text),
+                ChildrenPerGeneration = Int32.Parse(this.FindControl<TextBox>("ChildrenTextBox").Text),
+                TerminationValue = Int32.Parse(this.FindControl<TextBox>("TerminationTextBox").Text),
+                DataPath = this.FindControl<TextBox>("DataTextBox").Text
+                
+            };
 
 
             Stopwatch stopwatch = new Stopwatch();

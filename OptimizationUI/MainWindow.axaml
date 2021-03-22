@@ -12,7 +12,6 @@
                 <ComboBoxItem>Nearest Neighbor</ComboBoxItem>
                 <ComboBoxItem>Genetic Algorithm</ComboBoxItem>
                 <ComboBoxItem>Permutations</ComboBoxItem>
-
             </ComboBox>
         </WrapPanel>
         <WrapPanel>
@@ -68,9 +67,9 @@
         </WrapPanel>
         <WrapPanel>
             <Label>Data path:</Label>
-            <TextBox Name="DataTextBox" Width="800">path</TextBox>
+            <TextBox Name="DataTextBox" Width="800">distances-usa.txt</TextBox>
         </WrapPanel>
-        <CheckBox Name="2optBox">Use 2opt</CheckBox>
+        <CheckBox Name="2OptBox">Use 2opt</CheckBox>
         <Button Click="Button_OnClick">Start optimization</Button>
         <WrapPanel>
             <Label>Result: </Label>
