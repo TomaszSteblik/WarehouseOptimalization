@@ -1,6 +1,6 @@
+using Optimization.GeneticAppliances.Warehouse;
 using Optimization.Parameters;
 using Optimization.PathFinding;
-using Optimization.Warehouse;
 
 namespace Optimization.Helpers
 {

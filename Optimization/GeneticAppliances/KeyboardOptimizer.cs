@@ -1,7 +1,7 @@
 ﻿using Optimization.GeneticAlgorithms;
 using Optimization.Parameters;
 
-namespace Optimization.Keyboard
+namespace Optimization.GeneticAppliances
 {
     static class KeyboardOptimizer
     {

@@ -6,6 +6,7 @@ using Optimization.GeneticAlgorithms.Crossovers;
 using Optimization.GeneticAlgorithms.Eliminations;
 using Optimization.GeneticAlgorithms.Mutations;
 using Optimization.GeneticAlgorithms.Selections;
+using Optimization.GeneticAppliances;
 using Optimization.Helpers;
 using Optimization.Parameters;
 

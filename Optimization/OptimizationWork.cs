@@ -1,6 +1,6 @@
+using Optimization.GeneticAppliances;
 using Optimization.Helpers;
 using Optimization.Parameters;
-using Optimization.Warehouse;
 
 namespace Optimization
 {
@@ -26,7 +26,7 @@ namespace Optimization
 
         public static void KeyboardOptimization(OptimizationParameters optimizationParameters)
         {
-            Keyboard.KeyboardOptimizer.Optimize(optimizationParameters);
+            KeyboardOptimizer.Optimize(optimizationParameters);
         }
     }
 }

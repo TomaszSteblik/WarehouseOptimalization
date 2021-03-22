@@ -1,4 +1,4 @@
-namespace Optimization.Warehouse
+namespace Optimization.GeneticAppliances.Warehouse
 {
     internal class Translator
     {

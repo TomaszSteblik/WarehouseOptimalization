@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Optimization.GeneticAlgorithms;
+using Optimization.GeneticAppliances.Warehouse;
 using Optimization.Helpers;
 using Optimization.Parameters;
 
-namespace Optimization.Warehouse
+namespace Optimization.GeneticAppliances
 {
     internal class WarehouseOptimizer
     {
