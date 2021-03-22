@@ -30,6 +30,8 @@ namespace OptimizationUI
         private void Button_OnClick(object? sender, RoutedEventArgs e)
         {
             Optimization.Parameters.OptimizationParameters optimizationParameters = new OptimizationParameters();
+            optimizationParameters.OptimizationMethod =
+                (OptimizationMethod) this.FindControl<ComboBox>("OptimizationBox").SelectedIndex;
             optimizationParameters.CrossoverMethod = (Crossover.CrossoverType) this.FindControl<ComboBox>("CrossoverBox").SelectedIndex;
             optimizationParameters.MutationMethod = (Mutation.MutationType) this.FindControl<ComboBox>("MutationBox").SelectedIndex;
             optimizationParameters.EliminationMethod = (Elimination.EliminationType) this.FindControl<ComboBox>("EliminationBox").SelectedIndex;

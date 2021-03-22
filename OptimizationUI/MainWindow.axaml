@@ -7,11 +7,20 @@
         Title="OptimizationUI">
     <StackPanel>
         <WrapPanel>
+            <Label>Optimization Method:</Label>
+            <ComboBox Name="OptimizationBox" SelectedIndex="0">
+                <ComboBoxItem>Nearest Neighbor</ComboBoxItem>
+                <ComboBoxItem>Genetic Algorithm</ComboBoxItem>
+                <ComboBoxItem>Permutations</ComboBoxItem>
+
+            </ComboBox>
+        </WrapPanel>
+        <WrapPanel>
             <Label>Selection:</Label>
             <ComboBox Name="SelectionBox" SelectedIndex="0">
                 <ComboBoxItem>Elitism</ComboBoxItem>
                 <ComboBoxItem>Random</ComboBoxItem>
-                <ComboBoxItem>RouletteWheel</ComboBoxItem>
+                <ComboBoxItem>Roulette Wheel</ComboBoxItem>
                 <ComboBoxItem>Tournament</ComboBoxItem>
             </ComboBox>
         </WrapPanel>
@@ -32,7 +41,7 @@
             <Label>Elimination:</Label>
             <ComboBox Name="EliminationBox" SelectedIndex="0">
                 <ComboBoxItem>Elitism</ComboBoxItem>
-                <ComboBoxItem>RouletteWheel</ComboBoxItem>
+                <ComboBoxItem>Roulette Wheel</ComboBoxItem>
             </ComboBox>
         </WrapPanel>
         <WrapPanel>
