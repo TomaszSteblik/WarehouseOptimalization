@@ -14,14 +14,14 @@ namespace Optimization.GeneticAlgorithms
             int startingPoint = optimizationParameters.StartingId;
             Crossover crossover = optimizationParameters.CrossoverMethod switch
             {
-                "Aex" => new AexCrossover(distancesMatrix),
-                "HGreX" => new HGreXCrossover(distancesMatrix),
-                "MPHGreX" => new MPHGreXCrossover(distancesMatrix),
-                "HRndX" => new HRndXCrossover(distancesMatrix),
-                "HProX" => new HProXCrossover(distancesMatrix),
-                "MPHRndX" => new MPHRndXCrossover(distancesMatrix),
-                "MPHProX" => new MPHProXCrossover(distancesMatrix),
-                "KPoint" => new KPointCrossover(distancesMatrix),
+                Crossover.CrossoverType.Aex => new AexCrossover(distancesMatrix),
+                Crossover.CrossoverType.HGreX => new HGreXCrossover(distancesMatrix),
+                Crossover.CrossoverType.MPHGreX => new MPHGreXCrossover(distancesMatrix),
+                Crossover.CrossoverType.HRndX => new HRndXCrossover(distancesMatrix),
+                Crossover.CrossoverType.HProX => new HProXCrossover(distancesMatrix),
+                Crossover.CrossoverType.MPHRndX => new MPHRndXCrossover(distancesMatrix),
+                Crossover.CrossoverType.MPHProX => new MPHProXCrossover(distancesMatrix),
+                Crossover.CrossoverType.KPoint => new KPointCrossover(distancesMatrix),
                 _ => throw new ArgumentException("Wrong crossover name in parameters json file")
             };
             return crossover;
@@ -31,10 +31,10 @@ namespace Optimization.GeneticAlgorithms
         {
             Selection selection = optimizationParameters.SelectionMethod switch
             {
-                "Random" => new RandomSelection(population),
-                "Tournament" => new TournamentSelection(population),
-                "Elitism" => new ElitismSelection(population),
-                "RouletteWheel" => new RouletteWheelSelection(population),
+                Selection.SelectionType.Random => new RandomSelection(population),
+                Selection.SelectionType.Tournament => new TournamentSelection(population),
+                Selection.SelectionType.Elitism => new ElitismSelection(population),
+                Selection.SelectionType.RouletteWheel => new RouletteWheelSelection(population),
                 _ => throw new ArgumentException("Wrong selection name in parameters json file")
             };
             return selection;
@@ -44,8 +44,8 @@ namespace Optimization.GeneticAlgorithms
         {
             Elimination elimination = optimizationParameters.EliminationMethod switch
             {
-                "Elitism" => new ElitismElimination(population),
-                "RouletteWheel" => new RouletteWheelElimination(population),
+                Elimination.EliminationType.Elitism => new ElitismElimination(population),
+                Elimination.EliminationType.RouletteWheel => new RouletteWheelElimination(population),
                 _ => throw new ArgumentException("Wrong elimination name in parameters json file")
             };
             return elimination;
@@ -55,7 +55,7 @@ namespace Optimization.GeneticAlgorithms
         {
             Mutation mutation = optimizationParameters.MutationMethod switch
             {
-                "Inversion" => new InversionMutation(population, mutationProbability),
+                Mutation.MutationType.Inversion => new InversionMutation(population, mutationProbability),
                 _ => throw new AggregateException("Wrong mutation method in parameters json file")
             };
             return mutation;

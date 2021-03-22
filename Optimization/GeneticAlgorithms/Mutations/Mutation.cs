@@ -2,7 +2,7 @@
 
 namespace Optimization.GeneticAlgorithms.Mutations
 {
-    internal abstract class Mutation
+    public abstract class Mutation
     {
         protected int[][] _population;
         protected readonly Random _random;
@@ -15,5 +15,10 @@ namespace Optimization.GeneticAlgorithms.Mutations
         }
 
         public abstract void Mutate();
+        
+        public enum MutationType
+        {
+            Inversion
+        }
     }
 }

@@ -1,7 +1,7 @@
 using System;
 
 namespace Optimization.GeneticAlgorithms.Selections {
-    internal abstract class Selection
+    public abstract class Selection
     {
         protected readonly int[][] Population;
         protected readonly int PopulationSize;
@@ -25,5 +25,13 @@ namespace Optimization.GeneticAlgorithms.Selections {
         }
 
         public abstract int[][] GenerateParents(int numberOfParents, double[] fitness);
+
+        public enum SelectionType
+        {
+            Elitism,
+            Random,
+            RouletteWheel,
+            Tournament
+        }
     }
 }

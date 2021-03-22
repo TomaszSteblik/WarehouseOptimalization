@@ -20,5 +20,17 @@ namespace Optimization.GeneticAlgorithms.Crossovers
             DistancesMatrix = distancesMatrix;
         }
 
+        public enum CrossoverType
+        {
+            Aex,
+            KPoint,
+            HGreX,
+            MPHGreX,
+            HRndX,
+            MPHRndX,
+            HProX,
+            MPHProX
+        }
+
     }
 }
