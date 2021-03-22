@@ -27,5 +27,18 @@ namespace Optimization.Helpers
 
             return fitness;
         }
+        public static double CalculateFitness(int[] gene, double[] frequency, double[] weights)
+        {
+            var geneLength = gene.Length;
+            var fitness = 0d;
+            for (int i = 0; i < geneLength; i++)
+            {
+                if(gene[i] == 0) continue;
+                fitness += frequency[gene[i] - 'A'] * weights[i];
+            }
+
+            return fitness;
+        }
+        
     }
 }

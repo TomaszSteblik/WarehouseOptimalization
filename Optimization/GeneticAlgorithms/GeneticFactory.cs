@@ -11,16 +11,17 @@ namespace Optimization.GeneticAlgorithms
     {
         public static Crossover CreateCrossover(OptimizationParameters optimizationParameters, double[][] distancesMatrix)
         {
+            int startingPoint = optimizationParameters.StartingId;
             Crossover crossover = optimizationParameters.CrossoverMethod switch
             {
-                "Aex" => new AexCrossover(distancesMatrix),
-                "HGreX" => new HGreXCrossover(distancesMatrix),
-                "MPHGreX" => new MPHGreXCrossover(distancesMatrix),
-                "HRndX" => new HRndXCrossover(distancesMatrix),
-                "HProX" => new HProXCrossover(distancesMatrix),
-                "MPHRndX" => new MPHRndXCrossover(distancesMatrix),
-                "MPHProX" => new MPHProXCrossover(distancesMatrix),
-                "KPoint" => new KPointCrossover(distancesMatrix),
+                "Aex" => new AexCrossover(distancesMatrix, startingPoint),
+                "HGreX" => new HGreXCrossover(distancesMatrix, startingPoint),
+                "MPHGreX" => new MPHGreXCrossover(distancesMatrix, startingPoint),
+                "HRndX" => new HRndXCrossover(distancesMatrix, startingPoint),
+                "HProX" => new HProXCrossover(distancesMatrix, startingPoint),
+                "MPHRndX" => new MPHRndXCrossover(distancesMatrix, startingPoint),
+                "MPHProX" => new MPHProXCrossover(distancesMatrix, startingPoint),
+                "KPoint" => new KPointCrossover(distancesMatrix, startingPoint),
                 _ => throw new ArgumentException("Wrong crossover name in parameters json file")
             };
             return crossover;

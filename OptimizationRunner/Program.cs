@@ -22,7 +22,8 @@ namespace OptimizationRunner
             WarehouseParameters warehouseParameters = JsonConvert.DeserializeObject<WarehouseParameters>(jsonSe);
             
             //OptimizationWork.FindShortestPath(optimizationParameters);
-            OptimizationWork.WarehouseOptimization(warehouseParameters);
+            //OptimizationWork.WarehouseOptimization(warehouseParameters);
+            OptimizationWork.KeyboardOptimization(optimizationParameters);
             
             stopwatch.Stop();
             Console.WriteLine(stopwatch.Elapsed);

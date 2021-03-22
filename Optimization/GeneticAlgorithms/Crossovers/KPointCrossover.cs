@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Optimization.Parameters;
 
 namespace Optimization.GeneticAlgorithms.Crossovers
 {
     public class KPointCrossover : Crossover
     {
-        public KPointCrossover(double[][] distancesMatrix) : base(distancesMatrix)
+        public KPointCrossover(double[][] distancesMatrix, int startingPoint) : base(distancesMatrix, startingPoint)
         {
         }
 
@@ -15,7 +16,6 @@ namespace Optimization.GeneticAlgorithms.Crossovers
             var geneLength = parents[0].Length;
             var rnd = new Random();
             var offsprings = new int[parents.Length / 2][];
-            var startingPoint = 0;
             for (int i = 0; i < parents.Length / 2; i++)
             {
                 offsprings[i] = new int[geneLength];
@@ -23,9 +23,15 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 
             Parallel.ForEach(Enumerable.Range(0, parents.Length / 2).Select(i => 2 * i), i => {
                 var available = parents[i].ToList();
-                available.Remove(startingPoint);
+                if (_startingPoint == -1)
+                {
+                    _startingPoint = parents[i][0];
+                }
+                available.Remove(_startingPoint);
+                offsprings[i / 2][0] = _startingPoint;
+                
                 int iterator = 1;
-                offsprings[i / 2][0] = startingPoint;
+
 
                 for (int j = 1; j < parents[i].Length; j++)
                 {

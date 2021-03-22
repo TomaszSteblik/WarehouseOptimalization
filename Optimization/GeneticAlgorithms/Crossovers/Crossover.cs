@@ -9,15 +9,17 @@ namespace Optimization.GeneticAlgorithms.Crossovers
         public abstract int[][] GenerateOffsprings(int[][] parents, int numParentsForOneChild = 2);
         protected readonly Random Random = new Random();
         protected double[][] DistancesMatrix;
+        protected int _startingPoint = 0;
 
         protected bool IsThereGene(int[] chromosome, int a)
         {
             return chromosome.Any(t => t == a);
         }
 
-        protected Crossover(double[][] distancesMatrix)
+        protected Crossover(double[][] distancesMatrix, int startingPoint)
         {
             DistancesMatrix = distancesMatrix;
+            _startingPoint = startingPoint;
         }
 
     }

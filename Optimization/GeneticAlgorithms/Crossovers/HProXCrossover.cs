@@ -6,7 +6,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 {
     internal class HProXCrossover : Crossover
     {
-        public HProXCrossover(double[][] distancesMatrix) : base(distancesMatrix)
+        public HProXCrossover(double[][] distancesMatrix, int startingPoint) : base(distancesMatrix, startingPoint)
         {
         }
 

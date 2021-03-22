@@ -2,7 +2,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 {
     class MPHProXCrossover : HProXCrossover
     {
-        public MPHProXCrossover(double[][] distancesMatrix) : base(distancesMatrix)
+        public MPHProXCrossover(double[][] distancesMatrix, int startingPoint) : base(distancesMatrix, startingPoint)
         {
         }
         

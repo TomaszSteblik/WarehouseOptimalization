@@ -23,5 +23,10 @@ namespace Optimization
         {
             WarehouseOptimizer.Optimize(warehouseParameters);
         }
+
+        public static void KeyboardOptimization(OptimizationParameters optimizationParameters)
+        {
+            Keyboard.KeyboardOptimizer.Optimize(optimizationParameters);
+        }
     }
 }
