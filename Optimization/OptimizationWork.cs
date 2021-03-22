@@ -1,4 +1,6 @@
+using Optimization.GeneticAlgorithms;
 using Optimization.GeneticAppliances;
+using Optimization.GeneticAppliances.Warehouse;
 using Optimization.Helpers;
 using Optimization.Parameters;
 
@@ -26,7 +28,9 @@ namespace Optimization
 
         public static void KeyboardOptimization(OptimizationParameters optimizationParameters)
         {
-            KeyboardOptimizer.Optimize(optimizationParameters);
+            var keyboardOptimizer = new GeneticKeyboard(optimizationParameters);
+            var result = keyboardOptimizer.Run();
+            keyboardOptimizer.WriteResult(result);
         }
     }
 }
