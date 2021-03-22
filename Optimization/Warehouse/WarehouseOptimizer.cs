@@ -21,7 +21,8 @@ namespace Optimization.Warehouse
                 itemsToSort[i - 1] = i;
             }
             
-            GeneticAlgorithmPathFinding geneticAlgorithmPathFinding = new GeneticAlgorithmPathFinding(warehouseParameters.WarehouseGeneticAlgorithmParameters, distancesMatrix,
+            IGeneticAlgorithm geneticWarehouse = new GeneticWarehouse(warehouseParameters.WarehouseGeneticAlgorithmParameters,
+                warehouseManager.WarehouseSize, distancesMatrix,
                 (population, matrix) =>
                 {
                     double[] fitness = new double[population.Length];
@@ -34,7 +35,7 @@ namespace Optimization.Warehouse
                     return fitness;
                 });
             
-            int[] z = geneticAlgorithmPathFinding.FindShortestPath(itemsToSort);
+            int[] z = geneticWarehouse.Run();
             /*
             if (warehouseParameters.WarehouseGeneticAlgorithmParameters.ResultToFile)
             {

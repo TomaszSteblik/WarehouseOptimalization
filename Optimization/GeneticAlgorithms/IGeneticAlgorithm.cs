@@ -2,6 +2,6 @@
 {
     public interface IGeneticAlgorithm
     {
-        public void Run();
+        public int[] Run();
     }
 }

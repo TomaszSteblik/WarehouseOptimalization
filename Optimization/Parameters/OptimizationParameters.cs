@@ -27,8 +27,8 @@ namespace Optimization.Parameters
         public string EliminationMethod { get; set; } = "Elitism";
         public string MutationMethod { get; set; } = "Inversion";
         public double MutationProbability { get; set; } = 30;
-        public int PopulationSize { get; set; } = 100;
-        public int ChildrenPerGeneration { get; set; } = 20;
-        public int TerminationValue { get; set; } = 1000;
+        public int PopulationSize { get; set; } = 120;
+        public int ChildrenPerGeneration { get; set; } = 60;
+        public int TerminationValue { get; set; } = 100;
     }
 }
