@@ -8,16 +8,17 @@ using Optimization.Parameters;
 
 namespace Optimization.PathFinding
 {
-    internal class Permutations : AlgorithmPathFinding
+    internal class Permutations : IPathFinder
     {
         private double[][] _distancesMatrix;
+        private OptimizationParameters _optimizationParameters;
         
         public Permutations(OptimizationParameters optimizationParameters, double[][] distancesMatrix)
         {
             _optimizationParameters = optimizationParameters;
             _distancesMatrix = distancesMatrix;
         }
-        public override int[] FindShortestPath(int[] locationsToVisit)
+        public int[] FindShortestPath(int[] locationsToVisit)
         {
             ConvertedMatrix arr = new ConvertedMatrix(_distancesMatrix, locationsToVisit);
             _distancesMatrix = arr.GetConvertedMatrix();

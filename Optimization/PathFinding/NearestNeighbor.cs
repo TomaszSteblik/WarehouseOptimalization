@@ -4,12 +4,13 @@ using Optimization.Parameters;
 
 namespace Optimization.PathFinding
 {
-    internal class NearestNeighbor : AlgorithmPathFinding
+    internal class NearestNeighbor : IPathFinder
     {
         private List<int> _availableObjects;
 
         private int[] objectOrder;
         private double[][] _distances;
+        private OptimizationParameters _optimizationParameters;
         
         public NearestNeighbor(OptimizationParameters optimizationParameters, double[][] distancesMatrix)
         {
@@ -18,7 +19,7 @@ namespace Optimization.PathFinding
 
         }
         
-        public override int[] FindShortestPath(int[] order)
+        public int[] FindShortestPath(int[] order)
         {
             int startingId = _optimizationParameters.StartingId;
             
