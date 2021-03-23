@@ -30,7 +30,7 @@ namespace Optimization.Parameters
         public Selection.SelectionType SelectionMethod { get; set; } = Selection.SelectionType.RouletteWheel;
         public Crossover.CrossoverType CrossoverMethod { get; set; } = Crossover.CrossoverType.Aex;
         public Elimination.EliminationType EliminationMethod { get; set; } = Elimination.EliminationType.Elitism;
-        public Mutation.MutationType MutationMethod { get; set; } = Mutation.MutationType.Inversion;
+        public Mutation.MutationType MutationMethod { get; set; } = Mutation.MutationType.RSM;
         public double MutationProbability { get; set; } = 30;
         public int PopulationSize { get; set; } = 120;
         public int ChildrenPerGeneration { get; set; } = 60;
