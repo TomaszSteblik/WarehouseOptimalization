@@ -55,7 +55,11 @@ namespace Optimization.GeneticAlgorithms
         {
             Mutation mutation = optimizationParameters.MutationMethod switch
             {
-                "Inversion" => new InversionMutation(population, mutationProbability),
+                "RSM" => new RSMutation(population, mutationProbability),
+                "TWORS" => new TWORSMutation(population,mutationProbability),
+                "CIM" => new CIMutation(population,mutationProbability),
+                "THROAS" => new THROASMutation(population,mutationProbability),
+                "THRORS" => new THRORSMutation(population,mutationProbability),
                 _ => throw new AggregateException("Wrong mutation method in parameters json file")
             };
             return mutation;
