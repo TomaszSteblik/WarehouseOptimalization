@@ -2,7 +2,7 @@ using System;
 
 namespace Optimization.GeneticAlgorithms.Eliminations
 {
-    internal abstract class Elimination
+    public abstract class Elimination
     {
         public abstract void EliminateAndReplace(int[][] offsprings, double[] fitnessProductPlacement);
         protected readonly int[][] Population;
@@ -12,6 +12,11 @@ namespace Optimization.GeneticAlgorithms.Eliminations
         {
             Population = population;
             PopulationSize = population.Length;
+        }
+        public enum EliminationType
+        {
+            Elitism,
+            RouletteWheel
         }
     }
 }

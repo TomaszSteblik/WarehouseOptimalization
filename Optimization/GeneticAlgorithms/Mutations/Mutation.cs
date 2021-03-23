@@ -15,5 +15,10 @@ namespace Optimization.GeneticAlgorithms.Mutations
         }
 
         public abstract void Mutate();
+        
+        public enum MutationType
+        {
+            Inversion
+        }
     }
 }

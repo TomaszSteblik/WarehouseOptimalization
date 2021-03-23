@@ -9,7 +9,7 @@ namespace Optimization.GeneticAppliances.Warehouse
 {
     internal class WarehouseOptimizer
     {
-        public static void Optimize(WarehouseParameters warehouseParameters)
+        public static double Optimize(WarehouseParameters warehouseParameters)
         {
             WarehouseManager warehouseManager = new WarehouseManager();
             double[][] distancesMatrix = warehouseManager.CreateWarehouseDistancesMatrix(warehouseParameters.WarehousePath);
@@ -50,6 +50,7 @@ namespace Optimization.GeneticAppliances.Warehouse
                           + z[12] + " " + z[14] + " " + z[16] + " " + z[18] + " " + z[20] + " " + z[22] + "\r\n";
 
             Console.WriteLine(result);
+            return Fitness.CalculateAllOrdersFitness(orders, z, distancesMatrix, warehouseParameters.FitnessGeneticAlgorithmParameters);
         }
     }
 }
