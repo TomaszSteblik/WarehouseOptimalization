@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Optimization.GeneticAlgorithms.Mutations
 {
     internal class THRORSMutation : Mutation
@@ -14,9 +17,12 @@ namespace Optimization.GeneticAlgorithms.Mutations
                 {
                     if (_random.Next(0, 1000) <= _probability)
                     {
-                        var pointA = _random.Next(1, _population[m].Length);
-                        var pointB = _random.Next(1, _population[m].Length);
-                        var pointC = _random.Next(1, _population[m].Length);
+                        var range = Enumerable.Range(1, _population[m].Length-1).ToList();
+                        var pointA = range.ElementAt(_random.Next(0, range.Count));
+                        range.Remove(pointA);
+                        var pointB = range.ElementAt(_random.Next(0, range.Count));
+                        range.Remove(pointB);
+                        var pointC = range.ElementAt(_random.Next(0, _population[m].Length - range.Count));
 
                         var valueA = _population[m][pointA];
                         var valueB = _population[m][pointB];

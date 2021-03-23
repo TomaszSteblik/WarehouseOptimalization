@@ -14,9 +14,9 @@ namespace Optimization.GeneticAlgorithms.Mutations
                 {
                     if (_random.Next(0, 1000) <= _probability)
                     {
-                        var pointA = _random.Next(1, _population[m].Length);
-                        var pointB = _random.Next(pointA, _population[m].Length-1);
-                        var pointC = _random.Next(pointB, _population[m].Length);
+                        var pointA = _random.Next(1, _population[m].Length-2);
+                        var pointB = _random.Next(pointA+1, _population[m].Length-1);
+                        var pointC = _random.Next(pointB+1, _population[m].Length);
 
                         var valueA = _population[m][pointA];
                         var valueB = _population[m][pointB];
