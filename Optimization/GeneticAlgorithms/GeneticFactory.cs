@@ -19,7 +19,7 @@ namespace Optimization.GeneticAlgorithms
                 "HRndX" => new HRndXCrossover(distancesMatrix),
                 "HProX" => new HProXCrossover(distancesMatrix),
                 "KPoint" => new KPointCrossover(distancesMatrix),
-                "Cycle"=> new CycleCrossover(distancesMatrix),
+                //"Cycle"=> new CycleCrossover(distancesMatrix),
                 _ => throw new ArgumentException("Wrong crossover name in parameters json file")
             };
             return crossover;

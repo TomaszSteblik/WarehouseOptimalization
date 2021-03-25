@@ -15,15 +15,15 @@ namespace OptimizationRunner
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            string jsonS = File.ReadAllText(args.Length > 0 ? args[0] : @"/home/tomek/RiderProjects/WarehouseOptimization/parameters.json") ;
+            string jsonS = File.ReadAllText(args.Length > 0 ? args[0] : @"/home/rtry/RiderProjects/WarehouseOptimization/parameters.json") ;
             OptimizationParameters optimizationParameters = JsonConvert.DeserializeObject<OptimizationParameters>(jsonS);
             
-            string jsonSe = File.ReadAllText(args.Length > 0 ? args[0] : @"/home/tomek/RiderProjects/WarehouseOptimization/warehouseParameters.json") ;
+            string jsonSe = File.ReadAllText(args.Length > 0 ? args[0] : @"/home/rtry/RiderProjects/WarehouseOptimization/warehouseParameters.json") ;
             WarehouseParameters warehouseParameters = JsonConvert.DeserializeObject<WarehouseParameters>(jsonSe);
             
-            OptimizationWork.FindShortestPath(optimizationParameters);
+            //OptimizationWork.FindShortestPath(optimizationParameters);
             //OptimizationWork.WarehouseOptimization(warehouseParameters);
-            //OptimizationWork.KeyboardOptimization(optimizationParameters);
+            OptimizationWork.KeyboardOptimization(optimizationParameters);
             
             stopwatch.Stop();
             Console.WriteLine(stopwatch.Elapsed);

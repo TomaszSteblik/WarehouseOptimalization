@@ -13,49 +13,38 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 
         public override int[] GenerateOffspring(int[][] parents)
         {
-            throw new NotImplementedException();
-        }
-
-        public override int[][] GenerateOffsprings(int[][] parents, int numParentsForOneChild)
-        {
             var geneLength = parents[0].Length;
+            var parentsNumber = parents.Length;
             var rnd = new Random();
-            var offsprings = new int[parents.Length / 2][];
-            for (int i = 0; i < parents.Length / 2; i++)
+            var offspring = new int[geneLength];
+
+            var available = parents[0].ToList();
+            available.Remove(parents[0][0]);
+            offspring[0] = parents[0][0];
+
+            int iterator = 1;
+
+            for (int j = 1; j < geneLength; j++)
             {
-                offsprings[i] = new int[geneLength];
+                if (offspring.Contains(parents[j % parentsNumber][j]))
+                {
+                    int selected = -1;
+                    while (selected == -1 || offspring.Contains(selected))
+                    {
+                        selected = available[rnd.Next(0, available.Count)];
+                    }
+
+                    available.Remove(selected);
+                    offspring[iterator++] = selected;
+                }
+                else
+                {
+                    available.Remove(parents[j % parentsNumber][j]);
+                    offspring[iterator++] = parents[j % parentsNumber][j];
+                }
             }
 
-            Parallel.ForEach(Enumerable.Range(0, parents.Length / 2).Select(i => 2 * i), i => {
-                var available = parents[i].ToList();
-                
-                available.Remove(parents[i][0]);
-                offsprings[i / 2][0] = parents[i][0];
-                
-                int iterator = 1;
-                
-                for (int j = 1; j < parents[i].Length; j++)
-                {
-                    if (offsprings[i/2].Contains(parents[i + j%2][j]))
-                    {
-                        int selected = -1;
-                        while (selected == -1 || offsprings[i/2].Contains(selected))
-                        {
-                            selected = available[rnd.Next(0, available.Count)];
-                        }
-
-                        available.Remove(selected);
-                        offsprings[i / 2][iterator++] = selected;
-                    }
-                    else
-                    {
-                        available.Remove(parents[i + j%2][j]);
-                        offsprings[i / 2][iterator++] = parents[i + j%2][j];
-                    }
-                }
-            });
-
-            return offsprings;
+            return offspring;
         }
     }
 }
