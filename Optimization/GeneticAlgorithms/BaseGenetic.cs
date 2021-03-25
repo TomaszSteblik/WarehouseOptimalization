@@ -47,13 +47,11 @@ namespace Optimization.GeneticAlgorithms
         public int[] OptimizeForBestIndividual()
         {
             double[] fitness = new double[_population.Length];
-            double lastBestFitness = _population.Min(p => Fitness.CalculateFitness(p));
-            int[] bestGene = _population.First(p => Fitness.CalculateFitness(p) == lastBestFitness);
+            int[] bestGene = new int[_population[0].Length];
             
             for (int b = 0; b < _terminationValue; b++)
             {
                 fitness = _calculateFitness(_population);
-
                 int[][] parents = _selection.GenerateParents(_childrenPerGeneration * 2, fitness);
                 int[][] offsprings = _crossover.GenerateOffsprings(parents);
                 _elimination.EliminateAndReplace(offsprings, fitness);

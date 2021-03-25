@@ -21,9 +21,9 @@ namespace OptimizationRunner
             string jsonSe = File.ReadAllText(args.Length > 0 ? args[0] : @"/home/rtry/RiderProjects/WarehouseOptimization/warehouseParameters.json") ;
             WarehouseParameters warehouseParameters = JsonConvert.DeserializeObject<WarehouseParameters>(jsonSe);
             
-            OptimizationWork.FindShortestPath(optimizationParameters);
+            //OptimizationWork.FindShortestPath(optimizationParameters);
             //OptimizationWork.WarehouseOptimization(warehouseParameters);
-            //OptimizationWork.KeyboardOptimization(optimizationParameters);
+            OptimizationWork.KeyboardOptimization(optimizationParameters);
             
             stopwatch.Stop();
             Console.WriteLine(stopwatch.Elapsed);
