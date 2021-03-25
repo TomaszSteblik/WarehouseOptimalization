@@ -24,7 +24,7 @@ namespace Optimization.Parameters
         public string DataPath { get; set; }
         public string SelectionMethod { get; set; } = "RouletteWheel";
         public string CrossoverMethod { get; set; } = "Aex";
-        public string EliminationMethod { get; set; } = "Elitism";
+        public string EliminationMethod { get; set; } = "RouletteWheel";
         public string MutationMethod { get; set; } = "RSM";
         public double MutationProbability { get; set; } = 30;
         public int PopulationSize { get; set; } = 120;

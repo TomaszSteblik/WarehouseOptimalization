@@ -13,10 +13,10 @@ namespace Optimization.PathFinding
         private double[][] _distancesMatrix;
         private OptimizationParameters _optimizationParameters;
         
-        public Permutations(OptimizationParameters optimizationParameters, double[][] distancesMatrix)
+        public Permutations(OptimizationParameters optimizationParameters)
         {
             _optimizationParameters = optimizationParameters;
-            _distancesMatrix = distancesMatrix;
+            _distancesMatrix = Distances.GetInstance().DistancesMatrix;
         }
         public int[] FindShortestPath(int[] locationsToVisit)
         {

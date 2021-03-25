@@ -7,7 +7,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 {
     public class KPointCrossover : Crossover
     {
-        public KPointCrossover(double[][] distancesMatrix) : base(distancesMatrix)
+        public KPointCrossover()
         {
         }
 

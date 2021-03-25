@@ -6,12 +6,10 @@ namespace Optimization.Helpers
     internal class Optimizer2Opt
     {
         private List<int> _objectOrder;
-        private double[][] _distances;
 
-        public int[] Optimize(int[] objectOrder, double[][] distances)
+        public int[] Optimize(int[] objectOrder)
         {
             _objectOrder = objectOrder.ToList();
-            _distances = distances;
             int improvements;
             do
             {
@@ -33,11 +31,11 @@ namespace Optimization.Helpers
         
         private bool TryOrderImprovement(int firstId, int secondId)
         {
-            var sumBefore = Fitness.CalculateFitness(_objectOrder.ToArray(), _distances);
+            var sumBefore = Fitness.CalculateFitness(_objectOrder.ToArray());
             
             _objectOrder.Reverse(firstId, secondId - firstId + 1);
             
-            var sumAfter = Fitness.CalculateFitness(_objectOrder.ToArray(), _distances);
+            var sumAfter = Fitness.CalculateFitness(_objectOrder.ToArray());
 
             if (sumAfter < sumBefore)
                 return true;
