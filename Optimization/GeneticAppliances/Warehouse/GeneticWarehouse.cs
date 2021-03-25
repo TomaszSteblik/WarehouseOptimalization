@@ -47,7 +47,7 @@ namespace Optimization.GeneticAppliances.Warehouse
             _distancesMatrix = distancesMatrix;
             _population = new int[_populationSize][];
 
-            _crossover = GeneticFactory.CreateCrossover(optimizationParameters, _distancesMatrix);
+            _crossover = GeneticFactory.CreateCrossover(optimizationParameters);
             _selection = GeneticFactory.CreateSelection(optimizationParameters, _population);
             _elimination = GeneticFactory.CreateElimination(optimizationParameters, _population);
             _mutation = GeneticFactory.CreateMutation(optimizationParameters, _population, _mutationProbability);
@@ -64,14 +64,14 @@ namespace Optimization.GeneticAppliances.Warehouse
             }
             GeneticHelper.InitializePopulation(_population, itemsToSort, 0, _populationSize);
             
-            double lastBestFitness = _population.Min(p => Fitness.CalculateFitness(p, _distancesMatrix));
-            int[] bestGene = _population.First(p => Fitness.CalculateFitness(p, _distancesMatrix) == lastBestFitness);
+            double lastBestFitness = _population.Min(p => Fitness.CalculateFitness(p));
+            int[] bestGene = _population.First(p => Fitness.CalculateFitness(p) == lastBestFitness);
 
             double[] fitness = new double[_population.Length];
 
             for (int b = 0; b < _terminationValue; b++)
             {
-                fitness = _calculateFitness(_population, _distancesMatrix);
+                fitness = _calculateFitness(_population);
 
                 int[][] parents = _selection.GenerateParents(_childrenPerGeneration * 2, fitness);
                 int[][] offsprings = _crossover.GenerateOffsprings(parents);

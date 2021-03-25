@@ -49,7 +49,7 @@ namespace Optimization.GeneticAlgorithms
             _childrenPerGeneration = optimizationParameters.ChildrenPerGeneration;
             
             _selection = GeneticFactory.CreateSelection(optimizationParameters, _population);
-            _crossover = GeneticFactory.CreateCrossover(optimizationParameters, null);
+            _crossover = GeneticFactory.CreateCrossover(optimizationParameters);
             _elimination = GeneticFactory.CreateElimination(optimizationParameters, _population);
             _mutation = GeneticFactory.CreateMutation(optimizationParameters, _population, _mutationProb);
         }

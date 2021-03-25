@@ -13,18 +13,18 @@ namespace Optimization.PathFinding
             {
                 OptimizationMethod.Permutations => new Permutations(optimizationParameters, distancesMatrix),
                 OptimizationMethod.NearestNeighbor => new NearestNeighbor(optimizationParameters, distancesMatrix),
-                OptimizationMethod.GeneticAlgorithm => new GeneticPathFinding(optimizationParameters, order, distancesMatrix,
-                    (population, distances) =>
+                OptimizationMethod.GeneticAlgorithm => new GeneticPathFinding(order, optimizationParameters,
+                    (population) =>
                     {
                         double[] fitness = new double[population.Length];
                         for (int i = 0; i < population.Length; i++)
-                            fitness[i] = Fitness.CalculateFitness(population[i], distances);
+                            fitness[i] = Fitness.CalculateFitness(population[i]);
                         return fitness;
                     }),
                 _ => throw new ArgumentException("Incorrect optimization method in config file")
             };
             int[] objectOrder = algorithmPathFinding.FindShortestPath(order);
-            double pathLength = Fitness.CalculateFitness(objectOrder, distancesMatrix);
+            double pathLength = Fitness.CalculateFitness(objectOrder);
 
             if (optimizationParameters.ResultToFile)
             {
@@ -41,11 +41,11 @@ namespace Optimization.PathFinding
             {
                 OptimizationMethod.Permutations => new Permutations(optimizationParameters, distancesMatrix),
                 OptimizationMethod.NearestNeighbor => new NearestNeighbor(optimizationParameters, distancesMatrix),
-                OptimizationMethod.GeneticAlgorithm => new GeneticPathFinding(optimizationParameters,order, distancesMatrix,calcFitness),
+                OptimizationMethod.GeneticAlgorithm => new GeneticPathFinding(order,optimizationParameters,calcFitness),
                 _ => throw new ArgumentException("Incorrect optimization method in config file")
             };
             int[] objectOrder = algorithmPathFinding.FindShortestPath(order);
-            double pathLength = Fitness.CalculateFitness(objectOrder, distancesMatrix);
+            double pathLength = Fitness.CalculateFitness(objectOrder);
 
             if (optimizationParameters.ResultToFile)
             {

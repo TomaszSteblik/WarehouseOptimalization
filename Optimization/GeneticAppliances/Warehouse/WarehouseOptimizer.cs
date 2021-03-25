@@ -23,12 +23,12 @@ namespace Optimization.GeneticAppliances.Warehouse
             
             IGeneticAppliance geneticWarehouse = new GeneticWarehouse(warehouseParameters.WarehouseGeneticAlgorithmParameters,
                 warehouseManager.WarehouseSize, distancesMatrix,
-                (population, matrix) =>
+                (population) =>
                 {
                     double[] fitness = new double[population.Length];
                     Parallel.For( 0, population.Length, i =>
                     {
-                        fitness[i] = Fitness.CalculateAllOrdersFitness(orders, population[i], distancesMatrix, warehouseParameters.FitnessGeneticAlgorithmParameters);
+                        fitness[i] = Fitness.CalculateAllOrdersFitness(orders, population[i], warehouseParameters.FitnessGeneticAlgorithmParameters);
                     });
                     Console.WriteLine(fitness.Min());
                     

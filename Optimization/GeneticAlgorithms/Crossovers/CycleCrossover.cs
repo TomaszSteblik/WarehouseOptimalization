@@ -3,7 +3,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 {
     internal class CycleCrossover : Crossover
     {
-        public CycleCrossover(double[][] distancesMatrix) : base(distancesMatrix)
+        public CycleCrossover()
         {
 
         }
