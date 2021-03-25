@@ -2,9 +2,9 @@
   "OptimizationMethod": "GeneticAlgorithm",
   "Use2opt": false,
   "LogEnabled": false,
-  "LogPath":"C:/Users/rtry/RiderProjects/WarehouseOptimization/log.txt",
-  "DataPath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/distances-usa.txt",
+  "LogPath":"/home/tomek/RiderProjects/WarehouseOptimization/log.txt",
+  "DataPath": "/home/tomek/RiderProjects/WarehouseOptimization/distances-usa.txt",
   "ResultToFile": true,
-  "ResultPath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/result.txt",
-  "CrossoverMethod" : "Aex",
+  "ResultPath": "/home/tomek/RiderProjects/WarehouseOptimization/result.txt",
+  "CrossoverMethod" : "HGreX"
 }
