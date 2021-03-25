@@ -29,13 +29,13 @@ namespace Optimization.GeneticAlgorithms
         
         public GeneticKeyboard(OptimizationParameters optimizationParameters)
         {
-            int[][] population = InitializeKeyboardPopulation(_weights.Length);
-            _genetic = new BaseGenetic(optimizationParameters, population, population =>
+            int[][] population = InitializeKeyboardPopulation(optimizationParameters.PopulationSize);
+            _genetic = new BaseGenetic(optimizationParameters, population, pop =>
             {
-                double[] fitness = new double[population.Length];
-                for (int i = 0; i < population.Length; i++)
+                double[] fitness = new double[pop.Length];
+                for (int i = 0; i < pop.Length; i++)
                 {
-                    fitness[i] = Fitness.CalculateFitness(population[i], _frequency, _weights);
+                    fitness[i] = Fitness.CalculateFitness(pop[i], _frequency, _weights);
                 }
                 return fitness;
             });

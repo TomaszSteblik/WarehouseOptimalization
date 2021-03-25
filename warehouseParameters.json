@@ -11,6 +11,6 @@
     "LogEnabled": false,
     "ResultToFile": false
   },
-  "WarehousePath" : "/home/rtry/RiderProjects/WarehouseOptimization/mag23.txt",
-  "OrdersPath" : "/home/rtry/RiderProjects/WarehouseOptimization/orders23b.txt"
+  "WarehousePath" : "/home/tomek/RiderProjects/WarehouseOptimization/mag23.txt",
+  "OrdersPath" : "/home/tomek/RiderProjects/WarehouseOptimization/orders23b.txt"
 }
