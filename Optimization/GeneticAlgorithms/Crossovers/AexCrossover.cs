@@ -18,25 +18,35 @@ namespace Optimization.GeneticAlgorithms.Crossovers
             var availableVertexes = new List<int>(parents[0]);
             availableVertexes.Remove(currentVertex);
             var counter = 1;
-
+            var parentsLength = parents.Length;
+            var currentParentIndex = 0;
+            
             while (counter < parentLength)
             {
-                var feasibleParents = new List<int[]>(parents);
                 var nextVertex = -1;
-                //check for feasibility
-                for (var i = 0; i < parents.Length; i++)
+
+
+                var selectedParent =  parents[currentParentIndex];
+                var selectedParentAsList = selectedParent.ToList();
+                var indexOfCurrentVertexInSelectedParent = selectedParentAsList.IndexOf(currentVertex);
+                if (indexOfCurrentVertexInSelectedParent >= parentLength - 1 ||
+                    offspring.Contains(selectedParent[indexOfCurrentVertexInSelectedParent + 1]))
                 {
-                    var selectedParent = parents[i];
-                    var selectedParentAsList = selectedParent.ToList();
-                    var indexOfCurrentVertexInSelectedParent = selectedParentAsList.IndexOf(currentVertex);
-                    if (indexOfCurrentVertexInSelectedParent >= parentLength - 1 ||
-                        offspring.Contains(selectedParent[indexOfCurrentVertexInSelectedParent + 1]))
+                    
+                    
+                }
+                else
+                {
+                    nextVertex = selectedParent[indexOfCurrentVertexInSelectedParent + 1];
+                    if (currentParentIndex >= parentsLength -1)
                     {
-                        feasibleParents.Remove(selectedParent);
+                        currentParentIndex = 0;
+                    }
+                    else
+                    {
+                        currentParentIndex++;
                     }
                 }
-
-
                 
 
                 if (nextVertex == -1)

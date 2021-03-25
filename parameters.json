@@ -6,6 +6,6 @@
   "DataPath": "/home/tomek/RiderProjects/WarehouseOptimization/distances-usa.txt",
   "ResultToFile": true,
   "ResultPath": "/home/tomek/RiderProjects/WarehouseOptimization/result.txt",
-  "CrossoverMethod" : "HGreX",
+  "CrossoverMethod" : "Aex",
   "ParentsPerChildren" : 2
 }
