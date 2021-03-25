@@ -1,11 +1,14 @@
 using System;
+using Optimization.Helpers;
 
 namespace Optimization.GeneticAlgorithms.Crossovers
 {
     internal class HGreXCrossover : Crossover
         {
-            public HGreXCrossover(double[][] distancesMatrix) : base(distancesMatrix)
+            private double[][] DistancesMatrix { get; }
+            public HGreXCrossover()
             {
+                DistancesMatrix = Distances.GetInstance().DistancesMatrix;
             }
 
             private int[] GenerateOffspring(int[] parent1, int[] parent2)

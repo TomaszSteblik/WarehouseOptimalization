@@ -5,7 +5,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 {
     internal class HRndXCrossover : Crossover
     {
-        public HRndXCrossover(double[][] distancesMatrix) : base(distancesMatrix)
+        public HRndXCrossover()
         {
         }
 

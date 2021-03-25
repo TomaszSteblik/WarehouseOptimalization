@@ -6,5 +6,11 @@
   "DataPath": "/home/tomek/RiderProjects/WarehouseOptimization/distances-usa.txt",
   "ResultToFile": true,
   "ResultPath": "/home/tomek/RiderProjects/WarehouseOptimization/result.txt",
-  "CrossoverMethod" : "HGreX"
+  "CrossoverMethod" : "HGreX",
+  "LogPath":"/home/rtry/RiderProjects/WarehouseOptimization/log.txt",
+  "DataPath": "/home/rtry/RiderProjects/WarehouseOptimization/distances-usa.txt",
+  "ResultToFile": true,
+  "ResultPath": "/home/rtry/RiderProjects/WarehouseOptimization/result.txt",
+  "CrossoverMethod" : "KPoint"
+
 }

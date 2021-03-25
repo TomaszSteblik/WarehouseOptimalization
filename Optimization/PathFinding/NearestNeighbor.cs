@@ -12,10 +12,10 @@ namespace Optimization.PathFinding
         private double[][] _distances;
         private OptimizationParameters _optimizationParameters;
         
-        public NearestNeighbor(OptimizationParameters optimizationParameters, double[][] distancesMatrix)
+        public NearestNeighbor(OptimizationParameters optimizationParameters)
         {
             _optimizationParameters = optimizationParameters;
-            _distances = distancesMatrix;
+            _distances = Distances.GetInstance().DistancesMatrix;
 
         }
         
@@ -47,7 +47,7 @@ namespace Optimization.PathFinding
             if (_optimizationParameters.Use2opt)
             {
                 Optimizer2Opt optimizer2Opt = new Optimizer2Opt();
-                return optimizer2Opt.Optimize(objectOrder, _distances);
+                return optimizer2Opt.Optimize(objectOrder);
             }
 
             return objectOrder;

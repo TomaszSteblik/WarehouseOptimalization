@@ -11,13 +11,15 @@ namespace Optimization
         public static void FindShortestPath(OptimizationParameters optimizationParameters)
         {
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
-            PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), matrix, optimizationParameters);
+            Distances.Create(matrix);
+            PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters);
         }
 
         public static void FindShortestPath(OptimizationParameters optimizationParameters,
             DelegateFitness.CalcFitness calcFitness)
         {
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
+            Distances.Create(matrix);
             PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), matrix, optimizationParameters,calcFitness);
         }
 

@@ -2,7 +2,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 {
     class MPHRndXCrossover : HRndXCrossover
     {
-        public MPHRndXCrossover(double[][] distancesMatrix) : base(distancesMatrix)
+        public MPHRndXCrossover()
         {
         }
         public override int[][] GenerateOffsprings(int[][] parents, int numParentsForOneChild = 8)

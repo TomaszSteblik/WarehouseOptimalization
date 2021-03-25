@@ -6,8 +6,9 @@ namespace Optimization.Helpers
 {
     internal class Fitness
     {
-        public static double CalculateFitness(int[] path, double[][] distancesMatrix)
+        public static double CalculateFitness(int[] path)
         {
+            double[][] distancesMatrix = Distances.GetInstance().DistancesMatrix;
             var sum = 0d;
             for (int i = 0; i < path.Length - 1; i++)
                 sum += distancesMatrix[path[i]][path[i + 1]];
@@ -15,13 +16,13 @@ namespace Optimization.Helpers
             return sum;
         }
 
-        public static double CalculateAllOrdersFitness(Orders orders, int[] chromosome, double[][] distancesMatrix, OptimizationParameters optimizationParameters)
+        public static double CalculateAllOrdersFitness(Orders orders, int[] chromosome, OptimizationParameters optimizationParameters)
         {
             double fitness = 0d;
             for (int k = 0; k < orders.OrdersCount; k++)
             {
                 int[] order = Translator.TranslateWithChromosome(orders.OrdersList[k], chromosome);
-                double pathLength = ShortestPath.Find(order, distancesMatrix, optimizationParameters);
+                double pathLength = ShortestPath.Find(order, optimizationParameters);
                 fitness += pathLength * orders.OrderRepeats[k];
             }
 

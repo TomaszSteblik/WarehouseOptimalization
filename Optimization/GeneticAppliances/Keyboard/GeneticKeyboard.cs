@@ -14,16 +14,7 @@ namespace Optimization.GeneticAlgorithms
 {
     class GeneticKeyboard : IGeneticAppliance
     {
-        private int _geneLength;
-        private int _populationSize;
-        private int _terminationValue;
-        private double _mutationProb;
-        private Selection _selection;
-        private Crossover _crossover;
-        private Elimination _elimination;
-        private Mutation _mutation;
-        private int[][] _population;
-        private int _childrenPerGeneration;
+        private BaseGenetic _genetic;
 
         private double[] _frequency = {
             8.167, 1.492, 2.782, 4.253, 12.702, 2.228, 2.015, 6.094, 6.966, 0.153, 0.772, 4.025,
@@ -38,54 +29,28 @@ namespace Optimization.GeneticAlgorithms
         
         public GeneticKeyboard(OptimizationParameters optimizationParameters)
         {
-            _geneLength = _frequency.Length;
-            
-            _mutationProb = optimizationParameters.MutationProbability;
-            _terminationValue = optimizationParameters.TerminationValue;
-            
-            _populationSize = optimizationParameters.PopulationSize;
-            _population = InitializeKeyboardPopulation(_populationSize);
+            int[][] population = InitializeKeyboardPopulation(_weights.Length);
+            _genetic = new BaseGenetic(optimizationParameters, population, population =>
+            {
+                double[] fitness = new double[population.Length];
+                for (int i = 0; i < population.Length; i++)
+                {
+                    fitness[i] = Fitness.CalculateFitness(population[i], _frequency, _weights);
+                }
+                return fitness;
+            });
 
-            _childrenPerGeneration = optimizationParameters.ChildrenPerGeneration;
-            
-            _selection = GeneticFactory.CreateSelection(optimizationParameters, _population);
-            _crossover = GeneticFactory.CreateCrossover(optimizationParameters, null);
-            _elimination = GeneticFactory.CreateElimination(optimizationParameters, _population);
-            _mutation = GeneticFactory.CreateMutation(optimizationParameters, _population, _mutationProb);
         }
+
         public int[] Run()
         {
-            int[] bestGene = new int[_geneLength];
-            
-            for (int i = 0; i < _terminationValue; i++)
-            {
-                var fitness = new double[_populationSize];
-                
-                Parallel.For(0, _populationSize, j =>
-                {
-                    fitness[j] = Fitness.CalculateFitness(_population[j], _frequency, _weights);
-                });
-                var lastBestFitness = fitness.Min();
-                bestGene = _population.First(p => Fitness.CalculateFitness(p, _frequency, _weights) == lastBestFitness);
-                //_population = _population.OrderByDescending(x => fitness[Array.IndexOf(_population, x)]).ToArray();
-                //fitness = fitness.OrderByDescending(x => x).ToArray();
-                
-                Console.WriteLine($"epoch: {i} best fitness: {fitness.Min()}, avg: {fitness.Average()}");
-                var parents = _selection.GenerateParents(_childrenPerGeneration * 2, fitness);
-                var offsprings = _crossover.GenerateOffsprings(parents);
-                _elimination.EliminateAndReplace(offsprings, fitness);
-                _mutation.Mutate();
-            }
-
-            Console.WriteLine(Fitness.CalculateFitness(bestGene, _frequency, _weights));
-            return bestGene;
-
+            return _genetic.OptimizeForBestIndividual();
         }
 
         private int[][] InitializeKeyboardPopulation(int size)
         {
             var population = new int[size][];
-            var available = new int[_geneLength];
+            var available = new int[_frequency.Length];
             for (int i = 'A'; i <= 'Z' + 4; i++)
             {
                 available[i - 'A'] = i;

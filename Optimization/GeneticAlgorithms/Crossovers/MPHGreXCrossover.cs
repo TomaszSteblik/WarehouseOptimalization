@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Optimization.Helpers;
 
 namespace Optimization.GeneticAlgorithms.Crossovers
 {
@@ -8,9 +9,11 @@ namespace Optimization.GeneticAlgorithms.Crossovers
     internal class MPHGreXCrossover : Crossover
     {
         Random rnd = new Random();
+        private double[][] DistancesMatrix { get; }
 
-        public MPHGreXCrossover(double[][] distancesMatrix) : base(distancesMatrix)
+        public MPHGreXCrossover()
         {
+            DistancesMatrix = Distances.GetInstance().DistancesMatrix;
         }
 
         protected int[] GenerateOffspring(int[][] parents)

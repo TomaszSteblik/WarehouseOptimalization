@@ -9,20 +9,20 @@ namespace Optimization.GeneticAlgorithms
 {
     internal static class GeneticFactory
     {
-        public static Crossover CreateCrossover(OptimizationParameters optimizationParameters, double[][] distancesMatrix)
+        public static Crossover CreateCrossover(OptimizationParameters optimizationParameters)
         {
             int startingPoint = optimizationParameters.StartingId;
             Crossover crossover = optimizationParameters.CrossoverMethod switch
             {
-                "Aex" => new AexCrossover(distancesMatrix),
-                "HGreX" => new HGreXCrossover(distancesMatrix),
-                "MPHGreX" => new MPHGreXCrossover(distancesMatrix),
-                "HRndX" => new HRndXCrossover(distancesMatrix),
-                "HProX" => new HProXCrossover(distancesMatrix),
-                "MPHRndX" => new MPHRndXCrossover(distancesMatrix),
-                "MPHProX" => new MPHProXCrossover(distancesMatrix),
-                "KPoint" => new KPointCrossover(distancesMatrix),
-                "Cycle"=> new CycleCrossover(distancesMatrix),
+                "Aex" => new AexCrossover(),
+                "HGreX" => new HGreXCrossover(),
+                "MPHGreX" => new MPHGreXCrossover(),
+                "HRndX" => new HRndXCrossover(),
+                "HProX" => new HProXCrossover(),
+                "MPHRndX" => new MPHRndXCrossover(),
+                "MPHProX" => new MPHProXCrossover(),
+                "KPoint" => new KPointCrossover(),
+                "Cycle"=> new CycleCrossover(),
                 _ => throw new ArgumentException("Wrong crossover name in parameters json file")
             };
             return crossover;

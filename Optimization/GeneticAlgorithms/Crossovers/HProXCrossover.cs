@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Optimization.Helpers;
 
 namespace Optimization.GeneticAlgorithms.Crossovers
 {
     internal class HProXCrossover : Crossover
     {
-        public HProXCrossover(double[][] distancesMatrix) : base(distancesMatrix)
+        private double[][] DistancesMatrix { get; }
+        public HProXCrossover()
         {
+            DistancesMatrix = Distances.GetInstance().DistancesMatrix;
         }
 
         public override int[][] GenerateOffsprings(int[][] parents, int numParentsForOneChild = 2)
