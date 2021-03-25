@@ -12,10 +12,10 @@ namespace Optimization.PathFinding
         private double[][] _distances;
         private OptimizationParameters _optimizationParameters;
         
-        public NearestNeighbor(OptimizationParameters optimizationParameters, double[][] distancesMatrix)
+        public NearestNeighbor(OptimizationParameters optimizationParameters)
         {
             _optimizationParameters = optimizationParameters;
-            _distances = distancesMatrix;
+            _distances = Distances.GetInstance().DistancesMatrix;
 
         }
         

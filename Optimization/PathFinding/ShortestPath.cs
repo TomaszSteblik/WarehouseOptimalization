@@ -7,12 +7,12 @@ namespace Optimization.PathFinding
 {
     internal static class ShortestPath
     {
-        public static double Find(int[] order, double[][] distancesMatrix,  OptimizationParameters optimizationParameters)
+        public static double Find(int[] order,  OptimizationParameters optimizationParameters)
         {
             IPathFinder algorithmPathFinding = optimizationParameters.OptimizationMethod switch
             {
-                OptimizationMethod.Permutations => new Permutations(optimizationParameters, distancesMatrix),
-                OptimizationMethod.NearestNeighbor => new NearestNeighbor(optimizationParameters, distancesMatrix),
+                OptimizationMethod.Permutations => new Permutations(optimizationParameters),
+                OptimizationMethod.NearestNeighbor => new NearestNeighbor(optimizationParameters),
                 OptimizationMethod.GeneticAlgorithm => new GeneticPathFinding(order, optimizationParameters,
                     (population) =>
                     {
@@ -39,8 +39,8 @@ namespace Optimization.PathFinding
         {
             IPathFinder algorithmPathFinding = optimizationParameters.OptimizationMethod switch
             {
-                OptimizationMethod.Permutations => new Permutations(optimizationParameters, distancesMatrix),
-                OptimizationMethod.NearestNeighbor => new NearestNeighbor(optimizationParameters, distancesMatrix),
+                OptimizationMethod.Permutations => new Permutations(optimizationParameters),
+                OptimizationMethod.NearestNeighbor => new NearestNeighbor(optimizationParameters),
                 OptimizationMethod.GeneticAlgorithm => new GeneticPathFinding(order,optimizationParameters,calcFitness),
                 _ => throw new ArgumentException("Incorrect optimization method in config file")
             };

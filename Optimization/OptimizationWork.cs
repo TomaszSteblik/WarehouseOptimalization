@@ -12,7 +12,7 @@ namespace Optimization
         {
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
             Distances.Create(matrix);
-            PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), matrix, optimizationParameters);
+            PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters);
         }
 
         public static void FindShortestPath(OptimizationParameters optimizationParameters,

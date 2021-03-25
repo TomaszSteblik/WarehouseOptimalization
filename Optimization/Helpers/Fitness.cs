@@ -18,12 +18,11 @@ namespace Optimization.Helpers
 
         public static double CalculateAllOrdersFitness(Orders orders, int[] chromosome, OptimizationParameters optimizationParameters)
         {
-            double[][] distancesMatrix = Distances.GetInstance().DistancesMatrix;
             double fitness = 0d;
             for (int k = 0; k < orders.OrdersCount; k++)
             {
                 int[] order = Translator.TranslateWithChromosome(orders.OrdersList[k], chromosome);
-                double pathLength = ShortestPath.Find(order, distancesMatrix, optimizationParameters);
+                double pathLength = ShortestPath.Find(order, optimizationParameters);
                 fitness += pathLength * orders.OrderRepeats[k];
             }
 
