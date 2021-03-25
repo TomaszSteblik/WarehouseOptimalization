@@ -11,7 +11,12 @@ namespace Optimization.GeneticAlgorithms.Crossovers
         {
         }
 
-        public override int[][] GenerateOffsprings(int[][] parents, int numParentsForOneChild = 2)
+        public override int[] GenerateOffspring(int[][] parents)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int[][] GenerateOffsprings(int[][] parents, int numParentsForOneChild)
         {
             var geneLength = parents[0].Length;
             var rnd = new Random();

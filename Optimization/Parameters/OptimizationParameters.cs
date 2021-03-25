@@ -28,6 +28,7 @@ namespace Optimization.Parameters
         public string MutationMethod { get; set; } = "RSM";
         public double MutationProbability { get; set; } = 30;
         public int PopulationSize { get; set; } = 120;
+        public int ParentsPerChildren { get; set; } = 2;
         public int ChildrenPerGeneration { get; set; } = 60;
         public int TerminationValue { get; set; } = 100;
     }

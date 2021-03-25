@@ -24,6 +24,7 @@ namespace Optimization.GeneticAlgorithms
         private Mutation _mutation;
         private int[][] _population;
         private int _childrenPerGeneration;
+        private int parentsperChildren;
 
         private double[] _frequency = {
             8.167, 1.492, 2.782, 4.253, 12.702, 2.228, 2.015, 6.094, 6.966, 0.153, 0.772, 4.025,
@@ -42,6 +43,7 @@ namespace Optimization.GeneticAlgorithms
             
             _mutationProb = optimizationParameters.MutationProbability;
             _terminationValue = optimizationParameters.TerminationValue;
+            parentsperChildren = optimizationParameters.ParentsPerChildren;
             
             _populationSize = optimizationParameters.PopulationSize;
             _population = InitializeKeyboardPopulation(_populationSize);
@@ -72,7 +74,7 @@ namespace Optimization.GeneticAlgorithms
                 
                 Console.WriteLine($"epoch: {i} best fitness: {fitness.Min()}, avg: {fitness.Average()}");
                 var parents = _selection.GenerateParents(_childrenPerGeneration * 2, fitness);
-                var offsprings = _crossover.GenerateOffsprings(parents);
+                var offsprings = _crossover.GenerateOffsprings(parents,parentsperChildren);
                 _elimination.EliminateAndReplace(offsprings, fitness);
                 _mutation.Mutate();
             }

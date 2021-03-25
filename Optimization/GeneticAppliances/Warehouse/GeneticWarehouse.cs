@@ -74,7 +74,7 @@ namespace Optimization.GeneticAppliances.Warehouse
                 fitness = _calculateFitness(_population, _distancesMatrix);
 
                 int[][] parents = _selection.GenerateParents(_childrenPerGeneration * 2, fitness);
-                int[][] offsprings = _crossover.GenerateOffsprings(parents);
+                int[][] offsprings = _crossover.GenerateOffsprings(parents,_optimizationParameters.ParentsPerChildren);
                 _elimination.EliminateAndReplace(offsprings, fitness);
                 if (_canIncreaseStrictness)
                     _canIncreaseStrictness = _selection.IncreaseStrictness(_childrenPerGeneration);
