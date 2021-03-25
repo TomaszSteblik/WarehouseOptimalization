@@ -19,6 +19,7 @@ namespace Optimization
             DelegateFitness.CalcFitness calcFitness)
         {
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
+            Distances.Create(matrix);
             PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), matrix, optimizationParameters,calcFitness);
         }
 

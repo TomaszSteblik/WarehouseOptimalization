@@ -52,6 +52,7 @@ namespace Optimization.GeneticAlgorithms
             for (int b = 0; b < _terminationValue; b++)
             {
                 fitness = _calculateFitness(_population);
+                Console.WriteLine(fitness.Min());
                 int[][] parents = _selection.GenerateParents(_childrenPerGeneration * 2, fitness);
                 int[][] offsprings = _crossover.GenerateOffsprings(parents);
                 _elimination.EliminateAndReplace(offsprings, fitness);
