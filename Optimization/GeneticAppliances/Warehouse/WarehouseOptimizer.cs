@@ -15,12 +15,6 @@ namespace Optimization.GeneticAppliances.Warehouse
             double[][] distancesMatrix = warehouseManager.CreateWarehouseDistancesMatrix(warehouseParameters.WarehousePath);
             Distances.Create(distancesMatrix);
             Orders orders = new Orders(warehouseParameters.OrdersPath);
-
-            int[] itemsToSort = new int[warehouseManager.WarehouseSize];
-            for (int i = 1; i < warehouseManager.WarehouseSize; i++)
-            {
-                itemsToSort[i - 1] = i;
-            }
             
             IGeneticAppliance geneticWarehouse = new GeneticWarehouse(warehouseParameters.WarehouseGeneticAlgorithmParameters,
                 warehouseManager.WarehouseSize, distancesMatrix,
