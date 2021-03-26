@@ -17,7 +17,7 @@ namespace Optimization.GeneticAppliances.Warehouse
             Orders orders = new Orders(warehouseParameters.OrdersPath);
             
             IGeneticAppliance geneticWarehouse = new GeneticWarehouse(warehouseParameters.WarehouseGeneticAlgorithmParameters,
-                warehouseManager.WarehouseSize, distancesMatrix,
+                warehouseManager.WarehouseSize,
                 (population) =>
                 {
                     double[] fitness = new double[population.Length];

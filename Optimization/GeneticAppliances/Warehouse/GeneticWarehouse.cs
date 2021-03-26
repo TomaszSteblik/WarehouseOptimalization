@@ -16,7 +16,7 @@ namespace Optimization.GeneticAppliances.Warehouse
         private int _warehouseSize;
         private BaseGenetic _genetic;
 
-        public GeneticWarehouse(OptimizationParameters optimizationParameters, int warehouseSize, double[][] distancesMatrix,
+        public GeneticWarehouse(OptimizationParameters optimizationParameters, int warehouseSize,
             DelegateFitness.CalcFitness calcFitness)
         {
             _warehouseSize = warehouseSize;
