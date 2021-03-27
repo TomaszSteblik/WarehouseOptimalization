@@ -5,22 +5,19 @@ namespace Optimization.Helpers
 {
     internal class Optimizer2Opt
     {
-        private List<int> _objectOrder;
-        private double[][] _distances;
 
-        public int[] Optimize(int[] objectOrder, double[][] distances)
+        public static int[] Optimize(int[] objectOrderArr)
         {
-            _objectOrder = objectOrder.ToList();
-            _distances = distances;
+            List<int> objectOrder = objectOrderArr.ToList();
             int improvements;
             do
             {
                 improvements = 0;
-                for (int i = 1; i < _objectOrder.Count - 1; i++)
+                for (int i = 1; i < objectOrder.Count - 1; i++)
                 {
-                    for (int j = i + 1; j < _objectOrder.Count - 2; j++)
+                    for (int j = i + 1; j < objectOrder.Count - 2; j++)
                     {
-                        if (TryOrderImprovement(i, j))
+                        if (TryOrderImprovement(i, j, objectOrder))
                         {
                             improvements++;
                         }
@@ -28,22 +25,22 @@ namespace Optimization.Helpers
                 }
             } while (improvements > 0);
 
-            return _objectOrder.ToArray();
+            return objectOrder.ToArray();
         }
         
-        private bool TryOrderImprovement(int firstId, int secondId)
+        private static bool TryOrderImprovement(int firstId, int secondId, List<int> objectOrder)
         {
-            var sumBefore = Fitness.CalculateFitness(_objectOrder.ToArray(), _distances);
+            var sumBefore = Fitness.CalculateFitness(objectOrder.ToArray());
             
-            _objectOrder.Reverse(firstId, secondId - firstId + 1);
+            objectOrder.Reverse(firstId, secondId - firstId + 1);
             
-            var sumAfter = Fitness.CalculateFitness(_objectOrder.ToArray(), _distances);
+            var sumAfter = Fitness.CalculateFitness(objectOrder.ToArray());
 
             if (sumAfter < sumBefore)
                 return true;
             
 
-            _objectOrder.Reverse(firstId, secondId - firstId + 1);
+            objectOrder.Reverse(firstId, secondId - firstId + 1);
             return false;
         }
     }
