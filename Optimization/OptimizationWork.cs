@@ -1,3 +1,4 @@
+using System;
 using Optimization.GeneticAlgorithms;
 using Optimization.GeneticAppliances;
 using Optimization.GeneticAppliances.Warehouse;
@@ -12,7 +13,9 @@ namespace Optimization
         {
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
             Distances.Create(matrix);
-            PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters);
+            var result = PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters);
+            Console.WriteLine(result);
+            
         }
 
         public static void FindShortestPath(OptimizationParameters optimizationParameters,

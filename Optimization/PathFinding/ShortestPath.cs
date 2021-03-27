@@ -24,6 +24,10 @@ namespace Optimization.PathFinding
                 _ => throw new ArgumentException("Incorrect optimization method in config file")
             };
             int[] objectOrder = algorithmPathFinding.FindShortestPath(order);
+            
+            if (optimizationParameters.Use2opt)
+                objectOrder = Optimizer2Opt.Optimize(objectOrder);
+            
             double pathLength = Fitness.CalculateFitness(objectOrder);
 
             if (optimizationParameters.ResultToFile)

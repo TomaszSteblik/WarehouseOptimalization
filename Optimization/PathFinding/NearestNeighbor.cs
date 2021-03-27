@@ -44,11 +44,6 @@ namespace Optimization.PathFinding
 
             objectOrder[++i] = _availableObjects[0];
             objectOrder[++i] = startingId;
-            if (_optimizationParameters.Use2opt)
-            {
-                Optimizer2Opt optimizer2Opt = new Optimizer2Opt();
-                return optimizer2Opt.Optimize(objectOrder);
-            }
 
             return objectOrder;
         }
