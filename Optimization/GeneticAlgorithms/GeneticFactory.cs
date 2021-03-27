@@ -16,13 +16,11 @@ namespace Optimization.GeneticAlgorithms
             {
                 "Aex" => new AexCrossover(),
                 "HGreX" => new HGreXCrossover(),
-                "MPHGreX" => new MPHGreXCrossover(),
                 "HRndX" => new HRndXCrossover(),
                 "HProX" => new HProXCrossover(),
-                "MPHRndX" => new MPHRndXCrossover(),
-                "MPHProX" => new MPHProXCrossover(),
                 "KPoint" => new KPointCrossover(),
-                "Cycle"=> new CycleCrossover(),
+                "AexNN" => new AexNNCrossover(),
+                //"Cycle"=> new CycleCrossover(),
                 _ => throw new ArgumentException("Wrong crossover name in parameters json file")
             };
             return crossover;
