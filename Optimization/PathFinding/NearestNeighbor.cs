@@ -9,13 +9,13 @@ namespace Optimization.PathFinding
         private List<int> _availableObjects;
 
         private int[] objectOrder;
-        private double[][] _distances;
+        private double[][] DistancesMatrix { get; }
         private OptimizationParameters _optimizationParameters;
         
         public NearestNeighbor(OptimizationParameters optimizationParameters)
         {
             _optimizationParameters = optimizationParameters;
-            _distances = Distances.GetInstance().DistancesMatrix;
+            DistancesMatrix = Distances.GetInstance().DistancesMatrix;
 
         }
         
@@ -38,7 +38,7 @@ namespace Optimization.PathFinding
             var currentId = 0;
             while (_availableObjects.Count > 1)
             {
-                currentId = FindNearestNeighbor(currentId);
+                currentId = FindNearestNeighbor(currentId, DistancesMatrix, _availableObjects);
                 objectOrder[++i] = currentId;
             }
 
@@ -54,35 +54,32 @@ namespace Optimization.PathFinding
         }
         
 
-        private int FindNearestNeighbor(int id)
+        public static int FindNearestNeighbor(int currentPoint, double[][] distancesMatrix, List<int> availableVertexes)
         {
-            if (_availableObjects.Count == 1) 
-                return -1;
+            if (availableVertexes.Count == 1) 
+                return availableVertexes[0];
 
             int nearestObjectId;
-            int point1 = id;
-            int p0 = _availableObjects[0];
-            int point1b = p0;
+            int p0 = availableVertexes[0];
 
-            if (_distances[point1][point1b] == 0) 
-                nearestObjectId = _availableObjects[1];
+            if (distancesMatrix[currentPoint][p0] == 0) 
+                nearestObjectId = availableVertexes[1];
             else 
-                nearestObjectId = _availableObjects[0];
+                nearestObjectId = availableVertexes[0];
 
-            double lowestDistance = _distances[point1][nearestObjectId];
+            double lowestDistance = distancesMatrix[currentPoint][nearestObjectId];
 
-            for (int i = 0; i < _availableObjects.Count; i++)
+            for (int i = 0; i < availableVertexes.Count; i++)
             {
-                int p2 = _availableObjects[i];
-                int point2 = p2;
-                double currentDistance = _distances[point1][point2];
+                int nextPoint = availableVertexes[i];
+                double currentDistance = distancesMatrix[currentPoint][nextPoint];
                 if (currentDistance > 0 && currentDistance < lowestDistance)
                 {
                     lowestDistance = currentDistance;
-                    nearestObjectId = p2;
+                    nearestObjectId = nextPoint;
                 }
             }
-            _availableObjects.RemoveAt(_availableObjects.IndexOf(nearestObjectId));
+            availableVertexes.RemoveAt(availableVertexes.IndexOf(nearestObjectId));
             
             return nearestObjectId;
         }

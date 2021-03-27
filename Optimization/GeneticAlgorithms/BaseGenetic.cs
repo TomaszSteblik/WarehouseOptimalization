@@ -22,6 +22,8 @@ namespace Optimization.GeneticAlgorithms
         private readonly double _mutationProbability;
         private readonly int _childrenPerGeneration;
         private readonly int _terminationValue;
+        private readonly int _parentsPerChild;
+        
         private DelegateFitness.CalcFitness _calculateFitness;
 
         private int[][] _population;
@@ -35,6 +37,7 @@ namespace Optimization.GeneticAlgorithms
             _mutationProbability = parameters.MutationProbability;
             _childrenPerGeneration = parameters.ChildrenPerGeneration;
             _terminationValue = parameters.TerminationValue;
+            _parentsPerChild = parameters.ParentsPerChildren;
 
             _calculateFitness = calculateFitness;
 
@@ -54,7 +57,7 @@ namespace Optimization.GeneticAlgorithms
                 fitness = _calculateFitness(_population);
                 //Console.WriteLine(fitness.Min());
                 int[][] parents = _selection.GenerateParents(_childrenPerGeneration * 2, fitness);
-                int[][] offsprings = _crossover.GenerateOffsprings(parents);
+                int[][] offsprings = _crossover.GenerateOffsprings(parents, _parentsPerChild);
                 _elimination.EliminateAndReplace(offsprings, fitness);
                 if (_canIncreaseStrictness)
                     _canIncreaseStrictness = _selection.IncreaseStrictness(_childrenPerGeneration);
