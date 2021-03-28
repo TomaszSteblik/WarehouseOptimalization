@@ -20,7 +20,7 @@ namespace Optimization.GeneticAlgorithms
                 "HProX" => new HProXCrossover(),
                 "KPoint" => new KPointCrossover(),
                 "AexNN" => new AexNNCrossover(),
-                //"Cycle"=> new CycleCrossover(),
+                "Cycle" => new CycleCrossover(),
                 _ => throw new ArgumentException("Wrong crossover name in parameters json file")
             };
             return crossover;
