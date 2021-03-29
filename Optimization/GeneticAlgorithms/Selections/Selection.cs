@@ -26,4 +26,12 @@ namespace Optimization.GeneticAlgorithms.Selections {
 
         public abstract int[][] GenerateParents(int numberOfParents, double[] fitness);
     }
+
+    public enum SelectionMethod
+    {
+        Elitism,
+        Random,
+        RouletteWheel,
+        Tournament
+    }
 }

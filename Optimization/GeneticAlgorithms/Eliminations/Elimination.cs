@@ -14,4 +14,10 @@ namespace Optimization.GeneticAlgorithms.Eliminations
             PopulationSize = population.Length;
         }
     }
+
+    public enum EliminationMethod
+    {
+        Elitism,
+        RouletteWheel
+    }
 }

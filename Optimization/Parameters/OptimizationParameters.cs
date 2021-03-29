@@ -1,3 +1,8 @@
+using Optimization.GeneticAlgorithms.Crossovers;
+using Optimization.GeneticAlgorithms.Eliminations;
+using Optimization.GeneticAlgorithms.Mutations;
+using Optimization.GeneticAlgorithms.Selections;
+
 namespace Optimization.Parameters
 {
     public enum OptimizationMethod
@@ -22,10 +27,10 @@ namespace Optimization.Parameters
         public string ResultPath { get; set; }
         public bool ResultToFile { get; set; }
         public string DataPath { get; set; }
-        public string SelectionMethod { get; set; } = "RouletteWheel";
-        public string CrossoverMethod { get; set; } = "Aex";
-        public string EliminationMethod { get; set; } = "Elitism";
-        public string MutationMethod { get; set; } = "RSM";
+        public SelectionMethod SelectionMethod { get; set; } = SelectionMethod.RouletteWheel;
+        public CrossoverMethod CrossoverMethod { get; set; } = CrossoverMethod.Aex;
+        public EliminationMethod EliminationMethod { get; set; } = EliminationMethod.Elitism;
+        public MutationMethod MutationMethod { get; set; } = MutationMethod.RSM;
         public double MutationProbability { get; set; } = 30;
         public int PopulationSize { get; set; } = 120;
         public int ParentsPerChildren { get; set; } = 2;

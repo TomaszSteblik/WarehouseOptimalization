@@ -2,7 +2,7 @@
 
 namespace Optimization.GeneticAlgorithms.Mutations
 {
-    public abstract class Mutation
+    internal abstract class Mutation
     {
         protected int[][] _population;
         protected readonly Random _random;
@@ -15,5 +15,14 @@ namespace Optimization.GeneticAlgorithms.Mutations
         }
 
         public abstract void Mutate();
+    }
+
+    public enum MutationMethod
+    {
+        CIM,
+        RSM,
+        THROAS,
+        THRORS,
+        TWORS
     }
 }

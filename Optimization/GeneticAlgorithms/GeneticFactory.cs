@@ -14,14 +14,14 @@ namespace Optimization.GeneticAlgorithms
             int startingPoint = optimizationParameters.StartingId;
             Crossover crossover = optimizationParameters.CrossoverMethod switch
             {
-                "Aex" => new AexCrossover(),
-                "HGreX" => new HGreXCrossover(),
-                "HRndX" => new HRndXCrossover(),
-                "HProX" => new HProXCrossover(),
-                "KPoint" => new KPointCrossover(),
-                "AexNN" => new AexNNCrossover(),
-                "Cycle" => new CycleCrossover(),
-                _ => throw new ArgumentException("Wrong crossover name in parameters json file")
+                CrossoverMethod.Aex => new AexCrossover(),
+                CrossoverMethod.HGreX => new HGreXCrossover(),
+                CrossoverMethod.HRndX => new HRndXCrossover(),
+                CrossoverMethod.HProX => new HProXCrossover(),
+                CrossoverMethod.KPoint => new KPointCrossover(),
+                CrossoverMethod.AexNN => new AexNNCrossover(),
+                CrossoverMethod.Cycle => new CycleCrossover(),
+                _ => throw new ArgumentException("Wrong crossover method name")
             };
             return crossover;
         }
@@ -30,10 +30,10 @@ namespace Optimization.GeneticAlgorithms
         {
             Selection selection = optimizationParameters.SelectionMethod switch
             {
-                "Random" => new RandomSelection(population),
-                "Tournament" => new TournamentSelection(population),
-                "Elitism" => new ElitismSelection(population),
-                "RouletteWheel" => new RouletteWheelSelection(population),
+                SelectionMethod.Random => new RandomSelection(population),
+                SelectionMethod.Tournament => new TournamentSelection(population),
+                SelectionMethod.Elitism => new ElitismSelection(population),
+                SelectionMethod.RouletteWheel => new RouletteWheelSelection(population),
                 _ => throw new ArgumentException("Wrong selection name in parameters json file")
             };
             return selection;
@@ -43,9 +43,9 @@ namespace Optimization.GeneticAlgorithms
         {
             Elimination elimination = optimizationParameters.EliminationMethod switch
             {
-                "Elitism" => new ElitismElimination(population),
-                "RouletteWheel" => new RouletteWheelElimination(population),
-                _ => throw new ArgumentException("Wrong elimination name in parameters json file")
+                EliminationMethod.Elitism => new ElitismElimination(population),
+                EliminationMethod.RouletteWheel => new RouletteWheelElimination(population),
+                _ => throw new ArgumentException("Wrong elimination method name")
             };
             return elimination;
         }
@@ -54,12 +54,12 @@ namespace Optimization.GeneticAlgorithms
         {
             Mutation mutation = optimizationParameters.MutationMethod switch
             {
-                "RSM" => new RSMutation(population, mutationProbability),
-                "TWORS" => new TWORSMutation(population,mutationProbability),
-                "CIM" => new CIMutation(population,mutationProbability),
-                "THROAS" => new THROASMutation(population,mutationProbability),
-                "THRORS" => new THRORSMutation(population,mutationProbability),
-                _ => throw new AggregateException("Wrong mutation method in parameters json file")
+                MutationMethod.RSM => new RSMutation(population, mutationProbability),
+                MutationMethod.TWORS => new TWORSMutation(population,mutationProbability),
+                MutationMethod.CIM => new CIMutation(population,mutationProbability),
+                MutationMethod.THROAS => new THROASMutation(population,mutationProbability),
+                MutationMethod.THRORS => new THRORSMutation(population,mutationProbability),
+                _ => throw new AggregateException("Wrong mutation method name")
             };
             return mutation;
         }

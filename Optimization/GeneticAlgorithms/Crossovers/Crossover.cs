@@ -2,7 +2,7 @@ using System;
 
 namespace Optimization.GeneticAlgorithms.Crossovers
 {
-    public abstract class Crossover
+    internal abstract class Crossover
     {
         public abstract int[] GenerateOffspring(int[][] parents);
         public virtual int[][] GenerateOffsprings(int[][] parents, int numParentsForOneChild)
@@ -34,5 +34,15 @@ namespace Optimization.GeneticAlgorithms.Crossovers
             }
             return false;
         }
+    }
+    public enum CrossoverMethod
+    {
+        Aex,
+        AexNN,
+        Cycle,
+        HGreX,
+        HProX,
+        HRndX,
+        KPoint
     }
 }

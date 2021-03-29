@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Optimization.GeneticAlgorithms.Crossovers
 {
-    public class KPointCrossover : Crossover
+    internal class KPointCrossover : Crossover
     {
         public override int[] GenerateOffspring(int[][] parents)
         {
