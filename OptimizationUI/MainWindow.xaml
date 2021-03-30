@@ -1,0 +1,57 @@
+﻿<Window x:Class="OptimizationUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OptimizationUI"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="800" Width="800">
+    <Grid>
+        <TabControl>
+            <TabItem Header="Distance">
+                <StackPanel Background="#FFE5E5E5" Name="DistancePanel">
+                    <Label Content="Data path:"></Label>
+                    <TextBox Width="400" Text="{Binding DataPath}"></TextBox>
+                    <Label Content="Optimization method:"></Label>
+                    <ComboBox Width="120" ItemsSource="{Binding Path=OptimizationMethod}" Name="DistanceMethodComboBox"
+                              SelectedItem="{Binding OptimizationMethod}"/>
+                    <CheckBox Content="Use 2 opt" IsChecked="{Binding Use2opt}"></CheckBox>
+                    <StackPanel  Visibility="{Binding IsAllVisible}">
+                        <Label Content="Selection method:"></Label>
+                        <ComboBox Width="120" ItemsSource="{Binding Path=SelectionMethod}" Name="DistanceSelectionComboBox"
+                                  SelectedItem="{Binding SelectionMethod}"/>
+                        <Label Content="Crossover method:"></Label>
+                        <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="DistanceCrossoverComboBox"
+                                  SelectedItem="{Binding CrossoverMethod}"/>
+                        <Label Content="Elimination method:"></Label>
+                        <ComboBox Width="120" ItemsSource="{Binding Path=EliminationMethod}" Name="DistanceEliminationComboBox"
+                                  SelectedItem="{Binding EliminationMethod}"/>
+                        <Label Content="Mutation method:"></Label>
+                        <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="DistanceMutationComboBox"
+                                  SelectedItem="{Binding MutationMethod}"/>
+                        <Label Content="Population size:"></Label>
+                        <TextBox Width="120" Text="{Binding PopulationSize}"></TextBox>
+                        <Label Content="Children per generation:"></Label>
+                        <TextBox Width="120" Text="{Binding ChildrenPerGeneration}"></TextBox>
+                        <Label Content="Parents per children:"></Label>
+                        <TextBox Width="120" Text="{Binding ParentsPerChildren}"></TextBox>
+                        <Label Content="Mutation probability (in per mil)"></Label>
+                        <TextBox Width="120" Text="{Binding MutationProbability}"></TextBox>
+                        <Label Content="Termination value:"></Label>
+                        <TextBox Width="120" Text="{Binding TerminationValue}"></TextBox>
+                    </StackPanel>
+                    <Label Content="Number of instances:"></Label>
+                    <TextBox Width="120" Name="DistanceInstancesTextBox" Text="1"></TextBox>
+                    <Button Width="100" Content="Start" Click="DistanceStartButtonClick"/>
+                    <Label Name="DistanceResultLabel"></Label>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Warehouse">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Keyboard">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
