@@ -3,51 +3,180 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:OptimizationUI"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="800">
     <Grid>
         <TabControl>
             <TabItem Header="Distance">
                 <StackPanel Background="#FFE5E5E5" Name="DistancePanel">
-                    <Label Content="Data path:"></Label>
-                    <TextBox Width="400" Text="{Binding DataPath}"></TextBox>
-                    <Label Content="Optimization method:"></Label>
-                    <ComboBox Width="120" ItemsSource="{Binding Path=OptimizationMethod}" Name="DistanceMethodComboBox"
-                              SelectedItem="{Binding OptimizationMethod}"/>
+                    <WrapPanel>
+                        <Label Content="Data path:"></Label>
+                        <TextBox Width="400" Text="{Binding DataPath}"></TextBox>
+                    </WrapPanel>
                     <CheckBox Content="Use 2 opt" IsChecked="{Binding Use2opt}"></CheckBox>
+                    <WrapPanel>
+                        <Label Content="Number of instances:"></Label>
+                        <TextBox Width="120" Name="DistanceInstancesTextBox" Text="1"></TextBox>
+                    </WrapPanel>
+                    <WrapPanel>
+                        <Label Content="Optimization method:"></Label>
+                        <ComboBox Width="120" ItemsSource="{Binding Path=OptimizationMethod}" Name="DistanceMethodComboBox"
+                                  SelectedItem="{Binding OptimizationMethod}"/>
+                    </WrapPanel>
                     <StackPanel  Visibility="{Binding IsAllVisible}">
-                        <Label Content="Selection method:"></Label>
-                        <ComboBox Width="120" ItemsSource="{Binding Path=SelectionMethod}" Name="DistanceSelectionComboBox"
-                                  SelectedItem="{Binding SelectionMethod}"/>
-                        <Label Content="Crossover method:"></Label>
-                        <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="DistanceCrossoverComboBox"
-                                  SelectedItem="{Binding CrossoverMethod}"/>
-                        <Label Content="Elimination method:"></Label>
-                        <ComboBox Width="120" ItemsSource="{Binding Path=EliminationMethod}" Name="DistanceEliminationComboBox"
-                                  SelectedItem="{Binding EliminationMethod}"/>
-                        <Label Content="Mutation method:"></Label>
-                        <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="DistanceMutationComboBox"
-                                  SelectedItem="{Binding MutationMethod}"/>
-                        <Label Content="Population size:"></Label>
-                        <TextBox Width="120" Text="{Binding PopulationSize}"></TextBox>
-                        <Label Content="Children per generation:"></Label>
-                        <TextBox Width="120" Text="{Binding ChildrenPerGeneration}"></TextBox>
-                        <Label Content="Parents per children:"></Label>
-                        <TextBox Width="120" Text="{Binding ParentsPerChildren}"></TextBox>
-                        <Label Content="Mutation probability (in per mil)"></Label>
-                        <TextBox Width="120" Text="{Binding MutationProbability}"></TextBox>
-                        <Label Content="Termination value:"></Label>
-                        <TextBox Width="120" Text="{Binding TerminationValue}"></TextBox>
+                        <WrapPanel>
+                            <Label Content="Selection method:"></Label>
+                            <ComboBox Width="120" ItemsSource="{Binding Path=SelectionMethod}" Name="DistanceSelectionComboBox"
+                                      SelectedItem="{Binding SelectionMethod}"/>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Label Content="Crossover method:"></Label>
+                            <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="DistanceCrossoverComboBox"
+                                      SelectedItem="{Binding CrossoverMethod}"/>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Label Content="Elimination method:"></Label>
+                            <ComboBox Width="120" ItemsSource="{Binding Path=EliminationMethod}" Name="DistanceEliminationComboBox"
+                                      SelectedItem="{Binding EliminationMethod}"/>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Label Content="Mutation method:"></Label>
+                            <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="DistanceMutationComboBox"
+                                      SelectedItem="{Binding MutationMethod}"/>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Label Content="Population size:"></Label>
+                            <TextBox Width="120" Text="{Binding PopulationSize}"></TextBox>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Label Content="Children per generation:"></Label>
+                            <TextBox Width="120" Text="{Binding ChildrenPerGeneration}"></TextBox>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Label Content="Parents per children:"></Label>
+                            <TextBox Width="120" Text="{Binding ParentsPerChildren}"></TextBox>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Label Content="Mutation probability (in per mil)"></Label>
+                            <TextBox Width="120" Text="{Binding MutationProbability}"></TextBox>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Label Content="Termination value:"></Label>
+                            <TextBox Width="120" Text="{Binding TerminationValue}"></TextBox>
+                        </WrapPanel>
                     </StackPanel>
-                    <Label Content="Number of instances:"></Label>
-                    <TextBox Width="120" Name="DistanceInstancesTextBox" Text="1"></TextBox>
                     <Button Width="100" Content="Start" Click="DistanceStartButtonClick"/>
                     <Label Name="DistanceResultLabel"></Label>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Warehouse">
-                <Grid Background="#FFE5E5E5"/>
+                <StackPanel Background="#FFE5E5E5" Name="WarehousePanel">
+                    <WrapPanel>
+                        <Label Content="Warehouse path: "></Label>
+                        <TextBox Width="400" Text="{Binding WarehousePath}"></TextBox>
+                    </WrapPanel>
+                    <WrapPanel>
+                        <Label Content="Orders path: "></Label>
+                        <TextBox Width="400" Text="{Binding OrdersPath}"></TextBox>
+                    </WrapPanel>
+                    <Label Content="Warehouse parameters: "></Label>
+                    <StackPanel Name="WarehouseStackPanel">
+                        <StackPanel Margin="50 0 0 0">
+                            <WrapPanel>
+                                <Label Content="Selection method:"></Label>
+                                <ComboBox Width="120" ItemsSource="{Binding Path=SelectionMethod}" Name="WarehouseSelectionComboBox"
+                                      SelectedItem="{Binding SelectionMethod}"/>
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="Crossover method:"></Label>
+                                <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="WarehouseCrossoverComboBox"
+                                      SelectedItem="{Binding CrossoverMethod}"/>
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="Elimination method:"></Label>
+                                <ComboBox Width="120" ItemsSource="{Binding Path=EliminationMethod}" Name="WarehouseEliminationComboBox"
+                                      SelectedItem="{Binding EliminationMethod}"/>
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="Mutation method:"></Label>
+                                <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="WarehouseMutationComboBox"
+                                      SelectedItem="{Binding MutationMethod}"/>
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="Population size:"></Label>
+                                <TextBox Width="120" Text="{Binding PopulationSize}"></TextBox>
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="Children per generation:"></Label>
+                                <TextBox Width="120" Text="{Binding ChildrenPerGeneration}"></TextBox>
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="Parents per children:"></Label>
+                                <TextBox Width="120" Text="{Binding ParentsPerChildren}"></TextBox>
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="Mutation probability (in per mil)"></Label>
+                                <TextBox Width="120" Text="{Binding MutationProbability}"></TextBox>
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="Termination value:"></Label>
+                                <TextBox Width="120" Text="{Binding TerminationValue}"></TextBox>
+                            </WrapPanel>
+                    </StackPanel>
+                    </StackPanel>
+                    <Label Content="Fitness calculation: "></Label>
+                    <StackPanel Name="WarehouseFitnessPanel" Margin="50 0 0 0">
+                        <WrapPanel>
+                        <Label Content="Optimization method:"></Label>
+                        <ComboBox Width="120" ItemsSource="{Binding Path=OptimizationMethod}" Name="WarehouseFitnessMethodComboBox"
+                                  SelectedItem="{Binding OptimizationMethod}"/>
+                    </WrapPanel>
+                        <StackPanel  Visibility="{Binding IsAllVisible}">
+                            <WrapPanel>
+                                <Label Content="Selection method:"></Label>
+                                <ComboBox Width="120" ItemsSource="{Binding Path=SelectionMethod}" Name="WarehouseFitnessSelectionComboBox"
+                                          SelectedItem="{Binding SelectionMethod}"/>
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="Crossover method:"></Label>
+                                <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="WarehouseFitnessCrossoverComboBox"
+                                          SelectedItem="{Binding CrossoverMethod}"/>
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="Elimination method:"></Label>
+                                <ComboBox Width="120" ItemsSource="{Binding Path=EliminationMethod}" Name="WarehouseFitnessEliminationComboBox"
+                                          SelectedItem="{Binding EliminationMethod}"/>
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="Mutation method:"></Label>
+                                <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="WarehouseFitnessMutationComboBox"
+                                          SelectedItem="{Binding MutationMethod}"/>
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="Population size:"></Label>
+                                <TextBox Width="120" Text="{Binding PopulationSize}"></TextBox>
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="Children per generation:"></Label>
+                                <TextBox Width="120" Text="{Binding ChildrenPerGeneration}"></TextBox>
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="Parents per children:"></Label>
+                                <TextBox Width="120" Text="{Binding ParentsPerChildren}"></TextBox>
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="Mutation probability (in per mil)"></Label>
+                                <TextBox Width="120" Text="{Binding MutationProbability}"></TextBox>
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="Termination value:"></Label>
+                                <TextBox Width="120" Text="{Binding TerminationValue}"></TextBox>
+                            </WrapPanel>
+                        </StackPanel>
+                    </StackPanel>
+                    <Button Content="Start" Click="ButtonBase_OnClick"></Button>
+                    <Label HorizontalAlignment="Center" FontSize="20" Name="WarehouseResultLabel"></Label>
+                </StackPanel>
             </TabItem>
             <TabItem Header="Keyboard">
                 <Grid Background="#FFE5E5E5"/>

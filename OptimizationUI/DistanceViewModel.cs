@@ -26,7 +26,7 @@ namespace OptimizationUI
             }
         }
 
-        private OptimizationMethod _optimizationMethod = OptimizationMethod.NearestNeighbor;
+        private OptimizationMethod _optimizationMethod = OptimizationMethod.GeneticAlgorithm;
         public override OptimizationMethod OptimizationMethod
         {
             get

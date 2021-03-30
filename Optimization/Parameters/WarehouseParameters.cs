@@ -4,8 +4,8 @@ namespace Optimization.Parameters
     {
         public OptimizationParameters WarehouseGeneticAlgorithmParameters;
         public OptimizationParameters FitnessGeneticAlgorithmParameters;
-        public string WarehousePath;
-        public string OrdersPath;
+        public virtual string WarehousePath { get; set; }
+        public virtual string OrdersPath { get; set; }
 
     }
 }

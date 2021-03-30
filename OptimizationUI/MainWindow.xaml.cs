@@ -27,16 +27,50 @@ namespace OptimizationUI
     public partial class MainWindow : Window
     {
         private DistanceViewModel _distanceViewModel;
+        private WarehouseViewModel _warehouseViewModel;
+        private DistanceViewModel _warehouseDistanceViewModel;
+        private DistanceViewModel _warehouseFitnessCalculationDistanceViewModel;
         public MainWindow()
         {
             InitializeComponent();
+            
             _distanceViewModel = new DistanceViewModel();
             DistancePanel.DataContext = _distanceViewModel;
-            DistanceMethodComboBox.ItemsSource = Enum.GetValues(typeof(OptimizationMethod)).Cast<OptimizationMethod>();
-            DistanceSelectionComboBox.ItemsSource = Enum.GetValues(typeof(SelectionMethod)).Cast<SelectionMethod>();
-            DistanceCrossoverComboBox.ItemsSource = Enum.GetValues(typeof(CrossoverMethod)).Cast<CrossoverMethod>();
-            DistanceEliminationComboBox.ItemsSource = Enum.GetValues(typeof(EliminationMethod)).Cast<EliminationMethod>();
-            DistanceMutationComboBox.ItemsSource = Enum.GetValues(typeof(MutationMethod)).Cast<MutationMethod>();
+            
+            _warehouseFitnessCalculationDistanceViewModel = new DistanceViewModel();
+            WarehouseFitnessPanel.DataContext = _warehouseFitnessCalculationDistanceViewModel;
+            
+            _warehouseViewModel = new WarehouseViewModel();
+            WarehousePanel.DataContext = _warehouseViewModel;
+            
+            _warehouseDistanceViewModel = new DistanceViewModel();
+            WarehouseStackPanel.DataContext = _warehouseDistanceViewModel;
+
+            _warehouseViewModel.FitnessGeneticAlgorithmParameters = _warehouseFitnessCalculationDistanceViewModel;
+            _warehouseViewModel.WarehouseGeneticAlgorithmParameters = _warehouseDistanceViewModel;
+            
+            var methods = Enum.GetValues(typeof(OptimizationMethod)).Cast<OptimizationMethod>().ToList();
+            var selections = Enum.GetValues(typeof(SelectionMethod)).Cast<SelectionMethod>().ToList();
+            var crossovers = Enum.GetValues(typeof(CrossoverMethod)).Cast<CrossoverMethod>().ToList();
+            var eliminations = Enum.GetValues(typeof(EliminationMethod)).Cast<EliminationMethod>().ToList();
+            var mutations = Enum.GetValues(typeof(MutationMethod)).Cast<MutationMethod>().ToList();
+            
+            DistanceMethodComboBox.ItemsSource = methods;
+            DistanceSelectionComboBox.ItemsSource = selections;
+            DistanceCrossoverComboBox.ItemsSource = crossovers;
+            DistanceEliminationComboBox.ItemsSource = eliminations;
+            DistanceMutationComboBox.ItemsSource = mutations;
+
+            WarehouseSelectionComboBox.ItemsSource = selections;
+            WarehouseCrossoverComboBox.ItemsSource = crossovers;
+            WarehouseEliminationComboBox.ItemsSource = eliminations;
+            WarehouseMutationComboBox.ItemsSource = mutations;
+            
+            WarehouseFitnessMethodComboBox.ItemsSource = methods;
+            WarehouseFitnessSelectionComboBox.ItemsSource = selections;
+            WarehouseFitnessCrossoverComboBox.ItemsSource = crossovers;
+            WarehouseEliminationComboBox.ItemsSource = eliminations;
+            WarehouseFitnessMutationComboBox.ItemsSource = mutations;
         }
 
         private void DistanceStartButtonClick(object sender, RoutedEventArgs e)
@@ -49,6 +83,15 @@ namespace OptimizationUI
             }
 
             DistanceResultLabel.Content = $"Avg: {results.Average()}  Max: {results.Max()}  Min: {results.Min()}";
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            WarehouseParameters warehouseParameters = _warehouseViewModel as WarehouseParameters;
+
+            var result = Optimization.OptimizationWork.WarehouseOptimization(warehouseParameters);
+            WarehouseResultLabel.Content = $"Wynik: {result}";
+
         }
     }
 }
