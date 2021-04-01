@@ -5,7 +5,7 @@ namespace Optimization.GeneticAlgorithms.Mutations
     class MAMutation : Mutation
     {
         private List<Mutation> Mutations;
-        private int counter = 0;
+        private int _counter;
         public MAMutation(MutationMethod[] mutationMethods, double mutationProbability, int[][] population) : base(mutationProbability, population)
         {
             Mutations = new List<Mutation>();
@@ -17,9 +17,9 @@ namespace Optimization.GeneticAlgorithms.Mutations
 
         public override void Mutate(int[] chromosome)
         {
-            if (counter >= 4) counter = 0;
-            Mutations[counter].Mutate(chromosome);
-            counter++;
+            if (_counter >= Mutations.Count) _counter = 0;
+            Mutations[_counter].Mutate(chromosome);
+            _counter++;
         }
     }
 }

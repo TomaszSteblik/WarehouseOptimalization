@@ -42,7 +42,8 @@ namespace Optimization.GeneticAlgorithms
             _calculateFitness = calculateFitness;
 
             _selection = GeneticFactory.CreateSelection(parameters, _population);
-            _crossover = GeneticFactory.CreateCrossover(parameters);
+            _crossover = GeneticFactory.CreateCrossover(parameters.StartingId,parameters.CrossoverMethod,
+                parameters.MultiCrossovers);
             _elimination = GeneticFactory.CreateElimination(parameters, _population);
             _mutation = GeneticFactory.CreateMutation(parameters.MutationMethod,parameters.MultiMutations, _population,
                 _mutationProbability);

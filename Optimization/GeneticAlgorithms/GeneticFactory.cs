@@ -9,10 +9,10 @@ namespace Optimization.GeneticAlgorithms
 {
     internal static class GeneticFactory
     {
-        public static Crossover CreateCrossover(OptimizationParameters optimizationParameters)
+        public static Crossover CreateCrossover(int startingId, CrossoverMethod crossoverMethod, 
+            CrossoverMethod[] crossoverMethods)
         {
-            int startingPoint = optimizationParameters.StartingId;
-            Crossover crossover = optimizationParameters.CrossoverMethod switch
+            Crossover crossover = crossoverMethod switch
             {
                 CrossoverMethod.Aex => new AexCrossover(),
                 CrossoverMethod.HGreX => new HGreXCrossover(),
@@ -21,8 +21,8 @@ namespace Optimization.GeneticAlgorithms
                 CrossoverMethod.KPoint => new KPointCrossover(),
                 CrossoverMethod.AexNN => new AexNNCrossover(),
                 CrossoverMethod.Cycle => new CycleCrossover(),
-                CrossoverMethod.MEPC => new MEPCrossover(optimizationParameters.MultiCrossovers),
-                CrossoverMethod.MRPC => new MRPCrossover(optimizationParameters.MultiCrossovers),
+                CrossoverMethod.MAC => new MACrossover(crossoverMethods, startingId),
+                CrossoverMethod.MRPC => new MRPCrossover(crossoverMethods, startingId),
                 _ => throw new ArgumentException("Wrong crossover method name")
             };
             return crossover;
