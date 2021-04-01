@@ -69,7 +69,7 @@ namespace OptimizationUI
             WarehouseFitnessMethodComboBox.ItemsSource = methods;
             WarehouseFitnessSelectionComboBox.ItemsSource = selections;
             WarehouseFitnessCrossoverComboBox.ItemsSource = crossovers;
-            WarehouseEliminationComboBox.ItemsSource = eliminations;
+            WarehouseFitnessEliminationComboBox.ItemsSource = eliminations;
             WarehouseFitnessMutationComboBox.ItemsSource = mutations;
         }
 
