@@ -6,7 +6,7 @@ namespace Optimization.GeneticAlgorithms.Mutations
         {
         }
 
-        protected override void Mutate(int[] chromosome)
+        public override void Mutate(int[] chromosome)
         {
             var pointA = Random.Next(1, chromosome.Length-2);
             var pointB = Random.Next(pointA+1, chromosome.Length-1);

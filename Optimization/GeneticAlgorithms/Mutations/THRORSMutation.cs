@@ -9,7 +9,7 @@ namespace Optimization.GeneticAlgorithms.Mutations
         {
         }
 
-        protected override void Mutate(int[] chromosome)
+        public override void Mutate(int[] chromosome)
         {
             var range = Enumerable.Range(1, chromosome.Length-1).ToList();
             var pointA = range.ElementAt(Random.Next(0, range.Count));

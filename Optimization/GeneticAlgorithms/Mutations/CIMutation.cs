@@ -8,7 +8,7 @@ namespace Optimization.GeneticAlgorithms.Mutations
         {
         }
 
-        protected override void Mutate(int[] chromosome)
+        public override void Mutate(int[] chromosome)
         {
             var pointOfDivison = Random.Next(1, chromosome.Length);
             Array.Reverse(chromosome,1,pointOfDivison-1);

@@ -15,7 +15,7 @@ namespace Optimization.GeneticAlgorithms.Mutations
             Random = new Random();
         }
         
-        public void Mutate(int[][] population)
+        public virtual void Mutate(int[][] population)
         {
             if (_mutationProbability > 0d)
             {
@@ -28,7 +28,7 @@ namespace Optimization.GeneticAlgorithms.Mutations
                 }
             }
         }
-        protected abstract void Mutate(int[] chromosome);
+        public abstract void Mutate(int[] chromosome);
 
     }
 
@@ -39,7 +39,7 @@ namespace Optimization.GeneticAlgorithms.Mutations
         THROAS,
         THRORS,
         TWORS,
-        MRPM,
-        MEPM
+        MRM,
+        MAM
     }
 }

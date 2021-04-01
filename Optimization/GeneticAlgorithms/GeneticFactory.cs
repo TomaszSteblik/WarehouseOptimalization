@@ -52,17 +52,18 @@ namespace Optimization.GeneticAlgorithms
             return elimination;
         }
 
-        public static Mutation CreateMutation(OptimizationParameters optimizationParameters, int[][] population, double mutationProbability)
+        public static Mutation CreateMutation(MutationMethod mutationMethod, MutationMethod[] mutationMethods , 
+            int[][] population, double mutationProbability)
         {
-            Mutation mutation = optimizationParameters.MutationMethod switch
+            Mutation mutation = mutationMethod switch
             {
-                MutationMethod.RSM => new RSMutation(optimizationParameters.MutationProbability,population),
-                MutationMethod.TWORS => new TWORSMutation(optimizationParameters.MutationProbability,population),
-                MutationMethod.CIM => new CIMutation(optimizationParameters.MutationProbability,population),
-                MutationMethod.THROAS => new THROASMutation(optimizationParameters.MutationProbability,population),
-                MutationMethod.THRORS => new THRORSMutation(optimizationParameters.MutationProbability,population),
-                MutationMethod.MEPM => new MEPMutation(optimizationParameters.MultiMutations,optimizationParameters.MutationProbability,population),
-                MutationMethod.MRPM => new MRPMutation(optimizationParameters.MultiMutations,optimizationParameters.MutationProbability,population),
+                MutationMethod.RSM => new RSMutation(mutationProbability,population),
+                MutationMethod.TWORS => new TWORSMutation(mutationProbability,population),
+                MutationMethod.CIM => new CIMutation(mutationProbability,population),
+                MutationMethod.THROAS => new THROASMutation(mutationProbability,population),
+                MutationMethod.THRORS => new THRORSMutation(mutationProbability,population),
+                MutationMethod.MAM => new MAMutation(mutationMethods,mutationProbability,population),
+                MutationMethod.MRM => new MRMutation(mutationMethods,mutationProbability,population),
                 _ => throw new AggregateException("Wrong mutation method name")
             };
             return mutation;
