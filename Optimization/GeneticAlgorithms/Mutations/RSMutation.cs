@@ -4,14 +4,14 @@ namespace Optimization.GeneticAlgorithms.Mutations
 {
     internal class RSMutation : Mutation
     {
-        public RSMutation() : base()
+        public RSMutation(double mutationProbability, int[][] population) : base(mutationProbability, population)
         {
         }
 
-        public override void Mutate(int[] chromosome)
+        protected override void Mutate(int[] chromosome)
         {
-            var j = _random.Next(1, chromosome.Length);
-            var i = _random.Next(1, j);
+            var j = Random.Next(1, chromosome.Length);
+            var i = Random.Next(1, j);
             Array.Reverse(chromosome, i, j - i);
         }
     }

@@ -4,13 +4,32 @@ namespace Optimization.GeneticAlgorithms.Mutations
 {
     internal abstract class Mutation
     {
-        protected readonly Random _random;
-        protected Mutation()
-        {
-            _random = new Random();
-        }
+        protected readonly Random Random;
+        private double _mutationProbability;
+        private int[][] _population;
 
-        public abstract void Mutate(int[] chromosome);
+        protected Mutation(double mutationProbability, int[][] population)
+        {
+            _mutationProbability = mutationProbability;
+            _population = population;
+            Random = new Random();
+        }
+        
+        public void Mutate(int[][] population)
+        {
+            if (_mutationProbability > 0d)
+            {
+                for (int m = (int) (0.1 * _population.Length); m < _population.Length; m++)
+                {
+                    if (Random.Next(0, 1000) <= _mutationProbability)
+                    {
+                        Mutate(_population[m]);
+                    }
+                }
+            }
+        }
+        protected abstract void Mutate(int[] chromosome);
+
     }
 
     public enum MutationMethod
@@ -19,6 +38,8 @@ namespace Optimization.GeneticAlgorithms.Mutations
         RSM,
         THROAS,
         THRORS,
-        TWORS
+        TWORS,
+        MRPM,
+        MEPM
     }
 }

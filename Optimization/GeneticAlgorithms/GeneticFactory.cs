@@ -21,6 +21,8 @@ namespace Optimization.GeneticAlgorithms
                 CrossoverMethod.KPoint => new KPointCrossover(),
                 CrossoverMethod.AexNN => new AexNNCrossover(),
                 CrossoverMethod.Cycle => new CycleCrossover(),
+                CrossoverMethod.MEPC => new MEPCrossover(optimizationParameters.MultiCrossovers),
+                CrossoverMethod.MRPC => new MRPCrossover(optimizationParameters.MultiCrossovers),
                 _ => throw new ArgumentException("Wrong crossover method name")
             };
             return crossover;
@@ -54,11 +56,13 @@ namespace Optimization.GeneticAlgorithms
         {
             Mutation mutation = optimizationParameters.MutationMethod switch
             {
-                MutationMethod.RSM => new RSMutation(),
-                MutationMethod.TWORS => new TWORSMutation(),
-                MutationMethod.CIM => new CIMutation(),
-                MutationMethod.THROAS => new THROASMutation(),
-                MutationMethod.THRORS => new THRORSMutation(),
+                MutationMethod.RSM => new RSMutation(optimizationParameters.MutationProbability,population),
+                MutationMethod.TWORS => new TWORSMutation(optimizationParameters.MutationProbability,population),
+                MutationMethod.CIM => new CIMutation(optimizationParameters.MutationProbability,population),
+                MutationMethod.THROAS => new THROASMutation(optimizationParameters.MutationProbability,population),
+                MutationMethod.THRORS => new THRORSMutation(optimizationParameters.MutationProbability,population),
+                MutationMethod.MEPM => new MEPMutation(optimizationParameters.MultiMutations,optimizationParameters.MutationProbability,population),
+                MutationMethod.MRPM => new MRPMutation(optimizationParameters.MultiMutations,optimizationParameters.MutationProbability,population),
                 _ => throw new AggregateException("Wrong mutation method name")
             };
             return mutation;

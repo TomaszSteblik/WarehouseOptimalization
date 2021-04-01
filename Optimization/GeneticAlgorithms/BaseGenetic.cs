@@ -63,17 +63,7 @@ namespace Optimization.GeneticAlgorithms
                     _canIncreaseStrictness = _selection.IncreaseStrictness(_childrenPerGeneration);
                 
                 Array.Sort(fitness,_population);
-                
-                if (_mutationProbability > 0d)
-                {
-                    for (int m = (int) (0.1 * _population.Length); m < _population.Length; m++)
-                    {
-                        if (_random.Next(0, 1000) <= _mutationProbability)
-                        {
-                            _mutation.Mutate(_population[m]);
-                        }
-                    }
-                }
+                _mutation.Mutate(_population);
 
                 bestGene = _population[0];
 

@@ -2,15 +2,15 @@ namespace Optimization.GeneticAlgorithms.Mutations
 {
     internal class THROASMutation : Mutation
     {
-        public THROASMutation() : base()
+        public THROASMutation(double mutationProbability, int[][] population) : base(mutationProbability, population)
         {
         }
 
-        public override void Mutate(int[] chromosome)
+        protected override void Mutate(int[] chromosome)
         {
-            var pointA = _random.Next(1, chromosome.Length-2);
-            var pointB = _random.Next(pointA+1, chromosome.Length-1);
-            var pointC = _random.Next(pointB+1, chromosome.Length);
+            var pointA = Random.Next(1, chromosome.Length-2);
+            var pointB = Random.Next(pointA+1, chromosome.Length-1);
+            var pointC = Random.Next(pointB+1, chromosome.Length);
 
             var valueA = chromosome[pointA];
             var valueB = chromosome[pointB];

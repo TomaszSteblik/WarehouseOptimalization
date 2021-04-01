@@ -2,7 +2,7 @@ using System;
 
 namespace Optimization.GeneticAlgorithms.Crossovers
 {
-    internal abstract class Crossover
+    public abstract class Crossover
     {
         public abstract int[] GenerateOffspring(int[][] parents);
         public virtual int[][] GenerateOffsprings(int[][] parents, int numParentsForOneChild)
@@ -43,6 +43,8 @@ namespace Optimization.GeneticAlgorithms.Crossovers
         HGreX,
         HProX,
         HRndX,
-        KPoint
+        KPoint,
+        MRPC,
+        MEPC
     }
 }
