@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,29 +29,16 @@ namespace OptimizationUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private DistanceViewModel _distanceViewModel;
-        private WarehouseViewModel _warehouseViewModel;
-        private DistanceViewModel _warehouseDistanceViewModel;
-        private DistanceViewModel _warehouseFitnessCalculationDistanceViewModel;
+        private Properties _properties;
         public MainWindow()
         {
             InitializeComponent();
-            
-            _distanceViewModel = new DistanceViewModel();
-            DistancePanel.DataContext = _distanceViewModel;
-            
-            _warehouseFitnessCalculationDistanceViewModel = new DistanceViewModel();
-            WarehouseFitnessPanel.DataContext = _warehouseFitnessCalculationDistanceViewModel;
-            
-            _warehouseViewModel = new WarehouseViewModel();
-            WarehousePanel.DataContext = _warehouseViewModel;
-            
-            _warehouseDistanceViewModel = new DistanceViewModel();
-            WarehouseStackPanel.DataContext = _warehouseDistanceViewModel;
+            DeserializeParameters();
+            DistancePanel.DataContext = _properties.DistanceViewModel;
+            WarehouseFitnessPanel.DataContext = _properties.WarehouseViewModel.FitnessGeneticAlgorithmParameters as DistanceViewModel;
+            WarehouseStackPanel.DataContext = _properties.WarehouseViewModel.WarehouseGeneticAlgorithmParameters as DistanceViewModel;
+            WarehousePanel.DataContext = _properties.WarehouseViewModel;
 
-            _warehouseViewModel.FitnessGeneticAlgorithmParameters = _warehouseFitnessCalculationDistanceViewModel;
-            _warehouseViewModel.WarehouseGeneticAlgorithmParameters = _warehouseDistanceViewModel;
-            
             var methods = Enum.GetValues(typeof(OptimizationMethod)).Cast<OptimizationMethod>().ToList();
             var selections = Enum.GetValues(typeof(SelectionMethod)).Cast<SelectionMethod>().ToList();
             var crossovers = Enum.GetValues(typeof(CrossoverMethod)).Cast<CrossoverMethod>().ToList();
@@ -72,32 +62,11 @@ namespace OptimizationUI
             WarehouseFitnessEliminationComboBox.ItemsSource = eliminations;
             WarehouseFitnessMutationComboBox.ItemsSource = mutations;
             
-            var crossoversNames = Enum.GetNames(typeof(CrossoverMethod)).ToList();
-            crossoversNames.Remove("MRC");
-            crossoversNames.Remove("MAC");
-            foreach (var crossoverName in crossoversNames)
-            {
-                _distanceViewModel.CrossoverCheckBoxStates.Add(new CheckBoxState(crossoverName,true));
-                _warehouseDistanceViewModel.CrossoverCheckBoxStates.Add(new CheckBoxState(crossoverName,true));
-                _warehouseFitnessCalculationDistanceViewModel.CrossoverCheckBoxStates.Add(new CheckBoxState(crossoverName,true));
-            }
-
-            var mutationsNames = Enum.GetNames(typeof(MutationMethod)).ToList();
-            mutationsNames.Remove("MRM");
-            mutationsNames.Remove("MAM");
-            foreach (var mutationsName in mutationsNames)
-            {
-                _distanceViewModel.MutationCheckBoxStates.Add(new CheckBoxState(mutationsName,true));
-                _warehouseDistanceViewModel.MutationCheckBoxStates.Add(new CheckBoxState(mutationsName,true));
-                _warehouseFitnessCalculationDistanceViewModel.MutationCheckBoxStates.Add(new CheckBoxState(mutationsName,true));
-            }
-
-
         }
 
         private void DistanceStartButtonClick(object sender, RoutedEventArgs e)
         {
-            OptimizationParameters parameters = _distanceViewModel as OptimizationParameters;
+            OptimizationParameters parameters = _properties.DistanceViewModel as OptimizationParameters;
             List<double> results = new List<double>();
             for (int i = 0; i < Double.Parse(DistanceInstancesTextBox.Text); i++)
             {
@@ -109,11 +78,48 @@ namespace OptimizationUI
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            WarehouseParameters warehouseParameters = _warehouseViewModel as WarehouseParameters;
+            WarehouseParameters warehouseParameters = _properties.WarehouseViewModel as WarehouseParameters;
 
             var result = Optimization.OptimizationWork.WarehouseOptimization(warehouseParameters);
             WarehouseResultLabel.Content = $"Wynik: {result}";
 
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            SerializeParameters();
+        }
+
+        private void SerializeParameters()
+        {
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+            };
+            string jsonString = JsonSerializer.Serialize(_properties,options);
+            if(File.Exists("properties.json"))
+                File.Delete("properties.json");
+            File.WriteAllText("properties.json",jsonString);
+        }
+
+        private void DeserializeParameters()
+        {
+            string location = "properties.json";
+            if (File.Exists(location))
+            {
+                string jsonString = File.ReadAllText(location);
+                _properties = JsonSerializer.Deserialize<Properties>(jsonString);
+                _properties.WarehouseViewModel.FitnessGeneticAlgorithmParameters =
+                    new DistanceViewModel(_properties.WarehouseViewModel.FitnessGeneticAlgorithmParameters);
+                _properties.WarehouseViewModel.WarehouseGeneticAlgorithmParameters =
+                    new DistanceViewModel(_properties.WarehouseViewModel.WarehouseGeneticAlgorithmParameters);
+            }
+            else
+            {
+                _properties = new Properties();
+            }
+            
         }
     }
 }

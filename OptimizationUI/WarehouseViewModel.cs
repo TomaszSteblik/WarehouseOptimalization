@@ -1,12 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization;
 using Optimization.Parameters;
 
 namespace OptimizationUI
 {
     public class WarehouseViewModel : WarehouseParameters, INotifyPropertyChanged
     {
+        
         private string _warehousePath = "";
         public override string WarehousePath
         {
@@ -34,8 +36,7 @@ namespace OptimizationUI
                 NotifyPropertyChanged();
             }
         }
-
-
+        
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(String propertyName = "")
         {

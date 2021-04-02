@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Windows;
 using Optimization.GeneticAlgorithms.Crossovers;
 using Optimization.GeneticAlgorithms.Eliminations;
@@ -230,8 +231,10 @@ namespace OptimizationUI
                 return Visibility.Collapsed;
             }
         }
-
+        
         private List<CheckBoxState> _mutationCheckBoxStates = new List<CheckBoxState>();
+        
+
         public List<CheckBoxState> MutationCheckBoxStates
         {
             get => _mutationCheckBoxStates;
@@ -266,6 +269,60 @@ namespace OptimizationUI
                     || _mutationMethod == MutationMethod.MRM)
                     return Visibility.Visible;
                 return Visibility.Collapsed;
+            }
+        }
+        
+        
+        public DistanceViewModel(OptimizationParameters fitnessGeneticAlgorithmParameters)
+        {
+            this._use2opt = fitnessGeneticAlgorithmParameters.Use2opt;
+            this._crossoverMethod = fitnessGeneticAlgorithmParameters.CrossoverMethod;
+            this._dataPath = fitnessGeneticAlgorithmParameters.DataPath;
+            this._eliminationMethod = fitnessGeneticAlgorithmParameters.EliminationMethod;
+            this._mutationMethod = fitnessGeneticAlgorithmParameters.MutationMethod;
+            this._mutationProbability = fitnessGeneticAlgorithmParameters.MutationProbability;
+            this._optimizationMethod = fitnessGeneticAlgorithmParameters.OptimizationMethod;
+            this._populationSize = fitnessGeneticAlgorithmParameters.PopulationSize;
+            this._selectionMethod = fitnessGeneticAlgorithmParameters.SelectionMethod;
+            this._terminationValue = fitnessGeneticAlgorithmParameters.TerminationValue;
+            this._childrenPerGeneration = fitnessGeneticAlgorithmParameters.ChildrenPerGeneration;
+            this._parentsPerChildren = fitnessGeneticAlgorithmParameters.ParentsPerChildren;
+            
+            
+            var crossoversNames = Enum.GetNames(typeof(CrossoverMethod)).ToList();
+            crossoversNames.Remove("MRC");
+            crossoversNames.Remove("MAC");
+            foreach (var crossoverName in crossoversNames)
+            {
+                CrossoverCheckBoxStates.Add(new CheckBoxState(crossoverName, fitnessGeneticAlgorithmParameters.MultiCrossovers.Contains<CrossoverMethod>((CrossoverMethod) Enum.Parse(typeof(CrossoverMethod),crossoverName))));
+            }
+
+            var mutationsNames = Enum.GetNames(typeof(MutationMethod)).ToList();
+            mutationsNames.Remove("MRM");
+            mutationsNames.Remove("MAM");
+            foreach (var mutationsName in mutationsNames)
+            {
+                MutationCheckBoxStates.Add(new CheckBoxState(mutationsName,fitnessGeneticAlgorithmParameters.MultiMutations.Contains<MutationMethod>((MutationMethod) Enum.Parse(typeof(MutationMethod),mutationsName))));
+            }
+            
+        }
+
+        public DistanceViewModel()
+        {
+            var crossoversNames = Enum.GetNames(typeof(CrossoverMethod)).ToList();
+            crossoversNames.Remove("MRC");
+            crossoversNames.Remove("MAC");
+            foreach (var crossoverName in crossoversNames)
+            {
+                CrossoverCheckBoxStates.Add(new CheckBoxState(crossoverName, true));
+            }
+
+            var mutationsNames = Enum.GetNames(typeof(MutationMethod)).ToList();
+            mutationsNames.Remove("MRM");
+            mutationsNames.Remove("MAM");
+            foreach (var mutationsName in mutationsNames)
+            {
+                MutationCheckBoxStates.Add(new CheckBoxState(mutationsName,true));
             }
         }
         
