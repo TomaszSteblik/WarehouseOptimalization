@@ -11,7 +11,10 @@
                 <StackPanel Background="#FFE5E5E5" Name="DistancePanel">
                     <WrapPanel>
                         <Label Content="Data path:"></Label>
-                        <TextBox Width="400" Text="{Binding DataPath}"></TextBox>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox Width="400" Text="{Binding DataPath}"/>
+                            <Button Margin=" 10 0 0 0" Content="Open" Width="50" Name="ReadDistanceDataPathButton" Click="ReadDistanceDataPathButton_OnClick"/>
+                        </StackPanel>
                     </WrapPanel>
                     <CheckBox Content="Use 2 opt" IsChecked="{Binding Use2opt}"></CheckBox>
                     <WrapPanel>
@@ -79,7 +82,7 @@
                             <TextBox Width="120" Text="{Binding TerminationValue}"></TextBox>
                         </WrapPanel>
                     </StackPanel>
-                    <Button Width="100" Content="Start" Click="DistanceStartButtonClick"/>
+                    <Button Content="Start" Click="DistanceStartButtonClick"/>
                     <Label Name="DistanceResultLabel"></Label>
                 </StackPanel>
             </TabItem>
@@ -87,11 +90,18 @@
                 <StackPanel Background="#FFE5E5E5" Name="WarehousePanel">
                     <WrapPanel>
                         <Label Content="Warehouse path: "></Label>
-                        <TextBox Width="400" Text="{Binding WarehousePath}"></TextBox>
+                        
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox Width="400" Text="{Binding WarehousePath}"></TextBox>
+                            <Button Margin="10 0 0 0" Width="50" Content="Open" Name="WarehouseMagPathButton" Click="WarehouseMagPathButton_OnClick"></Button>
+                        </StackPanel>
                     </WrapPanel>
                     <WrapPanel>
                         <Label Content="Orders path: "></Label>
-                        <TextBox Width="400" Text="{Binding OrdersPath}"></TextBox>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox Width="400" Text="{Binding OrdersPath}"></TextBox>
+                            <Button Margin="10 0 0 0" Width="50" Content="Open" Name="WarehouseOrdersPathButton" Click="WarehouseOrdersPathButton_OnClick"></Button>
+                        </StackPanel>
                     </WrapPanel>
                     <Label Content="Warehouse parameters: "></Label>
                     <StackPanel Name="WarehouseStackPanel">

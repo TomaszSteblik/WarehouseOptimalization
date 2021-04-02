@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 using Optimization;
 using Optimization.GeneticAlgorithms.Crossovers;
 using Optimization.GeneticAlgorithms.Eliminations;
@@ -61,7 +62,7 @@ namespace OptimizationUI
             WarehouseFitnessCrossoverComboBox.ItemsSource = crossovers;
             WarehouseFitnessEliminationComboBox.ItemsSource = eliminations;
             WarehouseFitnessMutationComboBox.ItemsSource = mutations;
-            
+
         }
 
         private void DistanceStartButtonClick(object sender, RoutedEventArgs e)
@@ -120,6 +121,32 @@ namespace OptimizationUI
                 _properties = new Properties();
             }
             
+        }
+
+        private void ReadDistanceDataPathButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Filter = "txt files (*.txt)|*.txt";
+            fileDialog.RestoreDirectory = true;
+            fileDialog.ShowDialog();
+            _properties.DistanceViewModel.DataPath = fileDialog.FileName;
+        }
+
+        private void WarehouseMagPathButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Filter = "txt files (*.txt)|*.txt";
+            fileDialog.RestoreDirectory = true;
+            fileDialog.ShowDialog();
+            _properties.WarehouseViewModel.WarehousePath = fileDialog.FileName;        }
+
+        private void WarehouseOrdersPathButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Filter = "txt files (*.txt)|*.txt";
+            fileDialog.RestoreDirectory = true;
+            fileDialog.ShowDialog();
+            _properties.WarehouseViewModel.OrdersPath = fileDialog.FileName; 
         }
     }
 }
