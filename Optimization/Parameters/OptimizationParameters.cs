@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.Linq;
 using Optimization.GeneticAlgorithms.Crossovers;
 using Optimization.GeneticAlgorithms.Eliminations;
@@ -32,14 +33,40 @@ namespace Optimization.Parameters
         public virtual SelectionMethod SelectionMethod { get; set; } = SelectionMethod.RouletteWheel;
         public virtual CrossoverMethod CrossoverMethod { get; set; } = CrossoverMethod.Aex;
 
-        public virtual CrossoverMethod[] MultiCrossovers { get; set; } =
-            Enum.GetValues(typeof(CrossoverMethod)).Cast<CrossoverMethod>().ToArray();
+        public virtual CrossoverMethod[] MultiCrossovers
+        {
+            get
+            {
+                var temp = Enum.GetValues(typeof(CrossoverMethod)).Cast<CrossoverMethod>().ToList();
+                temp.Remove(CrossoverMethod.MAC);
+                temp.Remove(CrossoverMethod.MRC);
+                return temp.ToArray();
+            }
+            set
+            {
+                MultiCrossovers = value;
+            }
+        }
+
         public virtual EliminationMethod EliminationMethod { get; set; } = EliminationMethod.Elitism;
         public virtual MutationMethod MutationMethod { get; set; } = MutationMethod.RSM;
         public virtual double MutationProbability { get; set; } = 30;
 
-        public virtual MutationMethod[] MultiMutations { get; set; } =
-            Enum.GetValues(typeof(MutationMethod)).Cast<MutationMethod>().ToArray();
+        public virtual MutationMethod[] MultiMutations
+        {
+            get
+            {
+                var temp = Enum.GetValues(typeof(MutationMethod)).Cast<MutationMethod>().ToList();
+                temp.Remove(MutationMethod.MAM);
+                temp.Remove(MutationMethod.MRM);
+                return temp.ToArray();
+            }
+            set
+            {
+                MultiMutations = value;
+            }
+        }
+
         public virtual int PopulationSize { get; set; } = 120;
         public virtual int ParentsPerChildren { get; set; } = 2;
         public virtual int ChildrenPerGeneration { get; set; } = 60;
