@@ -34,6 +34,13 @@
                             <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="DistanceCrossoverComboBox"
                                       SelectedItem="{Binding CrossoverMethod}"/>
                         </WrapPanel>
+                        <ItemsControl Margin="50 0 0 0" ItemsSource="{Binding Path=CrossoverCheckBoxStates}" Visibility="{Binding IsCrossoverCheckBoxVisible}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding Path=CheckBoxValue}" Content="{Binding Path=CheckBoxText}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                         <WrapPanel>
                             <Label Content="Elimination method:"></Label>
                             <ComboBox Width="120" ItemsSource="{Binding Path=EliminationMethod}" Name="DistanceEliminationComboBox"
@@ -44,6 +51,13 @@
                             <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="DistanceMutationComboBox"
                                       SelectedItem="{Binding MutationMethod}"/>
                         </WrapPanel>
+                        <ItemsControl Margin="50 0 0 0" ItemsSource="{Binding Path=MutationCheckBoxStates}" Visibility="{Binding IsMutationCheckBoxVisible}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding Path=CheckBoxValue}" Content="{Binding Path=CheckBoxText}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                         <WrapPanel>
                             <Label Content="Population size:"></Label>
                             <TextBox Width="120" Text="{Binding PopulationSize}"></TextBox>
@@ -92,6 +106,13 @@
                                 <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="WarehouseCrossoverComboBox"
                                       SelectedItem="{Binding CrossoverMethod}"/>
                             </WrapPanel>
+                            <ItemsControl Margin="50 0 0 0" ItemsSource="{Binding Path=CrossoverCheckBoxStates}" Visibility="{Binding IsCrossoverCheckBoxVisible}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding Path=CheckBoxValue}" Content="{Binding Path=CheckBoxText}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                             <WrapPanel>
                                 <Label Content="Elimination method:"></Label>
                                 <ComboBox Width="120" ItemsSource="{Binding Path=EliminationMethod}" Name="WarehouseEliminationComboBox"
@@ -102,6 +123,13 @@
                                 <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="WarehouseMutationComboBox"
                                       SelectedItem="{Binding MutationMethod}"/>
                             </WrapPanel>
+                            <ItemsControl Margin="50 0 0 0" ItemsSource="{Binding Path=MutationCheckBoxStates}" Visibility="{Binding IsMutationCheckBoxVisible}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding Path=CheckBoxValue}" Content="{Binding Path=CheckBoxText}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                             <WrapPanel>
                                 <Label Content="Population size:"></Label>
                                 <TextBox Width="120" Text="{Binding PopulationSize}"></TextBox>
@@ -142,6 +170,13 @@
                                 <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="WarehouseFitnessCrossoverComboBox"
                                           SelectedItem="{Binding CrossoverMethod}"/>
                             </WrapPanel>
+                            <ItemsControl Margin="50 0 0 0" ItemsSource="{Binding Path=CrossoverCheckBoxStates}" Visibility="{Binding IsCrossoverCheckBoxVisible}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding Path=CheckBoxValue}" Content="{Binding Path=CheckBoxText}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                             <WrapPanel>
                                 <Label Content="Elimination method:"></Label>
                                 <ComboBox Width="120" ItemsSource="{Binding Path=EliminationMethod}" Name="WarehouseFitnessEliminationComboBox"
@@ -152,6 +187,13 @@
                                 <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="WarehouseFitnessMutationComboBox"
                                           SelectedItem="{Binding MutationMethod}"/>
                             </WrapPanel>
+                            <ItemsControl Margin="50 0 0 0" ItemsSource="{Binding Path=MutationCheckBoxStates}" Visibility="{Binding IsMutationCheckBoxVisible}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding Path=CheckBoxValue}" Content="{Binding Path=CheckBoxText}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                             <WrapPanel>
                                 <Label Content="Population size:"></Label>
                                 <TextBox Width="120" Text="{Binding PopulationSize}"></TextBox>
@@ -179,7 +221,9 @@
                 </StackPanel>
             </TabItem>
             <TabItem Header="Keyboard">
-                <Grid Background="#FFE5E5E5"/>
+                <StackPanel Background="#FFE5E5E5">
+                    
+                </StackPanel>
             </TabItem>
         </TabControl>
     </Grid>

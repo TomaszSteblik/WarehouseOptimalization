@@ -71,6 +71,28 @@ namespace OptimizationUI
             WarehouseFitnessCrossoverComboBox.ItemsSource = crossovers;
             WarehouseFitnessEliminationComboBox.ItemsSource = eliminations;
             WarehouseFitnessMutationComboBox.ItemsSource = mutations;
+            
+            var crossoversNames = Enum.GetNames(typeof(CrossoverMethod)).ToList();
+            crossoversNames.Remove("MRC");
+            crossoversNames.Remove("MAC");
+            foreach (var crossoverName in crossoversNames)
+            {
+                _distanceViewModel.CrossoverCheckBoxStates.Add(new CheckBoxState(crossoverName,true));
+                _warehouseDistanceViewModel.CrossoverCheckBoxStates.Add(new CheckBoxState(crossoverName,true));
+                _warehouseFitnessCalculationDistanceViewModel.CrossoverCheckBoxStates.Add(new CheckBoxState(crossoverName,true));
+            }
+
+            var mutationsNames = Enum.GetNames(typeof(MutationMethod)).ToList();
+            mutationsNames.Remove("MRM");
+            mutationsNames.Remove("MAM");
+            foreach (var mutationsName in mutationsNames)
+            {
+                _distanceViewModel.MutationCheckBoxStates.Add(new CheckBoxState(mutationsName,true));
+                _warehouseDistanceViewModel.MutationCheckBoxStates.Add(new CheckBoxState(mutationsName,true));
+                _warehouseFitnessCalculationDistanceViewModel.MutationCheckBoxStates.Add(new CheckBoxState(mutationsName,true));
+            }
+
+
         }
 
         private void DistanceStartButtonClick(object sender, RoutedEventArgs e)

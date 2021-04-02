@@ -1,6 +1,8 @@
 ﻿using Optimization;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using Optimization.GeneticAlgorithms.Crossovers;
 using Optimization.GeneticAlgorithms.Eliminations;
@@ -190,11 +192,99 @@ namespace OptimizationUI
                 NotifyPropertyChanged();
             }
         }
+        
+        private List<CheckBoxState> _crossoverCheckBoxStates = new List<CheckBoxState>();
+        public List<CheckBoxState> CrossoverCheckBoxStates
+        {
+            get => _crossoverCheckBoxStates;
+            set
+            {
+                _crossoverCheckBoxStates = value;
+                NotifyPropertyChanged();
+            }
+        }
 
+        public override CrossoverMethod[] MultiCrossovers
+        {
+            get
+            {
+                var temp = new List<CrossoverMethod>();
+                foreach (var checkBoxState in _crossoverCheckBoxStates)
+                {
+                    if (checkBoxState.CheckBoxValue == true)
+                    {
+                        temp.Add((CrossoverMethod) Enum.Parse(typeof(CrossoverMethod),checkBoxState.CheckBoxText));
+                    }
+                }
+                return temp.ToArray();
+            }
+        }
+
+        public Visibility IsCrossoverCheckBoxVisible
+        {
+            get
+            {
+                if (_crossoverMethod == CrossoverMethod.MAC
+                    || _crossoverMethod == CrossoverMethod.MRC)
+                    return Visibility.Visible;
+                return Visibility.Collapsed;
+            }
+        }
+
+        private List<CheckBoxState> _mutationCheckBoxStates = new List<CheckBoxState>();
+        public List<CheckBoxState> MutationCheckBoxStates
+        {
+            get => _mutationCheckBoxStates;
+            set
+            {
+                _mutationCheckBoxStates = value;
+                NotifyPropertyChanged();
+            }
+        }
+        
+        public override MutationMethod[] MultiMutations
+        {
+            get
+            {
+                var temp = new List<MutationMethod>();
+                foreach (var checkBoxState in _mutationCheckBoxStates)
+                {
+                    if (checkBoxState.CheckBoxValue == true)
+                    {
+                        temp.Add((MutationMethod) Enum.Parse(typeof(MutationMethod),checkBoxState.CheckBoxText));
+                    }
+                }
+                return temp.ToArray();
+            }
+        }
+        
+        public Visibility IsMutationCheckBoxVisible
+        {
+            get
+            {
+                if (_mutationMethod == MutationMethod.MAM
+                    || _mutationMethod == MutationMethod.MRM)
+                    return Visibility.Visible;
+                return Visibility.Collapsed;
+            }
+        }
+        
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(String propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+    }
+
+    public class CheckBoxState
+    {
+        public CheckBoxState(string checkBoxText, bool checkBoxValue)
+        {
+            CheckBoxText = checkBoxText;
+            CheckBoxValue = checkBoxValue;
+        }
+
+        public string CheckBoxText { get; set; }
+        public bool CheckBoxValue { get; set; }
     }
 }
