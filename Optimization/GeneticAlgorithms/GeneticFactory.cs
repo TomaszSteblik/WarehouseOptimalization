@@ -22,7 +22,7 @@ namespace Optimization.GeneticAlgorithms
                 CrossoverMethod.AexNN => new AexNNCrossover(),
                 CrossoverMethod.Cycle => new CycleCrossover(),
                 CrossoverMethod.MAC => new MACrossover(crossoverMethods, startingId),
-                CrossoverMethod.MRPC => new MRPCrossover(crossoverMethods, startingId),
+                CrossoverMethod.MRC => new MRCrossover(crossoverMethods, startingId),
                 _ => throw new ArgumentException("Wrong crossover method name")
             };
             return crossover;

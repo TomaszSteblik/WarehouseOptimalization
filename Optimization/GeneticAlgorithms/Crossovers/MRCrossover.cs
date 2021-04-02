@@ -2,10 +2,10 @@ using System.Collections.Generic;
 
 namespace Optimization.GeneticAlgorithms.Crossovers
 {
-    class MRPCrossover : Crossover
+    class MRCrossover : Crossover
     {
         private readonly List<Crossover> _crossovers;
-        public MRPCrossover(CrossoverMethod[] crossoverMethods, int startPoint)
+        public MRCrossover(CrossoverMethod[] crossoverMethods, int startPoint)
         {
             _crossovers = new List<Crossover>();
             foreach (var method in crossoverMethods)
