@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wpf="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="800">
     <Grid>
@@ -84,6 +85,9 @@
                     </StackPanel>
                     <Button Content="Start" Click="DistanceStartButtonClick"/>
                     <Label Name="DistanceResultLabel"></Label>
+                    <wpf:Chart BottomTitle="epoch" LeftTitle="fitness" Width="400" Height="350">
+                        <wpf:LineGraph x:Name="linegraphPathFinding" Description="Fitness Graph" Stroke="Blue" StrokeThickness="3" />
+                    </wpf:Chart> 
                 </StackPanel>
             </TabItem>
             <TabItem Header="Warehouse">
@@ -228,6 +232,9 @@
                     </StackPanel>
                     <Button Content="Start" Click="ButtonBase_OnClick"></Button>
                     <Label HorizontalAlignment="Center" FontSize="20" Name="WarehouseResultLabel"></Label>
+                    <wpf:Chart BottomTitle="epoch" LeftTitle="fitness" Width="400" Height="350">
+                        <wpf:LineGraph x:Name="linegraphWarehouse" Description="Fitness Graph" Stroke="Blue" StrokeThickness="3" />
+                    </wpf:Chart> 
                 </StackPanel>
             </TabItem>
             <TabItem Header="Keyboard">

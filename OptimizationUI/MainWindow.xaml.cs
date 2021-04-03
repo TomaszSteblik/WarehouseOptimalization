@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using InteractiveDataDisplay.WPF;
 using Microsoft.Win32;
 using Optimization;
 using Optimization.GeneticAlgorithms.Crossovers;
@@ -73,6 +74,7 @@ namespace OptimizationUI
             {
                 results.Add(OptimizationWork.FindShortestPath(parameters));
             }
+            WritePlot(linegraphPathFinding);
 
             DistanceResultLabel.Content = $"Avg: {results.Average()}  Max: {results.Max()}  Min: {results.Min()}";
         }
@@ -82,6 +84,7 @@ namespace OptimizationUI
             WarehouseParameters warehouseParameters = _properties.WarehouseViewModel as WarehouseParameters;
 
             var result = Optimization.OptimizationWork.WarehouseOptimization(warehouseParameters);
+            WritePlot(linegraphWarehouse);
             WarehouseResultLabel.Content = $"Wynik: {result}";
 
         }
@@ -147,6 +150,29 @@ namespace OptimizationUI
             fileDialog.RestoreDirectory = true;
             fileDialog.ShowDialog();
             _properties.WarehouseViewModel.OrdersPath = fileDialog.FileName; 
+        }
+
+        private void WritePlot(LineGraph linegraph)
+        {
+            string[] lines = File.ReadAllLines("fitness.csv");
+            int nonEmptyLines = 0;
+            for (int i = 0; i < lines.Length; i++)
+                if (lines[i].Trim().Length > 1)
+                    nonEmptyLines++;
+            double[][] fitness = new double[nonEmptyLines][];
+            for (int i = 0; i < nonEmptyLines; i++)
+            {
+                string[] s = lines[i].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                fitness[i] = Array.ConvertAll(s, double.Parse);
+            }
+            
+            var x = Enumerable.Range(0, nonEmptyLines).ToArray();
+            double[] y = new double[nonEmptyLines];
+            for (int i = 0; i < nonEmptyLines; i++)
+            {
+                y[i] = fitness[i][0];
+            }
+            linegraph.Plot(x,y);
         }
     }
 }
