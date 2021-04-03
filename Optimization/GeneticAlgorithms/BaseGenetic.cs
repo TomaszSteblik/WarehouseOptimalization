@@ -23,6 +23,8 @@ namespace Optimization.GeneticAlgorithms
         private readonly int _childrenPerGeneration;
         private readonly int _terminationValue;
         private readonly int _parentsPerChild;
+
+        private readonly bool _writeCsv;
         
         private DelegateFitness.CalcFitness _calculateFitness;
 
@@ -33,6 +35,8 @@ namespace Optimization.GeneticAlgorithms
         {
             _population = population;
             _populationSize = population.Length;
+
+            _writeCsv = parameters.WriteCsv;
 
             _mutationProbability = parameters.MutationProbability;
             _childrenPerGeneration = parameters.ChildrenPerGeneration;
@@ -53,11 +57,12 @@ namespace Optimization.GeneticAlgorithms
         {
             double[] fitness = new double[_population.Length];
             int[] bestGene = new int[_population[0].Length];
+            EpochFitness epochFitness = null;
+            if(_writeCsv) epochFitness = new EpochFitness("fitness.csv");
             
             for (int b = 0; b < _terminationValue; b++)
             {
                 fitness = _calculateFitness(_population);
-                //Console.WriteLine(fitness.Min());
                 int[][] parents = _selection.GenerateParents(_childrenPerGeneration * 2, fitness);
                 int[][] offsprings = _crossover.GenerateOffsprings(parents, _parentsPerChild);
                 _elimination.EliminateAndReplace(offsprings, fitness);
@@ -66,6 +71,8 @@ namespace Optimization.GeneticAlgorithms
                 
                 Array.Sort(fitness,_population);
                 _mutation.Mutate(_population);
+
+                epochFitness?.AddLine(fitness.Min(), fitness.Max(), fitness.Average());
 
                 bestGene = _population[0];
 
