@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:wpf="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="800">
+        Title="MainWindow" Height="860" Width="800">
     <Grid>
         <TabControl>
             <TabItem Header="Distance">
@@ -83,9 +83,9 @@
                             <TextBox Width="120" Text="{Binding TerminationValue}"></TextBox>
                         </WrapPanel>
                     </StackPanel>
-                    <ProgressBar Minimum="0" Maximum="100" Height="20" Name="distancesProgressBar" />
-                    <Button Content="Start" Click="DistanceStartButtonClick"/>
-                    <Button Content="Cancel" Click="CancelDistance"></Button>
+                    <Button Margin="30 5 30 0" Content="Start" Click="DistanceStartButtonClick"/>
+                    <Button Margin="30 5 30 0" Content="Cancel" Click="CancelDistance"></Button>
+                    <ProgressBar Margin="30 5 30 0" Height="20" Name="DistanceProgressBar" Value="{Binding ProgressBarValue}" Maximum="{Binding ProgressBarMaximum}"></ProgressBar>
                     <Label Name="DistanceResultLabel"></Label>
                     <wpf:Chart BottomTitle="epoch" LeftTitle="fitness" Width="400" Height="350">
                         <wpf:LineGraph x:Name="linegraphPathFinding" Description="Fitness Graph" Stroke="Blue" StrokeThickness="3" />

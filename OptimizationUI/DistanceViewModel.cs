@@ -271,8 +271,38 @@ namespace OptimizationUI
                 return Visibility.Collapsed;
             }
         }
-        
-        
+
+        private int _progessBarValue = 0;
+
+        public int ProgressBarValue
+        {
+            get
+            {
+                return _progessBarValue;
+            }
+            set
+            {
+                _progessBarValue = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private int _progessBarMaximum = 100;
+
+        public int ProgressBarMaximum
+        {
+            get
+            {
+                return _progessBarMaximum;
+            }
+            set
+            {
+                _progessBarMaximum = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+
         public DistanceViewModel(OptimizationParameters fitnessGeneticAlgorithmParameters)
         {
             this._use2opt = fitnessGeneticAlgorithmParameters.Use2opt;

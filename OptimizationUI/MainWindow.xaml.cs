@@ -74,6 +74,7 @@ namespace OptimizationUI
             int runs = Int32.Parse(DistanceInstancesTextBox.Text);
             double[] results = new double[runs];
             _cancellationTokenSource = new CancellationTokenSource();
+            _properties.DistanceViewModel.ProgressBarMaximum = runs-1;
             CancellationToken ct = _cancellationTokenSource.Token;
             try
             {
@@ -84,6 +85,7 @@ namespace OptimizationUI
                     for (int i = 0; i < runs; i++)
                     {
                         results[i] = OptimizationWork.FindShortestPath(parameters, ct);
+                        _properties.DistanceViewModel.ProgressBarValue = i;
                     }
                     
                 }, ct);
