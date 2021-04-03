@@ -92,7 +92,7 @@ namespace OptimizationUI
                 Dispatcher.Invoke(() =>
                 {
                     DistanceResultLabel.Content = $"Avg: {results.Average()}  Max: {results.Max()}  Min: {results.Min()}"; 
-                    WritePlot(linegraphPathFinding);
+                    WritePlot(linesGridDistances);
                 });
             }
             catch (OperationCanceledException exception)
@@ -120,7 +120,7 @@ namespace OptimizationUI
                 Dispatcher.Invoke(() =>
                 {
                     WarehouseResultLabel.Content = $"Wynik: {result}";
-                    WritePlot(linegraphWarehouse);
+                    WritePlot(linesGridWarehouse);
                 });
             }
             catch (OperationCanceledException exception)
@@ -208,8 +208,9 @@ namespace OptimizationUI
             _properties.WarehouseViewModel.OrdersPath = fileDialog.FileName; 
         }
 
-        private void WritePlot(LineGraph linegraph)
+        private void WritePlot(Grid linesGrid)
         {
+            linesGrid.Children.Clear();
             string[] lines = File.ReadAllLines("fitness.csv");
             int nonEmptyLines = 0;
             for (int i = 0; i < lines.Length; i++)
@@ -224,11 +225,42 @@ namespace OptimizationUI
             
             var x = Enumerable.Range(0, nonEmptyLines).ToArray();
             double[] y = new double[nonEmptyLines];
+            double[] z = new double[nonEmptyLines];
+            double[] a = new double[nonEmptyLines];
             for (int i = 0; i < nonEmptyLines; i++)
             {
                 y[i] = fitness[i][0];
+                a[i] = fitness[i][1];
+                z[i] = fitness[i][2];
             }
-            linegraph.Plot(x,y);
+
+            var lineBest = new InteractiveDataDisplay.WPF.LineGraph
+            {
+                Stroke = new SolidColorBrush(Colors.Green),
+                Description = "Best fitness",
+                StrokeThickness = 5,
+            };
+            var lineAvg = new InteractiveDataDisplay.WPF.LineGraph
+            {
+                Stroke = new SolidColorBrush(Colors.Blue),
+                Description = "Avg fitness",
+                StrokeThickness = 5
+            };
+            var lineWorst = new LineGraph
+            {
+                Stroke = new SolidColorBrush(Colors.Red),
+                Description = "Worst fitness",
+                StrokeThickness = 5
+            };
+            lineBest.Plot(x, y);
+            lineAvg.Plot(x,z);
+            lineWorst.Plot(x, a);
+            linesGrid.Children.Add(lineBest);
+            linesGrid.Children.Add(lineAvg);
+            linesGrid.Children.Add(lineWorst);
+
+
+
         }
     }
 }

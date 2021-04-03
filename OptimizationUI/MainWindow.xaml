@@ -87,8 +87,8 @@
                     <Button Margin="30 5 30 0" Content="Cancel" Click="CancelDistance"></Button>
                     <ProgressBar Margin="30 5 30 0" Height="20" Name="DistanceProgressBar" Value="{Binding ProgressBarValue}" Maximum="{Binding ProgressBarMaximum}"></ProgressBar>
                     <Label Name="DistanceResultLabel"></Label>
-                    <wpf:Chart BottomTitle="epoch" LeftTitle="fitness" Width="400" Height="350">
-                        <wpf:LineGraph x:Name="linegraphPathFinding" Description="Fitness Graph" Stroke="Blue" StrokeThickness="3" />
+                    <wpf:Chart BottomTitle="epoch" LeftTitle="fitness" Width="400" Height="350" Name="distancesChart">
+                        <Grid Name="linesGridDistances"/>
                     </wpf:Chart> 
                 </StackPanel>
             </TabItem>
@@ -235,8 +235,8 @@
                     <Button Content="Start" Click="ButtonBase_OnClick"></Button>
                     <Button Content="Cancel" Click="CancelWarehouse"></Button>
                     <Label HorizontalAlignment="Center" FontSize="20" Name="WarehouseResultLabel"></Label>
-                    <wpf:Chart BottomTitle="epoch" LeftTitle="fitness" Width="400" Height="350">
-                        <wpf:LineGraph x:Name="linegraphWarehouse" Description="Fitness Graph" Stroke="Blue" StrokeThickness="3" />
+                    <wpf:Chart BottomTitle="epoch" LeftTitle="fitness" Width="400" Height="350" Name="warehouseChart">
+                        <Grid Name="linesGridWarehouse"/>
                     </wpf:Chart> 
                 </StackPanel>
             </TabItem>
