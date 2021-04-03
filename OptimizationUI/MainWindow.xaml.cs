@@ -34,13 +34,16 @@ namespace OptimizationUI
     {
         private Properties _properties;
         private CancellationTokenSource _cancellationTokenSource;
+
         public MainWindow()
         {
             InitializeComponent();
             DeserializeParameters();
             DistancePanel.DataContext = _properties.DistanceViewModel;
-            WarehouseFitnessPanel.DataContext = _properties.WarehouseViewModel.FitnessGeneticAlgorithmParameters as DistanceViewModel;
-            WarehouseStackPanel.DataContext = _properties.WarehouseViewModel.WarehouseGeneticAlgorithmParameters as DistanceViewModel;
+            WarehouseFitnessPanel.DataContext =
+                _properties.WarehouseViewModel.FitnessGeneticAlgorithmParameters as DistanceViewModel;
+            WarehouseStackPanel.DataContext =
+                _properties.WarehouseViewModel.WarehouseGeneticAlgorithmParameters as DistanceViewModel;
             WarehousePanel.DataContext = _properties.WarehouseViewModel;
 
             var methods = Enum.GetValues(typeof(OptimizationMethod)).Cast<OptimizationMethod>().ToList();
@@ -48,7 +51,7 @@ namespace OptimizationUI
             var crossovers = Enum.GetValues(typeof(CrossoverMethod)).Cast<CrossoverMethod>().ToList();
             var eliminations = Enum.GetValues(typeof(EliminationMethod)).Cast<EliminationMethod>().ToList();
             var mutations = Enum.GetValues(typeof(MutationMethod)).Cast<MutationMethod>().ToList();
-            
+
             DistanceMethodComboBox.ItemsSource = methods;
             DistanceSelectionComboBox.ItemsSource = selections;
             DistanceCrossoverComboBox.ItemsSource = crossovers;
@@ -59,7 +62,7 @@ namespace OptimizationUI
             WarehouseCrossoverComboBox.ItemsSource = crossovers;
             WarehouseEliminationComboBox.ItemsSource = eliminations;
             WarehouseMutationComboBox.ItemsSource = mutations;
-            
+
             WarehouseFitnessMethodComboBox.ItemsSource = methods;
             WarehouseFitnessSelectionComboBox.ItemsSource = selections;
             WarehouseFitnessCrossoverComboBox.ItemsSource = crossovers;
@@ -73,26 +76,30 @@ namespace OptimizationUI
             OptimizationParameters parameters = _properties.DistanceViewModel as OptimizationParameters;
             int runs = Int32.Parse(DistanceInstancesTextBox.Text);
             double[] results = new double[runs];
+            double[][][] runFitnesses = new double[runs][][];
+
             _cancellationTokenSource = new CancellationTokenSource();
-            _properties.DistanceViewModel.ProgressBarMaximum = runs-1;
+            _properties.DistanceViewModel.ProgressBarMaximum = runs - 1;
             CancellationToken ct = _cancellationTokenSource.Token;
             try
             {
                 await Task.Run(() =>
                 {
                     results[0] = OptimizationWork.FindShortestPath(parameters, ct);
-                    
+
                     for (int i = 0; i < runs; i++)
                     {
                         results[i] = OptimizationWork.FindShortestPath(parameters, ct);
                         _properties.DistanceViewModel.ProgressBarValue = i;
+                        runFitnesses[i] = ReadFitness();
                     }
-                    
+
                 }, ct);
                 Dispatcher.Invoke(() =>
                 {
-                    DistanceResultLabel.Content = $"Avg: {results.Average()}  Max: {results.Max()}  Min: {results.Min()}"; 
-                    WritePlot(linesGridDistances);
+                    DistanceResultLabel.Content =
+                        $"Avg: {results.Average()}  Max: {results.Max()}  Min: {results.Min()}";
+                    WritePlot(linesGridDistances, GetAverageFitnesses(runFitnesses));
                 });
             }
             catch (OperationCanceledException exception)
@@ -100,9 +107,9 @@ namespace OptimizationUI
                 DistanceResultLabel.Content = "Cancelled";
             }
 
-            
+
         }
-        
+
         private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             _cancellationTokenSource = new CancellationTokenSource();
@@ -116,29 +123,25 @@ namespace OptimizationUI
                     WarehouseParameters warehouseParameters = _properties.WarehouseViewModel as WarehouseParameters;
                     result = Optimization.OptimizationWork.WarehouseOptimization(warehouseParameters, ct);
                 }, ct);
-            
+
                 Dispatcher.Invoke(() =>
                 {
                     WarehouseResultLabel.Content = $"Wynik: {result}";
-                    WritePlot(linesGridWarehouse);
+                    WritePlot(linesGridWarehouse, null);
                 });
             }
             catch (OperationCanceledException exception)
             {
-                Dispatcher.Invoke(() =>
-                {
-                    WarehouseResultLabel.Content = "Cancelled";
-                    
-                });
+                Dispatcher.Invoke(() => { WarehouseResultLabel.Content = "Cancelled"; });
             }
         }
-        
+
 
         private void CancelWarehouse(object sender, RoutedEventArgs e)
         {
             _cancellationTokenSource.Cancel();
         }
-        
+
         private void CancelDistance(object sender, RoutedEventArgs e)
         {
             _cancellationTokenSource.Cancel();
@@ -157,10 +160,10 @@ namespace OptimizationUI
             {
                 WriteIndented = true,
             };
-            string jsonString = JsonSerializer.Serialize(_properties,options);
-            if(File.Exists("properties.json"))
+            string jsonString = JsonSerializer.Serialize(_properties, options);
+            if (File.Exists("properties.json"))
                 File.Delete("properties.json");
-            File.WriteAllText("properties.json",jsonString);
+            File.WriteAllText("properties.json", jsonString);
         }
 
         private void DeserializeParameters()
@@ -179,7 +182,7 @@ namespace OptimizationUI
             {
                 _properties = new Properties();
             }
-            
+
         }
 
         private void ReadDistanceDataPathButton_OnClick(object sender, RoutedEventArgs e)
@@ -197,7 +200,8 @@ namespace OptimizationUI
             fileDialog.Filter = "txt files (*.txt)|*.txt";
             fileDialog.RestoreDirectory = true;
             fileDialog.ShowDialog();
-            _properties.WarehouseViewModel.WarehousePath = fileDialog.FileName;        }
+            _properties.WarehouseViewModel.WarehousePath = fileDialog.FileName;
+        }
 
         private void WarehouseOrdersPathButton_OnClick(object sender, RoutedEventArgs e)
         {
@@ -205,12 +209,27 @@ namespace OptimizationUI
             fileDialog.Filter = "txt files (*.txt)|*.txt";
             fileDialog.RestoreDirectory = true;
             fileDialog.ShowDialog();
-            _properties.WarehouseViewModel.OrdersPath = fileDialog.FileName; 
+            _properties.WarehouseViewModel.OrdersPath = fileDialog.FileName;
         }
 
-        private void WritePlot(Grid linesGrid)
+        private double[][] GetAverageFitnesses(double[][][] runFitnesses)
         {
-            linesGrid.Children.Clear();
+            int epoch = runFitnesses[0].Length;
+            double[][] fitness = new double[epoch][];
+            for (int i = 0; i < epoch; i++)
+            {
+                fitness[i] = new double[3];
+                for (int j = 0; j < 3; j++)
+                {
+                    fitness[i][j] = runFitnesses.Average(x => x[i][j]);
+                }
+            }
+
+            return fitness;
+        }
+
+        private double[][] ReadFitness()
+        {
             string[] lines = File.ReadAllLines("fitness.csv");
             int nonEmptyLines = 0;
             for (int i = 0; i < lines.Length; i++)
@@ -222,35 +241,43 @@ namespace OptimizationUI
                 string[] s = lines[i].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
                 fitness[i] = Array.ConvertAll(s, double.Parse);
             }
-            
-            var x = Enumerable.Range(0, nonEmptyLines).ToArray();
-            double[] y = new double[nonEmptyLines];
-            double[] z = new double[nonEmptyLines];
-            double[] a = new double[nonEmptyLines];
-            for (int i = 0; i < nonEmptyLines; i++)
+
+            return fitness;
+        }
+
+        private void WritePlot(Grid linesGrid, double[][] fitness)
+        {
+            linesGrid.Children.Clear();
+            int epoch = fitness.Length;
+
+            var x = Enumerable.Range(0, epoch).ToArray();
+            double[] y = new double[epoch];
+            double[] z = new double[epoch];
+            double[] a = new double[epoch];
+            for (int i = 0; i < epoch; i++)
             {
                 y[i] = fitness[i][0];
                 a[i] = fitness[i][1];
                 z[i] = fitness[i][2];
             }
 
-            var lineBest = new InteractiveDataDisplay.WPF.LineGraph
+            var lineBest = new LineGraph
             {
                 Stroke = new SolidColorBrush(Colors.Green),
                 Description = "Best fitness",
-                StrokeThickness = 5,
+                StrokeThickness = 2,
             };
-            var lineAvg = new InteractiveDataDisplay.WPF.LineGraph
+            var lineAvg = new LineGraph
             {
                 Stroke = new SolidColorBrush(Colors.Blue),
                 Description = "Avg fitness",
-                StrokeThickness = 5
+                StrokeThickness = 2
             };
             var lineWorst = new LineGraph
             {
                 Stroke = new SolidColorBrush(Colors.Red),
                 Description = "Worst fitness",
-                StrokeThickness = 5
+                StrokeThickness = 2
             };
             lineBest.Plot(x, y);
             lineAvg.Plot(x,z);
