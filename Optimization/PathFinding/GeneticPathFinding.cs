@@ -1,4 +1,5 @@
-﻿using Optimization.GeneticAlgorithms;
+﻿using System.Threading;
+using Optimization.GeneticAlgorithms;
 using Optimization.Helpers;
 using Optimization.Parameters;
 
@@ -8,12 +9,12 @@ namespace Optimization.PathFinding
     {
         private BaseGenetic _genetic;
         private bool use2Opt;
-        public GeneticPathFinding(int[] order, OptimizationParameters parameters, DelegateFitness.CalcFitness calcFitness)
+        public GeneticPathFinding(int[] order, OptimizationParameters parameters, DelegateFitness.CalcFitness calcFitness, CancellationToken ct)
         {
             use2Opt = parameters.Use2opt;
             int[][] population = new int[parameters.PopulationSize][];
             GeneticHelper.InitializePopulation(population, order, 0, parameters.PopulationSize);
-            _genetic = new BaseGenetic(parameters, population, calcFitness);
+            _genetic = new BaseGenetic(parameters, population, calcFitness, ct);
         }
         
         public int[] FindShortestPath(int[] order)

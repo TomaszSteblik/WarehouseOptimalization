@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -32,6 +33,7 @@ namespace OptimizationUI
     public partial class MainWindow : Window
     {
         private Properties _properties;
+        private CancellationTokenSource _cancellationTokenSource;
         public MainWindow()
         {
             InitializeComponent();
@@ -66,28 +68,80 @@ namespace OptimizationUI
 
         }
 
-        private void DistanceStartButtonClick(object sender, RoutedEventArgs e)
+        private async void DistanceStartButtonClick(object sender, RoutedEventArgs e)
         {
             OptimizationParameters parameters = _properties.DistanceViewModel as OptimizationParameters;
-            List<double> results = new List<double>();
-            for (int i = 0; i < Double.Parse(DistanceInstancesTextBox.Text); i++)
+            int runs = Int32.Parse(DistanceInstancesTextBox.Text);
+            double[] results = new double[runs];
+            _cancellationTokenSource = new CancellationTokenSource();
+            CancellationToken ct = _cancellationTokenSource.Token;
+            try
             {
-                results.Add(OptimizationWork.FindShortestPath(parameters));
+                await Task.Run(() =>
+                {
+                    results[0] = OptimizationWork.FindShortestPath(parameters, ct);
+                    
+                    for (int i = 0; i < runs; i++)
+                    {
+                        results[i] = OptimizationWork.FindShortestPath(parameters, ct);
+                    }
+                    
+                }, ct);
+                Dispatcher.Invoke(() =>
+                {
+                    DistanceResultLabel.Content = $"Avg: {results.Average()}  Max: {results.Max()}  Min: {results.Min()}"; 
+                    WritePlot(linegraphPathFinding);
+                });
             }
-            WritePlot(linegraphPathFinding);
+            catch (OperationCanceledException exception)
+            {
+                DistanceResultLabel.Content = "Cancelled";
+            }
 
-            DistanceResultLabel.Content = $"Avg: {results.Average()}  Max: {results.Max()}  Min: {results.Min()}";
+            
         }
-
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        
+        private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            WarehouseParameters warehouseParameters = _properties.WarehouseViewModel as WarehouseParameters;
+            _cancellationTokenSource = new CancellationTokenSource();
+            CancellationToken ct = _cancellationTokenSource.Token;
+            double result = -1d;
 
-            var result = Optimization.OptimizationWork.WarehouseOptimization(warehouseParameters);
-            WritePlot(linegraphWarehouse);
-            WarehouseResultLabel.Content = $"Wynik: {result}";
-
+            try
+            {
+                await Task.Run(() =>
+                {
+                    WarehouseParameters warehouseParameters = _properties.WarehouseViewModel as WarehouseParameters;
+                    result = Optimization.OptimizationWork.WarehouseOptimization(warehouseParameters, ct);
+                }, ct);
+            
+                Dispatcher.Invoke(() =>
+                {
+                    WarehouseResultLabel.Content = $"Wynik: {result}";
+                    WritePlot(linegraphWarehouse);
+                });
+            }
+            catch (OperationCanceledException exception)
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    WarehouseResultLabel.Content = "Cancelled";
+                    
+                });
+            }
         }
+        
+
+        private void CancelWarehouse(object sender, RoutedEventArgs e)
+        {
+            _cancellationTokenSource.Cancel();
+        }
+        
+        private void CancelDistance(object sender, RoutedEventArgs e)
+        {
+            _cancellationTokenSource.Cancel();
+        }
+
 
         protected override void OnClosing(CancelEventArgs e)
         {

@@ -83,7 +83,9 @@
                             <TextBox Width="120" Text="{Binding TerminationValue}"></TextBox>
                         </WrapPanel>
                     </StackPanel>
+                    <ProgressBar Minimum="0" Maximum="100" Height="20" Name="distancesProgressBar" />
                     <Button Content="Start" Click="DistanceStartButtonClick"/>
+                    <Button Content="Cancel" Click="CancelDistance"></Button>
                     <Label Name="DistanceResultLabel"></Label>
                     <wpf:Chart BottomTitle="epoch" LeftTitle="fitness" Width="400" Height="350">
                         <wpf:LineGraph x:Name="linegraphPathFinding" Description="Fitness Graph" Stroke="Blue" StrokeThickness="3" />
@@ -231,6 +233,7 @@
                         </StackPanel>
                     </StackPanel>
                     <Button Content="Start" Click="ButtonBase_OnClick"></Button>
+                    <Button Content="Cancel" Click="CancelWarehouse"></Button>
                     <Label HorizontalAlignment="Center" FontSize="20" Name="WarehouseResultLabel"></Label>
                     <wpf:Chart BottomTitle="epoch" LeftTitle="fitness" Width="400" Height="350">
                         <wpf:LineGraph x:Name="linegraphWarehouse" Description="Fitness Graph" Stroke="Blue" StrokeThickness="3" />

@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Optimization.GeneticAlgorithms.Crossovers;
 using Optimization.GeneticAlgorithms.Eliminations;
 using Optimization.GeneticAlgorithms.Mutations;
@@ -30,9 +32,13 @@ namespace Optimization.GeneticAlgorithms
 
         private int[][] _population;
 
+        private readonly CancellationToken _ct;
+
         public BaseGenetic(OptimizationParameters parameters, int[][] population,
-            DelegateFitness.CalcFitness calculateFitness)
+            DelegateFitness.CalcFitness calculateFitness, CancellationToken ct)
         {
+            _ct = ct;
+            
             _population = population;
             _populationSize = population.Length;
 
@@ -59,9 +65,13 @@ namespace Optimization.GeneticAlgorithms
             int[] bestGene = new int[_population[0].Length];
             EpochFitness epochFitness = null;
             if(_writeCsv) epochFitness = new EpochFitness("fitness.csv");
-            
+
             for (int b = 0; b < _terminationValue; b++)
             {
+                if (_ct.IsCancellationRequested)
+                {
+                        _ct.ThrowIfCancellationRequested();
+                }
                 fitness = _calculateFitness(_population);
                 int[][] parents = _selection.GenerateParents(_childrenPerGeneration * 2, fitness);
                 int[][] offsprings = _crossover.GenerateOffsprings(parents, _parentsPerChild);
@@ -77,8 +87,8 @@ namespace Optimization.GeneticAlgorithms
                 bestGene = _population[0];
 
             }
-            
             return bestGene;
+            
         }
     }
 }

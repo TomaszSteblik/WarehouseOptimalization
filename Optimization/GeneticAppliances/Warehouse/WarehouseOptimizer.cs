@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Optimization.GeneticAlgorithms;
 using Optimization.Helpers;
@@ -9,7 +10,7 @@ namespace Optimization.GeneticAppliances.Warehouse
 {
     internal class WarehouseOptimizer
     {
-        public static double Optimize(WarehouseParameters warehouseParameters)
+        public static double Optimize(WarehouseParameters warehouseParameters, CancellationToken ct)
         {
             WarehouseManager warehouseManager = new WarehouseManager();
             double[][] distancesMatrix = warehouseManager.CreateWarehouseDistancesMatrix(warehouseParameters.WarehousePath);
@@ -28,7 +29,7 @@ namespace Optimization.GeneticAppliances.Warehouse
                     });
 
                     return fitness;
-                });
+                }, ct);
             
             int[] z = geneticWarehouse.Run();
             

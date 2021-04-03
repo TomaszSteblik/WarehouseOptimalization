@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Optimization.GeneticAlgorithms.Crossovers;
 using Optimization.GeneticAlgorithms.Eliminations;
@@ -38,7 +39,7 @@ namespace Optimization.GeneticAlgorithms
                     fitness[i] = Fitness.CalculateFitness(pop[i], _frequency, _weights);
                 }
                 return fitness;
-            });
+            }, CancellationToken.None);
 
         }
 
