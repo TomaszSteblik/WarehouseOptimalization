@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Optimization.GeneticAlgorithms.Crossovers;
 using Optimization.GeneticAlgorithms.Eliminations;
 using Optimization.GeneticAlgorithms.Mutations;
@@ -23,16 +25,24 @@ namespace Optimization.GeneticAlgorithms
         private readonly int _childrenPerGeneration;
         private readonly int _terminationValue;
         private readonly int _parentsPerChild;
+
+        private readonly bool _writeCsv;
         
         private DelegateFitness.CalcFitness _calculateFitness;
 
         private int[][] _population;
 
+        private readonly CancellationToken _ct;
+
         public BaseGenetic(OptimizationParameters parameters, int[][] population,
-            DelegateFitness.CalcFitness calculateFitness)
+            DelegateFitness.CalcFitness calculateFitness, CancellationToken ct)
         {
+            _ct = ct;
+            
             _population = population;
             _populationSize = population.Length;
+
+            _writeCsv = parameters.WriteCsv;
 
             _mutationProbability = parameters.MutationProbability;
             _childrenPerGeneration = parameters.ChildrenPerGeneration;
@@ -53,11 +63,16 @@ namespace Optimization.GeneticAlgorithms
         {
             double[] fitness = new double[_population.Length];
             int[] bestGene = new int[_population[0].Length];
-            
+            EpochFitness epochFitness = null;
+            if(_writeCsv) epochFitness = new EpochFitness("fitness.csv");
+
             for (int b = 0; b < _terminationValue; b++)
             {
+                if (_ct.IsCancellationRequested)
+                {
+                        _ct.ThrowIfCancellationRequested();
+                }
                 fitness = _calculateFitness(_population);
-                //Console.WriteLine(fitness.Min());
                 int[][] parents = _selection.GenerateParents(_childrenPerGeneration * 2, fitness);
                 int[][] offsprings = _crossover.GenerateOffsprings(parents, _parentsPerChild);
                 _elimination.EliminateAndReplace(offsprings, fitness);
@@ -67,11 +82,13 @@ namespace Optimization.GeneticAlgorithms
                 Array.Sort(fitness,_population);
                 _mutation.Mutate(_population);
 
+                epochFitness?.AddLine(fitness.Min(), fitness.Max(), fitness.Average());
+
                 bestGene = _population[0];
 
             }
-            
             return bestGene;
+            
         }
     }
 }

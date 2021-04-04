@@ -1,3 +1,4 @@
+using System.Threading;
 using Optimization.GeneticAppliances.Warehouse;
 using Optimization.Parameters;
 using Optimization.PathFinding;
@@ -22,7 +23,7 @@ namespace Optimization.Helpers
             for (int k = 0; k < orders.OrdersCount; k++)
             {
                 int[] order = Translator.TranslateWithChromosome(orders.OrdersList[k], chromosome);
-                double pathLength = ShortestPath.Find(order, optimizationParameters);
+                double pathLength = ShortestPath.Find(order, optimizationParameters, CancellationToken.None);
                 fitness += pathLength * orders.OrderRepeats[k];
             }
 

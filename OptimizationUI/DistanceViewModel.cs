@@ -29,6 +29,43 @@ namespace OptimizationUI
             }
         }
 
+        private bool _showBest = true;
+
+        public bool ShowBest
+        {
+            get => _showBest;
+            set
+
+            {
+                _showBest = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private bool _showAvg = true;
+
+        public bool ShowAvg
+        {
+            get => _showAvg;
+            set
+
+            {
+                _showAvg = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private bool _showWorst = true;
+
+        public bool ShowWorst
+        {
+            get => _showWorst;
+            set
+
+            {
+                _showWorst = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         private OptimizationMethod _optimizationMethod = OptimizationMethod.GeneticAlgorithm;
         public override OptimizationMethod OptimizationMethod
         {
@@ -271,8 +308,38 @@ namespace OptimizationUI
                 return Visibility.Collapsed;
             }
         }
-        
-        
+
+        private int _progessBarValue = 0;
+
+        public int ProgressBarValue
+        {
+            get
+            {
+                return _progessBarValue;
+            }
+            set
+            {
+                _progessBarValue = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private int _progessBarMaximum = 100;
+
+        public int ProgressBarMaximum
+        {
+            get
+            {
+                return _progessBarMaximum;
+            }
+            set
+            {
+                _progessBarMaximum = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+
         public DistanceViewModel(OptimizationParameters fitnessGeneticAlgorithmParameters)
         {
             this._use2opt = fitnessGeneticAlgorithmParameters.Use2opt;

@@ -29,6 +29,8 @@ namespace Optimization.Parameters
         public virtual string LogPath { get; set; }
         public virtual string ResultPath { get; set; }
         public virtual bool ResultToFile { get; set; }
+
+        public bool WriteCsv { get; set; } = true;
         public virtual string DataPath { get; set; }
         public virtual SelectionMethod SelectionMethod { get; set; } = SelectionMethod.RouletteWheel;
         public virtual CrossoverMethod CrossoverMethod { get; set; } = CrossoverMethod.Aex;

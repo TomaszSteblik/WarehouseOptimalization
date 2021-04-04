@@ -9,6 +9,44 @@ namespace OptimizationUI
     public class WarehouseViewModel : WarehouseParameters, INotifyPropertyChanged
     {
         
+
+        private bool _showBest = true;
+
+        public bool ShowBest
+        {
+            get => _showBest;
+            set
+
+            {
+                _showBest = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private bool _showAvg = true;
+
+        public bool ShowAvg
+        {
+            get => _showAvg;
+            set
+
+            {
+                _showAvg = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private bool _showWorst = true;
+
+        public bool ShowWorst
+        {
+            get => _showWorst;
+            set
+
+            {
+                _showWorst = value;
+                NotifyPropertyChanged();
+            }
+        }
+        
         private string _warehousePath = "";
         public override string WarehousePath
         {

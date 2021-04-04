@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Optimization.GeneticAlgorithms;
 using Optimization.GeneticAppliances;
 using Optimization.GeneticAppliances.Warehouse;
@@ -13,7 +15,15 @@ namespace Optimization
         {
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
             Distances.Create(matrix);
-            return PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters);
+            return PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters, CancellationToken.None);
+            
+        }
+        
+        public static double FindShortestPath(OptimizationParameters optimizationParameters, CancellationToken ct)
+        {
+            var matrix = Files.ReadArray(optimizationParameters.DataPath);
+            Distances.Create(matrix);
+            return PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters, ct);
             
         }
 
@@ -22,12 +32,12 @@ namespace Optimization
         {
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
             Distances.Create(matrix);
-            PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), matrix, optimizationParameters,calcFitness);
+            PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), matrix, optimizationParameters,calcFitness, CancellationToken.None);
         }
 
-        public static double WarehouseOptimization(WarehouseParameters warehouseParameters)
+        public static double WarehouseOptimization(WarehouseParameters warehouseParameters, CancellationToken ct)
         {
-            return WarehouseOptimizer.Optimize(warehouseParameters);
+            return WarehouseOptimizer.Optimize(warehouseParameters, ct);
         }
 
         public static void KeyboardOptimization(OptimizationParameters optimizationParameters)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using Optimization.GeneticAlgorithms;
 using Optimization.GeneticAlgorithms.Crossovers;
 using Optimization.GeneticAlgorithms.Eliminations;
@@ -17,7 +18,7 @@ namespace Optimization.GeneticAppliances.Warehouse
         private BaseGenetic _genetic;
 
         public GeneticWarehouse(OptimizationParameters optimizationParameters, int warehouseSize,
-            DelegateFitness.CalcFitness calcFitness)
+            DelegateFitness.CalcFitness calcFitness, CancellationToken ct)
         {
             _warehouseSize = warehouseSize;
             int[][] population = new int[optimizationParameters.PopulationSize][];
@@ -27,7 +28,7 @@ namespace Optimization.GeneticAppliances.Warehouse
                 itemsToSort[i - 1] = i;
             }
             GeneticHelper.InitializePopulation(population, itemsToSort, 0, population.Length);
-            _genetic = new BaseGenetic(optimizationParameters, population, calcFitness);
+            _genetic = new BaseGenetic(optimizationParameters, population, calcFitness, ct);
 
         }
 

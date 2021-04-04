@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Optimization.GeneticAlgorithms;
 using Optimization.Helpers;
@@ -9,7 +10,7 @@ namespace Optimization.GeneticAppliances.Warehouse
 {
     internal class WarehouseOptimizer
     {
-        public static double Optimize(WarehouseParameters warehouseParameters)
+        public static double Optimize(WarehouseParameters warehouseParameters, CancellationToken ct)
         {
             WarehouseManager warehouseManager = new WarehouseManager();
             double[][] distancesMatrix = warehouseManager.CreateWarehouseDistancesMatrix(warehouseParameters.WarehousePath);
@@ -21,30 +22,17 @@ namespace Optimization.GeneticAppliances.Warehouse
                 (population) =>
                 {
                     double[] fitness = new double[population.Length];
+                    warehouseParameters.FitnessGeneticAlgorithmParameters.WriteCsv = false;
                     Parallel.For( 0, population.Length, i =>
                     {
                         fitness[i] = Fitness.CalculateAllOrdersFitness(orders, population[i], warehouseParameters.FitnessGeneticAlgorithmParameters);
                     });
-                    Console.WriteLine(fitness.Min());
-                    
+
                     return fitness;
-                });
+                }, ct);
             
             int[] z = geneticWarehouse.Run();
-            /*
-            if (warehouseParameters.WarehouseGeneticAlgorithmParameters.ResultToFile)
-            {
-                double fitness = Fitness.CalculateAllOrdersFitness(orders, z, distancesMatrix, optimizationParameters);
-                Log log = new Log(optimizationParameters);
-                log.SaveResult(z, fitness);
-            }
-            */
-            string result =  z[2] + " " + z[4] + " " + z[5] + " " + z[7] + " " + z[9] + " " + z[11] + "       "
-                          + z[13] + " " + z[15] + " " + z[17] + " " + z[19] + " " + z[21] + " " + z[23] + "\r\n"
-                          + z[1] + " " + z[3] + "     " + z[6] + " " + z[8] + " " + z[10] + "       "
-                          + z[12] + " " + z[14] + " " + z[16] + " " + z[18] + " " + z[20] + " " + z[22] + "\r\n";
-
-            Console.WriteLine(result);
+            
             return Fitness.CalculateAllOrdersFitness(orders, z, warehouseParameters.FitnessGeneticAlgorithmParameters);
         }
     }

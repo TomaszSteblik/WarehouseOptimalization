@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using InteractiveDataDisplay.WPF;
 using Microsoft.Win32;
 using Optimization;
 using Optimization.GeneticAlgorithms.Crossovers;
@@ -31,13 +33,17 @@ namespace OptimizationUI
     public partial class MainWindow : Window
     {
         private Properties _properties;
+        private CancellationTokenSource _cancellationTokenSource;
+
         public MainWindow()
         {
             InitializeComponent();
             DeserializeParameters();
             DistancePanel.DataContext = _properties.DistanceViewModel;
-            WarehouseFitnessPanel.DataContext = _properties.WarehouseViewModel.FitnessGeneticAlgorithmParameters as DistanceViewModel;
-            WarehouseStackPanel.DataContext = _properties.WarehouseViewModel.WarehouseGeneticAlgorithmParameters as DistanceViewModel;
+            WarehouseFitnessPanel.DataContext =
+                _properties.WarehouseViewModel.FitnessGeneticAlgorithmParameters as DistanceViewModel;
+            WarehouseStackPanel.DataContext =
+                _properties.WarehouseViewModel.WarehouseGeneticAlgorithmParameters as DistanceViewModel;
             WarehousePanel.DataContext = _properties.WarehouseViewModel;
 
             var methods = Enum.GetValues(typeof(OptimizationMethod)).Cast<OptimizationMethod>().ToList();
@@ -45,7 +51,7 @@ namespace OptimizationUI
             var crossovers = Enum.GetValues(typeof(CrossoverMethod)).Cast<CrossoverMethod>().ToList();
             var eliminations = Enum.GetValues(typeof(EliminationMethod)).Cast<EliminationMethod>().ToList();
             var mutations = Enum.GetValues(typeof(MutationMethod)).Cast<MutationMethod>().ToList();
-            
+
             DistanceMethodComboBox.ItemsSource = methods;
             DistanceSelectionComboBox.ItemsSource = selections;
             DistanceCrossoverComboBox.ItemsSource = crossovers;
@@ -56,7 +62,7 @@ namespace OptimizationUI
             WarehouseCrossoverComboBox.ItemsSource = crossovers;
             WarehouseEliminationComboBox.ItemsSource = eliminations;
             WarehouseMutationComboBox.ItemsSource = mutations;
-            
+
             WarehouseFitnessMethodComboBox.ItemsSource = methods;
             WarehouseFitnessSelectionComboBox.ItemsSource = selections;
             WarehouseFitnessCrossoverComboBox.ItemsSource = crossovers;
@@ -65,26 +71,94 @@ namespace OptimizationUI
 
         }
 
-        private void DistanceStartButtonClick(object sender, RoutedEventArgs e)
+        private async void DistanceStartButtonClick(object sender, RoutedEventArgs e)
         {
             OptimizationParameters parameters = _properties.DistanceViewModel as OptimizationParameters;
-            List<double> results = new List<double>();
-            for (int i = 0; i < Double.Parse(DistanceInstancesTextBox.Text); i++)
+            int runs = Int32.Parse(DistanceInstancesTextBox.Text);
+            double[] results = new double[runs];
+            double[][][] runFitnesses = new double[runs][][];
+
+            _cancellationTokenSource = new CancellationTokenSource();
+            _properties.DistanceViewModel.ProgressBarMaximum = runs - 1;
+            CancellationToken ct = _cancellationTokenSource.Token;
+            try
             {
-                results.Add(OptimizationWork.FindShortestPath(parameters));
+                await Task.Run(() =>
+                {
+                    results[0] = OptimizationWork.FindShortestPath(parameters, ct);
+
+                    for (int i = 0; i < runs; i++)
+                    {
+                        results[i] = OptimizationWork.FindShortestPath(parameters, ct);
+                        _properties.DistanceViewModel.ProgressBarValue = i;
+                        runFitnesses[i] = ReadFitness();
+                    }
+
+                }, ct);
+                Dispatcher.Invoke(() =>
+                {
+                    DistanceResultLabel.Content =
+                        $"Avg: {results.Average()}  Max: {results.Max()}  Min: {results.Min()}";
+                    WritePlotDistances(linesGridDistances, GetAverageFitnesses(runFitnesses));
+                });
+            }
+            catch (OperationCanceledException exception)
+            {
+                DistanceResultLabel.Content = "Cancelled";
             }
 
-            DistanceResultLabel.Content = $"Avg: {results.Average()}  Max: {results.Max()}  Min: {results.Min()}";
+
         }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            WarehouseParameters warehouseParameters = _properties.WarehouseViewModel as WarehouseParameters;
+            _cancellationTokenSource = new CancellationTokenSource();
+            CancellationToken ct = _cancellationTokenSource.Token;
+            double result = -1d;
+            double[][] fitness = null;
 
-            var result = Optimization.OptimizationWork.WarehouseOptimization(warehouseParameters);
-            WarehouseResultLabel.Content = $"Wynik: {result}";
+            try
+            {
+                await Task.Run(() =>
+                {
+                    WarehouseParameters warehouseParameters = _properties.WarehouseViewModel as WarehouseParameters;
+                    result = Optimization.OptimizationWork.WarehouseOptimization(warehouseParameters, ct);
+                    fitness = ReadFitness();
+                }, ct);
 
+                Dispatcher.Invoke(() =>
+                {
+                    WarehouseResultLabel.Content = $"Wynik: {result}";
+                    WritePlotWarehouse(linesGridWarehouse, fitness);
+                });
+            }
+            catch (OperationCanceledException exception)
+            {
+                Dispatcher.Invoke(() => { WarehouseResultLabel.Content = "Cancelled"; });
+            }
         }
+
+
+        private void CancelWarehouse(object sender, RoutedEventArgs e)
+        {
+            _cancellationTokenSource.Cancel();
+        }
+
+        private void CancelDistance(object sender, RoutedEventArgs e)
+        {
+            _cancellationTokenSource.Cancel();
+        }
+
+        private void RefreshDistanceGraph(object sender, RoutedEventArgs e)
+        {
+            RefreshLinesDistances(linesGridDistances);
+        }
+        
+        private void RefreshWarehouseGraph(object sender, RoutedEventArgs e)
+        {
+            RefreshLinesWarehouse(linesGridWarehouse);
+        }
+
 
         protected override void OnClosing(CancelEventArgs e)
         {
@@ -98,10 +172,10 @@ namespace OptimizationUI
             {
                 WriteIndented = true,
             };
-            string jsonString = JsonSerializer.Serialize(_properties,options);
-            if(File.Exists("properties.json"))
+            string jsonString = JsonSerializer.Serialize(_properties, options);
+            if (File.Exists("properties.json"))
                 File.Delete("properties.json");
-            File.WriteAllText("properties.json",jsonString);
+            File.WriteAllText("properties.json", jsonString);
         }
 
         private void DeserializeParameters()
@@ -120,7 +194,7 @@ namespace OptimizationUI
             {
                 _properties = new Properties();
             }
-            
+
         }
 
         private void ReadDistanceDataPathButton_OnClick(object sender, RoutedEventArgs e)
@@ -138,7 +212,8 @@ namespace OptimizationUI
             fileDialog.Filter = "txt files (*.txt)|*.txt";
             fileDialog.RestoreDirectory = true;
             fileDialog.ShowDialog();
-            _properties.WarehouseViewModel.WarehousePath = fileDialog.FileName;        }
+            _properties.WarehouseViewModel.WarehousePath = fileDialog.FileName;
+        }
 
         private void WarehouseOrdersPathButton_OnClick(object sender, RoutedEventArgs e)
         {
@@ -146,7 +221,160 @@ namespace OptimizationUI
             fileDialog.Filter = "txt files (*.txt)|*.txt";
             fileDialog.RestoreDirectory = true;
             fileDialog.ShowDialog();
-            _properties.WarehouseViewModel.OrdersPath = fileDialog.FileName; 
+            _properties.WarehouseViewModel.OrdersPath = fileDialog.FileName;
+        }
+
+        private double[][] GetAverageFitnesses(double[][][] runFitnesses)
+        {
+            int epoch = runFitnesses[0].Length;
+            double[][] fitness = new double[epoch][];
+            for (int i = 0; i < epoch; i++)
+            {
+                fitness[i] = new double[3];
+                for (int j = 0; j < 3; j++)
+                {
+                    fitness[i][j] = runFitnesses.Average(x => x[i][j]);
+                }
+            }
+
+            return fitness;
+        }
+
+        private double[][] ReadFitness()
+        {
+            string[] lines = File.ReadAllLines("fitness.csv");
+            int nonEmptyLines = 0;
+            for (int i = 0; i < lines.Length; i++)
+                if (lines[i].Trim().Length > 1)
+                    nonEmptyLines++;
+            double[][] fitness = new double[nonEmptyLines][];
+            for (int i = 0; i < nonEmptyLines; i++)
+            {
+                string[] s = lines[i].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                fitness[i] = Array.ConvertAll(s, double.Parse);
+            }
+
+            return fitness;
+        }
+
+        private void WritePlotDistances(Grid linesGrid, double[][] fitness)
+        {
+            linesGrid.Children.Clear();
+            int epoch = fitness.Length;
+
+            var x = Enumerable.Range(0, epoch).ToArray();
+            double[] y = new double[epoch];
+            double[] z = new double[epoch];
+            double[] a = new double[epoch];
+            for (int i = 0; i < epoch; i++)
+            {
+                y[i] = fitness[i][0];
+                a[i] = fitness[i][1];
+                z[i] = fitness[i][2];
+            }
+
+            var lineBest = new LineGraph
+            {
+                Stroke = new SolidColorBrush(Colors.Green),
+                Description = "Best fitness",
+                StrokeThickness = 2,
+            };
+            var lineAvg = new LineGraph
+            {
+                Stroke = new SolidColorBrush(Colors.Blue),
+                Description = "Avg fitness",
+                StrokeThickness = 2
+            };
+            var lineWorst = new LineGraph
+            {
+                Stroke = new SolidColorBrush(Colors.Red),
+                Description = "Worst fitness",
+                StrokeThickness = 2
+            };
+            lineBest.Plot(x, y);
+            lineAvg.Plot(x,z);
+            lineWorst.Plot(x, a);
+
+            lineBest.Visibility = _properties.DistanceViewModel.ShowBest ? Visibility.Visible : Visibility.Hidden;
+            lineAvg.Visibility = _properties.DistanceViewModel.ShowAvg ? Visibility.Visible : Visibility.Hidden;
+            lineWorst.Visibility = _properties.DistanceViewModel.ShowWorst ? Visibility.Visible : Visibility.Hidden;
+            
+            linesGrid.Children.Add(lineBest);
+            linesGrid.Children.Add(lineAvg);
+            linesGrid.Children.Add(lineWorst);
+        }
+        
+        private void WritePlotWarehouse(Grid linesGrid, double[][] fitness)
+        {
+            linesGrid.Children.Clear();
+            int epoch = fitness.Length;
+
+            var x = Enumerable.Range(0, epoch).ToArray();
+            double[] y = new double[epoch];
+            double[] z = new double[epoch];
+            double[] a = new double[epoch];
+            for (int i = 0; i < epoch; i++)
+            {
+                y[i] = fitness[i][0];
+                a[i] = fitness[i][1];
+                z[i] = fitness[i][2];
+            }
+
+            var lineBest = new LineGraph
+            {
+                Stroke = new SolidColorBrush(Colors.Green),
+                Description = "Best fitness",
+                StrokeThickness = 2,
+            };
+            var lineAvg = new LineGraph
+            {
+                Stroke = new SolidColorBrush(Colors.Blue),
+                Description = "Avg fitness",
+                StrokeThickness = 2
+            };
+            var lineWorst = new LineGraph
+            {
+                Stroke = new SolidColorBrush(Colors.Red),
+                Description = "Worst fitness",
+                StrokeThickness = 2
+            };
+            lineBest.Plot(x, y);
+            lineAvg.Plot(x,z);
+            lineWorst.Plot(x, a);
+
+            lineBest.Visibility = _properties.WarehouseViewModel.ShowBest ? Visibility.Visible : Visibility.Hidden;
+            lineAvg.Visibility = _properties.WarehouseViewModel.ShowAvg ? Visibility.Visible : Visibility.Hidden;
+            lineWorst.Visibility = _properties.WarehouseViewModel.ShowWorst ? Visibility.Visible : Visibility.Hidden;
+            
+            linesGrid.Children.Add(lineBest);
+            linesGrid.Children.Add(lineAvg);
+            linesGrid.Children.Add(lineWorst);
+        }
+
+        private void RefreshLinesDistances(Grid linesGrid)
+        {
+            if (linesGrid.Children.Count > 0)
+            {
+                linesGrid.Children[0].Visibility =
+                    _properties.DistanceViewModel.ShowBest ? Visibility.Visible : Visibility.Hidden;
+                linesGrid.Children[1].Visibility =
+                    _properties.DistanceViewModel.ShowAvg ? Visibility.Visible : Visibility.Hidden;
+                linesGrid.Children[2].Visibility =
+                    _properties.DistanceViewModel.ShowWorst ? Visibility.Visible : Visibility.Hidden;
+            }
+        }
+        
+        private void RefreshLinesWarehouse(Grid linesGrid)
+        {
+            if (linesGrid.Children.Count > 0)
+            {
+                linesGrid.Children[0].Visibility =
+                    _properties.WarehouseViewModel.ShowBest ? Visibility.Visible : Visibility.Hidden;
+                linesGrid.Children[1].Visibility =
+                    _properties.WarehouseViewModel.ShowAvg ? Visibility.Visible : Visibility.Hidden;
+                linesGrid.Children[2].Visibility =
+                    _properties.WarehouseViewModel.ShowWorst ? Visibility.Visible : Visibility.Hidden;
+            }
         }
     }
 }
