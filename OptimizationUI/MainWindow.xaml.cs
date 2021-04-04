@@ -99,7 +99,7 @@ namespace OptimizationUI
                 {
                     DistanceResultLabel.Content =
                         $"Avg: {results.Average()}  Max: {results.Max()}  Min: {results.Min()}";
-                    WritePlot(linesGridDistances, GetAverageFitnesses(runFitnesses));
+                    WritePlotDistances(linesGridDistances, GetAverageFitnesses(runFitnesses));
                 });
             }
             catch (OperationCanceledException exception)
@@ -129,7 +129,7 @@ namespace OptimizationUI
                 Dispatcher.Invoke(() =>
                 {
                     WarehouseResultLabel.Content = $"Wynik: {result}";
-                    WritePlot(linesGridWarehouse, fitness);
+                    WritePlotWarehouse(linesGridWarehouse, fitness);
                 });
             }
             catch (OperationCanceledException exception)
@@ -151,12 +151,12 @@ namespace OptimizationUI
 
         private void RefreshDistanceGraph(object sender, RoutedEventArgs e)
         {
-            RefreshLines(linesGridDistances);
+            RefreshLinesDistances(linesGridDistances);
         }
         
         private void RefreshWarehouseGraph(object sender, RoutedEventArgs e)
         {
-            RefreshLines(linesGridWarehouse);
+            RefreshLinesWarehouse(linesGridWarehouse);
         }
 
 
@@ -257,7 +257,7 @@ namespace OptimizationUI
             return fitness;
         }
 
-        private void WritePlot(Grid linesGrid, double[][] fitness)
+        private void WritePlotDistances(Grid linesGrid, double[][] fitness)
         {
             linesGrid.Children.Clear();
             int epoch = fitness.Length;
@@ -303,8 +303,55 @@ namespace OptimizationUI
             linesGrid.Children.Add(lineAvg);
             linesGrid.Children.Add(lineWorst);
         }
+        
+        private void WritePlotWarehouse(Grid linesGrid, double[][] fitness)
+        {
+            linesGrid.Children.Clear();
+            int epoch = fitness.Length;
 
-        private void RefreshLines(Grid linesGrid)
+            var x = Enumerable.Range(0, epoch).ToArray();
+            double[] y = new double[epoch];
+            double[] z = new double[epoch];
+            double[] a = new double[epoch];
+            for (int i = 0; i < epoch; i++)
+            {
+                y[i] = fitness[i][0];
+                a[i] = fitness[i][1];
+                z[i] = fitness[i][2];
+            }
+
+            var lineBest = new LineGraph
+            {
+                Stroke = new SolidColorBrush(Colors.Green),
+                Description = "Best fitness",
+                StrokeThickness = 2,
+            };
+            var lineAvg = new LineGraph
+            {
+                Stroke = new SolidColorBrush(Colors.Blue),
+                Description = "Avg fitness",
+                StrokeThickness = 2
+            };
+            var lineWorst = new LineGraph
+            {
+                Stroke = new SolidColorBrush(Colors.Red),
+                Description = "Worst fitness",
+                StrokeThickness = 2
+            };
+            lineBest.Plot(x, y);
+            lineAvg.Plot(x,z);
+            lineWorst.Plot(x, a);
+
+            lineBest.Visibility = _properties.WarehouseViewModel.ShowBest ? Visibility.Visible : Visibility.Hidden;
+            lineAvg.Visibility = _properties.WarehouseViewModel.ShowAvg ? Visibility.Visible : Visibility.Hidden;
+            lineWorst.Visibility = _properties.WarehouseViewModel.ShowWorst ? Visibility.Visible : Visibility.Hidden;
+            
+            linesGrid.Children.Add(lineBest);
+            linesGrid.Children.Add(lineAvg);
+            linesGrid.Children.Add(lineWorst);
+        }
+
+        private void RefreshLinesDistances(Grid linesGrid)
         {
             if (linesGrid.Children.Count > 0)
             {
@@ -314,6 +361,19 @@ namespace OptimizationUI
                     _properties.DistanceViewModel.ShowAvg ? Visibility.Visible : Visibility.Hidden;
                 linesGrid.Children[2].Visibility =
                     _properties.DistanceViewModel.ShowWorst ? Visibility.Visible : Visibility.Hidden;
+            }
+        }
+        
+        private void RefreshLinesWarehouse(Grid linesGrid)
+        {
+            if (linesGrid.Children.Count > 0)
+            {
+                linesGrid.Children[0].Visibility =
+                    _properties.WarehouseViewModel.ShowBest ? Visibility.Visible : Visibility.Hidden;
+                linesGrid.Children[1].Visibility =
+                    _properties.WarehouseViewModel.ShowAvg ? Visibility.Visible : Visibility.Hidden;
+                linesGrid.Children[2].Visibility =
+                    _properties.WarehouseViewModel.ShowWorst ? Visibility.Visible : Visibility.Hidden;
             }
         }
     }
