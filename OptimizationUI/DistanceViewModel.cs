@@ -29,6 +29,43 @@ namespace OptimizationUI
             }
         }
 
+        private bool _showBest = true;
+
+        public bool ShowBest
+        {
+            get => _showBest;
+            set
+
+            {
+                _showBest = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private bool _showAvg = true;
+
+        public bool ShowAvg
+        {
+            get => _showAvg;
+            set
+
+            {
+                _showAvg = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private bool _showWorst = true;
+
+        public bool ShowWorst
+        {
+            get => _showWorst;
+            set
+
+            {
+                _showWorst = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         private OptimizationMethod _optimizationMethod = OptimizationMethod.GeneticAlgorithm;
         public override OptimizationMethod OptimizationMethod
         {

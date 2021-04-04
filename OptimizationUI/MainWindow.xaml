@@ -87,9 +87,20 @@
                     <Button Margin="30 5 30 0" Content="Cancel" Click="CancelDistance"></Button>
                     <ProgressBar Margin="30 5 30 0" Height="20" Name="DistanceProgressBar" Value="{Binding ProgressBarValue}" Maximum="{Binding ProgressBarMaximum}"></ProgressBar>
                     <Label Name="DistanceResultLabel"></Label>
-                    <wpf:Chart BottomTitle="epoch" LeftTitle="fitness" Width="400" Height="350" Name="distancesChart">
-                        <Grid Name="linesGridDistances"/>
-                    </wpf:Chart> 
+                    <WrapPanel HorizontalAlignment="Center">
+                        
+                        <wpf:Chart BottomTitle="epoch" LeftTitle="fitness" Width="400" Height="350" Name="distancesChart">
+                            <Grid Name="linesGridDistances"/>
+                        </wpf:Chart>
+                        
+                        <StackPanel Margin="5 5 0 0">
+                            <CheckBox Content="Show best fitness line" IsChecked="{Binding ShowBest}" Margin=" 0 5 0 0" Click="RefreshDistanceGraph"></CheckBox>
+                            <CheckBox Content="Show avg fitness line" IsChecked="{Binding ShowAvg}" Margin=" 0 5 0 0" Click="RefreshDistanceGraph"></CheckBox>
+                            <CheckBox Content="Show worst fitness line" IsChecked="{Binding ShowWorst}" Margin=" 0 5 0 0" Click="RefreshDistanceGraph"></CheckBox>
+                        </StackPanel>
+                        
+                    </WrapPanel>
+                     
                 </StackPanel>
             </TabItem>
             <TabItem Header="Warehouse">
@@ -235,9 +246,20 @@
                     <Button Content="Start" Click="ButtonBase_OnClick"></Button>
                     <Button Content="Cancel" Click="CancelWarehouse"></Button>
                     <Label HorizontalAlignment="Center" FontSize="20" Name="WarehouseResultLabel"></Label>
-                    <wpf:Chart BottomTitle="epoch" LeftTitle="fitness" Width="400" Height="350" Name="warehouseChart">
-                        <Grid Name="linesGridWarehouse"/>
-                    </wpf:Chart> 
+                    <WrapPanel HorizontalAlignment="Center">
+                        
+                        <wpf:Chart BottomTitle="epoch" LeftTitle="fitness" Width="400" Height="350" Name="warehouseChart">
+                            <Grid Name="linesGridWarehouse"/>
+                        </wpf:Chart>
+                        
+                        <StackPanel Margin="5 5 0 0">
+                            <CheckBox Content="Show best fitness line" IsChecked="{Binding ShowBest}" Margin=" 0 5 0 0" Click="RefreshWarehouseGraph"></CheckBox>
+                            <CheckBox Content="Show avg fitness line" IsChecked="{Binding ShowAvg}" Margin=" 0 5 0 0" Click="RefreshWarehouseGraph"></CheckBox>
+                            <CheckBox Content="Show worst fitness line" IsChecked="{Binding ShowWorst}" Margin=" 0 5 0 0" Click="RefreshWarehouseGraph"></CheckBox>
+                        </StackPanel>
+                        
+                    </WrapPanel>
+                     
                 </StackPanel>
             </TabItem>
             <TabItem Header="Keyboard">

@@ -115,6 +115,7 @@ namespace OptimizationUI
             _cancellationTokenSource = new CancellationTokenSource();
             CancellationToken ct = _cancellationTokenSource.Token;
             double result = -1d;
+            double[][] fitness = null;
 
             try
             {
@@ -122,12 +123,13 @@ namespace OptimizationUI
                 {
                     WarehouseParameters warehouseParameters = _properties.WarehouseViewModel as WarehouseParameters;
                     result = Optimization.OptimizationWork.WarehouseOptimization(warehouseParameters, ct);
+                    fitness = ReadFitness();
                 }, ct);
 
                 Dispatcher.Invoke(() =>
                 {
                     WarehouseResultLabel.Content = $"Wynik: {result}";
-                    WritePlot(linesGridWarehouse, null);
+                    WritePlot(linesGridWarehouse, fitness);
                 });
             }
             catch (OperationCanceledException exception)
@@ -145,6 +147,16 @@ namespace OptimizationUI
         private void CancelDistance(object sender, RoutedEventArgs e)
         {
             _cancellationTokenSource.Cancel();
+        }
+
+        private void RefreshDistanceGraph(object sender, RoutedEventArgs e)
+        {
+            RefreshLines(linesGridDistances);
+        }
+        
+        private void RefreshWarehouseGraph(object sender, RoutedEventArgs e)
+        {
+            RefreshLines(linesGridWarehouse);
         }
 
 
@@ -282,12 +294,27 @@ namespace OptimizationUI
             lineBest.Plot(x, y);
             lineAvg.Plot(x,z);
             lineWorst.Plot(x, a);
+
+            lineBest.Visibility = _properties.DistanceViewModel.ShowBest ? Visibility.Visible : Visibility.Hidden;
+            lineAvg.Visibility = _properties.DistanceViewModel.ShowAvg ? Visibility.Visible : Visibility.Hidden;
+            lineWorst.Visibility = _properties.DistanceViewModel.ShowWorst ? Visibility.Visible : Visibility.Hidden;
+            
             linesGrid.Children.Add(lineBest);
             linesGrid.Children.Add(lineAvg);
             linesGrid.Children.Add(lineWorst);
+        }
 
-
-
+        private void RefreshLines(Grid linesGrid)
+        {
+            if (linesGrid.Children.Count > 0)
+            {
+                linesGrid.Children[0].Visibility =
+                    _properties.DistanceViewModel.ShowBest ? Visibility.Visible : Visibility.Hidden;
+                linesGrid.Children[1].Visibility =
+                    _properties.DistanceViewModel.ShowAvg ? Visibility.Visible : Visibility.Hidden;
+                linesGrid.Children[2].Visibility =
+                    _properties.DistanceViewModel.ShowWorst ? Visibility.Visible : Visibility.Hidden;
+            }
         }
     }
 }
