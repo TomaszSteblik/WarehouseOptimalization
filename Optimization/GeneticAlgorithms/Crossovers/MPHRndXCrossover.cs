@@ -1,12 +1,13 @@
-using System;
-
 namespace Optimization.GeneticAlgorithms.Crossovers
 {
-    public abstract class Crossover
+    class MPHRndXCrossover : HRndXCrossover
     {
-        public abstract int[] GenerateOffspring(int[][] parents);
-        public virtual int[][] GenerateOffsprings(int[][] parents, int numParentsForOneChild)
+        public MPHRndXCrossover(double[][] distancesMatrix) : base(distancesMatrix)
         {
+        }
+        public override int[][] GenerateOffsprings(int[][] parents, int numParentsForOneChild = 8)
+        {
+            numParentsForOneChild = 8;
             var parentsLength = parents.Length;
             var amountOfChildren = parentsLength / 2;
             int[][] offsprings = new int[amountOfChildren][];
@@ -24,27 +25,6 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 
             return offsprings;
         }
-        protected readonly Random Random = new Random();
 
-        protected bool IsThereGene(int[] chromosome, int a)
-        {
-            foreach (var t in chromosome)
-            {
-                if (t == a) return true;
-            }
-            return false;
-        }
-    }
-    public enum CrossoverMethod
-    {
-        Aex,
-        AexNN,
-        Cycle,
-        HGreX,
-        HProX,
-        HRndX,
-        KPoint,
-        MRC,
-        MAC
     }
 }

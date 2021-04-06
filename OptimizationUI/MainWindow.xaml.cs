@@ -385,19 +385,19 @@ namespace OptimizationUI
             {
                 Stroke = new SolidColorBrush(Colors.Green),
                 Description = "Best fitness",
-                StrokeThickness = 2,
+                StrokeThickness = 1,
             };
             var lineAvg = new LineGraph
             {
                 Stroke = new SolidColorBrush(Colors.Blue),
                 Description = "Avg fitness",
-                StrokeThickness = 2
+                StrokeThickness = 1
             };
             var lineWorst = new LineGraph
             {
                 Stroke = new SolidColorBrush(Colors.Red),
                 Description = "Worst fitness",
-                StrokeThickness = 2
+                StrokeThickness = 1
             };
             var lineCustom = new LineGraph
             {

@@ -14,22 +14,30 @@ namespace Optimization
         public static double FindShortestPath(OptimizationParameters optimizationParameters)
         {
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
-
-            return PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), matrix, optimizationParameters);
-
+            Distances.Create(matrix);
+            return PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters, CancellationToken.None);
+            
+        }
+        
+        public static double FindShortestPath(OptimizationParameters optimizationParameters, CancellationToken ct)
+        {
+            var matrix = Files.ReadArray(optimizationParameters.DataPath);
+            Distances.Create(matrix);
+            return PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters, ct);
+            
         }
 
-        public static double FindShortestPath(OptimizationParameters optimizationParameters,
+        public static void FindShortestPath(OptimizationParameters optimizationParameters,
             DelegateFitness.CalcFitness calcFitness)
         {
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
-            return PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), matrix, optimizationParameters,calcFitness);
+            Distances.Create(matrix);
+            PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters,calcFitness, CancellationToken.None);
         }
 
-        public static double WarehouseOptimization(WarehouseParameters warehouseParameters)
+        public static double WarehouseOptimization(WarehouseParameters warehouseParameters, CancellationToken ct)
         {
-            return WarehouseOptimizer.Optimize(warehouseParameters);
-
+            return WarehouseOptimizer.Optimize(warehouseParameters, ct);
         }
 
         public static void KeyboardOptimization(OptimizationParameters optimizationParameters)
