@@ -59,14 +59,12 @@ namespace Optimization.GeneticAlgorithms
         {
             Mutation mutation = mutationMethod switch
             {
-                MutationMethod.RSM => new RSMutation(mutationProbability,population),
-                MutationMethod.TWORS => new TWORSMutation(mutationProbability,population),
-                MutationMethod.CIM => new CIMutation(mutationProbability,population),
-                MutationMethod.THROAS => new THROASMutation(mutationProbability,population),
-                MutationMethod.THRORS => new THRORSMutation(mutationProbability,population),
-                MutationMethod.MAM => new MAMutation(mutationMethods,mutationProbability,population),
-                MutationMethod.MRM => new MRMutation(mutationMethods,mutationProbability,population),
-                _ => throw new AggregateException("Wrong mutation method name")
+                Mutation.MutationType.RSM => new RSMutation(population, mutationProbability),
+                Mutation.MutationType.TWORS => new TWORSMutation(population,mutationProbability),
+                Mutation.MutationType.CIM => new CIMutation(population,mutationProbability),
+                Mutation.MutationType.THROAS => new THROASMutation(population,mutationProbability),
+                Mutation.MutationType.THRORS => new THRORSMutation(population,mutationProbability),
+                _ => throw new AggregateException("Wrong mutation method in parameters json file")
             };
             return mutation;
         }

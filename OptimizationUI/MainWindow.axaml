@@ -46,7 +46,11 @@
         <WrapPanel>
             <Label>Mutation:</Label>
             <ComboBox Name="MutationBox" SelectedIndex="0">
-                <ComboBoxItem>Inversion</ComboBoxItem>
+                <ComboBoxItem>RSM</ComboBoxItem>
+                <ComboBoxItem>CIM</ComboBoxItem>
+                <ComboBoxItem>TWORS</ComboBoxItem>
+                <ComboBoxItem>THROAS</ComboBoxItem>
+                <ComboBoxItem>THRORS</ComboBoxItem>
             </ComboBox>
         </WrapPanel>
         <WrapPanel>

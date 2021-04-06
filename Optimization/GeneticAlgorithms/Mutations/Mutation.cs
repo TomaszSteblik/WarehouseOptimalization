@@ -34,7 +34,11 @@ namespace Optimization.GeneticAlgorithms.Mutations
         
         public enum MutationType
         {
-            Inversion
+            RSM,
+            CIM,
+            TWORS,
+            THROAS,
+            THRORS
         }
     }
 }
