@@ -1,6 +1,4 @@
-using System;
-using System.Data;
-using System.Linq;
+
 using Optimization.GeneticAlgorithms.Crossovers;
 using Optimization.GeneticAlgorithms.Eliminations;
 using Optimization.GeneticAlgorithms.Mutations;
@@ -22,29 +20,22 @@ namespace Optimization.Parameters
     }
     public class OptimizationParameters
     {
-        public virtual OptimizationMethod OptimizationMethod { get; set; } = OptimizationMethod.GeneticAlgorithm;
-        public virtual bool Use2opt { get; set; } = false;
-        public virtual int StartingId { get; set; } = 0;
-        public virtual bool LogEnabled { get; set; }
-        public virtual string LogPath { get; set; }
-        public virtual string ResultPath { get; set; }
-        public virtual bool ResultToFile { get; set; }
 
-        public bool WriteCsv { get; set; } = true;
-        public virtual string DataPath { get; set; }
-        public virtual SelectionMethod SelectionMethod { get; set; } = SelectionMethod.RouletteWheel;
-        public virtual CrossoverMethod CrossoverMethod { get; set; } = CrossoverMethod.Aex;
-        public virtual CrossoverMethod[] MultiCrossovers { get; set; }
-
-        public virtual EliminationMethod EliminationMethod { get; set; } = EliminationMethod.Elitism;
-        public virtual MutationMethod MutationMethod { get; set; } = MutationMethod.RSM;
-        public virtual double MutationProbability { get; set; } = 30;
-
-        public virtual MutationMethod[] MultiMutations { get; set; }
-
-        public virtual int PopulationSize { get; set; } = 120;
-        public virtual int ParentsPerChildren { get; set; } = 2;
-        public virtual int ChildrenPerGeneration { get; set; } = 60;
-        public virtual int TerminationValue { get; set; } = 300;
-    }
+        public OptimizationMethod OptimizationMethod { get; set; } = OptimizationMethod.GeneticAlgorithm;
+        public bool Use2opt { get; set; } = false;
+        public int StartingId { get; set; } = 0;
+        public bool LogEnabled { get; set; } = false;
+        public string LogPath { get; set; }
+        public string ResultPath { get; set; }
+        public bool ResultToFile { get; set; } = false;
+        public string DataPath { get; set; }
+        public Selection.SelectionType SelectionMethod { get; set; } = Selection.SelectionType.RouletteWheel;
+        public Crossover.CrossoverType CrossoverMethod { get; set; } = Crossover.CrossoverType.Aex;
+        public Elimination.EliminationType EliminationMethod { get; set; } = Elimination.EliminationType.Elitism;
+        public Mutation.MutationType MutationMethod { get; set; } = Mutation.MutationType.Inversion;
+        public double MutationProbability { get; set; } = 30;
+        public int PopulationSize { get; set; } = 120;
+        public int ChildrenPerGeneration { get; set; } = 60;
+        public int TerminationValue { get; set; } = 100;
+}
 }

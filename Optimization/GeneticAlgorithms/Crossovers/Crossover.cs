@@ -34,17 +34,17 @@ namespace Optimization.GeneticAlgorithms.Crossovers
             }
             return false;
         }
-    }
-    public enum CrossoverMethod
-    {
-        Aex,
-        AexNN,
-        Cycle,
-        HGreX,
-        HProX,
-        HRndX,
-        KPoint,
-        MRC,
-        MAC
+        public enum CrossoverType
+        {
+            Aex,
+            KPoint,
+            HGreX,
+            MPHGreX,
+            HRndX,
+            MPHRndX,
+            HProX,
+            MPHProX
+        }
+
     }
 }

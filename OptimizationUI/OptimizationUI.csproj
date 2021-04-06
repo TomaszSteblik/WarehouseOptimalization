@@ -2,16 +2,16 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net5.0-windows</TargetFramework>
-        <UseWPF>true</UseWPF>
+        <TargetFramework>net5.0</TargetFramework>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
-
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="0.10.0" />
+        <PackageReference Include="Avalonia.Desktop" Version="0.10.0" />
+        <PackageReference Include="Avalonia.Diagnostics" Version="0.10.0" />
+    </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\Optimization\Optimization.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="InteractiveDataDisplay.NetCore.WPF" Version="1.0.2" />
     </ItemGroup>
 
 </Project>

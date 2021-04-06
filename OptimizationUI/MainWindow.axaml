@@ -1,0 +1,84 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="OptimizationUI.MainWindow"
+        Title="OptimizationUI">
+    <StackPanel>
+        <WrapPanel>
+            <Label>Optimization Method:</Label>
+            <ComboBox Name="OptimizationBox" SelectedIndex="0">
+                <ComboBoxItem>Nearest Neighbor</ComboBoxItem>
+                <ComboBoxItem>Genetic Algorithm</ComboBoxItem>
+                <ComboBoxItem>Permutations</ComboBoxItem>
+            </ComboBox>
+        </WrapPanel>
+        <WrapPanel>
+            <Label>Selection:</Label>
+            <ComboBox Name="SelectionBox" SelectedIndex="0">
+                <ComboBoxItem>Elitism</ComboBoxItem>
+                <ComboBoxItem>Random</ComboBoxItem>
+                <ComboBoxItem>Roulette Wheel</ComboBoxItem>
+                <ComboBoxItem>Tournament</ComboBoxItem>
+            </ComboBox>
+        </WrapPanel>
+        <WrapPanel>
+            <Label>Crossover:</Label>
+            <ComboBox Name="CrossoverBox" SelectedIndex="0">
+                <ComboBoxItem>Aex</ComboBoxItem>
+                <ComboBoxItem>KPoint</ComboBoxItem>
+                <ComboBoxItem>HGreX</ComboBoxItem>
+                <ComboBoxItem>MPHGreX</ComboBoxItem>
+                <ComboBoxItem>HRndX</ComboBoxItem>
+                <ComboBoxItem>MPHRndX</ComboBoxItem>
+                <ComboBoxItem>HProX</ComboBoxItem>
+                <ComboBoxItem>MPHProX</ComboBoxItem>
+            </ComboBox>
+        </WrapPanel>
+        <WrapPanel>
+            <Label>Elimination:</Label>
+            <ComboBox Name="EliminationBox" SelectedIndex="0">
+                <ComboBoxItem>Elitism</ComboBoxItem>
+                <ComboBoxItem>Roulette Wheel</ComboBoxItem>
+            </ComboBox>
+        </WrapPanel>
+        <WrapPanel>
+            <Label>Mutation:</Label>
+            <ComboBox Name="MutationBox" SelectedIndex="0">
+                <ComboBoxItem>Inversion</ComboBoxItem>
+            </ComboBox>
+        </WrapPanel>
+        <WrapPanel>
+            <Label>Mutation probability:</Label>
+            <TextBox Name="MutationTextBox" Width="40">30</TextBox>
+        </WrapPanel>
+        <WrapPanel>
+            <Label>Population size:</Label>
+            <TextBox Name="PopulationTextBox" Width="40">100</TextBox>
+        </WrapPanel>
+        <WrapPanel>
+            <Label>Children per generation:</Label>
+            <TextBox Name="ChildrenTextBox" Width="40">20</TextBox>
+        </WrapPanel>
+        <WrapPanel>
+            <Label>Termination value:</Label>
+            <TextBox Name="TerminationTextBox" Width="40">300</TextBox>
+        </WrapPanel>
+        <WrapPanel>
+            <Label>Data path:</Label>
+            <TextBox Name="DataTextBox" Width="800">distances-usa.txt</TextBox>
+        </WrapPanel>
+        <CheckBox Name="2OptBox">Use 2opt</CheckBox>
+        <Button Click="Button_OnClick">Start optimization</Button>
+        <WrapPanel>
+            <Label>Result: </Label>
+            <TextBlock Name="ResultText"></TextBlock>
+        </WrapPanel>
+        <WrapPanel>
+            <Label>Time elapsed: </Label>
+            <TextBlock Name="ElapsedText"></TextBlock>
+        </WrapPanel>
+    </StackPanel>
+    
+</Window>

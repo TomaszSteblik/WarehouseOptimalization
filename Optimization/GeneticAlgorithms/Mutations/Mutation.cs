@@ -30,16 +30,11 @@ namespace Optimization.GeneticAlgorithms.Mutations
         }
         public abstract void Mutate(int[] chromosome);
 
-    }
-
-    public enum MutationMethod
-    {
-        CIM,
-        RSM,
-        THROAS,
-        THRORS,
-        TWORS,
-        MRM,
-        MAM
+        public abstract void Mutate();
+        
+        public enum MutationType
+        {
+            Inversion
+        }
     }
 }
