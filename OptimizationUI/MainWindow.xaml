@@ -100,11 +100,11 @@
                             <CheckBox Content="Show custom fitness line" IsChecked="{Binding ShowCustom}" Margin=" 0 5 0 0" Click="RefreshDistanceGraph"></CheckBox>
                             <WrapPanel>
                                 <Label Content="Percent: "></Label>
-                                <TextBox Width="40" Name="DistancesPercentText"></TextBox>
+                                <TextBox Width="40" Name="DistancesPercentText" Text="50"></TextBox>
                             </WrapPanel>
                             <WrapPanel>
                                 <Label Content="Individuals after: "></Label>
-                                <TextBox Width="40" Name="DistancesIndividualsText"></TextBox>
+                                <TextBox Width="40" Name="DistancesIndividualsText" Text="1"></TextBox>
                             </WrapPanel>
                             <Button Content="Save to file" Click="RenderChartDistances" Margin="0 10 0 0 "></Button>
                             <TextBlock TextWrapping="Wrap" Name="DistanceSavingChartLabel" Width="200"></TextBlock>
@@ -266,6 +266,15 @@
                             <CheckBox Content="Show best fitness line" IsChecked="{Binding ShowBest}" Margin=" 0 5 0 0" Click="RefreshWarehouseGraph"></CheckBox>
                             <CheckBox Content="Show avg fitness line" IsChecked="{Binding ShowAvg}" Margin=" 0 5 0 0" Click="RefreshWarehouseGraph"></CheckBox>
                             <CheckBox Content="Show worst fitness line" IsChecked="{Binding ShowWorst}" Margin=" 0 5 0 0" Click="RefreshWarehouseGraph"></CheckBox>
+                            <CheckBox Content="Show custom fitness line" IsChecked="{Binding ShowCustom}" Margin=" 0 5 0 0" Click="RefreshWarehouseGraph"></CheckBox>
+                            <WrapPanel>
+                                <Label Content="Percent: "></Label>
+                                <TextBox Width="40" Name="WarehousePercentText" Text="50"></TextBox>
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="Individuals after: "></Label>
+                                <TextBox Width="40" Name="WarehouseIndividualsText" Text="1"></TextBox>
+                            </WrapPanel>
                             <Button Content="Save to file" Click="RenderChartWarehouse" Margin="0 10 0 0 "></Button>
                             <TextBlock TextWrapping="Wrap" Name="WarehouseSavingChartLabel" Width="200"></TextBlock>
                         </StackPanel>
