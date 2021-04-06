@@ -19,5 +19,17 @@ namespace Optimization.GeneticAlgorithms
             sb.Append($"{best},{worst},{Convert.ToInt32(avg)}{Environment.NewLine}");
             File.AppendAllText(_path, sb.ToString());
         }
+
+        public void AddLine(double[] fitness)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var f in fitness)
+            {
+                sb.Append($"{f},");
+            }
+
+            sb.Append(Environment.NewLine);
+            File.AppendAllText(_path, sb.ToString());
+        }
     }
 }

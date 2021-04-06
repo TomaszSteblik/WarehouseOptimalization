@@ -82,7 +82,7 @@ namespace Optimization.GeneticAlgorithms
                 Array.Sort(fitness,_population);
                 _mutation.Mutate(_population);
 
-                epochFitness?.AddLine(fitness.Min(), fitness.Max(), fitness.Average());
+                epochFitness?.AddLine(fitness);
 
                 bestGene = _population[0];
 
