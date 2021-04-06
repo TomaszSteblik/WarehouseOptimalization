@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -230,8 +231,8 @@ namespace OptimizationUI
             double[][] fitness = new double[epoch][];
             for (int i = 0; i < epoch; i++)
             {
-                fitness[i] = new double[3];
-                for (int j = 0; j < 3; j++)
+                fitness[i] = new double[runFitnesses[0][0].Length];
+                for (int j = 0; j < runFitnesses[0][0].Length; j++)
                 {
                     fitness[i][j] = runFitnesses.Average(x => x[i][j]);
                 }
@@ -266,42 +267,98 @@ namespace OptimizationUI
             double[] y = new double[epoch];
             double[] z = new double[epoch];
             double[] a = new double[epoch];
+            double[] m = new double[epoch];
             for (int i = 0; i < epoch; i++)
             {
-                y[i] = fitness[i][0];
-                a[i] = fitness[i][1];
-                z[i] = fitness[i][2];
+                y[i] = fitness[i].Min();
+                a[i] = fitness[i].Max();
+                z[i] = fitness[i].Average();
+                m[i] = fitness[i].OrderBy(j => j).Skip((int)(Convert.ToInt32(DistancesPercentText.Text) * 0.01 * fitness[i].Length)).Take(Convert.ToInt32(DistancesIndividualsText.Text)).Average();
             }
 
             var lineBest = new LineGraph
             {
                 Stroke = new SolidColorBrush(Colors.Green),
                 Description = "Best fitness",
-                StrokeThickness = 2,
+                StrokeThickness = 1,
             };
             var lineAvg = new LineGraph
             {
                 Stroke = new SolidColorBrush(Colors.Blue),
                 Description = "Avg fitness",
-                StrokeThickness = 2
+                StrokeThickness = 1
             };
             var lineWorst = new LineGraph
             {
                 Stroke = new SolidColorBrush(Colors.Red),
                 Description = "Worst fitness",
-                StrokeThickness = 2
+                StrokeThickness = 1
             };
+            var lineCustom = new LineGraph
+            {
+                Stroke = new SolidColorBrush(Colors.Purple),
+                Description = "Selected fitness",
+                StrokeThickness = 1
+            };
+            
             lineBest.Plot(x, y);
             lineAvg.Plot(x,z);
             lineWorst.Plot(x, a);
+            lineCustom.Plot(x, m);
 
             lineBest.Visibility = _properties.DistanceViewModel.ShowBest ? Visibility.Visible : Visibility.Hidden;
             lineAvg.Visibility = _properties.DistanceViewModel.ShowAvg ? Visibility.Visible : Visibility.Hidden;
             lineWorst.Visibility = _properties.DistanceViewModel.ShowWorst ? Visibility.Visible : Visibility.Hidden;
+            lineCustom.Visibility = _properties.DistanceViewModel.ShowCustom ? Visibility.Visible : Visibility.Hidden;
             
             linesGrid.Children.Add(lineBest);
             linesGrid.Children.Add(lineAvg);
             linesGrid.Children.Add(lineWorst);
+            linesGrid.Children.Add(lineCustom);
+
+            distancesChart.Content = linesGrid;
+            distancesChart.UpdateLayout();
+
+        }
+        
+        private void RenderChartDistances(object sender, RoutedEventArgs e)
+        {
+
+            RenderTargetBitmap bmp = new RenderTargetBitmap(3000, 2450, 720, 660, PixelFormats.Pbgra32);
+            bmp.Render(distancesChart);
+
+            var encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(bmp));
+            
+            string name = "distances_chart_" + DateTime.Now + ".png";
+            name = name.Replace(" ", "_").Replace(":", ".");
+            
+            Assembly asm = Assembly.GetExecutingAssembly();
+            string path = System.IO.Path.GetDirectoryName(asm.Location);
+
+            using (Stream stm = File.Create(name)) { encoder.Save(stm); }
+
+            DistanceSavingChartLabel.Text = "Saving successful to " + path + "\\" + name;
+        }
+        
+        private void RenderChartWarehouse(object sender, RoutedEventArgs e)
+        {
+
+            RenderTargetBitmap bmp = new RenderTargetBitmap(3000, 2450, 720, 660, PixelFormats.Pbgra32);
+            bmp.Render(warehouseChart);
+
+            var encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(bmp));
+
+            string name = "warehouse_chart_" + DateTime.Now + ".png";
+            name = name.Replace(" ", "_").Replace(":", ".");
+            
+            Assembly asm = Assembly.GetExecutingAssembly();
+            string path = System.IO.Path.GetDirectoryName(asm.Location);
+
+            using (Stream stm = File.Create(name)) { encoder.Save(stm); }
+
+            WarehouseSavingChartLabel.Text = "Saving successful to " + path + "\\" + name;
         }
         
         private void WritePlotWarehouse(Grid linesGrid, double[][] fitness)
@@ -313,11 +370,15 @@ namespace OptimizationUI
             double[] y = new double[epoch];
             double[] z = new double[epoch];
             double[] a = new double[epoch];
+            double[] m = new double[epoch];
             for (int i = 0; i < epoch; i++)
             {
-                y[i] = fitness[i][0];
-                a[i] = fitness[i][1];
-                z[i] = fitness[i][2];
+                y[i] = fitness[i].Min();
+                a[i] = fitness[i].Max();
+                z[i] = fitness[i].Average();
+                m[i] = fitness[i].OrderBy(j => j)
+                    .Skip((int)(Convert.ToInt32(WarehousePercentText.Text) * 0.01 * fitness[i].Length))
+                    .Take(Convert.ToInt32(WarehouseIndividualsText.Text)).Average();
             }
 
             var lineBest = new LineGraph
@@ -338,17 +399,26 @@ namespace OptimizationUI
                 Description = "Worst fitness",
                 StrokeThickness = 2
             };
+            var lineCustom = new LineGraph
+            {
+                Stroke = new SolidColorBrush(Colors.Purple),
+                Description = "Selected fitness",
+                StrokeThickness = 1
+            };
             lineBest.Plot(x, y);
             lineAvg.Plot(x,z);
             lineWorst.Plot(x, a);
+            lineCustom.Plot(x, m);
 
             lineBest.Visibility = _properties.WarehouseViewModel.ShowBest ? Visibility.Visible : Visibility.Hidden;
             lineAvg.Visibility = _properties.WarehouseViewModel.ShowAvg ? Visibility.Visible : Visibility.Hidden;
             lineWorst.Visibility = _properties.WarehouseViewModel.ShowWorst ? Visibility.Visible : Visibility.Hidden;
+            lineCustom.Visibility = _properties.WarehouseViewModel.ShowCustom ? Visibility.Visible : Visibility.Hidden;
             
             linesGrid.Children.Add(lineBest);
             linesGrid.Children.Add(lineAvg);
             linesGrid.Children.Add(lineWorst);
+            linesGrid.Children.Add(lineCustom);
         }
 
         private void RefreshLinesDistances(Grid linesGrid)
@@ -361,6 +431,8 @@ namespace OptimizationUI
                     _properties.DistanceViewModel.ShowAvg ? Visibility.Visible : Visibility.Hidden;
                 linesGrid.Children[2].Visibility =
                     _properties.DistanceViewModel.ShowWorst ? Visibility.Visible : Visibility.Hidden;
+                linesGrid.Children[3].Visibility =
+                    _properties.DistanceViewModel.ShowCustom ? Visibility.Visible : Visibility.Hidden;
             }
         }
         
@@ -374,6 +446,8 @@ namespace OptimizationUI
                     _properties.WarehouseViewModel.ShowAvg ? Visibility.Visible : Visibility.Hidden;
                 linesGrid.Children[2].Visibility =
                     _properties.WarehouseViewModel.ShowWorst ? Visibility.Visible : Visibility.Hidden;
+                linesGrid.Children[3].Visibility =
+                    _properties.WarehouseViewModel.ShowCustom ? Visibility.Visible : Visibility.Hidden;
             }
         }
     }

@@ -32,7 +32,7 @@ namespace Optimization
         {
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
             Distances.Create(matrix);
-            PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), matrix, optimizationParameters,calcFitness, CancellationToken.None);
+            PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters,calcFitness, CancellationToken.None);
         }
 
         public static double WarehouseOptimization(WarehouseParameters warehouseParameters, CancellationToken ct)

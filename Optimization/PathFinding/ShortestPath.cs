@@ -40,7 +40,7 @@ namespace Optimization.PathFinding
             return pathLength;
 
         }
-        public static double Find(int[] order, double[][] distancesMatrix,  OptimizationParameters optimizationParameters,DelegateFitness.CalcFitness calcFitness, CancellationToken ct)
+        public static double Find(int[] order,  OptimizationParameters optimizationParameters, DelegateFitness.CalcFitness calcFitness, CancellationToken ct)
         {
             IPathFinder algorithmPathFinding = optimizationParameters.OptimizationMethod switch
             {
