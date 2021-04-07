@@ -309,7 +309,7 @@ namespace OptimizationUI
             lineBest.Visibility = _properties.DistanceViewModel.ShowBest ? Visibility.Visible : Visibility.Hidden;
             lineAvg.Visibility = _properties.DistanceViewModel.ShowAvg ? Visibility.Visible : Visibility.Hidden;
             lineWorst.Visibility = _properties.DistanceViewModel.ShowWorst ? Visibility.Visible : Visibility.Hidden;
-            lineCustom.Visibility = Visibility.Visible;
+            lineCustom.Visibility = _properties.DistanceViewModel.ShowCustom ? Visibility.Visible : Visibility.Hidden;
             
             linesGrid.Children.Add(lineBest);
             linesGrid.Children.Add(lineAvg);
@@ -370,11 +370,15 @@ namespace OptimizationUI
             double[] y = new double[epoch];
             double[] z = new double[epoch];
             double[] a = new double[epoch];
+            double[] m = new double[epoch];
             for (int i = 0; i < epoch; i++)
             {
                 y[i] = fitness[i].Min();
                 a[i] = fitness[i].Max();
                 z[i] = fitness[i].Average();
+                m[i] = fitness[i].OrderBy(j => j)
+                    .Skip((int)(Convert.ToInt32(WarehousePercentText.Text) * 0.01 * fitness[i].Length))
+                    .Take(Convert.ToInt32(WarehouseIndividualsText.Text)).Average();
             }
 
             var lineBest = new LineGraph
@@ -395,17 +399,26 @@ namespace OptimizationUI
                 Description = "Worst fitness",
                 StrokeThickness = 2
             };
+            var lineCustom = new LineGraph
+            {
+                Stroke = new SolidColorBrush(Colors.Purple),
+                Description = "Selected fitness",
+                StrokeThickness = 1
+            };
             lineBest.Plot(x, y);
             lineAvg.Plot(x,z);
             lineWorst.Plot(x, a);
+            lineCustom.Plot(x, m);
 
             lineBest.Visibility = _properties.WarehouseViewModel.ShowBest ? Visibility.Visible : Visibility.Hidden;
             lineAvg.Visibility = _properties.WarehouseViewModel.ShowAvg ? Visibility.Visible : Visibility.Hidden;
             lineWorst.Visibility = _properties.WarehouseViewModel.ShowWorst ? Visibility.Visible : Visibility.Hidden;
+            lineCustom.Visibility = _properties.WarehouseViewModel.ShowCustom ? Visibility.Visible : Visibility.Hidden;
             
             linesGrid.Children.Add(lineBest);
             linesGrid.Children.Add(lineAvg);
             linesGrid.Children.Add(lineWorst);
+            linesGrid.Children.Add(lineCustom);
         }
 
         private void RefreshLinesDistances(Grid linesGrid)
@@ -418,6 +431,8 @@ namespace OptimizationUI
                     _properties.DistanceViewModel.ShowAvg ? Visibility.Visible : Visibility.Hidden;
                 linesGrid.Children[2].Visibility =
                     _properties.DistanceViewModel.ShowWorst ? Visibility.Visible : Visibility.Hidden;
+                linesGrid.Children[3].Visibility =
+                    _properties.DistanceViewModel.ShowCustom ? Visibility.Visible : Visibility.Hidden;
             }
         }
         
@@ -431,6 +446,8 @@ namespace OptimizationUI
                     _properties.WarehouseViewModel.ShowAvg ? Visibility.Visible : Visibility.Hidden;
                 linesGrid.Children[2].Visibility =
                     _properties.WarehouseViewModel.ShowWorst ? Visibility.Visible : Visibility.Hidden;
+                linesGrid.Children[3].Visibility =
+                    _properties.WarehouseViewModel.ShowCustom ? Visibility.Visible : Visibility.Hidden;
             }
         }
     }
