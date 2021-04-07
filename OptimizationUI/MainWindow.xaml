@@ -97,6 +97,8 @@
                             <CheckBox Content="Show best fitness line" IsChecked="{Binding ShowBest}" Margin=" 0 5 0 0" Click="RefreshDistanceGraph"></CheckBox>
                             <CheckBox Content="Show avg fitness line" IsChecked="{Binding ShowAvg}" Margin=" 0 5 0 0" Click="RefreshDistanceGraph"></CheckBox>
                             <CheckBox Content="Show worst fitness line" IsChecked="{Binding ShowWorst}" Margin=" 0 5 0 0" Click="RefreshDistanceGraph"></CheckBox>
+                            <Button Content="Save to file" Click="RenderChartDistances" Margin="0 10 0 0 "></Button>
+                            <TextBlock TextWrapping="Wrap" Name="DistanceSavingChartLabel" Width="200"></TextBlock>
                         </StackPanel>
                         
                     </WrapPanel>
@@ -247,7 +249,6 @@
                     <Button Content="Cancel" Click="CancelWarehouse"></Button>
                     <Label HorizontalAlignment="Center" FontSize="20" Name="WarehouseResultLabel"></Label>
                     <WrapPanel HorizontalAlignment="Center">
-                        
                         <wpf:Chart BottomTitle="epoch" LeftTitle="fitness" Width="400" Height="350" Name="warehouseChart">
                             <Grid Name="linesGridWarehouse"/>
                         </wpf:Chart>
@@ -256,6 +257,8 @@
                             <CheckBox Content="Show best fitness line" IsChecked="{Binding ShowBest}" Margin=" 0 5 0 0" Click="RefreshWarehouseGraph"></CheckBox>
                             <CheckBox Content="Show avg fitness line" IsChecked="{Binding ShowAvg}" Margin=" 0 5 0 0" Click="RefreshWarehouseGraph"></CheckBox>
                             <CheckBox Content="Show worst fitness line" IsChecked="{Binding ShowWorst}" Margin=" 0 5 0 0" Click="RefreshWarehouseGraph"></CheckBox>
+                            <Button Content="Save to file" Click="RenderChartWarehouse" Margin="0 10 0 0 "></Button>
+                            <TextBlock TextWrapping="Wrap" Name="WarehouseSavingChartLabel" Width="200"></TextBlock>
                         </StackPanel>
                         
                     </WrapPanel>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -277,19 +278,19 @@ namespace OptimizationUI
             {
                 Stroke = new SolidColorBrush(Colors.Green),
                 Description = "Best fitness",
-                StrokeThickness = 2,
+                StrokeThickness = 1,
             };
             var lineAvg = new LineGraph
             {
                 Stroke = new SolidColorBrush(Colors.Blue),
                 Description = "Avg fitness",
-                StrokeThickness = 2
+                StrokeThickness = 1
             };
             var lineWorst = new LineGraph
             {
                 Stroke = new SolidColorBrush(Colors.Red),
                 Description = "Worst fitness",
-                StrokeThickness = 2
+                StrokeThickness = 1
             };
             lineBest.Plot(x, y);
             lineAvg.Plot(x,z);
@@ -302,6 +303,50 @@ namespace OptimizationUI
             linesGrid.Children.Add(lineBest);
             linesGrid.Children.Add(lineAvg);
             linesGrid.Children.Add(lineWorst);
+
+            distancesChart.Content = linesGrid;
+            distancesChart.UpdateLayout();
+
+        }
+        
+        private void RenderChartDistances(object sender, RoutedEventArgs e)
+        {
+
+            RenderTargetBitmap bmp = new RenderTargetBitmap(3000, 2450, 720, 660, PixelFormats.Pbgra32);
+            bmp.Render(distancesChart);
+
+            var encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(bmp));
+            
+            string name = "distances_chart_" + DateTime.Now + ".png";
+            name = name.Replace(" ", "_").Replace(":", ".");
+            
+            Assembly asm = Assembly.GetExecutingAssembly();
+            string path = System.IO.Path.GetDirectoryName(asm.Location);
+
+            using (Stream stm = File.Create(name)) { encoder.Save(stm); }
+
+            DistanceSavingChartLabel.Text = "Saving successful to " + path + "\\" + name;
+        }
+        
+        private void RenderChartWarehouse(object sender, RoutedEventArgs e)
+        {
+
+            RenderTargetBitmap bmp = new RenderTargetBitmap(3000, 2450, 720, 660, PixelFormats.Pbgra32);
+            bmp.Render(warehouseChart);
+
+            var encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(bmp));
+
+            string name = "warehouse_chart_" + DateTime.Now + ".png";
+            name = name.Replace(" ", "_").Replace(":", ".");
+            
+            Assembly asm = Assembly.GetExecutingAssembly();
+            string path = System.IO.Path.GetDirectoryName(asm.Location);
+
+            using (Stream stm = File.Create(name)) { encoder.Save(stm); }
+
+            WarehouseSavingChartLabel.Text = "Saving successful to " + path + "\\" + name;
         }
         
         private void WritePlotWarehouse(Grid linesGrid, double[][] fitness)
