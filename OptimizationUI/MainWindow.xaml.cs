@@ -231,8 +231,8 @@ namespace OptimizationUI
             double[][] fitness = new double[epoch][];
             for (int i = 0; i < epoch; i++)
             {
-                fitness[i] = new double[3];
-                for (int j = 0; j < 3; j++)
+                fitness[i] = new double[runFitnesses[0][0].Length];
+                for (int j = 0; j < runFitnesses[0][0].Length; j++)
                 {
                     fitness[i][j] = runFitnesses.Average(x => x[i][j]);
                 }
@@ -267,11 +267,13 @@ namespace OptimizationUI
             double[] y = new double[epoch];
             double[] z = new double[epoch];
             double[] a = new double[epoch];
+            double[] m = new double[epoch];
             for (int i = 0; i < epoch; i++)
             {
-                y[i] = fitness[i][0];
-                a[i] = fitness[i][1];
-                z[i] = fitness[i][2];
+                y[i] = fitness[i].Min();
+                a[i] = fitness[i].Max();
+                z[i] = fitness[i].Average();
+                m[i] = fitness[i].OrderBy(j => j).Skip((int)(Convert.ToInt32(DistancesPercentText.Text) * 0.01 * fitness[i].Length)).Take(Convert.ToInt32(DistancesIndividualsText.Text)).Average();
             }
 
             var lineBest = new LineGraph
@@ -292,17 +294,27 @@ namespace OptimizationUI
                 Description = "Worst fitness",
                 StrokeThickness = 1
             };
+            var lineCustom = new LineGraph
+            {
+                Stroke = new SolidColorBrush(Colors.Purple),
+                Description = "Selected fitness",
+                StrokeThickness = 1
+            };
+            
             lineBest.Plot(x, y);
             lineAvg.Plot(x,z);
             lineWorst.Plot(x, a);
+            lineCustom.Plot(x, m);
 
             lineBest.Visibility = _properties.DistanceViewModel.ShowBest ? Visibility.Visible : Visibility.Hidden;
             lineAvg.Visibility = _properties.DistanceViewModel.ShowAvg ? Visibility.Visible : Visibility.Hidden;
             lineWorst.Visibility = _properties.DistanceViewModel.ShowWorst ? Visibility.Visible : Visibility.Hidden;
+            lineCustom.Visibility = Visibility.Visible;
             
             linesGrid.Children.Add(lineBest);
             linesGrid.Children.Add(lineAvg);
             linesGrid.Children.Add(lineWorst);
+            linesGrid.Children.Add(lineCustom);
 
             distancesChart.Content = linesGrid;
             distancesChart.UpdateLayout();
@@ -360,9 +372,9 @@ namespace OptimizationUI
             double[] a = new double[epoch];
             for (int i = 0; i < epoch; i++)
             {
-                y[i] = fitness[i][0];
-                a[i] = fitness[i][1];
-                z[i] = fitness[i][2];
+                y[i] = fitness[i].Min();
+                a[i] = fitness[i].Max();
+                z[i] = fitness[i].Average();
             }
 
             var lineBest = new LineGraph

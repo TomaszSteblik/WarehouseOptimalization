@@ -29,6 +29,18 @@ namespace OptimizationUI
             }
         }
 
+        private bool _showCustom = true;
+
+        public bool ShowCustom
+        {
+            get => _showCustom;
+            set
+            {
+                _showCustom = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         private bool _showBest = true;
 
         public bool ShowBest
