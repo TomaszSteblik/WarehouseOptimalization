@@ -47,6 +47,7 @@ namespace Optimization.GeneticAlgorithms
             {
                 EliminationMethod.Elitism => new ElitismElimination(population),
                 EliminationMethod.RouletteWheel => new RouletteWheelElimination(population),
+                EliminationMethod.Tournament => new TournamentElimination(population),
                 _ => throw new ArgumentException("Wrong elimination method name")
             };
             return elimination;
