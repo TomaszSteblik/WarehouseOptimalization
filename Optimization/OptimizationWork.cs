@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Optimization.GeneticAlgorithms;
 using Optimization.GeneticAppliances;
+using Optimization.GeneticAppliances.TSP;
 using Optimization.GeneticAppliances.Warehouse;
 using Optimization.Helpers;
 using Optimization.Parameters;
@@ -24,6 +25,22 @@ namespace Optimization
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
             Distances.Create(matrix);
             return PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters, ct);
+            
+        }
+        
+        public static TSPResult TSP(OptimizationParameters optimizationParameters, CancellationToken ct)
+        {
+            var matrix = Files.ReadArray(optimizationParameters.DataPath);
+            Distances.Create(matrix);
+            var tsp = new GeneticTSP(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters,
+                (population) =>
+                {
+                    double[] fitness = new double[population.Length];
+                    for (int i = 0; i < population.Length; i++)
+                        fitness[i] = Fitness.CalculateFitness(population[i]);
+                    return fitness;
+                }, ct);
+            return tsp.Run();
             
         }
 

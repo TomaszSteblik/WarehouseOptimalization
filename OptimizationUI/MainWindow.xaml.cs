@@ -24,6 +24,7 @@ using Optimization.GeneticAlgorithms.Crossovers;
 using Optimization.GeneticAlgorithms.Eliminations;
 using Optimization.GeneticAlgorithms.Mutations;
 using Optimization.GeneticAlgorithms.Selections;
+using Optimization.GeneticAppliances.TSP;
 using Optimization.Parameters;
 
 namespace OptimizationUI
@@ -76,7 +77,7 @@ namespace OptimizationUI
         {
             OptimizationParameters parameters = _properties.DistanceViewModel as OptimizationParameters;
             int runs = Int32.Parse(DistanceInstancesTextBox.Text);
-            double[] results = new double[runs];
+            TSPResult[] results = new TSPResult[runs];
             double[][][] runFitnesses = new double[runs][][];
 
             _cancellationTokenSource = new CancellationTokenSource();
@@ -86,24 +87,26 @@ namespace OptimizationUI
             {
                 await Task.Run(() =>
                 {
-                    results[0] = OptimizationWork.FindShortestPath(parameters, ct);
-
-                    for (int i = 0; i < runs; i++)
+                    Parallel.For(0, runs, i =>
                     {
-                        results[i] = OptimizationWork.FindShortestPath(parameters, ct);
+                        results[i] = OptimizationWork.TSP(parameters, ct);
                         _properties.DistanceViewModel.ProgressBarValue = i;
-                        runFitnesses[i] = ReadFitness();
-                    }
+                        runFitnesses[i] = results[i].fitness;
 
+                    });
                 }, ct);
+                
                 Dispatcher.Invoke(() =>
                 {
                     DistanceResultLabel.Content =
-                        $"Avg: {results.Average()}  Max: {results.Max()}  Min: {results.Min()}";
+                        $"Avg: {results.Average(x=>x.FinalFitness)}  " +
+                        $"Max: {results.Max(x=>x.FinalFitness)}  " +
+                        $"Min: {results.Min(x=>x.FinalFitness)}  " +
+                        $"Avg epoch count: {results.Average(x=>x.EpochCount)}";
                     WritePlotDistances(linesGridDistances, GetAverageFitnesses(runFitnesses));
                 });
             }
-            catch (OperationCanceledException exception)
+            catch (AggregateException)
             {
                 DistanceResultLabel.Content = "Cancelled";
             }
@@ -227,14 +230,60 @@ namespace OptimizationUI
 
         private double[][] GetAverageFitnesses(double[][][] runFitnesses)
         {
-            int epoch = runFitnesses[0].Length;
+            double[][][] expandedFitness = new double[runFitnesses.Length][][];
+
+            int[] lengths = new int[runFitnesses.Length];
+            for (int i = 0; i < runFitnesses.Length; i++)
+            {
+                lengths[i] = runFitnesses[i].Length;
+            }
+            int epoch = lengths.Max();
+            
+            for (int i = 0; i < runFitnesses.Length; i++)
+            {
+                expandedFitness[i] = new double[epoch][];
+            }
+
+            for (int j = 0; j < runFitnesses.Length; j++)
+            {
+                for (int i = 0; i < epoch; i++)
+                {
+                    expandedFitness[j][i] = new double[runFitnesses[0][0].Length];
+                }
+            }
+
+            for (int i = 0; i < expandedFitness.Length; i++)
+            {
+                for (int j = 0; j < expandedFitness[0].Length; j++)
+                {
+                    for (int k = 0; k < expandedFitness[0][0].Length; k++)
+                    {
+                        if (j >= lengths[i])
+                        {
+                            expandedFitness[i][j][k] = runFitnesses[i][lengths[i] - 1][k];
+                        }
+                        else
+                        {
+                            expandedFitness[i][j][k] = runFitnesses[i][j][k];
+                        }
+                    }
+                }
+            }
+
+
             double[][] fitness = new double[epoch][];
+
             for (int i = 0; i < epoch; i++)
             {
                 fitness[i] = new double[runFitnesses[0][0].Length];
+            }
+            
+
+            for (int i = 0; i < epoch; i++)
+            {
                 for (int j = 0; j < runFitnesses[0][0].Length; j++)
                 {
-                    fitness[i][j] = runFitnesses.Average(x => x[i][j]);
+                    fitness[i][j] = expandedFitness.Average(x => x[i][j]);
                 }
             }
 
