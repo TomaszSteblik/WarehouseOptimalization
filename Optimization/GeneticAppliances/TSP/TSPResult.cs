@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Optimization.Helpers;
 
 namespace Optimization.GeneticAppliances.TSP
 {
@@ -6,13 +7,16 @@ namespace Optimization.GeneticAppliances.TSP
     {
         public int EpochCount { get; }
         public double[][] fitness { get; }
+        
+        public int[] BestGene { get; }
         public double FinalFitness { get; }
 
-        public TSPResult(double[][] fitness)
+        public TSPResult(double[][] fitness, int[] bestGene)
         {
+            BestGene = bestGene;
             EpochCount = fitness.Length;
             this.fitness = fitness;
-            FinalFitness = fitness[^1].Min();
+            FinalFitness = Fitness.CalculateFitness(BestGene);
         }
     }
 }

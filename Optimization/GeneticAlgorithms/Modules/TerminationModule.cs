@@ -19,7 +19,7 @@ namespace Optimization.GeneticAlgorithms.Modules
             epochCount = 0;
             Action = fitness =>
             {
-                if (epochCount == 1000) throw new GeneticModuleExit();
+                if (epochCount == 200) throw new GeneticModuleExit();
 
                 if (lastBest == -1)
                 {
