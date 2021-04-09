@@ -7,7 +7,7 @@ namespace Optimization.GeneticAlgorithms.Modules
     {
         private int epochCount;
         
-        public CataclysmModule()
+        public CataclysmModule(Func<int[], int, int, int[][]> initializePopulation)
         {
             epochCount = 0;
             Action = population =>
@@ -16,19 +16,17 @@ namespace Optimization.GeneticAlgorithms.Modules
 
                 epochCount = 0;
                 int populationSize = population.Length;
-                for (int i = populationSize / 10; i < populationSize; i++)
+                int eliminated = populationSize - populationSize / 10;
+
+                int[][] newIndividuals = initializePopulation(population[0], populationSize, population[0][0]);
+                var populationAfterCataclysm = population.Take(populationSize - eliminated).Concat(newIndividuals).ToArray();
+                for (int i = 0; i < populationSize; i++)
                 {
-                    var tmp = population[0].OrderBy(x => Guid.NewGuid()).ToArray();
-                    for (int j = 0; j < population[i].Length; j++)
+                    for (int j = 0; j < population[0].Length; j++)
                     {
-                        population[i][j] = tmp[j];
-                        if (population[i][j] == 0) population[i][j] = population[i][0];
+                        population[i][j] = populationAfterCataclysm[i][j];
                     }
-
-                    population[i][0] = 0;
-
                 }
-
             };
         }
 
