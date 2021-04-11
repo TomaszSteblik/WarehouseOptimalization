@@ -126,7 +126,7 @@ namespace OptimizationUI
         private void ReadDistanceDataPathButton_OnClick(object sender, RoutedEventArgs e)
         {
             OpenFileDialog fileDialog = new OpenFileDialog();
-            fileDialog.Filter = "txt files (*.txt)|*.txt";
+            fileDialog.Filter = "All files (*.*)|*.*|txt files (*.txt)|*.txt|tsp files (*.tsp)|*.tsp";
             fileDialog.RestoreDirectory = true;
             fileDialog.ShowDialog();
             _properties.DistanceViewModel.DataPath = fileDialog.FileName;

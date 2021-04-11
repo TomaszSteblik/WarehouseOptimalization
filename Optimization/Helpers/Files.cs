@@ -8,24 +8,20 @@ namespace Optimization.Helpers
     {
         public static double[][] ReadArray(string fileName)
         {
-
-            string[] lines = File.ReadAllLines(fileName);
-            int nonEmptyLines = 0;
-            for (int i = 0; i < lines.Length; i++)
-                if (lines[i].Trim().Length > 1)
-                    nonEmptyLines++;
-
-            double[][] Matrix = new double[nonEmptyLines][];
-            for (int i = 0; i < nonEmptyLines; i++)
+            string extension = fileName.Split('.')[1].ToLower();
+            switch (extension)
             {
-                string[] s = lines[i].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                Matrix[i] = Array.ConvertAll(s, double.Parse);
+                case "txt":
+                    return ReadTxt(fileName);
+                case "tsp":
+                    return ReadTsp(fileName);
+                default:
+                    throw new ArgumentException("File format not supported");
             }
-
-            return Matrix;
+            
 
         }
-
+        
         public static int[][] ReadArrayInt(string fileName)
         {
 
@@ -58,6 +54,66 @@ namespace Optimization.Helpers
 
             File.WriteAllText(fileName, stringBuilder.ToString());
 
+        }
+
+        private static double[][] ReadTxt(string fileName)
+        {
+            string[] lines = File.ReadAllLines(fileName);
+            int nonEmptyLines = 0;
+            for (int i = 0; i < lines.Length; i++)
+                if (lines[i].Trim().Length > 1)
+                    nonEmptyLines++;
+
+            double[][] Matrix = new double[nonEmptyLines][];
+            for (int i = 0; i < nonEmptyLines; i++)
+            {
+                string[] s = lines[i].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                Matrix[i] = Array.ConvertAll(s, double.Parse);
+            }
+
+            return Matrix;
+        }
+        
+        private static double[][] ReadTsp(string fileName)
+        {
+            string[] lines = File.ReadAllLines(fileName);
+            int nonEmptyLines = 0;
+            for (int i = 0; i < lines.Length; i++)
+                if (lines[i].Trim().Length > 1 && lines[i]!="EOF")
+                    nonEmptyLines++;
+
+            int linesBeforeValues = 0;
+            for (int i = 0; i < nonEmptyLines; i++)
+            {
+                if(int.TryParse(lines[i].Split(" ")[0],out var n))
+                    break;
+                linesBeforeValues++;
+            }
+
+            double[][] matrix = new double[nonEmptyLines-linesBeforeValues][];
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                matrix[i] = new double[matrix.Length];
+            }
+            double[] x = new double[nonEmptyLines-linesBeforeValues];
+            double[] y = new double[nonEmptyLines-linesBeforeValues];
+
+            for (int i = linesBeforeValues; i < nonEmptyLines; i++)
+            {
+                string[] s = lines[i].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                x[i-linesBeforeValues] = double.Parse(s[1].Replace('.',','));
+                y[i-linesBeforeValues] = double.Parse(s[2].Replace('.',','));
+            }
+
+            for (int i = 0; i < x.Length; i++)
+            {
+                for (int j = 0; j < x.Length; j++)
+                {
+                    matrix[i][j] = Math.Round(Math.Sqrt((x[i] - x[j]) * (x[i] - x[j]) + (y[i] - y[j]) * (y[i] - y[j])),2);
+                }
+            }
+
+            return matrix;
         }
     }
 }
