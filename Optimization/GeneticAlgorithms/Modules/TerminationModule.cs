@@ -6,6 +6,7 @@ namespace Optimization.GeneticAlgorithms.Modules
     {
         private double lastBest;
         private int epochCount;
+        private int maxEpoch;
         
         
         public override string GetDesiredObject()
@@ -13,13 +14,14 @@ namespace Optimization.GeneticAlgorithms.Modules
             return "fitness";
         }
 
-        public TerminationModule()
+        public TerminationModule(int epochs)
         {
             lastBest = -1d;
             epochCount = 0;
+            maxEpoch = epochs;
             Action = fitness =>
             {
-                if (epochCount == 200) throw new GeneticModuleExit();
+                if (epochCount == maxEpoch) throw new GeneticModuleExit();
 
                 if (lastBest == -1)
                 {

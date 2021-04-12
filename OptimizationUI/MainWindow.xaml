@@ -30,6 +30,12 @@
                         </WrapPanel>
                         <StackPanel  Visibility="{Binding IsAllVisible}">
                             <WrapPanel>
+                                <Label Content="Population initialization method:"></Label>
+                                <ComboBox Width="200" ItemsSource="{Binding Path=PopulationInitializationMethod}" Name="DistancePopulationInitializationMethod"
+                                          SelectedItem="{Binding PopulationInitializationMethod}"/>
+                                          
+                            </WrapPanel>
+                            <WrapPanel>
                                 <Label Content="Selection method:"></Label>
                                 <ComboBox Width="120" ItemsSource="{Binding Path=SelectionMethod}" Name="DistanceSelectionComboBox"
                                           SelectedItem="{Binding SelectionMethod}"/>
@@ -80,8 +86,18 @@
                                 <TextBox Width="120" Text="{Binding MutationProbability}"></TextBox>
                             </WrapPanel>
                             <WrapPanel>
-                                <Label Content="Termination value:"></Label>
-                                <TextBox Width="120" Text="{Binding TerminationValue}"></TextBox>
+                                <CheckBox Content="Enable cataclysm " IsChecked="{Binding EnableCataclysm}"></CheckBox>
+                                <Label Content="Cataclysm epochs"></Label>
+                                <TextBox Width="120" Text="{Binding CataclysmEpoch}"></TextBox>
+                                <Label Content="Cataclysm death %"></Label>
+                                <TextBox Width="120" Text="{Binding DeathPercentage}"></TextBox>
+                                
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="Max Epochs:"></Label>
+                                <TextBox Width="120" Text="{Binding MaxEpoch}"></TextBox>
+                                <CheckBox Content="After epochs without improvement " IsChecked="{Binding StopAfterEpochsWithoutChange}"></CheckBox>
+                                <TextBox Width="120" Text="{Binding StopAfterEpochCount}"></TextBox>
                             </WrapPanel>
                         </StackPanel>
                         <Button Margin="30 5 30 0" Content="Start" Click="DistanceStartButtonClick"/>
@@ -187,8 +203,8 @@
                                 <TextBox Width="120" Text="{Binding MutationProbability}"></TextBox>
                             </WrapPanel>
                             <WrapPanel>
-                                <Label Content="Termination value:"></Label>
-                                <TextBox Width="120" Text="{Binding TerminationValue}"></TextBox>
+                                <Label Content="Max epochs:"></Label>
+                                <TextBox Width="120" Text="{Binding MaxEpoch}"></TextBox>
                             </WrapPanel>
                     </StackPanel>
                     </StackPanel>
@@ -251,8 +267,8 @@
                                 <TextBox Width="120" Text="{Binding MutationProbability}"></TextBox>
                             </WrapPanel>
                             <WrapPanel>
-                                <Label Content="Termination value:"></Label>
-                                <TextBox Width="120" Text="{Binding TerminationValue}"></TextBox>
+                                <Label Content="Max epochs:"></Label>
+                                <TextBox Width="120" Text="{Binding MaxEpoch}"></TextBox>
                             </WrapPanel>
                         </StackPanel>
                     </StackPanel>

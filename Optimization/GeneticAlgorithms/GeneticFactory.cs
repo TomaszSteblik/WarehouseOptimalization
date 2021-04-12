@@ -1,6 +1,7 @@
 ﻿using System;
 using Optimization.GeneticAlgorithms.Crossovers;
 using Optimization.GeneticAlgorithms.Eliminations;
+using Optimization.GeneticAlgorithms.Initialization;
 using Optimization.GeneticAlgorithms.Mutations;
 using Optimization.GeneticAlgorithms.Selections;
 using Optimization.Parameters;
@@ -9,6 +10,22 @@ namespace Optimization.GeneticAlgorithms
 {
     internal static class GeneticFactory
     {
+
+        public static PopulationInitialization CreatePopulationInitialization(PopulationInitializationMethod method)
+        {
+            PopulationInitialization initialization = method switch
+            {
+                PopulationInitializationMethod.UniformInitialization => new UniformInitialization(),
+                PopulationInitializationMethod.NonUniformInitialization => new NonUniformInitialization(),
+                PopulationInitializationMethod.StandardPathInitialization => new StandardPathInitialization(),
+                PopulationInitializationMethod.PreferedCloseDistancePathInitialization =>
+                    new PreferedCloseDistancePathInitialization(),
+                _ => throw new ArgumentException("Wrong population initialization method name")
+            };
+            return initialization;
+        }
+        
+        
         public static Crossover CreateCrossover(int startingId, CrossoverMethod crossoverMethod, 
             CrossoverMethod[] crossoverMethods)
         {

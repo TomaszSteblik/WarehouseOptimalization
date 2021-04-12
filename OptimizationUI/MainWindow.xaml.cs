@@ -22,6 +22,7 @@ using Microsoft.Win32;
 using Optimization;
 using Optimization.GeneticAlgorithms.Crossovers;
 using Optimization.GeneticAlgorithms.Eliminations;
+using Optimization.GeneticAlgorithms.Initialization;
 using Optimization.GeneticAlgorithms.Mutations;
 using Optimization.GeneticAlgorithms.Selections;
 using Optimization.GeneticAppliances.TSP;
@@ -53,12 +54,15 @@ namespace OptimizationUI
             var crossovers = Enum.GetValues(typeof(CrossoverMethod)).Cast<CrossoverMethod>().ToList();
             var eliminations = Enum.GetValues(typeof(EliminationMethod)).Cast<EliminationMethod>().ToList();
             var mutations = Enum.GetValues(typeof(MutationMethod)).Cast<MutationMethod>().ToList();
+            var initializations = Enum.GetValues(typeof(PopulationInitializationMethod))
+                .Cast<PopulationInitializationMethod>().ToList();
 
             DistanceMethodComboBox.ItemsSource = methods;
             DistanceSelectionComboBox.ItemsSource = selections;
             DistanceCrossoverComboBox.ItemsSource = crossovers;
             DistanceEliminationComboBox.ItemsSource = eliminations;
             DistanceMutationComboBox.ItemsSource = mutations;
+            DistancePopulationInitializationMethod.ItemsSource = initializations;
 
             WarehouseSelectionComboBox.ItemsSource = selections;
             WarehouseCrossoverComboBox.ItemsSource = crossovers;
@@ -81,7 +85,7 @@ namespace OptimizationUI
             double[][][] runFitnesses = new double[runs][][];
 
             _cancellationTokenSource = new CancellationTokenSource();
-            _properties.DistanceViewModel.ProgressBarMaximum = runs*_properties.DistanceViewModel.TerminationValue - 1;
+            _properties.DistanceViewModel.ProgressBarMaximum = runs*_properties.DistanceViewModel.MaxEpoch - 1;
             _properties.DistanceViewModel.ProgressBarValue = 0;
             Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration += (sender,iteration) =>
             {
@@ -102,7 +106,7 @@ namespace OptimizationUI
                 
                 Dispatcher.Invoke(() =>
                 {
-                    _properties.DistanceViewModel.ProgressBarValue = runs*_properties.DistanceViewModel.TerminationValue - 1;
+                    _properties.DistanceViewModel.ProgressBarValue = runs*_properties.DistanceViewModel.MaxEpoch - 1;
                     DistanceResultLabel.Content =
                         $"Avg: {results.Average(x=>x.FinalFitness)}  " +
                         $"Max: {results.Max(x=>x.FinalFitness)}  " +

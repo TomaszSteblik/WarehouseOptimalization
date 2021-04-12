@@ -58,7 +58,7 @@ namespace Optimization.GeneticAlgorithms
 
             _mutationProbability = parameters.MutationProbability;
             _childrenPerGeneration = parameters.ChildrenPerGeneration;
-            _terminationValue = parameters.TerminationValue;
+            _terminationValue = parameters.MaxEpoch;
             _parentsPerChild = parameters.ParentsPerChildren;
 
             _calculateFitness = calculateFitness;
