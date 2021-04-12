@@ -102,6 +102,7 @@ namespace OptimizationUI
                 
                 Dispatcher.Invoke(() =>
                 {
+                    _properties.DistanceViewModel.ProgressBarValue = runs*_properties.DistanceViewModel.TerminationValue - 1;
                     DistanceResultLabel.Content =
                         $"Avg: {results.Average(x=>x.FinalFitness)}  " +
                         $"Max: {results.Max(x=>x.FinalFitness)}  " +
