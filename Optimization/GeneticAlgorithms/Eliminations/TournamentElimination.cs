@@ -15,7 +15,8 @@ namespace Optimization.GeneticAlgorithms.Eliminations
         public override void EliminateAndReplace(int[][] offsprings, double[] fitnessProductPlacement)
         {
             var offspringCount = offsprings.Length;
-            var participantsCount = 4;
+            var participantsCount = PopulationSize / 30;
+            if (participantsCount < 2) participantsCount = 2;
             var eliminated = new List<int>();
 
             for (int i = 0; i < offspringCount; i++)
