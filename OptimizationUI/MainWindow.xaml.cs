@@ -81,7 +81,7 @@ namespace OptimizationUI
             double[][][] runFitnesses = new double[runs][][];
 
             _cancellationTokenSource = new CancellationTokenSource();
-            _properties.DistanceViewModel.ProgressBarMaximum = runs*_properties.DistanceViewModel.TerminationValue - 1;
+            _properties.DistanceViewModel.ProgressBarMaximum = runs*_properties.DistanceViewModel.MaxEpoch - 1;
             _properties.DistanceViewModel.ProgressBarValue = 0;
             Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration += (sender,iteration) =>
             {
@@ -102,7 +102,7 @@ namespace OptimizationUI
                 
                 Dispatcher.Invoke(() =>
                 {
-                    _properties.DistanceViewModel.ProgressBarValue = runs*_properties.DistanceViewModel.TerminationValue - 1;
+                    _properties.DistanceViewModel.ProgressBarValue = runs*_properties.DistanceViewModel.MaxEpoch - 1;
                     DistanceResultLabel.Content =
                         $"Avg: {results.Average(x=>x.FinalFitness)}  " +
                         $"Max: {results.Max(x=>x.FinalFitness)}  " +

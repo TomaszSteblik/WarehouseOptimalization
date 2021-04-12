@@ -3,6 +3,7 @@ using System.Data;
 using System.Linq;
 using Optimization.GeneticAlgorithms.Crossovers;
 using Optimization.GeneticAlgorithms.Eliminations;
+using Optimization.GeneticAlgorithms.Modules;
 using Optimization.GeneticAlgorithms.Mutations;
 using Optimization.GeneticAlgorithms.Selections;
 
@@ -19,6 +20,12 @@ namespace Optimization.Parameters
     {
         WarehouseMode,
         DistancesMode
+    }
+    
+    public enum TerminationMethod
+    {
+        FixedEpochCount,
+        UntilNoImprovement
     }
     public class OptimizationParameters
     {
@@ -45,6 +52,11 @@ namespace Optimization.Parameters
         public virtual int PopulationSize { get; set; } = 120;
         public virtual int ParentsPerChildren { get; set; } = 2;
         public virtual int ChildrenPerGeneration { get; set; } = 60;
-        public virtual int TerminationValue { get; set; } = 300;
+
+        public virtual bool StopAfterEpochsWithoutChange { get; set; } = false;
+        
+        public virtual int MaxEpoch { get; set; } = 300;
+        
+        public virtual int StopAfterEpochCount { get; set; }
     }
 }

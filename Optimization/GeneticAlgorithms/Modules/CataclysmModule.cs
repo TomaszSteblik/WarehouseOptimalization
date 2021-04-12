@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Linq;
+using Optimization.GeneticAlgorithms.Initialization;
 
 namespace Optimization.GeneticAlgorithms.Modules
 {
-    public class CataclysmModule : GeneticModule<int[][]>
+    internal class CataclysmModule : GeneticModule<int[][]>
     {
         private int epochCount;
         
-        public CataclysmModule(Func<int[], int, int, int[][]> initializePopulation)
+        public CataclysmModule(PopulationInitialization initialization)
         {
             epochCount = 0;
             Action = population =>
@@ -18,7 +19,7 @@ namespace Optimization.GeneticAlgorithms.Modules
                 int populationSize = population.Length;
                 int eliminated = populationSize - populationSize / 10;
 
-                int[][] newIndividuals = initializePopulation(population[0], populationSize, population[0][0]);
+                int[][] newIndividuals = initialization.InitializePopulation(population[0], populationSize, population[0][0]);
                 var populationAfterCataclysm = population.Take(populationSize - eliminated).Concat(newIndividuals).ToArray();
                 for (int i = 0; i < populationSize; i++)
                 {

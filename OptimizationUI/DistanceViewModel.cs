@@ -215,16 +215,16 @@ namespace OptimizationUI
             }
         }
 
-        private int _terminationValue = 200;
-        public override int TerminationValue
+        private int _maxEpoch = 200;
+        public override int MaxEpoch
         {
             get
             {
-                return _terminationValue;
+                return _maxEpoch;
             }
             set
             {
-                _terminationValue = value;
+                _maxEpoch = value;
                 NotifyPropertyChanged();
             }
         }
@@ -351,6 +351,29 @@ namespace OptimizationUI
             }
         }
 
+        private bool _stopAfterEpochsWithoutChange = false;
+        public override bool StopAfterEpochsWithoutChange
+        {
+            get => _stopAfterEpochsWithoutChange;
+            set
+            {
+                _stopAfterEpochsWithoutChange = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private int _stopAfterEpochCount;
+
+        public override int StopAfterEpochCount
+        {
+            get => _stopAfterEpochCount;
+            set
+            {
+                _stopAfterEpochCount = value;
+                NotifyPropertyChanged();
+            }
+        }
+
 
         public DistanceViewModel(OptimizationParameters fitnessGeneticAlgorithmParameters)
         {
@@ -363,7 +386,7 @@ namespace OptimizationUI
             this._optimizationMethod = fitnessGeneticAlgorithmParameters.OptimizationMethod;
             this._populationSize = fitnessGeneticAlgorithmParameters.PopulationSize;
             this._selectionMethod = fitnessGeneticAlgorithmParameters.SelectionMethod;
-            this._terminationValue = fitnessGeneticAlgorithmParameters.TerminationValue;
+            this._maxEpoch = fitnessGeneticAlgorithmParameters.MaxEpoch;
             this._childrenPerGeneration = fitnessGeneticAlgorithmParameters.ChildrenPerGeneration;
             this._parentsPerChildren = fitnessGeneticAlgorithmParameters.ParentsPerChildren;
             

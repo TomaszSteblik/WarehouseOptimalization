@@ -20,8 +20,10 @@ namespace Optimization.GeneticAppliances.TSP
             var population = populationInitialization.InitializePopulation(order, parameters.PopulationSize, parameters.StartingId);
             _genetic = new BaseGenetic(parameters, population, calcFitness, ct);
             
-            _genetic.LoadModule(new TerminationModule());
-            _genetic.LoadModule(new CataclysmModule(populationInitialization.InitializePopulation));
+            if(parameters.StopAfterEpochsWithoutChange)
+                _genetic.LoadModule(new TerminationModule(parameters.StopAfterEpochCount));
+            
+            _genetic.LoadModule(new CataclysmModule(populationInitialization));
             _genetic.LoadModule(new TSPModule());
         }
 
