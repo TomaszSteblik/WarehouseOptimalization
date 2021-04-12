@@ -85,8 +85,8 @@
                                 <Label Content="Mutation probability (in per mil)"></Label>
                                 <TextBox Width="120" Text="{Binding MutationProbability}"></TextBox>
                             </WrapPanel>
-                            <WrapPanel>
-                                <CheckBox Content="Enable cataclysm " IsChecked="{Binding EnableCataclysm}"></CheckBox>
+                            <CheckBox Content="Enable cataclysm " IsChecked="{Binding EnableCataclysm}"></CheckBox>
+                            <WrapPanel Margin="20 0 0 0" Visibility="{Binding IsCataclysmVisible}">
                                 <Label Content="Cataclysm epochs"></Label>
                                 <TextBox Width="120" Text="{Binding CataclysmEpoch}"></TextBox>
                                 <Label Content="Cataclysm death %"></Label>

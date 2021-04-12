@@ -411,7 +411,17 @@ namespace OptimizationUI
                 NotifyPropertyChanged();
             }
         }
-        
+
+        public Visibility IsCataclysmVisible
+        {
+            get
+            {
+                if (_enableCataclysm)
+                    return Visibility.Visible;
+                return Visibility.Collapsed;
+            }
+        }
+
         private int _deathPercentage = 90;
 
         public override int DeathPercentage
