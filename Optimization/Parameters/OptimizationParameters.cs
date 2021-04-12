@@ -58,5 +58,9 @@ namespace Optimization.Parameters
         public virtual int MaxEpoch { get; set; } = 300;
         
         public virtual int StopAfterEpochCount { get; set; }
+        
+        public virtual bool EnableCataclysm { get; set; }
+        public virtual int CataclysmEpoch { get; set; }
+        public virtual int DeathPercentage { get; set; }
     }
 }

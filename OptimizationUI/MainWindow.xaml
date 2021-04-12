@@ -80,6 +80,14 @@
                                 <TextBox Width="120" Text="{Binding MutationProbability}"></TextBox>
                             </WrapPanel>
                             <WrapPanel>
+                                <CheckBox Content="Enable cataclysm " IsChecked="{Binding EnableCataclysm}"></CheckBox>
+                                <Label Content="Cataclysm epochs"></Label>
+                                <TextBox Width="120" Text="{Binding CataclysmEpoch}"></TextBox>
+                                <Label Content="Cataclysm death %"></Label>
+                                <TextBox Width="120" Text="{Binding DeathPercentage}"></TextBox>
+                                
+                            </WrapPanel>
+                            <WrapPanel>
                                 <Label Content="Max Epochs:"></Label>
                                 <TextBox Width="120" Text="{Binding MaxEpoch}"></TextBox>
                                 <CheckBox Content="After epochs without improvement " IsChecked="{Binding StopAfterEpochsWithoutChange}"></CheckBox>

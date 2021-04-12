@@ -7,17 +7,19 @@ namespace Optimization.GeneticAlgorithms.Modules
     internal class CataclysmModule : GeneticModule<int[][]>
     {
         private int epochCount;
+        private int epochThreshold;
         
-        public CataclysmModule(PopulationInitialization initialization)
+        public CataclysmModule(PopulationInitialization initialization, int percentage, int epochs)
         {
             epochCount = 0;
+            epochThreshold = epochs;
             Action = population =>
             {
-                if (epochCount++ != 200) return;
+                if (epochCount++ != epochThreshold) return;
 
                 epochCount = 0;
                 int populationSize = population.Length;
-                int eliminated = populationSize - populationSize / 10;
+                int eliminated = populationSize - populationSize * (100 - percentage) / 100;
 
                 int[][] newIndividuals = initialization.InitializePopulation(population[0], populationSize, population[0][0]);
                 var populationAfterCataclysm = population.Take(populationSize - eliminated).Concat(newIndividuals).ToArray();

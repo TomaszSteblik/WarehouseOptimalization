@@ -22,8 +22,8 @@ namespace Optimization.GeneticAppliances.TSP
             
             if(parameters.StopAfterEpochsWithoutChange)
                 _genetic.LoadModule(new TerminationModule(parameters.StopAfterEpochCount));
-            
-            _genetic.LoadModule(new CataclysmModule(populationInitialization));
+            if(parameters.EnableCataclysm)
+                _genetic.LoadModule(new CataclysmModule(populationInitialization, parameters.DeathPercentage, parameters.CataclysmEpoch));
             _genetic.LoadModule(new TSPModule());
         }
 

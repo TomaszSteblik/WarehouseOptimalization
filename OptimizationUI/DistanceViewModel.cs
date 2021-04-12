@@ -374,6 +374,42 @@ namespace OptimizationUI
             }
         }
 
+        private bool _enableCataclysm = false;
+
+        public override bool EnableCataclysm
+        {
+            get => _enableCataclysm;
+            set
+            {
+                _enableCataclysm = value;
+                NotifyPropertyChanged();
+            }
+        }
+        
+        private int _cataclysmEpoch = 200;
+
+        public override int CataclysmEpoch
+        {
+            get => _cataclysmEpoch;
+            set
+            {
+                _cataclysmEpoch = value;
+                NotifyPropertyChanged();
+            }
+        }
+        
+        private int _deathPercentage = 90;
+
+        public override int DeathPercentage
+        {
+            get => _deathPercentage;
+            set
+            {
+                _deathPercentage = value;
+                NotifyPropertyChanged();
+            }
+        }
+
 
         public DistanceViewModel(OptimizationParameters fitnessGeneticAlgorithmParameters)
         {
