@@ -76,12 +76,17 @@ namespace OptimizationUI
         private async void DistanceStartButtonClick(object sender, RoutedEventArgs e)
         {
             OptimizationParameters parameters = _properties.DistanceViewModel as OptimizationParameters;
-            int runs = Int32.Parse(DistanceInstancesTextBox.Text);
+            int runs = Int32.Parse(DistanceRunsTextBox.Text);
             TSPResult[] results = new TSPResult[runs];
             double[][][] runFitnesses = new double[runs][][];
 
             _cancellationTokenSource = new CancellationTokenSource();
-            _properties.DistanceViewModel.ProgressBarMaximum = runs - 1;
+            _properties.DistanceViewModel.ProgressBarMaximum = runs*_properties.DistanceViewModel.TerminationValue - 1;
+            _properties.DistanceViewModel.ProgressBarValue = 0;
+            Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration += (sender,iteration) =>
+            {
+                _properties.DistanceViewModel.ProgressBarValue++;
+            };
             CancellationToken ct = _cancellationTokenSource.Token;
             try
             {
@@ -90,7 +95,6 @@ namespace OptimizationUI
                     Parallel.For(0, runs, i =>
                     {
                         results[i] = OptimizationWork.TSP(parameters, ct);
-                        _properties.DistanceViewModel.ProgressBarValue = i;
                         runFitnesses[i] = results[i].fitness;
 
                     });

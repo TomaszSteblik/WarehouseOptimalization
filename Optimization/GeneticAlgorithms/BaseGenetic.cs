@@ -33,6 +33,8 @@ namespace Optimization.GeneticAlgorithms
 
         private readonly CancellationToken _ct;
 
+        public static event EventHandler<int> OnNextIteration; 
+
         private List<IModule> _modules;
         private double[] fitness;
 
@@ -82,7 +84,9 @@ namespace Optimization.GeneticAlgorithms
                     {
                         _ct.ThrowIfCancellationRequested();
                     }
-
+                    
+                    OnNextIteration?.Invoke(this,b);
+                    
                     fitness = _calculateFitness(_population);
 
                     RunModules();
