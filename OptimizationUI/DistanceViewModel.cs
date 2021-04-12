@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 using System.Windows;
 using Optimization.GeneticAlgorithms.Crossovers;
 using Optimization.GeneticAlgorithms.Eliminations;
+using Optimization.GeneticAlgorithms.Initialization;
 using Optimization.GeneticAlgorithms.Mutations;
 using Optimization.GeneticAlgorithms.Selections;
 using Optimization.Parameters;
@@ -100,6 +101,19 @@ namespace OptimizationUI
                 if (_optimizationMethod == OptimizationMethod.GeneticAlgorithm)
                     return Visibility.Visible;
                 return Visibility.Collapsed;
+            }
+        }
+
+        private PopulationInitializationMethod _populationInitializationMethod =
+            PopulationInitializationMethod.StandardPathInitialization;
+
+        public override PopulationInitializationMethod PopulationInitializationMethod
+        {
+            get => _populationInitializationMethod;
+            set
+            {
+                _populationInitializationMethod = value;
+                NotifyPropertyChanged();
             }
         }
 

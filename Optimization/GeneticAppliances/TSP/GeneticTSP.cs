@@ -16,7 +16,8 @@ namespace Optimization.GeneticAppliances.TSP
         public GeneticTSP(int[] order, OptimizationParameters parameters, DelegateFitness.CalcFitness calcFitness, CancellationToken ct)
         {
             _use2opt = parameters.Use2opt;
-            var populationInitialization = new StandardPathInitialization();
+            var populationInitialization =
+                GeneticFactory.CreatePopulationInitialization(parameters.PopulationInitializationMethod);
             var population = populationInitialization.InitializePopulation(order, parameters.PopulationSize, parameters.StartingId);
             _genetic = new BaseGenetic(parameters, population, calcFitness, ct);
             

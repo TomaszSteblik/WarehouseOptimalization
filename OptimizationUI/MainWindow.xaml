@@ -30,6 +30,12 @@
                         </WrapPanel>
                         <StackPanel  Visibility="{Binding IsAllVisible}">
                             <WrapPanel>
+                                <Label Content="Population initialization method:"></Label>
+                                <ComboBox Width="200" ItemsSource="{Binding Path=PopulationInitializationMethod}" Name="DistancePopulationInitializationMethod"
+                                          SelectedItem="{Binding PopulationInitializationMethod}"/>
+                                          
+                            </WrapPanel>
+                            <WrapPanel>
                                 <Label Content="Selection method:"></Label>
                                 <ComboBox Width="120" ItemsSource="{Binding Path=SelectionMethod}" Name="DistanceSelectionComboBox"
                                           SelectedItem="{Binding SelectionMethod}"/>

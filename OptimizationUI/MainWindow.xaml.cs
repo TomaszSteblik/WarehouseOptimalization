@@ -22,6 +22,7 @@ using Microsoft.Win32;
 using Optimization;
 using Optimization.GeneticAlgorithms.Crossovers;
 using Optimization.GeneticAlgorithms.Eliminations;
+using Optimization.GeneticAlgorithms.Initialization;
 using Optimization.GeneticAlgorithms.Mutations;
 using Optimization.GeneticAlgorithms.Selections;
 using Optimization.GeneticAppliances.TSP;
@@ -53,12 +54,15 @@ namespace OptimizationUI
             var crossovers = Enum.GetValues(typeof(CrossoverMethod)).Cast<CrossoverMethod>().ToList();
             var eliminations = Enum.GetValues(typeof(EliminationMethod)).Cast<EliminationMethod>().ToList();
             var mutations = Enum.GetValues(typeof(MutationMethod)).Cast<MutationMethod>().ToList();
+            var initializations = Enum.GetValues(typeof(PopulationInitializationMethod))
+                .Cast<PopulationInitializationMethod>().ToList();
 
             DistanceMethodComboBox.ItemsSource = methods;
             DistanceSelectionComboBox.ItemsSource = selections;
             DistanceCrossoverComboBox.ItemsSource = crossovers;
             DistanceEliminationComboBox.ItemsSource = eliminations;
             DistanceMutationComboBox.ItemsSource = mutations;
+            DistancePopulationInitializationMethod.ItemsSource = initializations;
 
             WarehouseSelectionComboBox.ItemsSource = selections;
             WarehouseCrossoverComboBox.ItemsSource = crossovers;

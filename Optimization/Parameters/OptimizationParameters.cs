@@ -3,6 +3,7 @@ using System.Data;
 using System.Linq;
 using Optimization.GeneticAlgorithms.Crossovers;
 using Optimization.GeneticAlgorithms.Eliminations;
+using Optimization.GeneticAlgorithms.Initialization;
 using Optimization.GeneticAlgorithms.Modules;
 using Optimization.GeneticAlgorithms.Mutations;
 using Optimization.GeneticAlgorithms.Selections;
@@ -22,11 +23,6 @@ namespace Optimization.Parameters
         DistancesMode
     }
     
-    public enum TerminationMethod
-    {
-        FixedEpochCount,
-        UntilNoImprovement
-    }
     public class OptimizationParameters
     {
         public virtual OptimizationMethod OptimizationMethod { get; set; } = OptimizationMethod.GeneticAlgorithm;
@@ -39,6 +35,9 @@ namespace Optimization.Parameters
 
         public bool WriteCsv { get; set; } = true;
         public virtual string DataPath { get; set; }
+
+        public virtual PopulationInitializationMethod PopulationInitializationMethod { get; set; } =
+            PopulationInitializationMethod.StandardPathInitialization;
         public virtual SelectionMethod SelectionMethod { get; set; } = SelectionMethod.RouletteWheel;
         public virtual CrossoverMethod CrossoverMethod { get; set; } = CrossoverMethod.Aex;
         public virtual CrossoverMethod[] MultiCrossovers { get; set; }
