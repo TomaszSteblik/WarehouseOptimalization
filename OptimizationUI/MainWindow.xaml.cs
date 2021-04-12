@@ -79,6 +79,14 @@ namespace OptimizationUI
 
         private async void DistanceStartButtonClick(object sender, RoutedEventArgs e)
         {
+            EventHandler<int> BaseGeneticOnOnNextIteration()
+            {
+                return (sender,iteration) =>
+                {
+                    _properties.DistanceViewModel.ProgressBarValue++;
+                };
+            }
+
             OptimizationParameters parameters = _properties.DistanceViewModel as OptimizationParameters;
             int runs = Int32.Parse(DistanceRunsTextBox.Text);
             TSPResult[] results = new TSPResult[runs];
@@ -87,10 +95,7 @@ namespace OptimizationUI
             _cancellationTokenSource = new CancellationTokenSource();
             _properties.DistanceViewModel.ProgressBarMaximum = runs*_properties.DistanceViewModel.MaxEpoch - 1;
             _properties.DistanceViewModel.ProgressBarValue = 0;
-            Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration += (sender,iteration) =>
-            {
-                _properties.DistanceViewModel.ProgressBarValue++;
-            };
+            Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration += BaseGeneticOnOnNextIteration();
             CancellationToken ct = _cancellationTokenSource.Token;
             try
             {
@@ -119,8 +124,7 @@ namespace OptimizationUI
             {
                 DistanceResultLabel.Content = "Cancelled";
             }
-
-
+            Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration -= BaseGeneticOnOnNextIteration();
         }
 
         private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
