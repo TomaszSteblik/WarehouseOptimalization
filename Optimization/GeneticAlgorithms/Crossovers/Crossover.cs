@@ -1,9 +1,17 @@
 using System;
+using System.Collections.Generic;
+using Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers;
 
 namespace Optimization.GeneticAlgorithms.Crossovers
 {
     public abstract class Crossover
     {
+        protected ConflictResolver ConflictResolver;
+
+        public Crossover(ConflictResolver resolver)
+        {
+            ConflictResolver = resolver;
+        }
         public abstract int[] GenerateOffspring(int[][] parents);
         public virtual int[][] GenerateOffsprings(int[][] parents, int numParentsForOneChild)
         {
@@ -25,6 +33,8 @@ namespace Optimization.GeneticAlgorithms.Crossovers
             return offsprings;
         }
         protected readonly Random Random = new Random();
+        
+        
 
         protected bool IsThereGene(int[] chromosome, int a)
         {
@@ -38,7 +48,6 @@ namespace Optimization.GeneticAlgorithms.Crossovers
     public enum CrossoverMethod
     {
         Aex,
-        AexNN,
         Cycle,
         HGreX,
         HProX,

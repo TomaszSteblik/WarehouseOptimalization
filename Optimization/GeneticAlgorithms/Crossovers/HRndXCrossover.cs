@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers;
 
 namespace Optimization.GeneticAlgorithms.Crossovers
 {
@@ -36,7 +37,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 
                 if (nextVertex == -1)
                 {
-                    nextVertex = availableVertexes[Random.Next(0, availableVertexes.Count)];
+                    nextVertex = ConflictResolver.ResolveConflict(currentVertex, availableVertexes);
                 }
                 offspring[counter] = nextVertex;
                 availableVertexes.Remove(nextVertex);
@@ -44,6 +45,10 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                 counter++;
             }
             return offspring;
+        }
+
+        public HRndXCrossover(ConflictResolver resolver) : base(resolver)
+        {
         }
     }
 }

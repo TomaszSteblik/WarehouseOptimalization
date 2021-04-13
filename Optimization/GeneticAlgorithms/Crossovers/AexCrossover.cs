@@ -1,10 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
+using Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers;
 
 namespace Optimization.GeneticAlgorithms.Crossovers
 {
     internal class AexCrossover : Crossover
     {
+        public AexCrossover(ConflictResolver resolver) : base(resolver)
+        {
+        }
         public override int[] GenerateOffspring(int[][] parents)
         {
             var parentLength = parents[0].Length;
@@ -47,7 +51,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 
                 if (nextVertex == -1)
                 {
-                    nextVertex = ResolveConflict(selectedParent[indexOfCurrentVertexInSelectedParent], availableVertexes);
+                    nextVertex = ConflictResolver.ResolveConflict(selectedParent[indexOfCurrentVertexInSelectedParent], availableVertexes);
                 }
                 offspring[counter] = nextVertex;
                 availableVertexes.Remove(nextVertex);
@@ -57,9 +61,6 @@ namespace Optimization.GeneticAlgorithms.Crossovers
             return offspring;
         }
 
-        protected virtual int ResolveConflict(int id, List<int> availableVertexes)
-        {
-            return availableVertexes[Random.Next(0, availableVertexes.Count)];
-        }
+        
     }
 }

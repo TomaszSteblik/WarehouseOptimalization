@@ -44,6 +44,9 @@
                                 <Label Content="Crossover method:"></Label>
                                 <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="DistanceCrossoverComboBox"
                                           SelectedItem="{Binding CrossoverMethod}"/>
+                                <Label Content="Conflict resolve method:"></Label>
+                                <ComboBox Width="120" ItemsSource="{Binding Path= ConflictResolveMethod}" Name="DistanceConflictResolveComboBox"
+                                          SelectedItem="{Binding ConflictResolveMethod}"></ComboBox>
                             </WrapPanel>
                             <ItemsControl Margin="50 0 0 0" ItemsSource="{Binding Path=CrossoverCheckBoxStates}" Visibility="{Binding IsCrossoverCheckBoxVisible}">
                                 <ItemsControl.ItemTemplate>
