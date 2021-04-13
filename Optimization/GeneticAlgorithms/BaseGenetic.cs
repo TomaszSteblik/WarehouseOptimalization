@@ -92,12 +92,12 @@ namespace Optimization.GeneticAlgorithms
                     
                     fitness = _calculateFitness(_population);
 
+                    Array.Sort(fitness,_population);
+
                     RunModules();
                 
                     int[][] parents = _selection.GenerateParents(_childrenPerGeneration * 2, fitness);
                     int[][] offsprings = _crossover.GenerateOffsprings(parents, _parentsPerChild);
-                    
-                    Array.Sort(fitness,_population);
                     
                     _elimination.EliminateAndReplace(offsprings, fitness);
                     if (_canIncreaseStrictness)
