@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -125,6 +127,12 @@ namespace OptimizationUI
                             $"Min: {results.Min(x => x.FinalFitness)}  " +
                             $"Avg epoch count: {results.Average(x => x.EpochCount)}";
                         WritePlotDistances(linesGridDistances, GetAverageFitnesses(runFitnesses));
+
+                        SaveDistanceResultsToDataCsv(results,runs,
+                            _properties.DistanceViewModel.DataPath.Split('\\')[^1]
+                                .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'))
+                            );
+
                     });
                 }
                 catch (AggregateException)
@@ -214,7 +222,6 @@ namespace OptimizationUI
         {
             if (File.Exists(location))
             {
-                Console.WriteLine("sdf");
                 string jsonString = File.ReadAllText(location);
                 _properties = JsonSerializer.Deserialize<Properties>(jsonString);
                 _properties.WarehouseViewModel.FitnessGeneticAlgorithmParameters =
@@ -550,6 +557,24 @@ namespace OptimizationUI
             fileDialog.RestoreDirectory = true;
             fileDialog.ShowDialog();
             SerializeParameters(fileDialog.FileName);
+        }
+
+        private void SaveDistanceResultsToDataCsv(TSPResult[] results,int runs, string dataset, string id = "default")
+        {
+            StringBuilder line = new StringBuilder();
+            line.Append(Enum.GetName(_properties.DistanceViewModel.CrossoverMethod));
+            if(_properties.DistanceViewModel.CrossoverMethod == CrossoverMethod.MAC || _properties.DistanceViewModel.CrossoverMethod == CrossoverMethod.MRC)
+            {
+                line.Append('(');
+                foreach (var crossoverMethod in _properties.DistanceViewModel.MultiCrossovers)
+                {
+                    line.Append($"{Enum.GetName(crossoverMethod)} ");
+                }
+                line.Remove(line.Length-1, 1);
+                line.Append(')');
+            }
+            line.Append($",{dataset},{id},{runs},{results.Average(x => x.FinalFitness).ToString(CultureInfo.CurrentCulture).Replace(',','.')}\n");
+            File.AppendAllText("data.csv",line.ToString());
         }
     }
 }
