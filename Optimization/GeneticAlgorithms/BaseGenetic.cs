@@ -96,11 +96,12 @@ namespace Optimization.GeneticAlgorithms
                 
                     int[][] parents = _selection.GenerateParents(_childrenPerGeneration * 2, fitness);
                     int[][] offsprings = _crossover.GenerateOffsprings(parents, _parentsPerChild);
+                    
+                    Array.Sort(fitness,_population);
+                    
                     _elimination.EliminateAndReplace(offsprings, fitness);
                     if (_canIncreaseStrictness)
                         _canIncreaseStrictness = _selection.IncreaseStrictness(_childrenPerGeneration);
-                
-                    Array.Sort(fitness,_population);
                     _mutation.Mutate(_population);
 
                     bestGene = _population[0];
