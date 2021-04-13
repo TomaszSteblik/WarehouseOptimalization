@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Optimization.GeneticAlgorithms.Crossovers;
+using Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers;
 using Optimization.GeneticAlgorithms.Eliminations;
 using Optimization.GeneticAlgorithms.Modules;
 using Optimization.GeneticAlgorithms.Mutations;
@@ -17,6 +18,7 @@ namespace Optimization.GeneticAlgorithms
     {
         private readonly Selection _selection;
         private readonly Crossover _crossover;
+        private readonly ConflictResolver _resolver;
         private readonly Elimination _elimination;
         private readonly Mutation _mutation;
         
@@ -64,8 +66,9 @@ namespace Optimization.GeneticAlgorithms
             _calculateFitness = calculateFitness;
 
             _selection = GeneticFactory.CreateSelection(parameters, _population);
+            _resolver = GeneticFactory.CreateConflictResolver(parameters.ConflictResolveMethod);
             _crossover = GeneticFactory.CreateCrossover(parameters.StartingId,parameters.CrossoverMethod,
-                parameters.MultiCrossovers);
+                parameters.MultiCrossovers, _resolver);
             _elimination = GeneticFactory.CreateElimination(parameters, _population);
             _mutation = GeneticFactory.CreateMutation(parameters.MutationMethod,parameters.MultiMutations, _population,
                 _mutationProbability);

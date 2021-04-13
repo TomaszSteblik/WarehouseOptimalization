@@ -2,6 +2,7 @@ using System;
 using System.Data;
 using System.Linq;
 using Optimization.GeneticAlgorithms.Crossovers;
+using Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers;
 using Optimization.GeneticAlgorithms.Eliminations;
 using Optimization.GeneticAlgorithms.Initialization;
 using Optimization.GeneticAlgorithms.Modules;
@@ -39,6 +40,8 @@ namespace Optimization.Parameters
         public virtual PopulationInitializationMethod PopulationInitializationMethod { get; set; } =
             PopulationInitializationMethod.StandardPathInitialization;
         public virtual SelectionMethod SelectionMethod { get; set; } = SelectionMethod.RouletteWheel;
+
+        public virtual ConflictResolveMethod ConflictResolveMethod { get; set; } = ConflictResolveMethod.Random;
         public virtual CrossoverMethod CrossoverMethod { get; set; } = CrossoverMethod.Aex;
         public virtual CrossoverMethod[] MultiCrossovers { get; set; }
 

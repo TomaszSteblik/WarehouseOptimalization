@@ -21,6 +21,7 @@ using InteractiveDataDisplay.WPF;
 using Microsoft.Win32;
 using Optimization;
 using Optimization.GeneticAlgorithms.Crossovers;
+using Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers;
 using Optimization.GeneticAlgorithms.Eliminations;
 using Optimization.GeneticAlgorithms.Initialization;
 using Optimization.GeneticAlgorithms.Mutations;
@@ -56,6 +57,8 @@ namespace OptimizationUI
             var mutations = Enum.GetValues(typeof(MutationMethod)).Cast<MutationMethod>().ToList();
             var initializations = Enum.GetValues(typeof(PopulationInitializationMethod))
                 .Cast<PopulationInitializationMethod>().ToList();
+            var conflictResolvers =
+                Enum.GetValues(typeof(ConflictResolveMethod)).Cast<ConflictResolveMethod>().ToList();
 
             DistanceMethodComboBox.ItemsSource = methods;
             DistanceSelectionComboBox.ItemsSource = selections;
@@ -63,6 +66,7 @@ namespace OptimizationUI
             DistanceEliminationComboBox.ItemsSource = eliminations;
             DistanceMutationComboBox.ItemsSource = mutations;
             DistancePopulationInitializationMethod.ItemsSource = initializations;
+            DistanceConflictResolveComboBox.ItemsSource = conflictResolvers;
 
             WarehouseSelectionComboBox.ItemsSource = selections;
             WarehouseCrossoverComboBox.ItemsSource = crossovers;

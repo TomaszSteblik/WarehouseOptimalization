@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Windows;
 using Optimization.GeneticAlgorithms.Crossovers;
+using Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers;
 using Optimization.GeneticAlgorithms.Eliminations;
 using Optimization.GeneticAlgorithms.Initialization;
 using Optimization.GeneticAlgorithms.Mutations;
@@ -430,6 +431,18 @@ namespace OptimizationUI
             set
             {
                 _deathPercentage = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private ConflictResolveMethod _conflictResolveMethod = ConflictResolveMethod.Random;
+
+        public override ConflictResolveMethod ConflictResolveMethod
+        {
+            get => _conflictResolveMethod;
+            set
+            {
+                _conflictResolveMethod = value;
                 NotifyPropertyChanged();
             }
         }

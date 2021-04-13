@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers;
 
 namespace Optimization.GeneticAlgorithms.Crossovers
 {
@@ -44,6 +45,10 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                 counter++;
             }
             return offspring;
+        }
+
+        public HRndXCrossover(ConflictResolver resolver) : base(resolver)
+        {
         }
     }
 }
