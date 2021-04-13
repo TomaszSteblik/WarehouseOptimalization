@@ -42,7 +42,7 @@ namespace OptimizationUI
         public MainWindow()
         {
             InitializeComponent();
-            DeserializeParameters();
+            DeserializeParameters("properties.json");
             DistancePanel.DataContext = _properties.DistanceViewModel;
             WarehouseFitnessPanel.DataContext =
                 _properties.WarehouseViewModel.FitnessGeneticAlgorithmParameters as DistanceViewModel;
@@ -195,26 +195,26 @@ namespace OptimizationUI
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
-            SerializeParameters();
+            SerializeParameters("properties.json");
         }
 
-        private void SerializeParameters()
+        private void SerializeParameters(string path)
         {
             var options = new JsonSerializerOptions
             {
                 WriteIndented = true,
             };
             string jsonString = JsonSerializer.Serialize(_properties, options);
-            if (File.Exists("properties.json"))
-                File.Delete("properties.json");
-            File.WriteAllText("properties.json", jsonString);
+            if (File.Exists(path))
+                File.Delete(path);
+            File.WriteAllText(path, jsonString);
         }
 
-        private void DeserializeParameters()
+        private void DeserializeParameters(string location)
         {
-            string location = "properties.json";
             if (File.Exists(location))
             {
+                Console.WriteLine("sdf");
                 string jsonString = File.ReadAllText(location);
                 _properties = JsonSerializer.Deserialize<Properties>(jsonString);
                 _properties.WarehouseViewModel.FitnessGeneticAlgorithmParameters =
@@ -526,6 +526,30 @@ namespace OptimizationUI
                 linesGrid.Children[3].Visibility =
                     _properties.WarehouseViewModel.ShowCustom ? Visibility.Visible : Visibility.Hidden;
             }
+        }
+
+        private void LoadDistanceParamsButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Filter = "json files (*.json)|*.json";
+            fileDialog.RestoreDirectory = true;
+            fileDialog.ShowDialog();
+            DeserializeParameters(fileDialog.FileName);
+            DistancePanel.DataContext = _properties.DistanceViewModel;
+            WarehouseFitnessPanel.DataContext =
+                _properties.WarehouseViewModel.FitnessGeneticAlgorithmParameters as DistanceViewModel;
+            WarehouseStackPanel.DataContext =
+                _properties.WarehouseViewModel.WarehouseGeneticAlgorithmParameters as DistanceViewModel;
+            WarehousePanel.DataContext = _properties.WarehouseViewModel;
+        }
+
+        private void SaveDistanceParamsButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog fileDialog = new SaveFileDialog();
+            fileDialog.Filter = "json files (*.json)|*.json";
+            fileDialog.RestoreDirectory = true;
+            fileDialog.ShowDialog();
+            SerializeParameters(fileDialog.FileName);
         }
     }
 }
