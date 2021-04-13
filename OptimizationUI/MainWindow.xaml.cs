@@ -101,34 +101,45 @@ namespace OptimizationUI
             _properties.DistanceViewModel.ProgressBarValue = 0;
             Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration += BaseGeneticOnOnNextIteration();
             CancellationToken ct = _cancellationTokenSource.Token;
-            try
+            if ((OptimizationMethod) DistanceMethodComboBox.SelectedItem == OptimizationMethod.GeneticAlgorithm)
             {
-                await Task.Run(() =>
+                try
                 {
-                    Parallel.For(0, runs, i =>
+                    await Task.Run(() =>
                     {
-                        results[i] = OptimizationWork.TSP(parameters, ct);
-                        runFitnesses[i] = results[i].fitness;
+                        Parallel.For(0, runs, i =>
+                        {
+                            results[i] = OptimizationWork.TSP(parameters, ct);
+                            runFitnesses[i] = results[i].fitness;
 
+                        });
+                    }, ct);
+
+                    Dispatcher.Invoke(() =>
+                    {
+                        _properties.DistanceViewModel.ProgressBarValue =
+                            runs * _properties.DistanceViewModel.MaxEpoch - 1;
+                        DistanceResultLabel.Content =
+                            $"Avg: {results.Average(x => x.FinalFitness)}  " +
+                            $"Max: {results.Max(x => x.FinalFitness)}  " +
+                            $"Min: {results.Min(x => x.FinalFitness)}  " +
+                            $"Avg epoch count: {results.Average(x => x.EpochCount)}";
+                        WritePlotDistances(linesGridDistances, GetAverageFitnesses(runFitnesses));
                     });
-                }, ct);
-                
-                Dispatcher.Invoke(() =>
+                }
+                catch (AggregateException)
                 {
-                    _properties.DistanceViewModel.ProgressBarValue = runs*_properties.DistanceViewModel.MaxEpoch - 1;
-                    DistanceResultLabel.Content =
-                        $"Avg: {results.Average(x=>x.FinalFitness)}  " +
-                        $"Max: {results.Max(x=>x.FinalFitness)}  " +
-                        $"Min: {results.Min(x=>x.FinalFitness)}  " +
-                        $"Avg epoch count: {results.Average(x=>x.EpochCount)}";
-                    WritePlotDistances(linesGridDistances, GetAverageFitnesses(runFitnesses));
-                });
+                    DistanceResultLabel.Content = "Cancelled";
+                }
+
+                Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration -= BaseGeneticOnOnNextIteration();
             }
-            catch (AggregateException)
+            else
             {
-                DistanceResultLabel.Content = "Cancelled";
+                double result = OptimizationWork.FindShortestPath(parameters);
+                DistanceResultLabel.Content =
+                    $"Result: {result}";
             }
-            Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration -= BaseGeneticOnOnNextIteration();
         }
 
         private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
