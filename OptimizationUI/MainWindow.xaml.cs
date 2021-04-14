@@ -85,6 +85,7 @@ namespace OptimizationUI
 
         private async void DistanceStartButtonClick(object sender, RoutedEventArgs e)
         {
+            DistanceStartButton.IsEnabled = false;
             EventHandler<int> BaseGeneticOnOnNextIteration()
             {
                 return (sender,iteration) =>
@@ -132,7 +133,6 @@ namespace OptimizationUI
                             _properties.DistanceViewModel.DataPath.Split('\\')[^1]
                                 .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'))
                             );
-
                     });
                 }
                 catch (AggregateException)
@@ -148,6 +148,7 @@ namespace OptimizationUI
                 DistanceResultLabel.Content =
                     $"Result: {result}";
             }
+            DistanceStartButton.IsEnabled = true;
         }
 
         private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)

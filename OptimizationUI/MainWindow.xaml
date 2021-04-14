@@ -108,7 +108,7 @@
                                 <TextBox Width="120" Text="{Binding StopAfterEpochCount}"></TextBox>
                             </WrapPanel>
                         </StackPanel>
-                        <Button Margin="30 5 30 0" Content="Start" Click="DistanceStartButtonClick"/>
+                        <Button Margin="30 5 30 0" Content="Start" Click="DistanceStartButtonClick" Name="DistanceStartButton"/>
                         <Button Margin="30 5 30 0" Content="Cancel" Click="CancelDistance"></Button>
                         <ProgressBar Margin="30 5 30 0" Height="20" Name="DistanceProgressBar" Value="{Binding ProgressBarValue}" Maximum="{Binding ProgressBarMaximum}"></ProgressBar>
                         <Label Name="DistanceResultLabel"></Label>
