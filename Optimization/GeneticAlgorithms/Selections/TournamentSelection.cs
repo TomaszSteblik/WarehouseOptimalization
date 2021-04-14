@@ -1,3 +1,5 @@
+using System;
+
 namespace Optimization.GeneticAlgorithms.Selections
 {
     internal class TournamentSelection : Selection {
@@ -46,7 +48,7 @@ namespace Optimization.GeneticAlgorithms.Selections
             return winners;
         }
         
-        public TournamentSelection(int[][] population) : base(population)
+        public TournamentSelection(int[][] population, Random random) : base(population, random)
         {
         }
     }

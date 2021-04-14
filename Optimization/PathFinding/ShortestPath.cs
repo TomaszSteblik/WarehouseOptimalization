@@ -8,7 +8,7 @@ namespace Optimization.PathFinding
 {
     internal static class ShortestPath
     {
-        public static double Find(int[] order,  OptimizationParameters optimizationParameters, CancellationToken ct)
+        public static double Find(int[] order,  OptimizationParameters optimizationParameters, CancellationToken ct, Random random)
         {
             IPathFinder algorithmPathFinding = optimizationParameters.OptimizationMethod switch
             {
@@ -21,7 +21,7 @@ namespace Optimization.PathFinding
                         for (int i = 0; i < population.Length; i++)
                             fitness[i] = Fitness.CalculateFitness(population[i]);
                         return fitness;
-                    }, ct),
+                    }, ct, random),
                 _ => throw new ArgumentException("Incorrect optimization method in config file")
             };
             int[] objectOrder = algorithmPathFinding.FindShortestPath(order);
@@ -40,13 +40,13 @@ namespace Optimization.PathFinding
             return pathLength;
 
         }
-        public static double Find(int[] order,  OptimizationParameters optimizationParameters, DelegateFitness.CalcFitness calcFitness, CancellationToken ct)
+        public static double Find(int[] order,  OptimizationParameters optimizationParameters, DelegateFitness.CalcFitness calcFitness, CancellationToken ct, Random random)
         {
             IPathFinder algorithmPathFinding = optimizationParameters.OptimizationMethod switch
             {
                 OptimizationMethod.Permutations => new Permutations(optimizationParameters),
                 OptimizationMethod.NearestNeighbor => new NearestNeighbor(optimizationParameters),
-                OptimizationMethod.GeneticAlgorithm => new GeneticPathFinding(order,optimizationParameters,calcFitness, ct),
+                OptimizationMethod.GeneticAlgorithm => new GeneticPathFinding(order,optimizationParameters,calcFitness, ct, random),
                 _ => throw new ArgumentException("Incorrect optimization method in config file")
             };
             int[] objectOrder = algorithmPathFinding.FindShortestPath(order);

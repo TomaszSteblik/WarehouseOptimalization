@@ -1,3 +1,5 @@
+using System;
+
 namespace Optimization.GeneticAlgorithms.Selections
 {
     internal class RandomSelection : Selection
@@ -19,7 +21,7 @@ namespace Optimization.GeneticAlgorithms.Selections
             return parents;
         }
 
-        public RandomSelection(int[][] population) : base(population)
+        public RandomSelection(int[][] population, Random random) : base(population, random)
         {
         }
     }
