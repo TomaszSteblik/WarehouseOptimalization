@@ -2,10 +2,10 @@
   "OptimizationMethod": "GeneticAlgorithm",
   "Use2opt": true,
   "LogEnabled": false,
-  "LogPath":"C:/Users/rtry/RiderProjects/WarehouseOptimization/log.txt",
-  "DataPath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/distances-usa.txt",
+  "LogPath": "C:\\Users\\MaksioloLaptop\\Documents\\GitHub\\WarehouseOptimization/log.txt",
+  "DataPath": "C:\\Users\\MaksioloLaptop\\Documents\\GitHub\\WarehouseOptimization/distances-usa.txt",
   "ResultToFile": true,
-  "ResultPath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/result.txt",
-  "CrossoverMethod" : "AexNN",
-  "EliminationMethod" : "Elitism"
+  "ResultPath": "C:\\Users\\MaksioloLaptop\\Documents\\GitHub\\WarehouseOptimization/result.txt",
+  "CrossoverMethod": "AexNN",
+  "EliminationMethod": "Elitism"
 }
