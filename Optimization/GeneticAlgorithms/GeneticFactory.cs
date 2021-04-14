@@ -51,6 +51,7 @@ namespace Optimization.GeneticAlgorithms
                 CrossoverMethod.Cycle => new CycleCrossover(resolver),
                 CrossoverMethod.MAC => new MACrossover(crossoverMethods, startingId, resolver),
                 CrossoverMethod.MRC => new MRCrossover(crossoverMethods, startingId, resolver),
+                CrossoverMethod.Order => new OrderCrossover(resolver),
                 _ => throw new ArgumentException("Wrong crossover method name")
             };
             return crossover;
