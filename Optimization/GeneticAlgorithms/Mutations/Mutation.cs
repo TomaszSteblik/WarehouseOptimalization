@@ -8,11 +8,11 @@ namespace Optimization.GeneticAlgorithms.Mutations
         private double _mutationProbability;
         private int[][] _population;
 
-        protected Mutation(double mutationProbability, int[][] population, Random random)
+        protected Mutation(double mutationProbability, int[][] population)
         {
             _mutationProbability = mutationProbability;
             _population = population;
-            Random = random;
+            Random = new Random();
         }
         
         public virtual void Mutate(int[][] population)

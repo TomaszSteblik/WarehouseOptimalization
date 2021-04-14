@@ -20,7 +20,7 @@ namespace Optimization.GeneticAppliances.Warehouse
         private BaseGenetic _genetic;
 
         public GeneticWarehouse(OptimizationParameters optimizationParameters, int warehouseSize,
-            DelegateFitness.CalcFitness calcFitness, CancellationToken ct, Random random)
+            DelegateFitness.CalcFitness calcFitness, CancellationToken ct)
         {
             _warehouseSize = warehouseSize;
             int[] itemsToSort = new int[_warehouseSize];
@@ -29,9 +29,9 @@ namespace Optimization.GeneticAppliances.Warehouse
                 itemsToSort[i - 1] = i;
             }
 
-            var populationInitialization = new StandardPathInitialization(random);
+            var populationInitialization = new StandardPathInitialization();
             var population = populationInitialization.InitializePopulation( itemsToSort, optimizationParameters.PopulationSize, 0);
-            _genetic = new BaseGenetic(optimizationParameters, population, calcFitness, ct, random);
+            _genetic = new BaseGenetic(optimizationParameters, population, calcFitness, ct);
 
         }
 

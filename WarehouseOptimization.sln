@@ -1,5 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptimizationRunner", "OptimizationRunner\OptimizationRunner.csproj", "{550B8C6E-941A-440B-9595-217AE2DA6444}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optimization", "Optimization\Optimization.csproj", "{5D8842C3-59AB-4B06-A57C-DDD6D8CDA4B6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptimizationUI", "OptimizationUI\OptimizationUI.csproj", "{1F4B2369-E278-4D1B-8057-F5692B56ECCD}"
@@ -10,6 +12,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{550B8C6E-941A-440B-9595-217AE2DA6444}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{550B8C6E-941A-440B-9595-217AE2DA6444}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{550B8C6E-941A-440B-9595-217AE2DA6444}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{550B8C6E-941A-440B-9595-217AE2DA6444}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5D8842C3-59AB-4B06-A57C-DDD6D8CDA4B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5D8842C3-59AB-4B06-A57C-DDD6D8CDA4B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D8842C3-59AB-4B06-A57C-DDD6D8CDA4B6}.Release|Any CPU.ActiveCfg = Release|Any CPU

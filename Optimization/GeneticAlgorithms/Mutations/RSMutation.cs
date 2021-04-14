@@ -4,7 +4,7 @@ namespace Optimization.GeneticAlgorithms.Mutations
 {
     internal class RSMutation : Mutation
     {
-        public RSMutation(double mutationProbability, int[][] population, Random random) : base(mutationProbability, population, random)
+        public RSMutation(double mutationProbability, int[][] population) : base(mutationProbability, population)
         {
         }
 

@@ -42,7 +42,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
             return offspring;
         }
 
-        public KPointCrossover(ConflictResolver resolver, Random random) : base(resolver, random)
+        public KPointCrossover(ConflictResolver resolver) : base(resolver)
         {
         }
     }

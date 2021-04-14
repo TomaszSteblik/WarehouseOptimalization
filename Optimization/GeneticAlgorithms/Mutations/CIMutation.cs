@@ -4,7 +4,7 @@ namespace Optimization.GeneticAlgorithms.Mutations
 {
     internal class CIMutation : Mutation
     {
-        public CIMutation(double mutationProbability, int[][] population, Random random) : base(mutationProbability, population, random)
+        public CIMutation(double mutationProbability, int[][] population) : base(mutationProbability, population)
         {
         }
 

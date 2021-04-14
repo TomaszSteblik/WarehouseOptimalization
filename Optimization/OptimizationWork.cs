@@ -12,23 +12,23 @@ namespace Optimization
 {
     public static class OptimizationWork
     {
-        public static double FindShortestPath(OptimizationParameters optimizationParameters, Random random)
+        public static double FindShortestPath(OptimizationParameters optimizationParameters)
         {
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
             Distances.Create(matrix);
-            return PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters, CancellationToken.None, random);
+            return PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters, CancellationToken.None);
             
         }
         
-        public static double FindShortestPath(OptimizationParameters optimizationParameters, CancellationToken ct, Random random)
+        public static double FindShortestPath(OptimizationParameters optimizationParameters, CancellationToken ct)
         {
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
             Distances.Create(matrix);
-            return PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters, ct, random);
+            return PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters, ct);
             
         }
         
-        public static TSPResult TSP(OptimizationParameters optimizationParameters, CancellationToken ct, Random random)
+        public static TSPResult TSP(OptimizationParameters optimizationParameters, CancellationToken ct)
         {
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
             Distances.Create(matrix);
@@ -39,27 +39,27 @@ namespace Optimization
                     for (int i = 0; i < population.Length; i++)
                         fitness[i] = Fitness.CalculateFitness(population[i]);
                     return fitness;
-                }, ct, random);
+                }, ct);
             return tsp.Run();
             
         }
 
         public static void FindShortestPath(OptimizationParameters optimizationParameters,
-            DelegateFitness.CalcFitness calcFitness, Random random)
+            DelegateFitness.CalcFitness calcFitness)
         {
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
             Distances.Create(matrix);
-            PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters,calcFitness, CancellationToken.None, random);
+            PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters,calcFitness, CancellationToken.None);
         }
 
-        public static double WarehouseOptimization(WarehouseParameters warehouseParameters, CancellationToken ct, Random random)
+        public static double WarehouseOptimization(WarehouseParameters warehouseParameters, CancellationToken ct)
         {
-            return WarehouseOptimizer.Optimize(warehouseParameters, ct, random);
+            return WarehouseOptimizer.Optimize(warehouseParameters, ct);
         }
 
-        public static void KeyboardOptimization(OptimizationParameters optimizationParameters, Random random)
+        public static void KeyboardOptimization(OptimizationParameters optimizationParameters)
         {
-            var keyboardOptimizer = new GeneticKeyboard(optimizationParameters, random);
+            var keyboardOptimizer = new GeneticKeyboard(optimizationParameters);
             var result = keyboardOptimizer.Run();
             keyboardOptimizer.WriteResult(result);
         }
