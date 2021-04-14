@@ -12,6 +12,12 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
     public abstract class ConflictResolver
     {
         public abstract int ResolveConflict(int currentPoint, List<int> availableVertexes);
+        protected Random Random;
+
+        public ConflictResolver(Random random)
+        {
+            Random = random;
+        }
         
     }
 }
