@@ -11,6 +11,6 @@
     "LogEnabled": false,
     "ResultToFile": false
   },
-  "WarehousePath": "C:\\Users\\MaksioloLaptop\\Documents\\GitHub\\WarehouseOptimization/mag23.txt",
-  "OrdersPath": "C:\\Users\\MaksioloLaptop\\Documents\\GitHub\\WarehouseOptimization/orders23b.txt"
+  "WarehousePath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/mag23.txt",
+  "OrdersPath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/orders23b.txt"
 }
