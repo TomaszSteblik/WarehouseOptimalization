@@ -10,9 +10,9 @@ namespace Optimization.GeneticAlgorithms.Mutations
 
         public override void Mutate(int[] chromosome)
         {
-            var pointOfDivison = Random.Next(1, chromosome.Length);
-            Array.Reverse(chromosome,1,pointOfDivison-1);
-            Array.Reverse(chromosome,pointOfDivison-1,chromosome.Length-pointOfDivison-1);
+            var pointOfDivision = Random.Next(1, chromosome.Length);
+            Array.Reverse(chromosome,1,pointOfDivision-1);
+            Array.Reverse(chromosome,pointOfDivision-1,chromosome.Length-pointOfDivision-1);
         }
     }
 }
