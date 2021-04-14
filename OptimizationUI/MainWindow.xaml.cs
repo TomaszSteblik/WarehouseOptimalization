@@ -561,7 +561,8 @@ namespace OptimizationUI
 
         private void SaveDistanceResultsToDataCsv(TSPResult[] results,int runs, string dataset, string id = "default")
         {
-            StringBuilder line = new StringBuilder();
+            var line = File.Exists("data.csv") ? new StringBuilder() : new StringBuilder("dataset;id;runs;distance;d_epoch;d*0.98_epoch\n");
+            
             line.Append(Enum.GetName(_properties.DistanceViewModel.CrossoverMethod));
             if(_properties.DistanceViewModel.CrossoverMethod == CrossoverMethod.MAC || _properties.DistanceViewModel.CrossoverMethod == CrossoverMethod.MRC)
             {
@@ -573,7 +574,33 @@ namespace OptimizationUI
                 line.Remove(line.Length-1, 1);
                 line.Append(')');
             }
-            line.Append($",{dataset},{id},{runs},{results.Average(x => x.FinalFitness).ToString(CultureInfo.CurrentCulture).Replace(',','.')}\n");
+            var averageMinEpoch = results.Select(x => x.EpochCount - x.fitness.Count(y => y[0] == x.fitness[^1][0])).Average();
+
+
+            var z = results.Select(x => x.fitness).ToArray();
+            var epochNumbersWhenSlowedDown = new int[z.Length];
+            for (var i = 0; i < z.Length; i++)
+            {
+                var bestsPerEpochs = new double[z[i].Length];
+                for (var j = 0; j < z[i].Length; j++)
+                {
+                    bestsPerEpochs[j] = z[i][j].Min();
+                }
+
+                var currentMin = bestsPerEpochs[0];
+                var indexOfMin = 0;
+                for (var j = 1; j < bestsPerEpochs.Length; j++)
+                {
+                    if (!(bestsPerEpochs[j] < currentMin * 0.98)) continue;
+                    currentMin = bestsPerEpochs[j];
+                    indexOfMin = j;
+                }
+
+                epochNumbersWhenSlowedDown[i] = indexOfMin;
+            }
+            
+            
+            line.Append($";{dataset};{id};{runs};{results.Average(x => x.FinalFitness)};{averageMinEpoch};{epochNumbersWhenSlowedDown.Average()}\n");
             File.AppendAllText("data.csv",line.ToString());
         }
     }
