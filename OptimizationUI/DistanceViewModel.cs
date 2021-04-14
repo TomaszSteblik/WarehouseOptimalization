@@ -6,7 +6,9 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Windows;
 using Optimization.GeneticAlgorithms.Crossovers;
+using Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers;
 using Optimization.GeneticAlgorithms.Eliminations;
+using Optimization.GeneticAlgorithms.Initialization;
 using Optimization.GeneticAlgorithms.Mutations;
 using Optimization.GeneticAlgorithms.Selections;
 using Optimization.Parameters;
@@ -100,6 +102,19 @@ namespace OptimizationUI
                 if (_optimizationMethod == OptimizationMethod.GeneticAlgorithm)
                     return Visibility.Visible;
                 return Visibility.Collapsed;
+            }
+        }
+
+        private PopulationInitializationMethod _populationInitializationMethod =
+            PopulationInitializationMethod.StandardPathInitialization;
+
+        public override PopulationInitializationMethod PopulationInitializationMethod
+        {
+            get => _populationInitializationMethod;
+            set
+            {
+                _populationInitializationMethod = value;
+                NotifyPropertyChanged();
             }
         }
 
@@ -215,16 +230,16 @@ namespace OptimizationUI
             }
         }
 
-        private int _terminationValue = 200;
-        public override int TerminationValue
+        private int _maxEpoch = 200;
+        public override int MaxEpoch
         {
             get
             {
-                return _terminationValue;
+                return _maxEpoch;
             }
             set
             {
-                _terminationValue = value;
+                _maxEpoch = value;
                 NotifyPropertyChanged();
             }
         }
@@ -351,6 +366,87 @@ namespace OptimizationUI
             }
         }
 
+        private bool _stopAfterEpochsWithoutChange = false;
+        public override bool StopAfterEpochsWithoutChange
+        {
+            get => _stopAfterEpochsWithoutChange;
+            set
+            {
+                _stopAfterEpochsWithoutChange = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private int _stopAfterEpochCount;
+
+        public override int StopAfterEpochCount
+        {
+            get => _stopAfterEpochCount;
+            set
+            {
+                _stopAfterEpochCount = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private bool _enableCataclysm = false;
+
+        public override bool EnableCataclysm
+        {
+            get => _enableCataclysm;
+            set
+            {
+                _enableCataclysm = value;
+                NotifyPropertyChanged();
+            }
+        }
+        
+        private int _cataclysmEpoch = 200;
+
+        public override int CataclysmEpoch
+        {
+            get => _cataclysmEpoch;
+            set
+            {
+                _cataclysmEpoch = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public Visibility IsCataclysmVisible
+        {
+            get
+            {
+                if (_enableCataclysm)
+                    return Visibility.Visible;
+                return Visibility.Collapsed;
+            }
+        }
+
+        private int _deathPercentage = 90;
+
+        public override int DeathPercentage
+        {
+            get => _deathPercentage;
+            set
+            {
+                _deathPercentage = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private ConflictResolveMethod _conflictResolveMethod = ConflictResolveMethod.Random;
+
+        public override ConflictResolveMethod ConflictResolveMethod
+        {
+            get => _conflictResolveMethod;
+            set
+            {
+                _conflictResolveMethod = value;
+                NotifyPropertyChanged();
+            }
+        }
+
 
         public DistanceViewModel(OptimizationParameters fitnessGeneticAlgorithmParameters)
         {
@@ -363,7 +459,7 @@ namespace OptimizationUI
             this._optimizationMethod = fitnessGeneticAlgorithmParameters.OptimizationMethod;
             this._populationSize = fitnessGeneticAlgorithmParameters.PopulationSize;
             this._selectionMethod = fitnessGeneticAlgorithmParameters.SelectionMethod;
-            this._terminationValue = fitnessGeneticAlgorithmParameters.TerminationValue;
+            this._maxEpoch = fitnessGeneticAlgorithmParameters.MaxEpoch;
             this._childrenPerGeneration = fitnessGeneticAlgorithmParameters.ChildrenPerGeneration;
             this._parentsPerChildren = fitnessGeneticAlgorithmParameters.ParentsPerChildren;
             

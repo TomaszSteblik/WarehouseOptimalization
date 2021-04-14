@@ -4,6 +4,8 @@ using System.Threading;
 using Optimization.GeneticAlgorithms;
 using Optimization.GeneticAlgorithms.Crossovers;
 using Optimization.GeneticAlgorithms.Eliminations;
+using Optimization.GeneticAlgorithms.Initialization;
+using Optimization.GeneticAlgorithms.Modules;
 using Optimization.GeneticAlgorithms.Mutations;
 using Optimization.GeneticAlgorithms.Selections;
 using Optimization.Helpers;
@@ -21,13 +23,14 @@ namespace Optimization.GeneticAppliances.Warehouse
             DelegateFitness.CalcFitness calcFitness, CancellationToken ct)
         {
             _warehouseSize = warehouseSize;
-            int[][] population = new int[optimizationParameters.PopulationSize][];
             int[] itemsToSort = new int[_warehouseSize];
             for (int i = 1; i < _warehouseSize; i++)
             {
                 itemsToSort[i - 1] = i;
             }
-            GeneticHelper.InitializePopulation(population, itemsToSort, 0, population.Length);
+
+            var populationInitialization = new StandardPathInitialization();
+            var population = populationInitialization.InitializePopulation( itemsToSort, optimizationParameters.PopulationSize, 0);
             _genetic = new BaseGenetic(optimizationParameters, population, calcFitness, ct);
 
         }

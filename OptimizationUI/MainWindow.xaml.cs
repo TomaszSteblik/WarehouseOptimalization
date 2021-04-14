@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -21,9 +23,12 @@ using InteractiveDataDisplay.WPF;
 using Microsoft.Win32;
 using Optimization;
 using Optimization.GeneticAlgorithms.Crossovers;
+using Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers;
 using Optimization.GeneticAlgorithms.Eliminations;
+using Optimization.GeneticAlgorithms.Initialization;
 using Optimization.GeneticAlgorithms.Mutations;
 using Optimization.GeneticAlgorithms.Selections;
+using Optimization.GeneticAppliances.TSP;
 using Optimization.Parameters;
 
 namespace OptimizationUI
@@ -39,7 +44,7 @@ namespace OptimizationUI
         public MainWindow()
         {
             InitializeComponent();
-            DeserializeParameters();
+            DeserializeParameters("properties.json");
             DistancePanel.DataContext = _properties.DistanceViewModel;
             WarehouseFitnessPanel.DataContext =
                 _properties.WarehouseViewModel.FitnessGeneticAlgorithmParameters as DistanceViewModel;
@@ -52,12 +57,18 @@ namespace OptimizationUI
             var crossovers = Enum.GetValues(typeof(CrossoverMethod)).Cast<CrossoverMethod>().ToList();
             var eliminations = Enum.GetValues(typeof(EliminationMethod)).Cast<EliminationMethod>().ToList();
             var mutations = Enum.GetValues(typeof(MutationMethod)).Cast<MutationMethod>().ToList();
+            var initializations = Enum.GetValues(typeof(PopulationInitializationMethod))
+                .Cast<PopulationInitializationMethod>().ToList();
+            var conflictResolvers =
+                Enum.GetValues(typeof(ConflictResolveMethod)).Cast<ConflictResolveMethod>().ToList();
 
             DistanceMethodComboBox.ItemsSource = methods;
             DistanceSelectionComboBox.ItemsSource = selections;
             DistanceCrossoverComboBox.ItemsSource = crossovers;
             DistanceEliminationComboBox.ItemsSource = eliminations;
             DistanceMutationComboBox.ItemsSource = mutations;
+            DistancePopulationInitializationMethod.ItemsSource = initializations;
+            DistanceConflictResolveComboBox.ItemsSource = conflictResolvers;
 
             WarehouseSelectionComboBox.ItemsSource = selections;
             WarehouseCrossoverComboBox.ItemsSource = crossovers;
@@ -74,41 +85,70 @@ namespace OptimizationUI
 
         private async void DistanceStartButtonClick(object sender, RoutedEventArgs e)
         {
+            DistanceStartButton.IsEnabled = false;
+            EventHandler<int> BaseGeneticOnOnNextIteration()
+            {
+                return (sender,iteration) =>
+                {
+                    _properties.DistanceViewModel.ProgressBarValue++;
+                };
+            }
+
             OptimizationParameters parameters = _properties.DistanceViewModel as OptimizationParameters;
-            int runs = Int32.Parse(DistanceInstancesTextBox.Text);
-            double[] results = new double[runs];
+            int runs = Int32.Parse(DistanceRunsTextBox.Text);
+            TSPResult[] results = new TSPResult[runs];
             double[][][] runFitnesses = new double[runs][][];
 
             _cancellationTokenSource = new CancellationTokenSource();
-            _properties.DistanceViewModel.ProgressBarMaximum = runs - 1;
+            _properties.DistanceViewModel.ProgressBarMaximum = runs*_properties.DistanceViewModel.MaxEpoch - 1;
+            _properties.DistanceViewModel.ProgressBarValue = 0;
+            Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration += BaseGeneticOnOnNextIteration();
             CancellationToken ct = _cancellationTokenSource.Token;
-            try
+            if ((OptimizationMethod) DistanceMethodComboBox.SelectedItem == OptimizationMethod.GeneticAlgorithm)
             {
-                await Task.Run(() =>
+                try
                 {
-                    results[0] = OptimizationWork.FindShortestPath(parameters, ct);
-
-                    for (int i = 0; i < runs; i++)
+                    await Task.Run(() =>
                     {
-                        results[i] = OptimizationWork.FindShortestPath(parameters, ct);
-                        _properties.DistanceViewModel.ProgressBarValue = i;
-                        runFitnesses[i] = ReadFitness();
-                    }
+                        Parallel.For(0, runs, i =>
+                        {
+                            results[i] = OptimizationWork.TSP(parameters, ct);
+                            runFitnesses[i] = results[i].fitness;
 
-                }, ct);
-                Dispatcher.Invoke(() =>
+                        });
+                    }, ct);
+
+                    Dispatcher.Invoke(() =>
+                    {
+                        _properties.DistanceViewModel.ProgressBarValue =
+                            runs * _properties.DistanceViewModel.MaxEpoch - 1;
+                        DistanceResultLabel.Content =
+                            $"Avg: {results.Average(x => x.FinalFitness)}  " +
+                            $"Max: {results.Max(x => x.FinalFitness)}  " +
+                            $"Min: {results.Min(x => x.FinalFitness)}  " +
+                            $"Avg epoch count: {results.Average(x => x.EpochCount)}";
+                        WritePlotDistances(linesGridDistances, GetAverageFitnesses(runFitnesses));
+
+                        SaveDistanceResultsToDataCsv(results,runs,
+                            _properties.DistanceViewModel.DataPath.Split('\\')[^1]
+                                .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'))
+                            );
+                    });
+                }
+                catch (AggregateException)
                 {
-                    DistanceResultLabel.Content =
-                        $"Avg: {results.Average()}  Max: {results.Max()}  Min: {results.Min()}";
-                    WritePlotDistances(linesGridDistances, GetAverageFitnesses(runFitnesses));
-                });
+                    DistanceResultLabel.Content = "Cancelled";
+                }
+
+                Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration -= BaseGeneticOnOnNextIteration();
             }
-            catch (OperationCanceledException exception)
+            else
             {
-                DistanceResultLabel.Content = "Cancelled";
+                double result = OptimizationWork.FindShortestPath(parameters);
+                DistanceResultLabel.Content =
+                    $"Result: {result}";
             }
-
-
+            DistanceStartButton.IsEnabled = true;
         }
 
         private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
@@ -164,24 +204,23 @@ namespace OptimizationUI
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
-            SerializeParameters();
+            SerializeParameters("properties.json");
         }
 
-        private void SerializeParameters()
+        private void SerializeParameters(string path)
         {
             var options = new JsonSerializerOptions
             {
                 WriteIndented = true,
             };
             string jsonString = JsonSerializer.Serialize(_properties, options);
-            if (File.Exists("properties.json"))
-                File.Delete("properties.json");
-            File.WriteAllText("properties.json", jsonString);
+            if (File.Exists(path))
+                File.Delete(path);
+            File.WriteAllText(path, jsonString);
         }
 
-        private void DeserializeParameters()
+        private void DeserializeParameters(string location)
         {
-            string location = "properties.json";
             if (File.Exists(location))
             {
                 string jsonString = File.ReadAllText(location);
@@ -227,14 +266,60 @@ namespace OptimizationUI
 
         private double[][] GetAverageFitnesses(double[][][] runFitnesses)
         {
-            int epoch = runFitnesses[0].Length;
+            double[][][] expandedFitness = new double[runFitnesses.Length][][];
+
+            int[] lengths = new int[runFitnesses.Length];
+            for (int i = 0; i < runFitnesses.Length; i++)
+            {
+                lengths[i] = runFitnesses[i].Length;
+            }
+            int epoch = lengths.Max();
+            
+            for (int i = 0; i < runFitnesses.Length; i++)
+            {
+                expandedFitness[i] = new double[epoch][];
+            }
+
+            for (int j = 0; j < runFitnesses.Length; j++)
+            {
+                for (int i = 0; i < epoch; i++)
+                {
+                    expandedFitness[j][i] = new double[runFitnesses[0][0].Length];
+                }
+            }
+
+            for (int i = 0; i < expandedFitness.Length; i++)
+            {
+                for (int j = 0; j < expandedFitness[0].Length; j++)
+                {
+                    for (int k = 0; k < expandedFitness[0][0].Length; k++)
+                    {
+                        if (j >= lengths[i])
+                        {
+                            expandedFitness[i][j][k] = runFitnesses[i][lengths[i] - 1][k];
+                        }
+                        else
+                        {
+                            expandedFitness[i][j][k] = runFitnesses[i][j][k];
+                        }
+                    }
+                }
+            }
+
+
             double[][] fitness = new double[epoch][];
+
             for (int i = 0; i < epoch; i++)
             {
                 fitness[i] = new double[runFitnesses[0][0].Length];
+            }
+            
+
+            for (int i = 0; i < epoch; i++)
+            {
                 for (int j = 0; j < runFitnesses[0][0].Length; j++)
                 {
-                    fitness[i][j] = runFitnesses.Average(x => x[i][j]);
+                    fitness[i][j] = expandedFitness.Average(x => x[i][j]);
                 }
             }
 
@@ -449,6 +534,75 @@ namespace OptimizationUI
                 linesGrid.Children[3].Visibility =
                     _properties.WarehouseViewModel.ShowCustom ? Visibility.Visible : Visibility.Hidden;
             }
+        }
+
+        private void LoadDistanceParamsButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Filter = "json files (*.json)|*.json";
+            fileDialog.RestoreDirectory = true;
+            fileDialog.ShowDialog();
+            DeserializeParameters(fileDialog.FileName);
+            DistancePanel.DataContext = _properties.DistanceViewModel;
+            WarehouseFitnessPanel.DataContext =
+                _properties.WarehouseViewModel.FitnessGeneticAlgorithmParameters as DistanceViewModel;
+            WarehouseStackPanel.DataContext =
+                _properties.WarehouseViewModel.WarehouseGeneticAlgorithmParameters as DistanceViewModel;
+            WarehousePanel.DataContext = _properties.WarehouseViewModel;
+        }
+
+        private void SaveDistanceParamsButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog fileDialog = new SaveFileDialog();
+            fileDialog.Filter = "json files (*.json)|*.json";
+            fileDialog.RestoreDirectory = true;
+            fileDialog.ShowDialog();
+            SerializeParameters(fileDialog.FileName);
+        }
+
+        private void SaveDistanceResultsToDataCsv(TSPResult[] results,int runs, string dataset, string id = "default")
+        {
+            var line = File.Exists("data.csv") ? new StringBuilder() : new StringBuilder("algorithm;dataset;id;runs;distance;d_epoch;d*0.98_epoch\n");
+            
+            line.Append(Enum.GetName(_properties.DistanceViewModel.CrossoverMethod));
+            if(_properties.DistanceViewModel.CrossoverMethod == CrossoverMethod.MAC || _properties.DistanceViewModel.CrossoverMethod == CrossoverMethod.MRC)
+            {
+                line.Append('(');
+                foreach (var crossoverMethod in _properties.DistanceViewModel.MultiCrossovers)
+                {
+                    line.Append($"{Enum.GetName(crossoverMethod)} ");
+                }
+                line.Remove(line.Length-1, 1);
+                line.Append(')');
+            }
+            var averageMinEpoch = results.Select(x => x.EpochCount - x.fitness.Count(y => y[0] == x.fitness[^1][0])).Average();
+
+
+            var z = results.Select(x => x.fitness).ToArray();
+            var epochNumbersWhenSlowedDown = new int[z.Length];
+            for (var i = 0; i < z.Length; i++)
+            {
+                var bestsPerEpochs = new double[z[i].Length];
+                for (var j = 0; j < z[i].Length; j++)
+                {
+                    bestsPerEpochs[j] = z[i][j].Min();
+                }
+
+                var currentMin = bestsPerEpochs[0];
+                var indexOfMin = 0;
+                for (var j = 1; j < bestsPerEpochs.Length; j++)
+                {
+                    if (!(bestsPerEpochs[j] < currentMin * 0.98)) continue;
+                    currentMin = bestsPerEpochs[j];
+                    indexOfMin = j;
+                }
+
+                epochNumbersWhenSlowedDown[i] = indexOfMin;
+            }
+            
+            
+            line.Append($";{dataset};{id};{runs};{results.Average(x => x.FinalFitness)};{averageMinEpoch};{epochNumbersWhenSlowedDown.Average()}\n");
+            File.AppendAllText("data.csv",line.ToString());
         }
     }
 }

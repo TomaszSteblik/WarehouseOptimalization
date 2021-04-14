@@ -2,7 +2,10 @@ using System;
 using System.Data;
 using System.Linq;
 using Optimization.GeneticAlgorithms.Crossovers;
+using Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers;
 using Optimization.GeneticAlgorithms.Eliminations;
+using Optimization.GeneticAlgorithms.Initialization;
+using Optimization.GeneticAlgorithms.Modules;
 using Optimization.GeneticAlgorithms.Mutations;
 using Optimization.GeneticAlgorithms.Selections;
 
@@ -20,6 +23,7 @@ namespace Optimization.Parameters
         WarehouseMode,
         DistancesMode
     }
+    
     public class OptimizationParameters
     {
         public virtual OptimizationMethod OptimizationMethod { get; set; } = OptimizationMethod.GeneticAlgorithm;
@@ -32,7 +36,12 @@ namespace Optimization.Parameters
 
         public bool WriteCsv { get; set; } = true;
         public virtual string DataPath { get; set; }
+
+        public virtual PopulationInitializationMethod PopulationInitializationMethod { get; set; } =
+            PopulationInitializationMethod.StandardPathInitialization;
         public virtual SelectionMethod SelectionMethod { get; set; } = SelectionMethod.RouletteWheel;
+
+        public virtual ConflictResolveMethod ConflictResolveMethod { get; set; } = ConflictResolveMethod.Random;
         public virtual CrossoverMethod CrossoverMethod { get; set; } = CrossoverMethod.Aex;
         public virtual CrossoverMethod[] MultiCrossovers { get; set; }
 
@@ -45,6 +54,15 @@ namespace Optimization.Parameters
         public virtual int PopulationSize { get; set; } = 120;
         public virtual int ParentsPerChildren { get; set; } = 2;
         public virtual int ChildrenPerGeneration { get; set; } = 60;
-        public virtual int TerminationValue { get; set; } = 300;
+
+        public virtual bool StopAfterEpochsWithoutChange { get; set; } = false;
+        
+        public virtual int MaxEpoch { get; set; } = 300;
+        
+        public virtual int StopAfterEpochCount { get; set; }
+        
+        public virtual bool EnableCataclysm { get; set; }
+        public virtual int CataclysmEpoch { get; set; }
+        public virtual int DeathPercentage { get; set; }
     }
 }

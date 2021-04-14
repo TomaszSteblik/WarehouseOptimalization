@@ -1,6 +1,8 @@
 ﻿using System;
 using Optimization.GeneticAlgorithms.Crossovers;
+using Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers;
 using Optimization.GeneticAlgorithms.Eliminations;
+using Optimization.GeneticAlgorithms.Initialization;
 using Optimization.GeneticAlgorithms.Mutations;
 using Optimization.GeneticAlgorithms.Selections;
 using Optimization.Parameters;
@@ -9,20 +11,46 @@ namespace Optimization.GeneticAlgorithms
 {
     internal static class GeneticFactory
     {
+
+        public static PopulationInitialization CreatePopulationInitialization(PopulationInitializationMethod method)
+        {
+            PopulationInitialization initialization = method switch
+            {
+                PopulationInitializationMethod.UniformInitialization => new UniformInitialization(),
+                PopulationInitializationMethod.NonUniformInitialization => new NonUniformInitialization(),
+                PopulationInitializationMethod.StandardPathInitialization => new StandardPathInitialization(),
+                PopulationInitializationMethod.PreferedCloseDistancePathInitialization =>
+                    new PreferedCloseDistancePathInitialization(),
+                _ => throw new ArgumentException("Wrong population initialization method name")
+            };
+            return initialization;
+        }
+
+        public static ConflictResolver CreateConflictResolver(ConflictResolveMethod method)
+        {
+            ConflictResolver resolver = method switch
+            {
+                ConflictResolveMethod.Random => new RandomResolve(),
+                ConflictResolveMethod.NearestNeighbor => new NearestNeighborResolve(),
+                _ => throw new ArgumentException("Wrong conflict resolve method name")
+            };
+            return resolver;
+        }
+        
+        
         public static Crossover CreateCrossover(int startingId, CrossoverMethod crossoverMethod, 
-            CrossoverMethod[] crossoverMethods)
+            CrossoverMethod[] crossoverMethods, ConflictResolver resolver)
         {
             Crossover crossover = crossoverMethod switch
             {
-                CrossoverMethod.Aex => new AexCrossover(),
-                CrossoverMethod.HGreX => new HGreXCrossover(),
-                CrossoverMethod.HRndX => new HRndXCrossover(),
-                CrossoverMethod.HProX => new HProXCrossover(),
-                CrossoverMethod.KPoint => new KPointCrossover(),
-                CrossoverMethod.AexNN => new AexNNCrossover(),
-                CrossoverMethod.Cycle => new CycleCrossover(),
-                CrossoverMethod.MAC => new MACrossover(crossoverMethods, startingId),
-                CrossoverMethod.MRC => new MRCrossover(crossoverMethods, startingId),
+                CrossoverMethod.Aex => new AexCrossover(resolver),
+                CrossoverMethod.HGreX => new HGreXCrossover(resolver),
+                CrossoverMethod.HRndX => new HRndXCrossover(resolver),
+                CrossoverMethod.HProX => new HProXCrossover(resolver),
+                CrossoverMethod.KPoint => new KPointCrossover(resolver),
+                CrossoverMethod.Cycle => new CycleCrossover(resolver),
+                CrossoverMethod.MAC => new MACrossover(crossoverMethods, startingId, resolver),
+                CrossoverMethod.MRC => new MRCrossover(crossoverMethods, startingId, resolver),
                 _ => throw new ArgumentException("Wrong crossover method name")
             };
             return crossover;
@@ -47,6 +75,7 @@ namespace Optimization.GeneticAlgorithms
             {
                 EliminationMethod.Elitism => new ElitismElimination(population),
                 EliminationMethod.RouletteWheel => new RouletteWheelElimination(population),
+                EliminationMethod.Tournament => new TournamentElimination(population),
                 _ => throw new ArgumentException("Wrong elimination method name")
             };
             return elimination;

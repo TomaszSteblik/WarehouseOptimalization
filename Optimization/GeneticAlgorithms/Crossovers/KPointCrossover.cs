@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers;
 
 namespace Optimization.GeneticAlgorithms.Crossovers
 {
@@ -25,7 +26,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                     int selected = -1;
                     while (selected == -1 || offspring.Contains(selected))
                     {
-                        selected = available[rnd.Next(0, available.Count)];
+                        selected = ConflictResolver.ResolveConflict(offspring[j - 1], available);
                     }
 
                     available.Remove(selected);
@@ -39,6 +40,10 @@ namespace Optimization.GeneticAlgorithms.Crossovers
             }
 
             return offspring;
+        }
+
+        public KPointCrossover(ConflictResolver resolver) : base(resolver)
+        {
         }
     }
 }

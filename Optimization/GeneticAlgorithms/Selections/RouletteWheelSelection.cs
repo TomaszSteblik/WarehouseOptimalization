@@ -12,37 +12,38 @@ namespace Optimization.GeneticAlgorithms.Selections
 
         public override int[][] GenerateParents(int numberOfParents, double[] fitness)
         {
-            double[] reversedFitness = new double[fitness.Length];
+            var rnd = new Random();
             var max = fitness.Max();
             var min = fitness.Min();
+
+            var weights = new double[fitness.Length];
             for (int i = 0; i < fitness.Length; i++)
             {
-                reversedFitness[i] = (1-((fitness[i] - min) / (max - min)));
+                weights[i] = min / (min + fitness[i]) - min / (min + max);
             }
 
+            var weightsSum = weights.Sum();
+            
             int[][] parents = new int[numberOfParents][];
             for (int i = 0; i < numberOfParents; i++)
             {
-                parents[i] = GenerateSingleParent(reversedFitness);
-            }
-
-            return parents;
-        }
-        private int[] GenerateSingleParent(double[] fitness)
-        {
-            var fitnessSum = fitness.Sum();
-            var target = Random.NextDouble() * fitnessSum;
-            for (int i = 0; i < PopulationSize; i++)
-            {
-                target += fitness[i];
-                if (target >= fitnessSum)
+                var roll = rnd.NextDouble() * weightsSum;
+                var tmp = 0d;
+                for (int j = 0; j < fitness.Length; j++)
                 {
-                    return Population[i];
+                    tmp += weights[j];
+                    if (tmp >= roll)
+                    {
+                        parents[i] = Population[j];
+                        break;
+                    }
+                    
                 }
             }
 
-            return Population[PopulationSize - 1];
+            return parents;
+            
         }
-        
+
     }
 }
