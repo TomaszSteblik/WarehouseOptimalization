@@ -562,7 +562,7 @@ namespace OptimizationUI
 
         private void SaveDistanceResultsToDataCsv(TSPResult[] results,int runs, string dataset, string id = "default")
         {
-            var line = File.Exists("data.csv") ? new StringBuilder() : new StringBuilder("dataset;id;runs;distance;d_epoch;d*0.98_epoch\n");
+            var line = File.Exists("data.csv") ? new StringBuilder() : new StringBuilder("algorithm;dataset;id;runs;distance;d_epoch;d*0.98_epoch\n");
             
             line.Append(Enum.GetName(_properties.DistanceViewModel.CrossoverMethod));
             if(_properties.DistanceViewModel.CrossoverMethod == CrossoverMethod.MAC || _properties.DistanceViewModel.CrossoverMethod == CrossoverMethod.MRC)
