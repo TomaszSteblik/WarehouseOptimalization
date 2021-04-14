@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -42,7 +44,7 @@ namespace OptimizationUI
         public MainWindow()
         {
             InitializeComponent();
-            DeserializeParameters();
+            DeserializeParameters("properties.json");
             DistancePanel.DataContext = _properties.DistanceViewModel;
             WarehouseFitnessPanel.DataContext =
                 _properties.WarehouseViewModel.FitnessGeneticAlgorithmParameters as DistanceViewModel;
@@ -125,6 +127,12 @@ namespace OptimizationUI
                             $"Min: {results.Min(x => x.FinalFitness)}  " +
                             $"Avg epoch count: {results.Average(x => x.EpochCount)}";
                         WritePlotDistances(linesGridDistances, GetAverageFitnesses(runFitnesses));
+
+                        SaveDistanceResultsToDataCsv(results,runs,
+                            _properties.DistanceViewModel.DataPath.Split('\\')[^1]
+                                .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'))
+                            );
+
                     });
                 }
                 catch (AggregateException)
@@ -195,24 +203,23 @@ namespace OptimizationUI
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
-            SerializeParameters();
+            SerializeParameters("properties.json");
         }
 
-        private void SerializeParameters()
+        private void SerializeParameters(string path)
         {
             var options = new JsonSerializerOptions
             {
                 WriteIndented = true,
             };
             string jsonString = JsonSerializer.Serialize(_properties, options);
-            if (File.Exists("properties.json"))
-                File.Delete("properties.json");
-            File.WriteAllText("properties.json", jsonString);
+            if (File.Exists(path))
+                File.Delete(path);
+            File.WriteAllText(path, jsonString);
         }
 
-        private void DeserializeParameters()
+        private void DeserializeParameters(string location)
         {
-            string location = "properties.json";
             if (File.Exists(location))
             {
                 string jsonString = File.ReadAllText(location);
@@ -526,6 +533,48 @@ namespace OptimizationUI
                 linesGrid.Children[3].Visibility =
                     _properties.WarehouseViewModel.ShowCustom ? Visibility.Visible : Visibility.Hidden;
             }
+        }
+
+        private void LoadDistanceParamsButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Filter = "json files (*.json)|*.json";
+            fileDialog.RestoreDirectory = true;
+            fileDialog.ShowDialog();
+            DeserializeParameters(fileDialog.FileName);
+            DistancePanel.DataContext = _properties.DistanceViewModel;
+            WarehouseFitnessPanel.DataContext =
+                _properties.WarehouseViewModel.FitnessGeneticAlgorithmParameters as DistanceViewModel;
+            WarehouseStackPanel.DataContext =
+                _properties.WarehouseViewModel.WarehouseGeneticAlgorithmParameters as DistanceViewModel;
+            WarehousePanel.DataContext = _properties.WarehouseViewModel;
+        }
+
+        private void SaveDistanceParamsButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog fileDialog = new SaveFileDialog();
+            fileDialog.Filter = "json files (*.json)|*.json";
+            fileDialog.RestoreDirectory = true;
+            fileDialog.ShowDialog();
+            SerializeParameters(fileDialog.FileName);
+        }
+
+        private void SaveDistanceResultsToDataCsv(TSPResult[] results,int runs, string dataset, string id = "default")
+        {
+            StringBuilder line = new StringBuilder();
+            line.Append(Enum.GetName(_properties.DistanceViewModel.CrossoverMethod));
+            if(_properties.DistanceViewModel.CrossoverMethod == CrossoverMethod.MAC || _properties.DistanceViewModel.CrossoverMethod == CrossoverMethod.MRC)
+            {
+                line.Append('(');
+                foreach (var crossoverMethod in _properties.DistanceViewModel.MultiCrossovers)
+                {
+                    line.Append($"{Enum.GetName(crossoverMethod)} ");
+                }
+                line.Remove(line.Length-1, 1);
+                line.Append(')');
+            }
+            line.Append($",{dataset},{id},{runs},{results.Average(x => x.FinalFitness).ToString(CultureInfo.CurrentCulture).Replace(',','.')}\n");
+            File.AppendAllText("data.csv",line.ToString());
         }
     }
 }
