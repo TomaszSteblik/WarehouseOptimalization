@@ -112,7 +112,7 @@ namespace OptimizationUI
                     {
                         Parallel.For(0, runs, i =>
                         {
-                            results[i] = OptimizationWork.TSP(parameters, ct, new Random(i));
+                            results[i] = OptimizationWork.TSP(parameters, ct);
                             runFitnesses[i] = results[i].fitness;
 
                         });
@@ -144,7 +144,7 @@ namespace OptimizationUI
             }
             else
             {
-                double result = OptimizationWork.FindShortestPath(parameters, new Random());
+                double result = OptimizationWork.FindShortestPath(parameters);
                 DistanceResultLabel.Content =
                     $"Result: {result}";
             }
@@ -163,7 +163,7 @@ namespace OptimizationUI
                 await Task.Run(() =>
                 {
                     WarehouseParameters warehouseParameters = _properties.WarehouseViewModel as WarehouseParameters;
-                    result = Optimization.OptimizationWork.WarehouseOptimization(warehouseParameters, ct, new Random());
+                    result = Optimization.OptimizationWork.WarehouseOptimization(warehouseParameters, ct);
                     fitness = ReadFitness();
                 }, ct);
 
