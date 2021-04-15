@@ -41,7 +41,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                 int geneIndex = 0;
                 int geneInParent1 = 0;
                 int geneInParent2 = 0;
-                for (int i = 0; i < parentLength; i++)
+                for (int i = 0; i < parentLength-(stop-start); i++)
                 {
                     geneIndex = (stop + i) % parentLength;
                     geneInParent1 = Parent1[geneIndex];
