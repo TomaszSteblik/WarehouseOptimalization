@@ -49,6 +49,7 @@ namespace Optimization.GeneticAlgorithms
                 CrossoverMethod.HProX => new HProXCrossover(resolver, random),
                 CrossoverMethod.KPoint => new KPointCrossover(resolver, random),
                 CrossoverMethod.Cycle => new CycleCrossover(resolver, random),
+                CrossoverMethod.Order => new OrderCrossover(resolver, random),
                 CrossoverMethod.MAC => new MACrossover(crossoverMethods, startingId, resolver, random),
                 CrossoverMethod.MRC => new MRCrossover(crossoverMethods, startingId, resolver, random),
                 _ => throw new ArgumentException("Wrong crossover method name")

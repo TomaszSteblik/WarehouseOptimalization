@@ -51,6 +51,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
     {
         Aex,
         Cycle,
+        Order,
         HGreX,
         HProX,
         HRndX,
