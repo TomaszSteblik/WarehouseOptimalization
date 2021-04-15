@@ -12,26 +12,26 @@ namespace Optimization.GeneticAlgorithms
     internal static class GeneticFactory
     {
 
-        public static PopulationInitialization CreatePopulationInitialization(PopulationInitializationMethod method, Random random)
+        public static PopulationInitialization CreatePopulationInitialization(PopulationInitializationMethod method)
         {
             PopulationInitialization initialization = method switch
             {
-                PopulationInitializationMethod.UniformInitialization => new UniformInitialization(random),
-                PopulationInitializationMethod.NonUniformInitialization => new NonUniformInitialization(random),
-                PopulationInitializationMethod.StandardPathInitialization => new StandardPathInitialization(random),
+                PopulationInitializationMethod.UniformInitialization => new UniformInitialization(),
+                PopulationInitializationMethod.NonUniformInitialization => new NonUniformInitialization(),
+                PopulationInitializationMethod.StandardPathInitialization => new StandardPathInitialization(),
                 PopulationInitializationMethod.PreferedCloseDistancePathInitialization =>
-                    new PreferedCloseDistancePathInitialization(random),
+                    new PreferedCloseDistancePathInitialization(),
                 _ => throw new ArgumentException("Wrong population initialization method name")
             };
             return initialization;
         }
 
-        public static ConflictResolver CreateConflictResolver(ConflictResolveMethod method, Random random)
+        public static ConflictResolver CreateConflictResolver(ConflictResolveMethod method)
         {
             ConflictResolver resolver = method switch
             {
-                ConflictResolveMethod.Random => new RandomResolve(random),
-                ConflictResolveMethod.NearestNeighbor => new NearestNeighborResolve(random),
+                ConflictResolveMethod.Random => new RandomResolve(),
+                ConflictResolveMethod.NearestNeighbor => new NearestNeighborResolve(),
                 _ => throw new ArgumentException("Wrong conflict resolve method name")
             };
             return resolver;
@@ -39,60 +39,61 @@ namespace Optimization.GeneticAlgorithms
         
         
         public static Crossover CreateCrossover(int startingId, CrossoverMethod crossoverMethod, 
-            CrossoverMethod[] crossoverMethods, ConflictResolver resolver, Random random)
+            CrossoverMethod[] crossoverMethods, ConflictResolver resolver)
         {
             Crossover crossover = crossoverMethod switch
             {
-                CrossoverMethod.Aex => new AexCrossover(resolver, random),
-                CrossoverMethod.HGreX => new HGreXCrossover(resolver, random),
-                CrossoverMethod.HRndX => new HRndXCrossover(resolver, random),
-                CrossoverMethod.HProX => new HProXCrossover(resolver, random),
-                CrossoverMethod.KPoint => new KPointCrossover(resolver, random),
-                CrossoverMethod.Cycle => new CycleCrossover(resolver, random),
-                CrossoverMethod.MAC => new MACrossover(crossoverMethods, startingId, resolver, random),
-                CrossoverMethod.MRC => new MRCrossover(crossoverMethods, startingId, resolver, random),
+                CrossoverMethod.Aex => new AexCrossover(resolver),
+                CrossoverMethod.HGreX => new HGreXCrossover(resolver),
+                CrossoverMethod.HRndX => new HRndXCrossover(resolver),
+                CrossoverMethod.HProX => new HProXCrossover(resolver),
+                CrossoverMethod.KPoint => new KPointCrossover(resolver),
+                CrossoverMethod.Cycle => new CycleCrossover(resolver),
+                CrossoverMethod.MAC => new MACrossover(crossoverMethods, startingId, resolver),
+                CrossoverMethod.MRC => new MRCrossover(crossoverMethods, startingId, resolver),
+                CrossoverMethod.Order => new OrderCrossover(resolver),
                 _ => throw new ArgumentException("Wrong crossover method name")
             };
             return crossover;
         }
 
-        public static Selection CreateSelection(OptimizationParameters optimizationParameters, int[][] population, Random random)
+        public static Selection CreateSelection(OptimizationParameters optimizationParameters, int[][] population)
         {
             Selection selection = optimizationParameters.SelectionMethod switch
             {
-                SelectionMethod.Random => new RandomSelection(population, random),
-                SelectionMethod.Tournament => new TournamentSelection(population, random),
-                SelectionMethod.Elitism => new ElitismSelection(population, random),
-                SelectionMethod.RouletteWheel => new RouletteWheelSelection(population, random),
+                SelectionMethod.Random => new RandomSelection(population),
+                SelectionMethod.Tournament => new TournamentSelection(population),
+                SelectionMethod.Elitism => new ElitismSelection(population),
+                SelectionMethod.RouletteWheel => new RouletteWheelSelection(population),
                 _ => throw new ArgumentException("Wrong selection name in parameters json file")
             };
             return selection;
         }
 
-        public static Elimination CreateElimination(OptimizationParameters optimizationParameters, int[][] population, Random random)
+        public static Elimination CreateElimination(OptimizationParameters optimizationParameters, int[][] population)
         {
             Elimination elimination = optimizationParameters.EliminationMethod switch
             {
-                EliminationMethod.Elitism => new ElitismElimination(population, random),
-                EliminationMethod.RouletteWheel => new RouletteWheelElimination(population, random),
-                EliminationMethod.Tournament => new TournamentElimination(population, random),
+                EliminationMethod.Elitism => new ElitismElimination(population),
+                EliminationMethod.RouletteWheel => new RouletteWheelElimination(population),
+                EliminationMethod.Tournament => new TournamentElimination(population),
                 _ => throw new ArgumentException("Wrong elimination method name")
             };
             return elimination;
         }
 
         public static Mutation CreateMutation(MutationMethod mutationMethod, MutationMethod[] mutationMethods , 
-            int[][] population, double mutationProbability, Random random)
+            int[][] population, double mutationProbability)
         {
             Mutation mutation = mutationMethod switch
             {
-                MutationMethod.RSM => new RSMutation(mutationProbability,population, random),
-                MutationMethod.TWORS => new TWORSMutation(mutationProbability,population, random),
-                MutationMethod.CIM => new CIMutation(mutationProbability,population, random),
-                MutationMethod.THROAS => new THROASMutation(mutationProbability,population, random),
-                MutationMethod.THRORS => new THRORSMutation(mutationProbability,population, random),
-                MutationMethod.MAM => new MAMutation(mutationMethods,mutationProbability,population, random),
-                MutationMethod.MRM => new MRMutation(mutationMethods,mutationProbability,population, random),
+                MutationMethod.RSM => new RSMutation(mutationProbability,population),
+                MutationMethod.TWORS => new TWORSMutation(mutationProbability,population),
+                MutationMethod.CIM => new CIMutation(mutationProbability,population),
+                MutationMethod.THROAS => new THROASMutation(mutationProbability,population),
+                MutationMethod.THRORS => new THRORSMutation(mutationProbability,population),
+                MutationMethod.MAM => new MAMutation(mutationMethods,mutationProbability,population),
+                MutationMethod.MRM => new MRMutation(mutationMethods,mutationProbability,population),
                 _ => throw new AggregateException("Wrong mutation method name")
             };
             return mutation;

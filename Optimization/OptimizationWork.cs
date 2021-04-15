@@ -18,20 +18,22 @@ namespace Optimization
             var random = new Random(seed);
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
             Distances.Create(matrix);
-            return PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters, CancellationToken.None, random);
+            return PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters, CancellationToken.None);
             
         }
         
+
         public static double FindShortestPath(OptimizationParameters optimizationParameters, CancellationToken ct, int seed = 0)
         {
             seed = GetSeed(seed);
             var random = new Random(seed);
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
             Distances.Create(matrix);
-            return PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters, ct, random);
+            return PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters, ct);
             
         }
         
+
         public static TSPResult TSP(OptimizationParameters optimizationParameters, CancellationToken ct, int seed = 0)
         {
             seed = GetSeed(seed);
@@ -50,7 +52,8 @@ namespace Optimization
             var result = tsp.Run();
             result.Seed = seed;
             return result;
-            
+
+       
         }
 
         public static void FindShortestPath(OptimizationParameters optimizationParameters,
@@ -60,8 +63,9 @@ namespace Optimization
             var random = new Random(seed);
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
             Distances.Create(matrix);
-            PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters,calcFitness, CancellationToken.None, random);
+            PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters,calcFitness, CancellationToken.None);
         }
+
 
         public static double WarehouseOptimization(WarehouseParameters warehouseParameters, CancellationToken ct, int seed = 0)
         {
@@ -75,6 +79,7 @@ namespace Optimization
             seed = GetSeed(seed);
             var random = new Random(seed);
             var keyboardOptimizer = new GeneticKeyboard(optimizationParameters, random);
+
             var result = keyboardOptimizer.Run();
             keyboardOptimizer.WriteResult(result);
         }

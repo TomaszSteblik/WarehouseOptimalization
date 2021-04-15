@@ -28,7 +28,7 @@ namespace Optimization.GeneticAlgorithms
             4, 4, 3, 2, 5, 3, 2, 3, 4, 4
         };
         
-        public GeneticKeyboard(OptimizationParameters optimizationParameters, Random random)
+        public GeneticKeyboard(OptimizationParameters optimizationParameters)
         {
             int[][] population = InitializeKeyboardPopulation(optimizationParameters.PopulationSize);
             _genetic = new BaseGenetic(optimizationParameters, population, pop =>
@@ -39,7 +39,7 @@ namespace Optimization.GeneticAlgorithms
                     fitness[i] = Fitness.CalculateFitness(pop[i], _frequency, _weights);
                 }
                 return fitness;
-            }, CancellationToken.None, random);
+            }, CancellationToken.None);
 
         }
 

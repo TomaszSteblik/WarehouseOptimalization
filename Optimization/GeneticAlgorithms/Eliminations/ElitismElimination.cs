@@ -4,7 +4,7 @@ namespace Optimization.GeneticAlgorithms.Eliminations
 {
     internal class ElitismElimination : Elimination
     {
-        public ElitismElimination(int[][] pop, Random random) : base(pop, random)
+        public ElitismElimination(int[][] pop) : base(pop)
         {
             
         }

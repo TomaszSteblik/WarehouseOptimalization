@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers;
 
@@ -56,6 +55,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                     if (selectedParent1[j] == parent2Value)
                     {
                         currentVertex = selectedParent1[j];
+                        break;
                     }
                 }
                 counter++;
@@ -64,7 +64,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
             return offspring;
         }
 
-        public CycleCrossover(ConflictResolver resolver, Random random) : base(resolver, random)
+        public CycleCrossover(ConflictResolver resolver) : base(resolver)
         {
         }
     }

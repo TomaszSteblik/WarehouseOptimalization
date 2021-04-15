@@ -7,13 +7,10 @@ namespace Optimization.GeneticAlgorithms.Crossovers
     public abstract class Crossover
     {
         protected ConflictResolver ConflictResolver;
-        protected readonly Random Random;
 
-
-        public Crossover(ConflictResolver resolver, Random random)
+        public Crossover(ConflictResolver resolver)
         {
             ConflictResolver = resolver;
-            Random = random;
         }
         public abstract int[] GenerateOffspring(int[][] parents);
         public virtual int[][] GenerateOffsprings(int[][] parents, int numParentsForOneChild)
@@ -35,6 +32,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 
             return offsprings;
         }
+        protected readonly Random Random = new Random();
         
         
 
@@ -56,6 +54,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
         HRndX,
         KPoint,
         MRC,
-        MAC
+        MAC,
+        Order
     }
 }

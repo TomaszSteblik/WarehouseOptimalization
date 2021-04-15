@@ -18,9 +18,5 @@ namespace Optimization.GeneticAlgorithms.Initialization
             return population;
 
         }
-
-        public StandardPathInitialization(Random random) : base(random)
-        {
-        }
     }
 }

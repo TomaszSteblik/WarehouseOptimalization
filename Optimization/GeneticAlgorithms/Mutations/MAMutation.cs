@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace Optimization.GeneticAlgorithms.Mutations
@@ -7,12 +6,12 @@ namespace Optimization.GeneticAlgorithms.Mutations
     {
         private List<Mutation> Mutations;
         private int _counter;
-        public MAMutation(MutationMethod[] mutationMethods, double mutationProbability, int[][] population, Random random) : base(mutationProbability, population, random)
+        public MAMutation(MutationMethod[] mutationMethods, double mutationProbability, int[][] population) : base(mutationProbability, population)
         {
             Mutations = new List<Mutation>();
             foreach (var method in mutationMethods)
             {
-                Mutations.Add(GeneticFactory.CreateMutation(method,null,population,mutationProbability, random));
+                Mutations.Add(GeneticFactory.CreateMutation(method,null,population,mutationProbability));
             }
         }
 
