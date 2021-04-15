@@ -12,33 +12,24 @@ namespace Optimization
 {
     public static class OptimizationWork
     {
-        public static double FindShortestPath(OptimizationParameters optimizationParameters, int seed = 0)
+        public static double FindShortestPath(OptimizationParameters optimizationParameters)
         {
-            seed = GetSeed(seed);
-            var random = new Random(seed);
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
             Distances.Create(matrix);
             return PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters, CancellationToken.None);
             
         }
         
-
-        public static double FindShortestPath(OptimizationParameters optimizationParameters, CancellationToken ct, int seed = 0)
+        public static double FindShortestPath(OptimizationParameters optimizationParameters, CancellationToken ct)
         {
-            seed = GetSeed(seed);
-            var random = new Random(seed);
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
             Distances.Create(matrix);
             return PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters, ct);
             
         }
         
-
-        public static TSPResult TSP(OptimizationParameters optimizationParameters, CancellationToken ct, int seed = 0)
+        public static TSPResult TSP(OptimizationParameters optimizationParameters, CancellationToken ct)
         {
-            seed = GetSeed(seed);
-            var random = new Random(seed);
-            
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
             Distances.Create(matrix);
             var tsp = new GeneticTSP(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters,
@@ -48,51 +39,29 @@ namespace Optimization
                     for (int i = 0; i < population.Length; i++)
                         fitness[i] = Fitness.CalculateFitness(population[i]);
                     return fitness;
-                }, ct, random);
-            var result = tsp.Run();
-            result.Seed = seed;
-            return result;
-
-       
+                }, ct);
+            return tsp.Run();
+            
         }
 
         public static void FindShortestPath(OptimizationParameters optimizationParameters,
-            DelegateFitness.CalcFitness calcFitness, int seed = 0)
+            DelegateFitness.CalcFitness calcFitness)
         {
-            seed = GetSeed(seed);
-            var random = new Random(seed);
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
             Distances.Create(matrix);
             PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters,calcFitness, CancellationToken.None);
         }
 
-
-        public static double WarehouseOptimization(WarehouseParameters warehouseParameters, CancellationToken ct, int seed = 0)
+        public static double WarehouseOptimization(WarehouseParameters warehouseParameters, CancellationToken ct)
         {
-            seed = GetSeed(seed);
-            var random = new Random(seed);
-            return WarehouseOptimizer.Optimize(warehouseParameters, ct, random);
+            return WarehouseOptimizer.Optimize(warehouseParameters, ct);
         }
 
-        public static void KeyboardOptimization(OptimizationParameters optimizationParameters, int seed = 0)
+        public static void KeyboardOptimization(OptimizationParameters optimizationParameters)
         {
-            seed = GetSeed(seed);
-            var random = new Random(seed);
-            var keyboardOptimizer = new GeneticKeyboard(optimizationParameters, random);
-
+            var keyboardOptimizer = new GeneticKeyboard(optimizationParameters);
             var result = keyboardOptimizer.Run();
             keyboardOptimizer.WriteResult(result);
         }
-
-        private static int GetSeed(int givenValue)
-        {
-            if (givenValue == 0)
-            {
-                return (int) DateTime.Now.Ticks;
-            }
-
-            return givenValue;
-        }
-        
     }
 }
