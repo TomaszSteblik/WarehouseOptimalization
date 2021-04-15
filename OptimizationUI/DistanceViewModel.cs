@@ -156,6 +156,28 @@ namespace OptimizationUI
             }
         }
 
+        private int _tournamentEliminationParticipantsCount = 8;
+
+        public override int TournamentEliminationParticipantsCount
+        {
+            get => _tournamentEliminationParticipantsCount;
+            set
+            {
+                _tournamentEliminationParticipantsCount = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public Visibility IsTournamentEliminationSelected
+        {
+            get
+            {
+                if (_eliminationMethod == EliminationMethod.Tournament)
+                    return Visibility.Visible;
+                return Visibility.Collapsed;
+            }
+        }
+
         private SelectionMethod _selectionMethod = SelectionMethod.Tournament;
         public override SelectionMethod SelectionMethod
         {
@@ -167,6 +189,27 @@ namespace OptimizationUI
             {
                 _selectionMethod = value;
                 NotifyPropertyChanged();
+            }
+        }
+
+        private int _tournamentSelectionParticipantsCount = 8;
+
+        public override int TournamentSelectionParticipantsCount
+        {
+            get => _tournamentSelectionParticipantsCount;
+            set
+            {
+                _tournamentSelectionParticipantsCount = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public Visibility IsTournamentSelectionSelected
+        {
+            get
+            {
+                if (_selectionMethod == SelectionMethod.Tournament)
+                    return Visibility.Visible;
+                return Visibility.Collapsed;
             }
         }
 

@@ -62,7 +62,8 @@ namespace Optimization.GeneticAlgorithms
             Selection selection = optimizationParameters.SelectionMethod switch
             {
                 SelectionMethod.Random => new RandomSelection(population, random),
-                SelectionMethod.Tournament => new TournamentSelection(population, random),
+                SelectionMethod.Tournament => new TournamentSelection(population, random) {
+                        ParticipantsCount = optimizationParameters.TournamentSelectionParticipantsCount },
                 SelectionMethod.Elitism => new ElitismSelection(population, random),
                 SelectionMethod.RouletteWheel => new RouletteWheelSelection(population, random),
                 _ => throw new ArgumentException("Wrong selection name in parameters json file")
@@ -76,7 +77,10 @@ namespace Optimization.GeneticAlgorithms
             {
                 EliminationMethod.Elitism => new ElitismElimination(population, random),
                 EliminationMethod.RouletteWheel => new RouletteWheelElimination(population, random),
-                EliminationMethod.Tournament => new TournamentElimination(population, random),
+                EliminationMethod.Tournament => new TournamentElimination(population, random)
+                {
+                    ParticipantsCount = optimizationParameters.TournamentEliminationParticipantsCount
+                },
                 _ => throw new ArgumentException("Wrong elimination method name")
             };
             return elimination;

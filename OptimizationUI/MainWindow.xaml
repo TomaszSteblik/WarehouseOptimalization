@@ -47,6 +47,8 @@
                                 <Label Content="Selection method:"></Label>
                                 <ComboBox Width="120" ItemsSource="{Binding Path=SelectionMethod}" Name="DistanceSelectionComboBox"
                                           SelectedItem="{Binding SelectionMethod}"/>
+                                <Label Content="Tournament participants:" Visibility="{Binding IsTournamentSelectionSelected}"></Label>
+                                <TextBox Width="120" Visibility="{Binding IsTournamentSelectionSelected}" Text="{Binding TournamentSelectionParticipantsCount}"></TextBox>
                             </WrapPanel>
                             <WrapPanel>
                                 <Label Content="Crossover method:"></Label>
@@ -67,6 +69,8 @@
                                 <Label Content="Elimination method:"></Label>
                                 <ComboBox Width="120" ItemsSource="{Binding Path=EliminationMethod}" Name="DistanceEliminationComboBox"
                                           SelectedItem="{Binding EliminationMethod}"/>
+                                <Label Content="Tournament participants:" Visibility="{Binding IsTournamentEliminationSelected}"></Label>
+                                <TextBox Width="120" Visibility="{Binding IsTournamentEliminationSelected}" Text="{Binding TournamentEliminationParticipantsCount}"></TextBox>
                             </WrapPanel>
                             <WrapPanel>
                                 <Label Content="Mutation method:"></Label>

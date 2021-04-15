@@ -41,11 +41,15 @@ namespace Optimization.Parameters
             PopulationInitializationMethod.StandardPathInitialization;
         public virtual SelectionMethod SelectionMethod { get; set; } = SelectionMethod.RouletteWheel;
 
+        public virtual int TournamentSelectionParticipantsCount { get; set; } = 8;
+
         public virtual ConflictResolveMethod ConflictResolveMethod { get; set; } = ConflictResolveMethod.Random;
         public virtual CrossoverMethod CrossoverMethod { get; set; } = CrossoverMethod.Aex;
         public virtual CrossoverMethod[] MultiCrossovers { get; set; }
 
         public virtual EliminationMethod EliminationMethod { get; set; } = EliminationMethod.Elitism;
+        
+        public virtual int TournamentEliminationParticipantsCount { get; set; } = 8;
         public virtual MutationMethod MutationMethod { get; set; } = MutationMethod.RSM;
         public virtual double MutationProbability { get; set; } = 30;
 
