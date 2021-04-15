@@ -8,11 +8,11 @@ namespace Optimization.GeneticAlgorithms.Selections {
         protected readonly Random Random;
         protected int Strictness = 1;
 
-        public Selection(int[][] population)
+        public Selection(int[][] population, Random random)
         {
             Population = population;
             PopulationSize = population.Length;
-            Random = new Random();
+            Random = random;
         }
         public bool IncreaseStrictness(int numberOfChildren)
         {

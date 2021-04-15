@@ -1,16 +1,16 @@
 {
-  "WarehouseGeneticAlgorithmParameters": {
+  "WarehouseGeneticAlgorithmParameters" : {
     "OptimizationMethod": "GeneticAlgorithm",
-    "Use2opt": false,
+    "Use2opt": false, 
     "LogEnabled": false,
     "ResultToFile": false
   },
-  "FitnessGeneticAlgorithmParameters": {
+  "FitnessGeneticAlgorithmParameters" : {
     "OptimizationMethod": "NearestNeighbor",
     "Use2opt": true,
     "LogEnabled": false,
     "ResultToFile": false
   },
-  "WarehousePath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/mag23.txt",
-  "OrdersPath": "C:/Users/rtry/RiderProjects/WarehouseOptimization/orders23b.txt"
+  "WarehousePath" : "C:/Users/rtry/RiderProjects/WarehouseOptimization/mag23.txt",
+  "OrdersPath" : "C:/Users/rtry/RiderProjects/WarehouseOptimization/orders23b.txt"
 }

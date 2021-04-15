@@ -13,13 +13,13 @@ namespace Optimization.GeneticAppliances.TSP
     {
         private BaseGenetic _genetic;
         private bool _use2opt;
-        public GeneticTSP(int[] order, OptimizationParameters parameters, DelegateFitness.CalcFitness calcFitness, CancellationToken ct)
+        public GeneticTSP(int[] order, OptimizationParameters parameters, DelegateFitness.CalcFitness calcFitness, CancellationToken ct, Random random)
         {
             _use2opt = parameters.Use2opt;
             var populationInitialization =
-                GeneticFactory.CreatePopulationInitialization(parameters.PopulationInitializationMethod);
+                GeneticFactory.CreatePopulationInitialization(parameters.PopulationInitializationMethod, random);
             var population = populationInitialization.InitializePopulation(order, parameters.PopulationSize, parameters.StartingId);
-            _genetic = new BaseGenetic(parameters, population, calcFitness, ct);
+            _genetic = new BaseGenetic(parameters, population, calcFitness, ct, random);
             
             if(parameters.StopAfterEpochsWithoutChange)
                 _genetic.LoadModule(new TerminationModule(parameters.StopAfterEpochCount));

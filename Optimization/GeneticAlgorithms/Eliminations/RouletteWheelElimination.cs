@@ -1,10 +1,11 @@
+using System;
 using System.Linq;
 
 namespace Optimization.GeneticAlgorithms.Eliminations
 {
     internal class RouletteWheelElimination : Elimination
     {
-        public RouletteWheelElimination(int[][] population) : base(population)
+        public RouletteWheelElimination(int[][] population, Random random) : base(population, random)
         {
             
         }

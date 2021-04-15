@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers;
@@ -6,7 +7,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 {
     internal class AexCrossover : Crossover
     {
-        public AexCrossover(ConflictResolver resolver) : base(resolver)
+        public AexCrossover(ConflictResolver resolver, Random random) : base(resolver, random)
         {
         }
         public override int[] GenerateOffspring(int[][] parents)
