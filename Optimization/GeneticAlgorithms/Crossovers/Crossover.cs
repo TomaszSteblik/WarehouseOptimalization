@@ -54,7 +54,6 @@ namespace Optimization.GeneticAlgorithms.Crossovers
         HRndX,
         KPoint,
         MRC,
-        MAC,
-        Order
+        MAC
     }
 }

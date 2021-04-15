@@ -55,7 +55,6 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                     if (selectedParent1[j] == parent2Value)
                     {
                         currentVertex = selectedParent1[j];
-                        break;
                     }
                 }
                 counter++;
