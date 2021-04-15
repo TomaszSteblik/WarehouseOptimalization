@@ -113,7 +113,11 @@ namespace OptimizationUI
                     {
                         Parallel.For(0, runs, i =>
                         {
-                            if(_properties.DistanceViewModel.RandomSeed) results[i] = OptimizationWork.TSP(parameters, ct);
+                            if (_properties.DistanceViewModel.RandomSeed)
+                            {
+                                var randomSeed = DateTime.Now.Millisecond * DateTime.Now.Second * DateTime.Now.Minute + 1;
+                                results[i] = OptimizationWork.TSP(parameters, ct, randomSeed + i);
+                            }
                             else results[i] = OptimizationWork.TSP(parameters, ct, seed + i);
                             runFitnesses[i] = results[i].fitness;
 
