@@ -24,11 +24,12 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 
                 int num1 = 0;
                 int num2 = 0;
-                while (num1 != num2)
+                do
                 {
-                    num1 = Random.Next(0, parentLength);
-                    num2 = Random.Next(0, parentLength);
+                    num1 = Random.Next(parentLength);
+                    num2 = Random.Next(parentLength);
                 }
+                while (num1 == num2);
                 int start = Math.Min(num1, num2);
                 int stop = Math.Max(num1, num2);
 
