@@ -26,8 +26,8 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                 int num2 = 0;
                 while (num1 != num2)
                 {
-                    num1 = Random.Next(parentLength);
-                    num2 = Random.Next(parentLength);
+                    num1 = Random.Next(0, parentLength);
+                    num2 = Random.Next(0, parentLength);
                 }
                 int start = Math.Min(num1, num2);
                 int stop = Math.Max(num1, num2);
@@ -55,13 +55,13 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                     }
                     if (!check)
                     {
-                        offspring[i] = Parent2[geneInParent2];
+                        offspring[geneIndex] = geneInParent2;
                     }
                 }
                 counter++;
             }
 
-                return offspring;
+            return offspring;
         }
 
         public OrderCrossover(ConflictResolver resolver, Random random) : base(resolver, random)
