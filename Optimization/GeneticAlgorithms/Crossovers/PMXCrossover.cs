@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers;
+using System;
 using System.Collections.Generic;
-using Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers;
 
 namespace Optimization.GeneticAlgorithms.Crossovers
 {
-    internal class OrderCrossover : Crossover
+    internal class PMXCrossover : Crossover
     {
         public override int[] GenerateOffspring(int[][] parents)
         {
@@ -33,28 +33,32 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                 int start = Math.Min(num1, num2);
                 int stop = Math.Max(num1, num2);
 
+                int cutSize = stop - start;
+                var parent1CutPart = new int[cutSize];
+                var parent2CutPart = new int[cutSize];
                 for (int i = start; i < stop; i++)
                 {
+                    int j = 0;
                     offspring[i] = Parent1[i];
+                    parent1CutPart[j] = Parent1[i];
+                    parent2CutPart[j] = Parent2[i];
+                    j++;
                 }
 
                 int geneIndex;
-                int geneInParent2;
-                for (int i = 0; i < parentLength-(stop-start); i++)
+                for (int i = 0; i < parentLength - (stop - start); i++)
                 {
                     geneIndex = (stop + i) % parentLength;
-                    geneInParent2 = Parent2[geneIndex];
-                    bool check = false;
-                    for (int j = 0; j < parentLength; j++)
+                    for(int j = 0; j < parent1CutPart.Length; j++)
                     {
-                        if (offspring[j] == geneInParent2)
+                        if (parent1CutPart[j] == Parent2[geneIndex]) 
                         {
-                            check = true;
+                            offspring[geneIndex] = parent2CutPart[j];
                         }
-                    }
-                    if (!check)
-                    {
-                        offspring[geneIndex] = geneInParent2;
+                        else
+                        {
+                            offspring[geneIndex] = Parent2[geneIndex];
+                        }
                     }
                 }
                 counter++;
@@ -63,7 +67,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
             return offspring;
         }
 
-        public OrderCrossover(ConflictResolver resolver, Random random) : base(resolver, random)
+        public PMXCrossover(ConflictResolver resolver, Random random) : base(resolver, random)
         {
         }
     }
