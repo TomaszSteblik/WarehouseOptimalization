@@ -10,7 +10,7 @@ namespace Optimization.GeneticAppliances.Warehouse
 {
     internal class WarehouseOptimizer
     {
-        public static double Optimize(WarehouseParameters warehouseParameters, CancellationToken ct)
+        public static double Optimize(WarehouseParameters warehouseParameters, CancellationToken ct, Random random)
         {
             WarehouseManager warehouseManager = new WarehouseManager();
             double[][] distancesMatrix = warehouseManager.CreateWarehouseDistancesMatrix(warehouseParameters.WarehousePath);
@@ -25,15 +25,15 @@ namespace Optimization.GeneticAppliances.Warehouse
                     warehouseParameters.FitnessGeneticAlgorithmParameters.WriteCsv = false;
                     Parallel.For( 0, population.Length, i =>
                     {
-                        fitness[i] = Fitness.CalculateAllOrdersFitness(orders, population[i], warehouseParameters.FitnessGeneticAlgorithmParameters);
+                        fitness[i] = Fitness.CalculateAllOrdersFitness(orders, population[i], warehouseParameters.FitnessGeneticAlgorithmParameters, random);
                     });
 
                     return fitness;
-                }, ct);
+                }, ct, random);
             
             int[] z = geneticWarehouse.Run();
             
-            return Fitness.CalculateAllOrdersFitness(orders, z, warehouseParameters.FitnessGeneticAlgorithmParameters);
+            return Fitness.CalculateAllOrdersFitness(orders, z, warehouseParameters.FitnessGeneticAlgorithmParameters, random);
         }
     }
 }

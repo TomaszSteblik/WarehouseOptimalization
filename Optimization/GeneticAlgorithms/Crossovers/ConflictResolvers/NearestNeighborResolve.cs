@@ -8,7 +8,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
     public class NearestNeighborResolve : ConflictResolver
     {
         private double[][] _distancesMatrix;
-        public NearestNeighborResolve()
+        public NearestNeighborResolve(Random random) : base(random)
         {
             _distancesMatrix = Distances.GetInstance().DistancesMatrix;
         }
