@@ -10,8 +10,6 @@ namespace Optimization.GeneticAppliances.TSP
         
         public int[] BestGene { get; }
         public double FinalFitness { get; }
-        
-        public int Seed { get; set; }
 
         public TSPResult(double[][] fitness, int[] bestGene)
         {
