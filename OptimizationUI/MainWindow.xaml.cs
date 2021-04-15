@@ -129,10 +129,10 @@ namespace OptimizationUI
                             $"Avg epoch count: {results.Average(x => x.EpochCount)}";
                         WritePlotDistances(linesGridDistances, GetAverageFitnesses(runFitnesses));
 
-                        SaveDistanceResultsToDataCsv(results,runs,_properties.DistanceViewModel.ConflictResolveMethod,
+                        SaveDistanceResultsToDataCsv(results,runs,
                             _properties.DistanceViewModel.DataPath.Split('\\')[^1]
                                 .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'))
-                        );
+                            );
                     });
                 }
                 catch (AggregateException)
@@ -560,10 +560,9 @@ namespace OptimizationUI
             SerializeParameters(fileDialog.FileName);
         }
 
-        private void SaveDistanceResultsToDataCsv(TSPResult[] results, int runs,
-            ConflictResolveMethod conflictResolveMethod, string dataset, string id = "default")
+        private void SaveDistanceResultsToDataCsv(TSPResult[] results,int runs, string dataset, string id = "default")
         {
-            var line = File.Exists("data.csv") ? new StringBuilder() : new StringBuilder("algorithm;resolve;dataset;id;runs;distance;d_epoch;d*0.98_epoch\n");
+            var line = File.Exists("data.csv") ? new StringBuilder() : new StringBuilder("algorithm;dataset;id;runs;distance;d_epoch;d*0.98_epoch\n");
             
             line.Append(Enum.GetName(_properties.DistanceViewModel.CrossoverMethod));
             if(_properties.DistanceViewModel.CrossoverMethod == CrossoverMethod.MAC || _properties.DistanceViewModel.CrossoverMethod == CrossoverMethod.MRC)
@@ -602,7 +601,7 @@ namespace OptimizationUI
             }
             
             
-            line.Append($";{Enum.GetName(conflictResolveMethod)};{dataset};{id};{runs};{results.Average(x => x.FinalFitness)};{averageMinEpoch};{epochNumbersWhenSlowedDown.Average()}\n");
+            line.Append($";{dataset};{id};{runs};{results.Average(x => x.FinalFitness)};{averageMinEpoch};{epochNumbersWhenSlowedDown.Average()}\n");
             File.AppendAllText("data.csv",line.ToString());
         }
     }
