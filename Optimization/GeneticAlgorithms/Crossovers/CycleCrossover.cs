@@ -65,7 +65,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
             return offspring;
         }
 
-        public CycleCrossover(ConflictResolver resolver, Random random) : base(resolver, random)
+        public CycleCrossover(ConflictResolver resolverConflict, ConflictResolver resolverRandomized, Random random) : base(resolverConflict, resolverRandomized,  random)
         {
         }
     }

@@ -58,6 +58,13 @@
                                 <ComboBox Width="120" ItemsSource="{Binding Path= ConflictResolveMethod}" Name="DistanceConflictResolveComboBox"
                                           SelectedItem="{Binding ConflictResolveMethod}"></ComboBox>
                             </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="Randomized resolve method:"></Label>
+                                <ComboBox Width="120" ItemsSource="{Binding Path= ConflictResolveMethod}" Name="DistanceRandomizedResolveComboBox"
+                                          SelectedItem="{Binding RandomizedResolveMethod}"></ComboBox>
+                                <Label Content="Probability:"></Label>
+                                <TextBox Width="120" Text="{Binding ResolveRandomizationProbability}"></TextBox>
+                            </WrapPanel>
                             <ItemsControl Margin="50 0 0 0" ItemsSource="{Binding Path=CrossoverCheckBoxStates}" Visibility="{Binding IsCrossoverCheckBoxVisible}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>

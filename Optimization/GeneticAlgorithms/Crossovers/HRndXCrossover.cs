@@ -35,10 +35,15 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                     }
                     nextVertex = selectedParent[indexOfCurrentVertexInSelectedParent + 1];
                 }
+                
+                if (Random.NextDouble() < ResolverRandomized.RandomizationProbability)
+                {
+                    nextVertex = ResolverRandomized.ResolveConflict(currentVertex, availableVertexes);
+                }
 
                 if (nextVertex == -1)
                 {
-                    nextVertex = ConflictResolver.ResolveConflict(currentVertex, availableVertexes);
+                    nextVertex = ResolverConflict.ResolveConflict(currentVertex, availableVertexes);
                 }
                 offspring[counter] = nextVertex;
                 availableVertexes.Remove(nextVertex);
@@ -48,7 +53,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
             return offspring;
         }
 
-        public HRndXCrossover(ConflictResolver resolver, Random random) : base(resolver, random)
+        public HRndXCrossover(ConflictResolver resolverConflict, ConflictResolver resolverRandomized, Random random) : base(resolverConflict, resolverRandomized,  random)
         {
         }
     }

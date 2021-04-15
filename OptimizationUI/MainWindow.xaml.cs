@@ -69,6 +69,7 @@ namespace OptimizationUI
             DistanceMutationComboBox.ItemsSource = mutations;
             DistancePopulationInitializationMethod.ItemsSource = initializations;
             DistanceConflictResolveComboBox.ItemsSource = conflictResolvers;
+            DistanceRandomizedResolveComboBox.ItemsSource = conflictResolvers;
 
             WarehouseSelectionComboBox.ItemsSource = selections;
             WarehouseCrossoverComboBox.ItemsSource = crossovers;

@@ -9,7 +9,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
     internal class HGreXCrossover : Crossover
         {
             private double[][] DistancesMatrix { get; }
-            public HGreXCrossover(ConflictResolver resolver, Random random) : base(resolver, random)
+            public HGreXCrossover(ConflictResolver resolverConflict, ConflictResolver resolverRandomized, Random random) : base(resolverConflict, resolverRandomized,  random)
             {
                 DistancesMatrix = Distances.GetInstance().DistancesMatrix;
             }
@@ -58,9 +58,14 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                 if(minIndex>=0)
                     nextVertex = feasibleParents[minIndex][feasibleParents[minIndex].ToList().IndexOf(currentVertex) + 1];
                 
+                if (Random.NextDouble() < ResolverRandomized.RandomizationProbability)
+                {
+                    nextVertex = ResolverRandomized.ResolveConflict(currentVertex, availableVertexes);
+                }
+                
                 if (nextVertex == -1)
                 {
-                    nextVertex = ConflictResolver.ResolveConflict(currentVertex, availableVertexes);
+                    nextVertex = ResolverRandomized.ResolveConflict(currentVertex, availableVertexes);
                 }
                 offspring[counter] = nextVertex;
                 availableVertexes.Remove(nextVertex);

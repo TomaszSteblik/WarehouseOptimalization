@@ -25,7 +25,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                     int selected = -1;
                     while (selected == -1 || offspring.Contains(selected))
                     {
-                        selected = ConflictResolver.ResolveConflict(offspring[j - 1], available);
+                        selected = ResolverConflict.ResolveConflict(offspring[j - 1], available);
                     }
 
                     available.Remove(selected);
@@ -41,7 +41,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
             return offspring;
         }
 
-        public KPointCrossover(ConflictResolver resolver, Random random) : base(resolver, random)
+        public KPointCrossover(ConflictResolver resolverConflict, ConflictResolver resolverRandomized, Random random) : base(resolverConflict, resolverRandomized,  random)
         {
         }
     }

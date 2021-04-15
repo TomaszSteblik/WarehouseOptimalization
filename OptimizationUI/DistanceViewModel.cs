@@ -513,6 +513,30 @@ namespace OptimizationUI
                 NotifyPropertyChanged();
             }
         }
+        
+        private ConflictResolveMethod _randomizedResolveMethod = ConflictResolveMethod.Random;
+
+        public override ConflictResolveMethod RandomizedResolveMethod
+        {
+            get => _randomizedResolveMethod;
+            set
+            {
+                _randomizedResolveMethod = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private double _resolveRandomizationProbability = 0d;
+
+        public override double ResolveRandomizationProbability
+        {
+            get => _resolveRandomizationProbability;
+            set
+            {
+                _resolveRandomizationProbability = value;
+                NotifyPropertyChanged();
+            }
+        }
 
 
         public DistanceViewModel(OptimizationParameters fitnessGeneticAlgorithmParameters)

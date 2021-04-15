@@ -7,7 +7,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 {
     internal class AexCrossover : Crossover
     {
-        public AexCrossover(ConflictResolver resolver, Random random) : base(resolver, random)
+        public AexCrossover(ConflictResolver resolverConflict, ConflictResolver resolverRandomized, Random random) : base(resolverConflict, resolverRandomized,  random)
         {
         }
         public override int[] GenerateOffspring(int[][] parents)
@@ -48,11 +48,17 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                         currentParentIndex++;
                     }
                 }
-                
+
+                if (Random.NextDouble() < ResolverRandomized.RandomizationProbability)
+                {
+                    nextVertex =
+                        ResolverRandomized.ResolveConflict(selectedParent[indexOfCurrentVertexInSelectedParent],
+                            availableVertexes);
+                }
 
                 if (nextVertex == -1)
                 {
-                    nextVertex = ConflictResolver.ResolveConflict(selectedParent[indexOfCurrentVertexInSelectedParent], availableVertexes);
+                    nextVertex = ResolverConflict.ResolveConflict(selectedParent[indexOfCurrentVertexInSelectedParent], availableVertexes);
                 }
                 offspring[counter] = nextVertex;
                 availableVertexes.Remove(nextVertex);

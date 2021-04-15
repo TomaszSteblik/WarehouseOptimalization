@@ -44,6 +44,8 @@ namespace Optimization.Parameters
         public virtual int TournamentSelectionParticipantsCount { get; set; } = 8;
 
         public virtual ConflictResolveMethod ConflictResolveMethod { get; set; } = ConflictResolveMethod.Random;
+        public virtual ConflictResolveMethod RandomizedResolveMethod { get; set; } = ConflictResolveMethod.Random;
+        public virtual double ResolveRandomizationProbability { get; set; } = 0d;
         public virtual CrossoverMethod CrossoverMethod { get; set; } = CrossoverMethod.Aex;
         public virtual CrossoverMethod[] MultiCrossovers { get; set; }
 

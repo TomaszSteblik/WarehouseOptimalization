@@ -26,12 +26,12 @@ namespace Optimization.GeneticAlgorithms
             return initialization;
         }
 
-        public static ConflictResolver CreateConflictResolver(ConflictResolveMethod method, Random random)
+        public static ConflictResolver CreateConflictResolver(OptimizationParameters parameters, ConflictResolveMethod method, Random random)
         {
             ConflictResolver resolver = method switch
             {
-                ConflictResolveMethod.Random => new RandomResolve(random),
-                ConflictResolveMethod.NearestNeighbor => new NearestNeighborResolve(random),
+                ConflictResolveMethod.Random => new RandomResolve(random, parameters.ResolveRandomizationProbability),
+                ConflictResolveMethod.NearestNeighbor => new NearestNeighborResolve(random, parameters.ResolveRandomizationProbability),
                 _ => throw new ArgumentException("Wrong conflict resolve method name")
             };
             return resolver;
@@ -39,19 +39,19 @@ namespace Optimization.GeneticAlgorithms
         
         
         public static Crossover CreateCrossover(int startingId, CrossoverMethod crossoverMethod, 
-            CrossoverMethod[] crossoverMethods, ConflictResolver resolver, Random random)
+            CrossoverMethod[] crossoverMethods, ConflictResolver resolverConflict, ConflictResolver resolverRandomized, Random random)
         {
             Crossover crossover = crossoverMethod switch
             {
-                CrossoverMethod.Aex => new AexCrossover(resolver, random),
-                CrossoverMethod.HGreX => new HGreXCrossover(resolver, random),
-                CrossoverMethod.HRndX => new HRndXCrossover(resolver, random),
-                CrossoverMethod.HProX => new HProXCrossover(resolver, random),
-                CrossoverMethod.KPoint => new KPointCrossover(resolver, random),
-                CrossoverMethod.Cycle => new CycleCrossover(resolver, random),
-                CrossoverMethod.Order => new OrderCrossover(resolver, random),
-                CrossoverMethod.MAC => new MACrossover(crossoverMethods, startingId, resolver, random),
-                CrossoverMethod.MRC => new MRCrossover(crossoverMethods, startingId, resolver, random),
+                CrossoverMethod.Aex => new AexCrossover(resolverConflict,resolverRandomized, random),
+                CrossoverMethod.HGreX => new HGreXCrossover(resolverConflict,resolverRandomized, random),
+                CrossoverMethod.HRndX => new HRndXCrossover(resolverConflict,resolverRandomized, random),
+                CrossoverMethod.HProX => new HProXCrossover(resolverConflict,resolverRandomized, random),
+                CrossoverMethod.KPoint => new KPointCrossover(resolverConflict,resolverRandomized, random),
+                CrossoverMethod.Cycle => new CycleCrossover(resolverConflict,resolverRandomized, random),
+                CrossoverMethod.Order => new OrderCrossover(resolverConflict,resolverRandomized, random),
+                CrossoverMethod.MAC => new MACrossover(crossoverMethods, startingId, resolverConflict,resolverRandomized, random),
+                CrossoverMethod.MRC => new MRCrossover(crossoverMethods, startingId, resolverConflict,resolverRandomized, random),
                 _ => throw new ArgumentException("Wrong crossover method name")
             };
             return crossover;
