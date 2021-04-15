@@ -8,13 +8,12 @@ namespace Optimization.GeneticAlgorithms.Initialization
 {
     class PreferedCloseDistancePathInitialization : PopulationInitialization
     {
-
+        
 
         bool log = false;
         public override int[][] InitializePopulation(int[] pointsToInclude, int populationSize, int startingPoint)
         {
             double[][] distanceMatrix = Distances.GetInstance().DistancesMatrix;
-            Random R = new Random();
 
 
             int numCandidates = (int)(0.25 * distanceMatrix.Length);
@@ -46,7 +45,7 @@ namespace Optimization.GeneticAlgorithms.Initialization
 
                         for (int k = 0; k < numCandidates; k++)
                         {
-                            int candidate = R.Next(1, RemainingPoints.Count);
+                            int candidate = Random.Next(1, RemainingPoints.Count);
                             if (distanceMatrix[lastPoint][RemainingPoints[candidate]] < minDistance)
                             {
                                 minDistance = distanceMatrix[lastPoint][RemainingPoints[candidate]];
@@ -98,6 +97,8 @@ namespace Optimization.GeneticAlgorithms.Initialization
         }
 
 
-
+        public PreferedCloseDistancePathInitialization(Random random) : base(random)
+        {
+        }
     }
 }

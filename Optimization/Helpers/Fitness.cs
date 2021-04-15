@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Optimization.GeneticAppliances.Warehouse;
 using Optimization.Parameters;
@@ -17,13 +18,13 @@ namespace Optimization.Helpers
             return sum;
         }
 
-        public static double CalculateAllOrdersFitness(Orders orders, int[] chromosome, OptimizationParameters optimizationParameters)
+        public static double CalculateAllOrdersFitness(Orders orders, int[] chromosome, OptimizationParameters optimizationParameters, Random random)
         {
             double fitness = 0d;
             for (int k = 0; k < orders.OrdersCount; k++)
             {
                 int[] order = Translator.TranslateWithChromosome(orders.OrdersList[k], chromosome);
-                double pathLength = ShortestPath.Find(order, optimizationParameters, CancellationToken.None);
+                double pathLength = ShortestPath.Find(order, optimizationParameters, CancellationToken.None, random);
                 fitness += pathLength * orders.OrderRepeats[k];
             }
 
