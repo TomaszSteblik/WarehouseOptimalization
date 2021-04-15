@@ -19,7 +19,11 @@ namespace Optimization
             return PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters, CancellationToken.None, random);
             
         }
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> parent of d32bc4c (Merge branch 'master' into random)
         public static double FindShortestPath(OptimizationParameters optimizationParameters, CancellationToken ct, int seed = 0)
         {
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
@@ -28,7 +32,6 @@ namespace Optimization
             
         }
         
-
         public static TSPResult TSP(OptimizationParameters optimizationParameters, CancellationToken ct, int seed = 0)
         {
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
@@ -62,6 +65,12 @@ namespace Optimization
 
         public static void KeyboardOptimization(OptimizationParameters optimizationParameters)
         {
+<<<<<<< HEAD
+=======
+            seed = GetSeed(seed);
+            var random = new Random(seed);
+            var keyboardOptimizer = new GeneticKeyboard(optimizationParameters, random);
+>>>>>>> parent of d32bc4c (Merge branch 'master' into random)
             var result = keyboardOptimizer.Run();
             keyboardOptimizer.WriteResult(result);
         }
