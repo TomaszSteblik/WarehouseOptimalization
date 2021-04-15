@@ -19,24 +19,16 @@ namespace Optimization
             return PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters, CancellationToken.None, random);
             
         }
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> parent of d32bc4c (Merge branch 'master' into random)
-=======
-        
->>>>>>> parent of d32bc4c (Merge branch 'master' into random)
-        public static double FindShortestPath(OptimizationParameters optimizationParameters, CancellationToken ct, int seed = 0)
+        public static double FindShortestPath(OptimizationParameters optimizationParameters, CancellationToken ct, int seed = 0)        
+        public static double FindShortestPath(OptimizationParameters optimizationParameters, CancellationToken ct)
         {
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
             Distances.Create(matrix);
             return PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters, ct, random);
             
-        }
-        
-        public static TSPResult TSP(OptimizationParameters optimizationParameters, CancellationToken ct, int seed = 0)
+        }    
+        public static TSPResult TSP(OptimizationParameters optimizationParameters, CancellationToken ct)
         {
             var matrix = Files.ReadArray(optimizationParameters.DataPath);
             Distances.Create(matrix);
@@ -47,11 +39,8 @@ namespace Optimization
                     for (int i = 0; i < population.Length; i++)
                         fitness[i] = Fitness.CalculateFitness(population[i]);
                     return fitness;
-                }, ct, random);
-            var result = tsp.Run();
-            result.Seed = seed;
-            return result;
-            
+                }, ct);
+            return tsp.Run();
         }
 
         public static void FindShortestPath(OptimizationParameters optimizationParameters,
@@ -61,23 +50,17 @@ namespace Optimization
             Distances.Create(matrix);
             PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters,calcFitness, CancellationToken.None, random);
         }
-
-        public static double WarehouseOptimization(WarehouseParameters warehouseParameters, CancellationToken ct, int seed = 0)
+        public static double WarehouseOptimization(WarehouseParameters warehouseParameters, CancellationToken ct)
         {
             return WarehouseOptimizer.Optimize(warehouseParameters, ct);
         }
 
         public static void KeyboardOptimization(OptimizationParameters optimizationParameters)
         {
-<<<<<<< HEAD
-=======
             seed = GetSeed(seed);
             var random = new Random(seed);
             var keyboardOptimizer = new GeneticKeyboard(optimizationParameters, random);
-<<<<<<< HEAD
->>>>>>> parent of d32bc4c (Merge branch 'master' into random)
-=======
->>>>>>> parent of d32bc4c (Merge branch 'master' into random)
+            var keyboardOptimizer = new GeneticKeyboard(optimizationParameters);
             var result = keyboardOptimizer.Run();
             keyboardOptimizer.WriteResult(result);
         }

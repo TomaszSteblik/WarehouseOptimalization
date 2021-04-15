@@ -43,14 +43,14 @@ namespace Optimization.GeneticAlgorithms
         {
             Crossover crossover = crossoverMethod switch
             {
-                CrossoverMethod.Aex => new AexCrossover(resolver, random),
-                CrossoverMethod.HGreX => new HGreXCrossover(resolver, random),
-                CrossoverMethod.HRndX => new HRndXCrossover(resolver, random),
-                CrossoverMethod.HProX => new HProXCrossover(resolver, random),
-                CrossoverMethod.KPoint => new KPointCrossover(resolver, random),
-                CrossoverMethod.Cycle => new CycleCrossover(resolver, random),
-                CrossoverMethod.MAC => new MACrossover(crossoverMethods, startingId, resolver, random),
-                CrossoverMethod.MRC => new MRCrossover(crossoverMethods, startingId, resolver, random),
+                CrossoverMethod.Aex => new AexCrossover(resolver),
+                CrossoverMethod.HGreX => new HGreXCrossover(resolver),
+                CrossoverMethod.HRndX => new HRndXCrossover(resolver),
+                CrossoverMethod.HProX => new HProXCrossover(resolver),
+                CrossoverMethod.KPoint => new KPointCrossover(resolver),
+                CrossoverMethod.Cycle => new CycleCrossover(resolver),
+                CrossoverMethod.MAC => new MACrossover(crossoverMethods, startingId, resolver),
+                CrossoverMethod.MRC => new MRCrossover(crossoverMethods, startingId, resolver),
                 _ => throw new ArgumentException("Wrong crossover method name")
             };
             return crossover;
