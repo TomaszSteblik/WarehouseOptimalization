@@ -20,7 +20,11 @@ namespace Optimization
             
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> parent of d32bc4c (Merge branch 'master' into random)
 =======
         
 >>>>>>> parent of d32bc4c (Merge branch 'master' into random)
@@ -70,6 +74,9 @@ namespace Optimization
             seed = GetSeed(seed);
             var random = new Random(seed);
             var keyboardOptimizer = new GeneticKeyboard(optimizationParameters, random);
+<<<<<<< HEAD
+>>>>>>> parent of d32bc4c (Merge branch 'master' into random)
+=======
 >>>>>>> parent of d32bc4c (Merge branch 'master' into random)
             var result = keyboardOptimizer.Run();
             keyboardOptimizer.WriteResult(result);
