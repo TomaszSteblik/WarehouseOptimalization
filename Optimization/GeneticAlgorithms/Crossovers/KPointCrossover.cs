@@ -33,8 +33,13 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                 }
                 else
                 {
-                    available.Remove(parents[j % parentsNumber][j]);
-                    offspring[iterator++] = parents[j % parentsNumber][j];
+                    var selected = parents[j % parentsNumber][j];
+                    if (Random.NextDouble() < ResolverRandomized.RandomizationProbability)
+                    {
+                        selected = ResolverRandomized.ResolveConflict(offspring[j - 1], available);
+                    }
+                    available.Remove(selected);
+                    offspring[iterator++] = selected;
                 }
             }
 
