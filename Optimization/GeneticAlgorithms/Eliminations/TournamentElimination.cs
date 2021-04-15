@@ -23,7 +23,7 @@ namespace Optimization.GeneticAlgorithms.Eliminations
             {
                 var participants = Enumerable.Range(0, PopulationSize)
                     .Except(eliminated)
-                    .OrderBy(x => Guid.NewGuid())
+                    .OrderBy(x => Random.Next())
                     .Take(participantsCount);
 
                 var indexToEliminate = participants.Max();

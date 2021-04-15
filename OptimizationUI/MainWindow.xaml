@@ -27,6 +27,9 @@
                         <WrapPanel>
                             <Label Content="Number of runs:"></Label>
                             <TextBox Width="120" Name="DistanceRunsTextBox" Text="1"></TextBox>
+                            <Label Content="Seed:"></Label>
+                            <TextBox Width="120" Name="DistanceSeedTextBox" Text="{Binding CurrentSeed}" IsReadOnly="{Binding RandomSeed}"></TextBox>
+                            <CheckBox Content="Random seed" IsChecked="{Binding RandomSeed}"></CheckBox>
                         </WrapPanel>
                         <WrapPanel>
                             <Label Content="Optimization method:"></Label>

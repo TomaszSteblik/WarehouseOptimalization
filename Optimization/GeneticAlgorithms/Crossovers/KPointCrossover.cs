@@ -10,7 +10,6 @@ namespace Optimization.GeneticAlgorithms.Crossovers
         {
             var geneLength = parents[0].Length;
             var parentsNumber = parents.Length;
-            var rnd = new Random();
             var offspring = new int[geneLength];
 
             var available = parents[0].ToList();

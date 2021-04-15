@@ -31,6 +31,30 @@ namespace OptimizationUI
             }
         }
 
+        private bool _randomSeed = true;
+
+        public bool RandomSeed
+        {
+            get => _randomSeed;
+            set
+            {
+                _randomSeed = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private int _currentSeed;
+
+        public int CurrentSeed
+        {
+            get => _currentSeed;
+            set
+            {
+                _currentSeed = value; 
+                NotifyPropertyChanged();
+            }
+        }
+
         private bool _showCustom = true;
 
         public bool ShowCustom

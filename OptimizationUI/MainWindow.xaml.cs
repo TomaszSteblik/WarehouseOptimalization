@@ -96,6 +96,7 @@ namespace OptimizationUI
 
             OptimizationParameters parameters = _properties.DistanceViewModel as OptimizationParameters;
             int runs = Int32.Parse(DistanceRunsTextBox.Text);
+            int seed = Int32.Parse(DistanceSeedTextBox.Text);
             TSPResult[] results = new TSPResult[runs];
             double[][][] runFitnesses = new double[runs][][];
 
@@ -112,7 +113,8 @@ namespace OptimizationUI
                     {
                         Parallel.For(0, runs, i =>
                         {
-                            results[i] = OptimizationWork.TSP(parameters, ct);
+                            if(_properties.DistanceViewModel.RandomSeed) results[i] = OptimizationWork.TSP(parameters, ct);
+                            else results[i] = OptimizationWork.TSP(parameters, ct, seed + i);
                             runFitnesses[i] = results[i].fitness;
 
                         });
@@ -127,6 +129,7 @@ namespace OptimizationUI
                             $"Max: {results.Max(x => x.FinalFitness)}  " +
                             $"Min: {results.Min(x => x.FinalFitness)}  " +
                             $"Avg epoch count: {results.Average(x => x.EpochCount)}";
+                        _properties.DistanceViewModel.CurrentSeed = results[0].Seed;
                         WritePlotDistances(linesGridDistances, GetAverageFitnesses(runFitnesses));
 
                         SaveDistanceResultsToDataCsv(results,runs,
@@ -562,7 +565,7 @@ namespace OptimizationUI
 
         private void SaveDistanceResultsToDataCsv(TSPResult[] results,int runs, string dataset, string id = "default")
         {
-            var line = File.Exists("data.csv") ? new StringBuilder() : new StringBuilder("algorithm;dataset;id;runs;distance;d_epoch;d*0.98_epoch\n");
+            var line = File.Exists("data.csv") ? new StringBuilder() : new StringBuilder("algorithm;dataset;id;runs;distance;d_epoch;d*0.98_epoch;seed\n");
             
             line.Append(Enum.GetName(_properties.DistanceViewModel.CrossoverMethod));
             if(_properties.DistanceViewModel.CrossoverMethod == CrossoverMethod.MAC || _properties.DistanceViewModel.CrossoverMethod == CrossoverMethod.MRC)
@@ -601,7 +604,7 @@ namespace OptimizationUI
             }
             
             
-            line.Append($";{dataset};{id};{runs};{results.Average(x => x.FinalFitness)};{averageMinEpoch};{epochNumbersWhenSlowedDown.Average()}\n");
+            line.Append($";{dataset};{id};{runs};{results.Average(x => x.FinalFitness)};{averageMinEpoch};{epochNumbersWhenSlowedDown.Average()};{results[0].Seed}\n");
             File.AppendAllText("data.csv",line.ToString());
         }
     }
