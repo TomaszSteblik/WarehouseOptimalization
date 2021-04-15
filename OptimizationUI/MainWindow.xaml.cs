@@ -115,7 +115,8 @@ namespace OptimizationUI
                         {
                             if (_properties.DistanceViewModel.RandomSeed)
                             {
-                                var randomSeed = DateTime.Now.Millisecond * DateTime.Now.Second * DateTime.Now.Minute + 1;
+                                var rand = new Random();
+                                var randomSeed = rand.Next(1, Int32.MaxValue); 
                                 results[i] = OptimizationWork.TSP(parameters, ct, randomSeed + i);
                             }
                             else results[i] = OptimizationWork.TSP(parameters, ct, seed + i);
