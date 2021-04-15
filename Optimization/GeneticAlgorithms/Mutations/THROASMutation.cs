@@ -1,8 +1,10 @@
+using System;
+
 namespace Optimization.GeneticAlgorithms.Mutations
 {
     internal class THROASMutation : Mutation
     {
-        public THROASMutation(double mutationProbability, int[][] population) : base(mutationProbability, population)
+        public THROASMutation(double mutationProbability, int[][] population, Random random) : base(mutationProbability, population, random)
         {
         }
 

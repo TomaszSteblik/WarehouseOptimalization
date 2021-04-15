@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers;
 
@@ -8,12 +9,12 @@ namespace Optimization.GeneticAlgorithms.Crossovers
         private List<Crossover> _crossovers;
         private int _counter;
 
-        public MACrossover(CrossoverMethod[] crossoverMethods, int startPoint, ConflictResolver resolver) : base(resolver)
+        public MACrossover(CrossoverMethod[] crossoverMethods, int startPoint, ConflictResolver resolver, Random random) : base(resolver, random)
         {
             _crossovers = new List<Crossover>();
             foreach (var method in crossoverMethods)
             {
-                _crossovers.Add(GeneticFactory.CreateCrossover(startPoint, method, null, resolver));
+                _crossovers.Add(GeneticFactory.CreateCrossover(startPoint, method, null, resolver, random));
             }
         }
         public override int[] GenerateOffspring(int[][] parents)

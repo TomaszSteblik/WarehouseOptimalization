@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Optimization.GeneticAlgorithms.Mutations
@@ -5,12 +6,12 @@ namespace Optimization.GeneticAlgorithms.Mutations
     class MRMutation : Mutation
     {
         private List<Mutation> Mutations;
-        public MRMutation(MutationMethod[] mutationMethods, double mutationProbability, int[][] population) : base(mutationProbability, population)
+        public MRMutation(MutationMethod[] mutationMethods, double mutationProbability, int[][] population, Random random) : base(mutationProbability, population, random)
         {
             Mutations = new List<Mutation>();
             foreach (var method in mutationMethods)
             {
-                Mutations.Add(GeneticFactory.CreateMutation(method,null,population,mutationProbability));
+                Mutations.Add(GeneticFactory.CreateMutation(method,null,population,mutationProbability, random));
             }
         }
 

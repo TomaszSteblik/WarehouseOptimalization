@@ -8,7 +8,7 @@ namespace Optimization.GeneticAlgorithms.Eliminations
 {
     internal class TournamentElimination : Elimination
     {
-        public TournamentElimination(int[][] population) : base(population)
+        public TournamentElimination(int[][] population, Random random) : base(population, random)
         {
         }
 
