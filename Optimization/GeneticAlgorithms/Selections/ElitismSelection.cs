@@ -4,7 +4,7 @@ namespace Optimization.GeneticAlgorithms.Selections
 {
     internal class ElitismSelection : Selection
     {
-        public ElitismSelection(int[][] population, Random random) : base(population, random)
+        public ElitismSelection(int[][] population) : base(population)
         {
             
         }

@@ -6,7 +6,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
     public class RandomResolve : ConflictResolver
     {
         private Random rnd;
-        public RandomResolve(Random random) : base(random)
+        public RandomResolve()
         {
             rnd = new Random();
         }

@@ -5,13 +5,14 @@ namespace Optimization.GeneticAlgorithms.Selections
 {
     internal class RouletteWheelSelection : Selection
     {
-        public RouletteWheelSelection(int[][] population, Random random) : base(population, random)
+        public RouletteWheelSelection(int[][] population) : base(population)
         {
             
         }
 
         public override int[][] GenerateParents(int numberOfParents, double[] fitness)
         {
+            var rnd = new Random();
             var max = fitness.Max();
             var min = fitness.Min();
 
@@ -26,7 +27,7 @@ namespace Optimization.GeneticAlgorithms.Selections
             int[][] parents = new int[numberOfParents][];
             for (int i = 0; i < numberOfParents; i++)
             {
-                var roll = Random.NextDouble() * weightsSum;
+                var roll = rnd.NextDouble() * weightsSum;
                 var tmp = 0d;
                 for (int j = 0; j < fitness.Length; j++)
                 {

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers;
@@ -48,7 +47,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
             return offspring;
         }
 
-        public HRndXCrossover(ConflictResolver resolver, Random random) : base(resolver, random)
+        public HRndXCrossover(ConflictResolver resolver) : base(resolver)
         {
         }
     }

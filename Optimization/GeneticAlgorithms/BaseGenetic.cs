@@ -51,7 +51,7 @@ namespace Optimization.GeneticAlgorithms
         }
 
         public BaseGenetic(OptimizationParameters parameters, int[][] population,
-            DelegateFitness.CalcFitness calculateFitness, CancellationToken ct, Random random)
+            DelegateFitness.CalcFitness calculateFitness, CancellationToken ct)
         {
             _ct = ct;
             _modules = new List<IModule>();
@@ -65,13 +65,13 @@ namespace Optimization.GeneticAlgorithms
 
             _calculateFitness = calculateFitness;
 
-            _selection = GeneticFactory.CreateSelection(parameters, _population, random);
-            _resolver = GeneticFactory.CreateConflictResolver(parameters.ConflictResolveMethod, random);
+            _selection = GeneticFactory.CreateSelection(parameters, _population);
+            _resolver = GeneticFactory.CreateConflictResolver(parameters.ConflictResolveMethod);
             _crossover = GeneticFactory.CreateCrossover(parameters.StartingId,parameters.CrossoverMethod,
-                parameters.MultiCrossovers, _resolver, random);
-            _elimination = GeneticFactory.CreateElimination(parameters, _population, random);
+                parameters.MultiCrossovers, _resolver);
+            _elimination = GeneticFactory.CreateElimination(parameters, _population);
             _mutation = GeneticFactory.CreateMutation(parameters.MutationMethod,parameters.MultiMutations, _population,
-                _mutationProbability, random);
+                _mutationProbability);
         }
 
         public int[] OptimizeForBestIndividual()

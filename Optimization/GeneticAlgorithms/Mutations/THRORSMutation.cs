@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,7 +5,7 @@ namespace Optimization.GeneticAlgorithms.Mutations
 {
     internal class THRORSMutation : Mutation
     {
-        public THRORSMutation(double mutationProbability, int[][] population, Random random) : base(mutationProbability, population, random)
+        public THRORSMutation(double mutationProbability, int[][] population) : base(mutationProbability, population)
         {
         }
 
