@@ -643,6 +643,7 @@ namespace OptimizationUI
                 return (_,iteration) =>
                 {
                     _properties.DistanceViewModel.ProgressBarValue++;
+                    Console.WriteLine("iteration");
                 };
             }
             
@@ -661,8 +662,10 @@ namespace OptimizationUI
                 Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration += BaseGeneticOnOnNextIteration();
                 foreach (var dataset in files)
                 {
+                    parameters.DataPath = dataset;
                     var results = new TSPResult[runs];
-                    var fileName = runs + "_" + dataset;
+                    var fileName = runs + "_" + _properties.DistanceViewModel.DataPath.Split('\\')[^1]
+                        .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'));
                     var s = "conflict_resolver;random_resolver;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation\n";
 
                     parameters.RandomizedResolveMethod = ConflictResolveMethod.Random;
