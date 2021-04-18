@@ -613,5 +613,110 @@ namespace OptimizationUI
             line.Append($";{dataset};{id};{runs};{results.Average(x => x.FinalFitness)};{averageMinEpoch};{epochNumbersWhenSlowedDown.Average()};{results[0].Seed}\n");
             File.AppendAllText("data.csv",line.ToString());
         }
+        private string CreateDistanceLogsPerRunsParams(TSPResult[] results,string conflictResolver, string randomResolver)
+        {
+            string s = "";
+            for (int i = 0; i < results.Length; i++)
+            {
+                s += conflictResolver + ";";
+                s += randomResolver+ ";";
+                //tego nie jestem do końca pewien, które wartości będą potrzebne - może lepiej ich naprodukować więcej, by mieć z czego wybierać:
+                s += results.Min(x => x.FinalFitness)+ ";";  //najlepszy wynik
+                s += results.OrderBy(x => x.FinalFitness).Take((int)(0.1 * results.Length)).Average(x => x.FinalFitness) + ";"; //średnia z najlepszych 10%
+                s += results.OrderBy(x => x.FinalFitness).Skip((int)(0.5 * results.Length)).Take(1).Average(x => x.FinalFitness) + ";";  //mediana
+                s += results.OrderBy(x => x.FinalFitness).Skip((int)(0.9 * results.Length)).Take((int)(0.1 * results.Length)).Average(x => x.FinalFitness) + ";"; //średnia z najgorszych 10%
+                s += (int)results.Average(x => x.FinalFitness)+ ";"; //średnia
+                s += results.Max(x => x.FinalFitness)+ ";"; // najgorszy wynik
+                s += results.StandardDeviation(x => x.FinalFitness)+ ";"; // odchylenie standardowe
+                s += "\n";
+            }
+
+            return s;
+        }
+
+        private async void DistanceArticleStartButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            
+            DistanceStartButton.IsEnabled = false;
+            EventHandler<int> BaseGeneticOnOnNextIteration()
+            {
+                return (_,iteration) =>
+                {
+                    _properties.DistanceViewModel.ProgressBarValue++;
+                };
+            }
+            
+
+            var files = Directory.GetFiles("C:\\Users\\Tomek\\RiderProjects\\WarehouseOptimization1\\Data");
+            var runs = int.Parse(DistanceRunsTextBox.Text);
+            var seed = DateTime.Now.Millisecond;
+            _cancellationTokenSource = new CancellationTokenSource();
+            CancellationToken ct = _cancellationTokenSource.Token;
+            OptimizationParameters parameters = _properties.DistanceViewModel as OptimizationParameters;
+            
+            await Task.Run(() =>
+            {
+                _properties.DistanceViewModel.ProgressBarMaximum = runs*_properties.DistanceViewModel.MaxEpoch*4*files.Length - 1;
+                _properties.DistanceViewModel.ProgressBarValue = 0;
+                Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration += BaseGeneticOnOnNextIteration();
+                foreach (var dataset in files)
+                {
+                    var results = new TSPResult[runs];
+                    var fileName = runs + "_" + dataset;
+                    var s = "conflict_resolver;random_resolver;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation\n";
+
+                    parameters.RandomizedResolveMethod = ConflictResolveMethod.Random;
+                    parameters.ConflictResolveMethod = ConflictResolveMethod.Random;
+                    Parallel.For(0, runs, i =>
+                    {
+                        results[i] = OptimizationWork.TSP(parameters, ct, seed+i);
+
+                    });
+                    s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
+                        Enum.GetName(parameters.RandomizedResolveMethod));
+                    
+                    parameters.RandomizedResolveMethod = ConflictResolveMethod.Random;
+                    parameters.ConflictResolveMethod = ConflictResolveMethod.NearestNeighbor;
+                    Parallel.For(0, runs, i =>
+                    {
+                        results[i] = OptimizationWork.TSP(parameters, ct, seed+i);
+
+                    });
+                    s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
+                        Enum.GetName(parameters.RandomizedResolveMethod));
+                    
+                    
+                    parameters.RandomizedResolveMethod = ConflictResolveMethod.NearestNeighbor;
+                    parameters.ConflictResolveMethod = ConflictResolveMethod.Random;
+                    Parallel.For(0, runs, i =>
+                    {
+                        results[i] = OptimizationWork.TSP(parameters, ct, seed+i);
+
+                    });
+                    s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
+                        Enum.GetName(parameters.RandomizedResolveMethod));
+                    
+                    parameters.RandomizedResolveMethod = ConflictResolveMethod.NearestNeighbor;
+                    parameters.ConflictResolveMethod = ConflictResolveMethod.NearestNeighbor;
+                    Parallel.For(0, runs, i =>
+                    {
+                        results[i] = OptimizationWork.TSP(parameters, ct, seed+i);
+
+                    });
+                    s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
+                        Enum.GetName(parameters.RandomizedResolveMethod));
+                    
+                   File.AppendAllText(fileName, s);
+                }
+            }, ct);
+
+            Dispatcher.Invoke(() =>
+            {
+                _properties.DistanceViewModel.ProgressBarValue =
+                    runs * _properties.DistanceViewModel.MaxEpoch - 1;
+                Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration -= BaseGeneticOnOnNextIteration();
+            });
+        }
     }
+    
 }
