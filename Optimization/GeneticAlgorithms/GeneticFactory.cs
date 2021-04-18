@@ -32,6 +32,7 @@ namespace Optimization.GeneticAlgorithms
             {
                 ConflictResolveMethod.Random => new RandomResolve(random, parameters.ResolveRandomizationProbability),
                 ConflictResolveMethod.NearestNeighbor => new NearestNeighborResolve(random, parameters.ResolveRandomizationProbability),
+                ConflictResolveMethod.Tournament => new TournamentResolver(random, parameters.ResolveRandomizationProbability),
                 _ => throw new ArgumentException("Wrong conflict resolve method name")
             };
             return resolver;
