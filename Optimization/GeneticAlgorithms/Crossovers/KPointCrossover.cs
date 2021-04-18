@@ -10,7 +10,6 @@ namespace Optimization.GeneticAlgorithms.Crossovers
         {
             var geneLength = parents[0].Length;
             var parentsNumber = parents.Length;
-            var rnd = new Random();
             var offspring = new int[geneLength];
 
             var available = parents[0].ToList();
@@ -26,7 +25,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                     int selected = -1;
                     while (selected == -1 || offspring.Contains(selected))
                     {
-                        selected = ConflictResolver.ResolveConflict(offspring[j - 1], available);
+                        selected = ResolverConflict.ResolveConflict(offspring[j - 1], available);
                     }
 
                     available.Remove(selected);
@@ -34,15 +33,20 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                 }
                 else
                 {
-                    available.Remove(parents[j % parentsNumber][j]);
-                    offspring[iterator++] = parents[j % parentsNumber][j];
+                    var selected = parents[j % parentsNumber][j];
+                    if (Random.NextDouble() < ResolverRandomized.RandomizationProbability)
+                    {
+                        selected = ResolverRandomized.ResolveConflict(offspring[j - 1], available);
+                    }
+                    available.Remove(selected);
+                    offspring[iterator++] = selected;
                 }
             }
 
             return offspring;
         }
 
-        public KPointCrossover(ConflictResolver resolver, Random random) : base(resolver, random)
+        public KPointCrossover(ConflictResolver resolverConflict, ConflictResolver resolverRandomized, Random random) : base(resolverConflict, resolverRandomized,  random)
         {
         }
     }

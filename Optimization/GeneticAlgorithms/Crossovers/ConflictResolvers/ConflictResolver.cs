@@ -7,16 +7,20 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
     public enum ConflictResolveMethod
     {
         Random,
-        NearestNeighbor
+        NearestNeighbor,
+        Tournament
     }
     public abstract class ConflictResolver
     {
         public abstract int ResolveConflict(int currentPoint, List<int> availableVertexes);
+        
+        public double RandomizationProbability { get; set; }
         protected Random Random;
 
-        public ConflictResolver(Random random)
+        public ConflictResolver(Random random, double randomizationProbability)
         {
             Random = random;
+            RandomizationProbability = randomizationProbability;
         }
         
     }

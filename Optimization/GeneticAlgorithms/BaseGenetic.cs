@@ -18,7 +18,8 @@ namespace Optimization.GeneticAlgorithms
     {
         private readonly Selection _selection;
         private readonly Crossover _crossover;
-        private readonly ConflictResolver _resolver;
+        private readonly ConflictResolver _resolverConflict;
+        private readonly ConflictResolver _resolverRandomized;
         private readonly Elimination _elimination;
         private readonly Mutation _mutation;
         
@@ -66,9 +67,12 @@ namespace Optimization.GeneticAlgorithms
             _calculateFitness = calculateFitness;
 
             _selection = GeneticFactory.CreateSelection(parameters, _population, random);
-            _resolver = GeneticFactory.CreateConflictResolver(parameters.ConflictResolveMethod, random);
+            
+            _resolverConflict = GeneticFactory.CreateConflictResolver(parameters, parameters.ConflictResolveMethod, random);
+            _resolverRandomized = GeneticFactory.CreateConflictResolver(parameters, parameters.RandomizedResolveMethod, random);
+            
             _crossover = GeneticFactory.CreateCrossover(parameters.StartingId,parameters.CrossoverMethod,
-                parameters.MultiCrossovers, _resolver, random);
+                parameters.MultiCrossovers, _resolverConflict, _resolverRandomized, random);
             _elimination = GeneticFactory.CreateElimination(parameters, _population, random);
             _mutation = GeneticFactory.CreateMutation(parameters.MutationMethod,parameters.MultiMutations, _population,
                 _mutationProbability, random);
@@ -100,8 +104,6 @@ namespace Optimization.GeneticAlgorithms
                     int[][] offsprings = _crossover.GenerateOffsprings(parents, _parentsPerChild);
                     
                     _elimination.EliminateAndReplace(offsprings, fitness);
-                    if (_canIncreaseStrictness)
-                        _canIncreaseStrictness = _selection.IncreaseStrictness(_childrenPerGeneration);
                     _mutation.Mutate(_population);
 
                     bestGene = _population[0];

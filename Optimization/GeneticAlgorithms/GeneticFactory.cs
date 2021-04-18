@@ -26,12 +26,13 @@ namespace Optimization.GeneticAlgorithms
             return initialization;
         }
 
-        public static ConflictResolver CreateConflictResolver(ConflictResolveMethod method, Random random)
+        public static ConflictResolver CreateConflictResolver(OptimizationParameters parameters, ConflictResolveMethod method, Random random)
         {
             ConflictResolver resolver = method switch
             {
-                ConflictResolveMethod.Random => new RandomResolve(random),
-                ConflictResolveMethod.NearestNeighbor => new NearestNeighborResolve(random),
+                ConflictResolveMethod.Random => new RandomResolve(random, parameters.ResolveRandomizationProbability),
+                ConflictResolveMethod.NearestNeighbor => new NearestNeighborResolve(random, parameters.ResolveRandomizationProbability),
+                ConflictResolveMethod.Tournament => new TournamentResolver(random, parameters.ResolveRandomizationProbability),
                 _ => throw new ArgumentException("Wrong conflict resolve method name")
             };
             return resolver;
@@ -39,7 +40,7 @@ namespace Optimization.GeneticAlgorithms
         
         
         public static Crossover CreateCrossover(int startingId, CrossoverMethod crossoverMethod, 
-            CrossoverMethod[] crossoverMethods, ConflictResolver resolver, Random random)
+            CrossoverMethod[] crossoverMethods, ConflictResolver resolverConflict, ConflictResolver resolverRandomized, Random random)
         {
             Crossover crossover = crossoverMethod switch
             {
@@ -63,7 +64,8 @@ namespace Optimization.GeneticAlgorithms
             Selection selection = optimizationParameters.SelectionMethod switch
             {
                 SelectionMethod.Random => new RandomSelection(population, random),
-                SelectionMethod.Tournament => new TournamentSelection(population, random),
+                SelectionMethod.Tournament => new TournamentSelection(population, random) {
+                        ParticipantsCount = optimizationParameters.TournamentSelectionParticipantsCount },
                 SelectionMethod.Elitism => new ElitismSelection(population, random),
                 SelectionMethod.RouletteWheel => new RouletteWheelSelection(population, random),
                 _ => throw new ArgumentException("Wrong selection name in parameters json file")
@@ -77,7 +79,10 @@ namespace Optimization.GeneticAlgorithms
             {
                 EliminationMethod.Elitism => new ElitismElimination(population, random),
                 EliminationMethod.RouletteWheel => new RouletteWheelElimination(population, random),
-                EliminationMethod.Tournament => new TournamentElimination(population, random),
+                EliminationMethod.Tournament => new TournamentElimination(population, random)
+                {
+                    ParticipantsCount = optimizationParameters.TournamentEliminationParticipantsCount
+                },
                 _ => throw new ArgumentException("Wrong elimination method name")
             };
             return elimination;

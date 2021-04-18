@@ -12,7 +12,7 @@ namespace Optimization.GeneticAlgorithms.Initialization
             {
                 var availablePoints = pointsToInclude.Except(new [] {startingPoint});
                 var unit = new[] {startingPoint};
-                population[i] = unit.Concat(availablePoints.OrderBy(x => Guid.NewGuid())).ToArray();
+                population[i] = unit.Concat(availablePoints.OrderBy(x => Random.Next())).ToArray();
             }
 
             return population;

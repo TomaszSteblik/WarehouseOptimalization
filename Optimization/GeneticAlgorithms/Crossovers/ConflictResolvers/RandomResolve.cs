@@ -5,15 +5,13 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
 {
     public class RandomResolve : ConflictResolver
     {
-        private Random rnd;
-        public RandomResolve(Random random) : base(random)
+        public RandomResolve(Random random, double probability) : base(random, probability)
         {
-            rnd = new Random();
         }
         
         public override int ResolveConflict(int currentPoint, List<int> availableVertexes)
         {
-            return availableVertexes[rnd.Next(0, availableVertexes.Count)];
+            return availableVertexes[Random.Next(0, availableVertexes.Count)];
         }
     }
 }

@@ -27,6 +27,9 @@
                         <WrapPanel>
                             <Label Content="Number of runs:"></Label>
                             <TextBox Width="120" Name="DistanceRunsTextBox" Text="1"></TextBox>
+                            <Label Content="Seed:"></Label>
+                            <TextBox Width="120" Name="DistanceSeedTextBox" Text="{Binding CurrentSeed}" IsReadOnly="{Binding RandomSeed}"></TextBox>
+                            <CheckBox Content="Random seed" IsChecked="{Binding RandomSeed}"></CheckBox>
                         </WrapPanel>
                         <WrapPanel>
                             <Label Content="Optimization method:"></Label>
@@ -44,6 +47,8 @@
                                 <Label Content="Selection method:"></Label>
                                 <ComboBox Width="120" ItemsSource="{Binding Path=SelectionMethod}" Name="DistanceSelectionComboBox"
                                           SelectedItem="{Binding SelectionMethod}"/>
+                                <Label Content="Tournament participants:" Visibility="{Binding IsTournamentSelectionSelected}"></Label>
+                                <TextBox Width="120" Visibility="{Binding IsTournamentSelectionSelected}" Text="{Binding TournamentSelectionParticipantsCount}"></TextBox>
                             </WrapPanel>
                             <WrapPanel>
                                 <Label Content="Crossover method:"></Label>
@@ -52,6 +57,13 @@
                                 <Label Content="Conflict resolve method:"></Label>
                                 <ComboBox Width="120" ItemsSource="{Binding Path= ConflictResolveMethod}" Name="DistanceConflictResolveComboBox"
                                           SelectedItem="{Binding ConflictResolveMethod}"></ComboBox>
+                            </WrapPanel>
+                            <WrapPanel>
+                                <Label Content="Randomized resolve method:"></Label>
+                                <ComboBox Width="120" ItemsSource="{Binding Path= ConflictResolveMethod}" Name="DistanceRandomizedResolveComboBox"
+                                          SelectedItem="{Binding RandomizedResolveMethod}"></ComboBox>
+                                <Label Content="Probability:"></Label>
+                                <TextBox Width="120" Text="{Binding ResolveRandomizationProbability}"></TextBox>
                             </WrapPanel>
                             <ItemsControl Margin="50 0 0 0" ItemsSource="{Binding Path=CrossoverCheckBoxStates}" Visibility="{Binding IsCrossoverCheckBoxVisible}">
                                 <ItemsControl.ItemTemplate>
@@ -64,6 +76,8 @@
                                 <Label Content="Elimination method:"></Label>
                                 <ComboBox Width="120" ItemsSource="{Binding Path=EliminationMethod}" Name="DistanceEliminationComboBox"
                                           SelectedItem="{Binding EliminationMethod}"/>
+                                <Label Content="Tournament participants:" Visibility="{Binding IsTournamentEliminationSelected}"></Label>
+                                <TextBox Width="120" Visibility="{Binding IsTournamentEliminationSelected}" Text="{Binding TournamentEliminationParticipantsCount}"></TextBox>
                             </WrapPanel>
                             <WrapPanel>
                                 <Label Content="Mutation method:"></Label>

@@ -6,13 +6,15 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 {
     public abstract class Crossover
     {
-        protected ConflictResolver ConflictResolver;
+        protected ConflictResolver ResolverConflict;
+        protected ConflictResolver ResolverRandomized;
         protected readonly Random Random;
 
 
-        public Crossover(ConflictResolver resolver, Random random)
+        public Crossover(ConflictResolver resolverConflict, ConflictResolver resolverRandomized, Random random)
         {
-            ConflictResolver = resolver;
+            ResolverConflict = resolverConflict;
+            ResolverRandomized = resolverRandomized;
             Random = random;
         }
         public abstract int[] GenerateOffspring(int[][] parents);

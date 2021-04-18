@@ -31,6 +31,30 @@ namespace OptimizationUI
             }
         }
 
+        private bool _randomSeed = true;
+
+        public bool RandomSeed
+        {
+            get => _randomSeed;
+            set
+            {
+                _randomSeed = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private int _currentSeed;
+
+        public int CurrentSeed
+        {
+            get => _currentSeed;
+            set
+            {
+                _currentSeed = value; 
+                NotifyPropertyChanged();
+            }
+        }
+
         private bool _showCustom = true;
 
         public bool ShowCustom
@@ -132,6 +156,28 @@ namespace OptimizationUI
             }
         }
 
+        private int _tournamentEliminationParticipantsCount = 8;
+
+        public override int TournamentEliminationParticipantsCount
+        {
+            get => _tournamentEliminationParticipantsCount;
+            set
+            {
+                _tournamentEliminationParticipantsCount = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public Visibility IsTournamentEliminationSelected
+        {
+            get
+            {
+                if (_eliminationMethod == EliminationMethod.Tournament)
+                    return Visibility.Visible;
+                return Visibility.Collapsed;
+            }
+        }
+
         private SelectionMethod _selectionMethod = SelectionMethod.Tournament;
         public override SelectionMethod SelectionMethod
         {
@@ -143,6 +189,27 @@ namespace OptimizationUI
             {
                 _selectionMethod = value;
                 NotifyPropertyChanged();
+            }
+        }
+
+        private int _tournamentSelectionParticipantsCount = 8;
+
+        public override int TournamentSelectionParticipantsCount
+        {
+            get => _tournamentSelectionParticipantsCount;
+            set
+            {
+                _tournamentSelectionParticipantsCount = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public Visibility IsTournamentSelectionSelected
+        {
+            get
+            {
+                if (_selectionMethod == SelectionMethod.Tournament)
+                    return Visibility.Visible;
+                return Visibility.Collapsed;
             }
         }
 
@@ -443,6 +510,30 @@ namespace OptimizationUI
             set
             {
                 _conflictResolveMethod = value;
+                NotifyPropertyChanged();
+            }
+        }
+        
+        private ConflictResolveMethod _randomizedResolveMethod = ConflictResolveMethod.Random;
+
+        public override ConflictResolveMethod RandomizedResolveMethod
+        {
+            get => _randomizedResolveMethod;
+            set
+            {
+                _randomizedResolveMethod = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private double _resolveRandomizationProbability = 0d;
+
+        public override double ResolveRandomizationProbability
+        {
+            get => _resolveRandomizationProbability;
+            set
+            {
+                _resolveRandomizationProbability = value;
                 NotifyPropertyChanged();
             }
         }
