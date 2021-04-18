@@ -7,7 +7,8 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
     public enum ConflictResolveMethod
     {
         Random,
-        NearestNeighbor
+        NearestNeighbor,
+        Tournament
     }
     public abstract class ConflictResolver
     {
