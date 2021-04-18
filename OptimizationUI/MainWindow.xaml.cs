@@ -613,21 +613,74 @@ namespace OptimizationUI
             line.Append($";{dataset};{id};{runs};{results.Average(x => x.FinalFitness)};{averageMinEpoch};{epochNumbersWhenSlowedDown.Average()};{results[0].Seed}\n");
             File.AppendAllText("data.csv",line.ToString());
         }
+
+        private void SaveDistanceArticleResultsToFile(int seed,TSPResult[] results,
+            string conflictResolver, string randomResolver)
+        {
+            var dataset = _properties.DistanceViewModel.DataPath.Split('\\')[^1]
+                .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'));
+            var s = File.Exists($"{seed}/{dataset}_data.csv") ? "" : "dataset;crossover;conflict_resolver;random_resolver;best_distance;avg_top_10%;median;avg_worst_10%;average;worst_distance;std_dev;avg_min_epoch;d*0.98_epoch\n";
+            
+            
+            var averageMinEpoch = results.Select(x => x.EpochCount - x.fitness.Count(y => y[0] == x.fitness[^1][0])).Average();
+            var z = results.Select(x => x.fitness).ToArray();
+            var epochNumbersWhenSlowedDown = new int[z.Length];
+            for (var i = 0; i < z.Length; i++)
+            {
+                var bestsPerEpochs = new double[z[i].Length];
+                for (var j = 0; j < z[i].Length; j++)
+                {
+                    bestsPerEpochs[j] = z[i][j].Min();
+                }
+
+                var currentMin = bestsPerEpochs[0];
+                var indexOfMin = 0;
+                for (var j = 1; j < bestsPerEpochs.Length; j++)
+                {
+                    if (!(bestsPerEpochs[j] < currentMin * 0.98)) continue;
+                    currentMin = bestsPerEpochs[j];
+                    indexOfMin = j;
+                }
+
+                epochNumbersWhenSlowedDown[i] = indexOfMin;
+            }
+            
+            s += Enum.GetName(_properties.DistanceViewModel.CrossoverMethod) + ';';
+            s += conflictResolver + ';';
+            s += randomResolver + ';';
+            //tego nie jestem do końca pewien, które wartości będą potrzebne - może lepiej ich naprodukować więcej, by mieć z czego wybierać:
+            s += results.Min(x => x.FinalFitness) + ';';  //najlepszy wynik
+            s += results.OrderBy(x => x.FinalFitness).Take((int)(0.1 * results.Length)).Average(x => x.FinalFitness) + ';'; //średnia z najlepszych 10%
+            s += results.OrderBy(x => x.FinalFitness).Skip((int)(0.5 * results.Length)).Take(1).Average(x => x.FinalFitness) + ';';  //mediana
+            s += results.OrderBy(x => x.FinalFitness).Skip((int)(0.9 * results.Length)).Take((int)(0.1 * results.Length)).Average(x => x.FinalFitness) + ';'; //średnia z najgorszych 10%
+            s += (int)results.Average(x => x.FinalFitness) + ';'; //średnia
+            s += results.Max(x => x.FinalFitness) + ';'; // najgorszy wynik
+            s += results.StandardDeviation(x => x.FinalFitness) + ';'; // odchylenie standardowe
+            s += averageMinEpoch + ';';
+            s += epochNumbersWhenSlowedDown.Average() + ";";
+            s += "\n";
+
+
+               File.AppendAllText($"{seed}/{dataset}_data.csv",s);    
+        }
         private string CreateDistanceLogsPerRunsParams(TSPResult[] results,string conflictResolver, string randomResolver)
         {
+            var fitness = GetAverageFitnesses(results.Select(x => x.fitness).ToArray());
             string s = "";
-            for (int i = 0; i < results.Length; i++)
+            for (int i = 0; i < fitness.Length; i++)
             {
+                var epochFitnesses = fitness[i];
                 s += conflictResolver + ";";
                 s += randomResolver+ ";";
+                s += i+ ";";
                 //tego nie jestem do końca pewien, które wartości będą potrzebne - może lepiej ich naprodukować więcej, by mieć z czego wybierać:
-                s += results.Min(x => x.FinalFitness)+ ";";  //najlepszy wynik
-                s += results.OrderBy(x => x.FinalFitness).Take((int)(0.1 * results.Length)).Average(x => x.FinalFitness) + ";"; //średnia z najlepszych 10%
-                s += results.OrderBy(x => x.FinalFitness).Skip((int)(0.5 * results.Length)).Take(1).Average(x => x.FinalFitness) + ";";  //mediana
-                s += results.OrderBy(x => x.FinalFitness).Skip((int)(0.9 * results.Length)).Take((int)(0.1 * results.Length)).Average(x => x.FinalFitness) + ";"; //średnia z najgorszych 10%
-                s += (int)results.Average(x => x.FinalFitness)+ ";"; //średnia
-                s += results.Max(x => x.FinalFitness)+ ";"; // najgorszy wynik
-                s += results.StandardDeviation(x => x.FinalFitness)+ ";"; // odchylenie standardowe
+                s += epochFitnesses.Min()+ ";";  //najlepszy wynik
+                s += epochFitnesses.OrderBy(x => x).Take((int)(0.1 * epochFitnesses.Length)).Average() + ";"; //średnia z najlepszych 10%
+                s += epochFitnesses.OrderBy(x => x).Skip((int) (0.5 * epochFitnesses.Length)).Take(1).Average() + ";";  //mediana
+                s += epochFitnesses.OrderBy(x => x).Skip((int)(0.9 * epochFitnesses.Length)).Take((int)(0.1 * epochFitnesses.Length)).Average() + ";"; //średnia z najgorszych 10%
+                s += (int)epochFitnesses.Average()+ ";"; //średnia
+                s += epochFitnesses.Max()+ ";"; // najgorszy wynik
+                s += epochFitnesses.StandardDeviation()+ ";"; // odchylenie standardowe
                 s += "\n";
             }
 
@@ -643,7 +696,7 @@ namespace OptimizationUI
                 return (_,iteration) =>
                 {
                     _properties.DistanceViewModel.ProgressBarValue++;
-                    Console.WriteLine("iteration");
+                    Console.WriteLine(iteration);
                 };
             }
             
@@ -657,25 +710,32 @@ namespace OptimizationUI
             
             await Task.Run(() =>
             {
-                _properties.DistanceViewModel.ProgressBarMaximum = runs*_properties.DistanceViewModel.MaxEpoch*4*files.Length - 1;
+                Directory.CreateDirectory(seed.ToString());
+                SerializeParameters(seed+"/parameters.json");
+                
+                _properties.DistanceViewModel.ProgressBarMaximum = (runs*_properties.DistanceViewModel.MaxEpoch*9*files.Length) - 1;
                 _properties.DistanceViewModel.ProgressBarValue = 0;
                 Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration += BaseGeneticOnOnNextIteration();
+                
                 foreach (var dataset in files)
                 {
                     parameters.DataPath = dataset;
                     var results = new TSPResult[runs];
-                    var fileName = runs + "_" + _properties.DistanceViewModel.DataPath.Split('\\')[^1]
-                        .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'));
-                    var s = "conflict_resolver;random_resolver;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation\n";
+                    var fileName = seed+"/"+runs + "_" + _properties.DistanceViewModel.DataPath.Split('\\')[^1]
+                        .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'))+".csv";
+                    var s = "conflict_resolver;random_resolver;epoch;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation\n";
 
                     parameters.RandomizedResolveMethod = ConflictResolveMethod.Random;
                     parameters.ConflictResolveMethod = ConflictResolveMethod.Random;
                     Parallel.For(0, runs, i =>
                     {
                         results[i] = OptimizationWork.TSP(parameters, ct, seed+i);
-
                     });
+                    
                     s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
+                        Enum.GetName(parameters.RandomizedResolveMethod));
+                    SaveDistanceArticleResultsToFile(seed, results, 
+                        Enum.GetName(parameters.ConflictResolveMethod),
                         Enum.GetName(parameters.RandomizedResolveMethod));
                     
                     parameters.RandomizedResolveMethod = ConflictResolveMethod.Random;
@@ -687,16 +747,22 @@ namespace OptimizationUI
                     });
                     s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
                         Enum.GetName(parameters.RandomizedResolveMethod));
-                    
+                    SaveDistanceArticleResultsToFile(seed, results, 
+                        Enum.GetName(parameters.ConflictResolveMethod),
+                        Enum.GetName(parameters.RandomizedResolveMethod));
                     
                     parameters.RandomizedResolveMethod = ConflictResolveMethod.NearestNeighbor;
                     parameters.ConflictResolveMethod = ConflictResolveMethod.Random;
+                    Console.WriteLine("STARTED");
                     Parallel.For(0, runs, i =>
                     {
                         results[i] = OptimizationWork.TSP(parameters, ct, seed+i);
 
                     });
                     s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
+                        Enum.GetName(parameters.RandomizedResolveMethod));
+                    SaveDistanceArticleResultsToFile(seed, results, 
+                        Enum.GetName(parameters.ConflictResolveMethod),
                         Enum.GetName(parameters.RandomizedResolveMethod));
                     
                     parameters.RandomizedResolveMethod = ConflictResolveMethod.NearestNeighbor;
@@ -707,6 +773,74 @@ namespace OptimizationUI
 
                     });
                     s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
+                        Enum.GetName(parameters.RandomizedResolveMethod));
+                    SaveDistanceArticleResultsToFile(seed, results, 
+                        Enum.GetName(parameters.ConflictResolveMethod),
+                        Enum.GetName(parameters.RandomizedResolveMethod));
+                    
+                    parameters.RandomizedResolveMethod = ConflictResolveMethod.Random;
+                    parameters.ConflictResolveMethod = ConflictResolveMethod.Tournament;
+                    Parallel.For(0, runs, i =>
+                    {
+                        results[i] = OptimizationWork.TSP(parameters, ct, seed+i);
+
+                    });
+                    s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
+                        Enum.GetName(parameters.RandomizedResolveMethod));
+                    SaveDistanceArticleResultsToFile(seed, results, 
+                        Enum.GetName(parameters.ConflictResolveMethod),
+                        Enum.GetName(parameters.RandomizedResolveMethod));
+                    
+                    parameters.RandomizedResolveMethod = ConflictResolveMethod.Tournament;
+                    parameters.ConflictResolveMethod = ConflictResolveMethod.Random;
+                    Parallel.For(0, runs, i =>
+                    {
+                        results[i] = OptimizationWork.TSP(parameters, ct, seed+i);
+
+                    });
+                    s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
+                        Enum.GetName(parameters.RandomizedResolveMethod));
+                    SaveDistanceArticleResultsToFile(seed, results, 
+                        Enum.GetName(parameters.ConflictResolveMethod),
+                        Enum.GetName(parameters.RandomizedResolveMethod));
+                    
+                    parameters.RandomizedResolveMethod = ConflictResolveMethod.Tournament;
+                    parameters.ConflictResolveMethod = ConflictResolveMethod.NearestNeighbor;
+                    Parallel.For(0, runs, i =>
+                    {
+                        results[i] = OptimizationWork.TSP(parameters, ct, seed+i);
+
+                    });
+                    s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
+                        Enum.GetName(parameters.RandomizedResolveMethod));
+                    SaveDistanceArticleResultsToFile(seed, results, 
+                        Enum.GetName(parameters.ConflictResolveMethod),
+                        Enum.GetName(parameters.RandomizedResolveMethod));
+                    
+                    parameters.RandomizedResolveMethod = ConflictResolveMethod.NearestNeighbor;
+                    parameters.ConflictResolveMethod = ConflictResolveMethod.Tournament;
+                    Parallel.For(0, runs, i =>
+                    {
+                        results[i] = OptimizationWork.TSP(parameters, ct, seed+i);
+
+                    });
+                    s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
+                        Enum.GetName(parameters.RandomizedResolveMethod));
+                    SaveDistanceArticleResultsToFile(seed, results, 
+                        Enum.GetName(parameters.ConflictResolveMethod),
+                        Enum.GetName(parameters.RandomizedResolveMethod));
+                    
+                    parameters.RandomizedResolveMethod = ConflictResolveMethod.Tournament;
+                    parameters.ConflictResolveMethod = ConflictResolveMethod.Tournament;
+                    Parallel.For(0, runs, i =>
+                    {
+                        results[i] = OptimizationWork.TSP(parameters, ct, seed+i);
+
+                    });
+                    s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
+                        Enum.GetName(parameters.RandomizedResolveMethod));
+                    SaveDistanceArticleResultsToFile(seed, results, 
+                        Enum.GetName(parameters.ConflictResolveMethod),
                         Enum.GetName(parameters.RandomizedResolveMethod));
                     
                    File.AppendAllText(fileName, s);
