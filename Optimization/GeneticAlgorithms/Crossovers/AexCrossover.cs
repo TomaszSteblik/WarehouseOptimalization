@@ -49,8 +49,11 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                     }
                 }
 
+                _randomizationChances++;
+
                 if (Random.NextDouble() < ResolverRandomized.RandomizationProbability)
                 {
+                    _randomizedResolvesCount++;
                     nextVertex =
                         ResolverRandomized.ResolveConflict(selectedParent[indexOfCurrentVertexInSelectedParent],
                             availableVertexes);
@@ -59,6 +62,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                 if (nextVertex == -1)
                 {
                     nextVertex = ResolverConflict.ResolveConflict(selectedParent[indexOfCurrentVertexInSelectedParent], availableVertexes);
+                    _resolveCount++;
                 }
                 offspring[counter] = nextVertex;
                 availableVertexes.Remove(nextVertex);

@@ -58,14 +58,17 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                 if(minIndex>=0)
                     nextVertex = feasibleParents[minIndex][feasibleParents[minIndex].ToList().IndexOf(currentVertex) + 1];
                 
+                _randomizationChances++;
                 if (Random.NextDouble() < ResolverRandomized.RandomizationProbability)
                 {
+                    _randomizedResolvesCount++;
                     nextVertex = ResolverRandomized.ResolveConflict(currentVertex, availableVertexes);
                 }
                 
                 if (nextVertex == -1)
                 {
-                    nextVertex = ResolverRandomized.ResolveConflict(currentVertex, availableVertexes);
+                    _resolveCount++;
+                    nextVertex = ResolverConflict.ResolveConflict(currentVertex, availableVertexes);
                 }
                 offspring[counter] = nextVertex;
                 availableVertexes.Remove(nextVertex);

@@ -9,6 +9,7 @@ using Optimization.GeneticAlgorithms.Eliminations;
 using Optimization.GeneticAlgorithms.Modules;
 using Optimization.GeneticAlgorithms.Mutations;
 using Optimization.GeneticAlgorithms.Selections;
+using Optimization.GeneticAppliances.TSP;
 using Optimization.Helpers;
 using Optimization.Parameters;
 
@@ -102,6 +103,12 @@ namespace Optimization.GeneticAlgorithms
                 
                     int[][] parents = _selection.GenerateParents(_childrenPerGeneration * 2, fitness);
                     int[][] offsprings = _crossover.GenerateOffsprings(parents, _parentsPerChild);
+                    
+                    var tsp = (TSPModule) GetModule(typeof(TSPModule));
+                    tsp?.AddResolveCount(_crossover.ResolveCount);
+                    tsp?.AddRandomizedResolveCount(_crossover.RandomizedResolvesCount);
+                    tsp?.AddConflictResolvesPercent(100.0 * _crossover.ResolveCount / _crossover.RandomizationChances);
+                    tsp?.AddRandomResolvesPercent(100.0 * _crossover.RandomizedResolvesCount / _crossover.RandomizationChances);
                     
                     _elimination.EliminateAndReplace(offsprings, fitness);
                     _mutation.Mutate(_population);

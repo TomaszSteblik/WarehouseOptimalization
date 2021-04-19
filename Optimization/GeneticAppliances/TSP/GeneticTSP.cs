@@ -36,7 +36,13 @@ namespace Optimization.GeneticAppliances.TSP
             if (_use2opt) result = Optimizer2Opt.Optimize(result);
             var tsp = (TSPModule) _genetic.GetModule(typeof(TSPModule));
             var fitness = tsp.GetFitnessHistory();
-            return new TSPResult(fitness, result);
+            return new TSPResult(fitness, result)
+            {
+                ResolveInEpoch = tsp.ResolveCountInEpoch,
+                RandomizedResolveInEpoch = tsp.RandomizedResolveCountInEpoch,
+                ResolvePercentInEpoch = tsp.ConflictResolvesPercent,
+                RandomizedResolvePercentInEpoch = tsp.RandomResolvesPercent
+            };
         }
     }
 }

@@ -36,13 +36,16 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                     nextVertex = selectedParent[indexOfCurrentVertexInSelectedParent + 1];
                 }
                 
+                _randomizationChances++;
                 if (Random.NextDouble() < ResolverRandomized.RandomizationProbability)
                 {
+                    _randomizedResolvesCount++;
                     nextVertex = ResolverRandomized.ResolveConflict(currentVertex, availableVertexes);
                 }
 
                 if (nextVertex == -1)
                 {
+                    _resolveCount++;
                     nextVertex = ResolverConflict.ResolveConflict(currentVertex, availableVertexes);
                 }
                 offspring[counter] = nextVertex;
