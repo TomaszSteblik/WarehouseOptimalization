@@ -11,7 +11,11 @@ namespace Optimization.GeneticAppliances.TSP
         public int[] BestGene { get; }
         
         public int[] ResolveInEpoch { get; set; }
+        public double[] ResolvePercentInEpoch { get; set; }
         public int[] RandomizedResolveInEpoch { get; set; }
+        
+        public double[] RandomizedResolvePercentInEpoch { get; set; }
+
         public double FinalFitness { get; }
         
         public int Seed { get; set; }
@@ -22,6 +26,7 @@ namespace Optimization.GeneticAppliances.TSP
             EpochCount = fitness.Length;
             this.fitness = fitness;
             FinalFitness = Fitness.CalculateFitness(BestGene);
+            
         }
     }
 }

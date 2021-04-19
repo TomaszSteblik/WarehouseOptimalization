@@ -39,7 +39,11 @@ namespace Optimization.GeneticAppliances.TSP
             return new TSPResult(fitness, result)
             {
                 ResolveInEpoch = tsp.ResolveCountInEpoch,
-                RandomizedResolveInEpoch = tsp.RandomizedResolveCountInEpoch
+                RandomizedResolveInEpoch = tsp.RandomizedResolveCountInEpoch,
+                ResolvePercentInEpoch =
+                    tsp.ResolveCountInEpoch.Select(x => x * 100.0 / (fitness[0].Length * result.Length)).ToArray(),
+                RandomizedResolvePercentInEpoch =
+                    tsp.RandomizedResolveCountInEpoch.Select(x => x * 100.0 / (fitness[0].Length * result.Length)).ToArray()
             };
         }
     }

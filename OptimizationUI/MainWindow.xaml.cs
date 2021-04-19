@@ -137,17 +137,17 @@ namespace OptimizationUI
                             $"Avg epoch count: {results.Average(x => x.EpochCount)}";
                         _properties.DistanceViewModel.CurrentSeed = results[0].Seed;
                         WritePlotDistances(linesGridDistances, GetAverageFitnesses(runFitnesses));
-
+                        
                         SaveDistanceResultsToDataCsv(results,runs,
                             _properties.DistanceViewModel.DataPath.Split('\\')[^1]
                                 .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'))
                             );
                     });
                 }
-                 catch (AggregateException)
-                 {
-                     DistanceResultLabel.Content = "Cancelled";
-                 }
+                catch (AggregateException)
+                {
+                    DistanceResultLabel.Content = "Cancelled";
+                }
 
                 Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration -= BaseGeneticOnOnNextIteration();
             }
