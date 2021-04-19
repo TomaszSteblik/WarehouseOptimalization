@@ -5,6 +5,8 @@ namespace Optimization.GeneticAlgorithms.Modules
     public class TSPModule : GeneticModule<double[]>
     {
         private List<double[]> fitnessHistory;
+
+        private List<int> resolveCountInEpoch;
         public override string GetDesiredObject()
         {
             return "fitness";
@@ -12,9 +14,17 @@ namespace Optimization.GeneticAlgorithms.Modules
 
         public double[][] GetFitnessHistory() => fitnessHistory.ToArray();
 
+        public int[] ResolveCountInEpoch => resolveCountInEpoch.ToArray();
+
+        public void AddResolveCount(int count)
+        {
+            resolveCountInEpoch.Add(count);
+        }
+
         public TSPModule()
         {
             fitnessHistory = new List<double[]>();
+            resolveCountInEpoch = new List<int>();
             
             Action = fitness =>
             {

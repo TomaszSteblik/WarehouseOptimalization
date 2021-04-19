@@ -9,6 +9,8 @@ namespace Optimization.GeneticAppliances.TSP
         public double[][] fitness { get; }
         
         public int[] BestGene { get; }
+        
+        public int[] ResolveInEpoch { get; set; }
         public double FinalFitness { get; }
         
         public int Seed { get; set; }
