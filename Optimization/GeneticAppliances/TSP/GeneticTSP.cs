@@ -40,10 +40,8 @@ namespace Optimization.GeneticAppliances.TSP
             {
                 ResolveInEpoch = tsp.ResolveCountInEpoch,
                 RandomizedResolveInEpoch = tsp.RandomizedResolveCountInEpoch,
-                ResolvePercentInEpoch =
-                    tsp.ResolveCountInEpoch.Select(x => x * 100.0 / (fitness[0].Length * result.Length)).ToArray(),
-                RandomizedResolvePercentInEpoch =
-                    tsp.RandomizedResolveCountInEpoch.Select(x => x * 100.0 / (fitness[0].Length * result.Length)).ToArray()
+                ResolvePercentInEpoch = tsp.ConflictResolvesPercent,
+                RandomizedResolvePercentInEpoch = tsp.RandomResolvesPercent
             };
         }
     }

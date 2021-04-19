@@ -49,6 +49,8 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                     }
                 }
 
+                _randomizationChances++;
+
                 if (Random.NextDouble() < ResolverRandomized.RandomizationProbability)
                 {
                     _randomizedResolvesCount++;
