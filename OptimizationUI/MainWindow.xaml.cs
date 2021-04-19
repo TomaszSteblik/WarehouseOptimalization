@@ -144,10 +144,10 @@ namespace OptimizationUI
                             );
                     });
                 }
-                catch (AggregateException)
-                {
-                    DistanceResultLabel.Content = "Cancelled";
-                }
+                 catch (AggregateException)
+                 {
+                     DistanceResultLabel.Content = "Cancelled";
+                 }
 
                 Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration -= BaseGeneticOnOnNextIteration();
             }
