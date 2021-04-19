@@ -661,7 +661,7 @@ namespace OptimizationUI
             s += "\n";
 
 
-               File.AppendAllText($"{seed}/{dataset}_data.csv",s);    
+               File.AppendAllText($"{seed}/{dataset}_{Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)}_data.csv",s);    
         }
         private string CreateDistanceLogsPerRunsParams(TSPResult[] results,string conflictResolver, string randomResolver)
         {
@@ -722,7 +722,8 @@ namespace OptimizationUI
                     parameters.DataPath = dataset;
                     var results = new TSPResult[runs];
                     var fileName = seed+"/"+runs + "_" + _properties.DistanceViewModel.DataPath.Split('\\')[^1]
-                        .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'))+".csv";
+                        .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'))+
+                                   Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)+".csv";
                     var s = "conflict_resolver;random_resolver;epoch;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation\n";
 
                     parameters.RandomizedResolveMethod = ConflictResolveMethod.Random;
