@@ -65,7 +65,8 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                 
                 if (nextVertex == -1)
                 {
-                    nextVertex = ResolverRandomized.ResolveConflict(currentVertex, availableVertexes);
+                    _resolveCount++;
+                    nextVertex = ResolverConflict.ResolveConflict(currentVertex, availableVertexes);
                 }
                 offspring[counter] = nextVertex;
                 availableVertexes.Remove(nextVertex);

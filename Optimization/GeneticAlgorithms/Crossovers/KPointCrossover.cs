@@ -25,6 +25,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                     int selected = -1;
                     while (selected == -1 || offspring.Contains(selected))
                     {
+                        _resolveCount++;
                         selected = ResolverConflict.ResolveConflict(offspring[j - 1], available);
                     }
 
