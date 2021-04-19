@@ -614,13 +614,14 @@ namespace OptimizationUI
             File.AppendAllText("data.csv",line.ToString());
         }
 
-        private void SaveDistanceArticleResultsToFile(int seed,TSPResult[] results,
+        private void SaveDistanceArticleResultsToFile(string path,TSPResult[] results,
             string conflictResolver, string randomResolver)
         {
+            var headers =
+                "dataset;crossover;conflict_resolver;random_resolver;best_distance;avg_top_10%;median;avg_worst_10%;average;worst_distance;std_dev;avg_min_epoch;d*0.98_epoch\n";
             var dataset = _properties.DistanceViewModel.DataPath.Split('\\')[^1]
                 .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'));
-            var s = File.Exists($"{seed}/{dataset}_data.csv") ? "" : "dataset;crossover;conflict_resolver;random_resolver;best_distance;avg_top_10%;median;avg_worst_10%;average;worst_distance;std_dev;avg_min_epoch;d*0.98_epoch\n";
-            
+            var s = File.Exists(path) ? "" : headers;
             
             var averageMinEpoch = results.Select(x => x.EpochCount - x.fitness.Count(y => y[0] == x.fitness[^1][0])).Average();
             var z = results.Select(x => x.fitness).ToArray();
@@ -644,28 +645,49 @@ namespace OptimizationUI
 
                 epochNumbersWhenSlowedDown[i] = indexOfMin;
             }
-            
-            s += Enum.GetName(_properties.DistanceViewModel.CrossoverMethod) + ';';
-            s += conflictResolver + ';';
-            s += randomResolver + ';';
+
+            s += dataset + ";";
+            s += Enum.GetName(_properties.DistanceViewModel.CrossoverMethod) + ";";
+            s += conflictResolver + ";";
+            s += randomResolver + ";";
             //tego nie jestem do końca pewien, które wartości będą potrzebne - może lepiej ich naprodukować więcej, by mieć z czego wybierać:
-            s += results.Min(x => x.FinalFitness) + ';';  //najlepszy wynik
-            s += results.OrderBy(x => x.FinalFitness).Take((int)(0.1 * results.Length)).Average(x => x.FinalFitness) + ';'; //średnia z najlepszych 10%
-            s += results.OrderBy(x => x.FinalFitness).Skip((int)(0.5 * results.Length)).Take(1).Average(x => x.FinalFitness) + ';';  //mediana
-            s += results.OrderBy(x => x.FinalFitness).Skip((int)(0.9 * results.Length)).Take((int)(0.1 * results.Length)).Average(x => x.FinalFitness) + ';'; //średnia z najgorszych 10%
-            s += (int)results.Average(x => x.FinalFitness) + ';'; //średnia
-            s += results.Max(x => x.FinalFitness) + ';'; // najgorszy wynik
-            s += results.StandardDeviation(x => x.FinalFitness) + ';'; // odchylenie standardowe
-            s += averageMinEpoch + ';';
+            s += results.Min(x => x.FinalFitness) + ";";  //najlepszy wynik
+            s += results.OrderBy(x => x.FinalFitness).Take((int)(0.1 * results.Length)).Average(x => x.FinalFitness) + ";"; //średnia z najlepszych 10%
+            s += results.OrderBy(x => x.FinalFitness).Skip((int)(0.5 * results.Length)).Take(1).Average(x => x.FinalFitness) + ";";  //mediana
+            s += results.OrderBy(x => x.FinalFitness).Skip((int)(0.9 * results.Length)).Take((int)(0.1 * results.Length)).Average(x => x.FinalFitness) + ";"; //średnia z najgorszych 10%
+            s += (int)results.Average(x => x.FinalFitness) + ";"; //średnia
+            s += results.Max(x => x.FinalFitness) + ";"; // najgorszy wynik
+            s += results.StandardDeviation(x => x.FinalFitness) + ";"; // odchylenie standardowe
+            s += averageMinEpoch + ";";
             s += epochNumbersWhenSlowedDown.Average() + ";";
             s += "\n";
-
-
-               File.AppendAllText($"{seed}/{dataset}_{Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)}_data.csv",s);    
+            
+            
+            var s2 = File.Exists("data_for_article.csv") ? File.Exists(path) ? s : s.Remove(0,headers.Length) : File.Exists(path) ? headers + s : s;
+            File.AppendAllText(path,s);    
+            File.AppendAllText("data_for_article.csv",s2);    
         }
         private string CreateDistanceLogsPerRunsParams(TSPResult[] results,string conflictResolver, string randomResolver)
         {
             var fitness = GetAverageFitnesses(results.Select(x => x.fitness).ToArray());
+            var z = results.Select(x => x.ResolvePercentInEpoch).ToArray();
+
+            var transponsedZ = new double[z[0].Length][];
+            for (int i = 0; i < transponsedZ.Length; i++)
+            {
+                transponsedZ[i] = new double[z.Length];
+            }
+
+            for (int i = 0; i < z[0].Length; i++)
+            {
+                for (int j = 0; j < z.Length; j++)
+                {
+                    transponsedZ[i][j] = z[j][i];
+                }
+            }
+
+            var epochsPerc = transponsedZ.Select(x => x.Average()).ToArray();
+
             string s = "";
             for (int i = 0; i < fitness.Length; i++)
             {
@@ -681,6 +703,7 @@ namespace OptimizationUI
                 s += (int)epochFitnesses.Average()+ ";"; //średnia
                 s += epochFitnesses.Max()+ ";"; // najgorszy wynik
                 s += epochFitnesses.StandardDeviation()+ ";"; // odchylenie standardowe
+                s += epochsPerc[i] + ";";
                 s += "\n";
             }
 
@@ -719,12 +742,14 @@ namespace OptimizationUI
                 
                 foreach (var dataset in files)
                 {
+                    var datasetName = dataset.Split('\\')[^1]
+                        .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'));
                     parameters.DataPath = dataset;
                     var results = new TSPResult[runs];
-                    var fileName = seed+"/"+runs + "_" + _properties.DistanceViewModel.DataPath.Split('\\')[^1]
-                        .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'))+
-                                   Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)+".csv";
-                    var s = "conflict_resolver;random_resolver;epoch;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation\n";
+                    var fileName = seed+"/"+runs + "_" + dataset.Split('\\')[^1]
+                        .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'))+ "_"
+                                   + Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)+".csv";
+                    var s = "conflict_resolver;random_resolver;epoch;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation;resolver_percentage\n";
 
                     parameters.RandomizedResolveMethod = ConflictResolveMethod.Random;
                     parameters.ConflictResolveMethod = ConflictResolveMethod.Random;
@@ -735,7 +760,7 @@ namespace OptimizationUI
                     
                     s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
                         Enum.GetName(parameters.RandomizedResolveMethod));
-                    SaveDistanceArticleResultsToFile(seed, results, 
+                    SaveDistanceArticleResultsToFile($"{seed}/{datasetName}_{Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)}_data.csv", results, 
                         Enum.GetName(parameters.ConflictResolveMethod),
                         Enum.GetName(parameters.RandomizedResolveMethod));
                     
@@ -748,7 +773,7 @@ namespace OptimizationUI
                     });
                     s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
                         Enum.GetName(parameters.RandomizedResolveMethod));
-                    SaveDistanceArticleResultsToFile(seed, results, 
+                    SaveDistanceArticleResultsToFile($"{seed}/{datasetName}_{Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)}_data.csv", results, 
                         Enum.GetName(parameters.ConflictResolveMethod),
                         Enum.GetName(parameters.RandomizedResolveMethod));
                     
@@ -762,7 +787,7 @@ namespace OptimizationUI
                     });
                     s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
                         Enum.GetName(parameters.RandomizedResolveMethod));
-                    SaveDistanceArticleResultsToFile(seed, results, 
+                    SaveDistanceArticleResultsToFile($"{seed}/{datasetName}_{Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)}_data.csv", results, 
                         Enum.GetName(parameters.ConflictResolveMethod),
                         Enum.GetName(parameters.RandomizedResolveMethod));
                     
@@ -775,7 +800,7 @@ namespace OptimizationUI
                     });
                     s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
                         Enum.GetName(parameters.RandomizedResolveMethod));
-                    SaveDistanceArticleResultsToFile(seed, results, 
+                    SaveDistanceArticleResultsToFile($"{seed}/{datasetName}_{Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)}_data.csv", results, 
                         Enum.GetName(parameters.ConflictResolveMethod),
                         Enum.GetName(parameters.RandomizedResolveMethod));
                     
@@ -788,7 +813,7 @@ namespace OptimizationUI
                     });
                     s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
                         Enum.GetName(parameters.RandomizedResolveMethod));
-                    SaveDistanceArticleResultsToFile(seed, results, 
+                    SaveDistanceArticleResultsToFile($"{seed}/{datasetName}_{Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)}_data.csv", results, 
                         Enum.GetName(parameters.ConflictResolveMethod),
                         Enum.GetName(parameters.RandomizedResolveMethod));
                     
@@ -801,7 +826,7 @@ namespace OptimizationUI
                     });
                     s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
                         Enum.GetName(parameters.RandomizedResolveMethod));
-                    SaveDistanceArticleResultsToFile(seed, results, 
+                    SaveDistanceArticleResultsToFile($"{seed}/{datasetName}_{Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)}_data.csv", results, 
                         Enum.GetName(parameters.ConflictResolveMethod),
                         Enum.GetName(parameters.RandomizedResolveMethod));
                     
@@ -814,7 +839,7 @@ namespace OptimizationUI
                     });
                     s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
                         Enum.GetName(parameters.RandomizedResolveMethod));
-                    SaveDistanceArticleResultsToFile(seed, results, 
+                    SaveDistanceArticleResultsToFile($"{seed}/{datasetName}_{Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)}_data.csv", results, 
                         Enum.GetName(parameters.ConflictResolveMethod),
                         Enum.GetName(parameters.RandomizedResolveMethod));
                     
@@ -827,7 +852,7 @@ namespace OptimizationUI
                     });
                     s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
                         Enum.GetName(parameters.RandomizedResolveMethod));
-                    SaveDistanceArticleResultsToFile(seed, results, 
+                    SaveDistanceArticleResultsToFile($"{seed}/{datasetName}_{Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)}_data.csv", results, 
                         Enum.GetName(parameters.ConflictResolveMethod),
                         Enum.GetName(parameters.RandomizedResolveMethod));
                     
@@ -840,7 +865,7 @@ namespace OptimizationUI
                     });
                     s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
                         Enum.GetName(parameters.RandomizedResolveMethod));
-                    SaveDistanceArticleResultsToFile(seed, results, 
+                    SaveDistanceArticleResultsToFile($"{seed}/{datasetName}_{Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)}_data.csv", results, 
                         Enum.GetName(parameters.ConflictResolveMethod),
                         Enum.GetName(parameters.RandomizedResolveMethod));
                     
@@ -851,7 +876,7 @@ namespace OptimizationUI
             Dispatcher.Invoke(() =>
             {
                 _properties.DistanceViewModel.ProgressBarValue =
-                    runs * _properties.DistanceViewModel.MaxEpoch - 1;
+                    _properties.DistanceViewModel.ProgressBarMaximum;
                 Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration -= BaseGeneticOnOnNextIteration();
             });
         }
