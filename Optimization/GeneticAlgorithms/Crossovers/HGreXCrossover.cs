@@ -58,6 +58,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                 if(minIndex>=0)
                     nextVertex = feasibleParents[minIndex][feasibleParents[minIndex].ToList().IndexOf(currentVertex) + 1];
                 
+                _randomizationChances++;
                 if (Random.NextDouble() < ResolverRandomized.RandomizationProbability)
                 {
                     _randomizedResolvesCount++;

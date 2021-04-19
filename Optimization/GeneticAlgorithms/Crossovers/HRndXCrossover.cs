@@ -36,6 +36,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                     nextVertex = selectedParent[indexOfCurrentVertexInSelectedParent + 1];
                 }
                 
+                _randomizationChances++;
                 if (Random.NextDouble() < ResolverRandomized.RandomizationProbability)
                 {
                     _randomizedResolvesCount++;
