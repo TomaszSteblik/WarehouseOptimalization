@@ -106,6 +106,7 @@ namespace Optimization.GeneticAlgorithms
                     
                     var tsp = (TSPModule) GetModule(typeof(TSPModule));
                     tsp?.AddResolveCount(_crossover.ResolveCount);
+                    tsp?.AddRandomizedResolveCount(_crossover.RandomizedResolvesCount);
                     
                     _elimination.EliminateAndReplace(offsprings, fitness);
                     _mutation.Mutate(_population);

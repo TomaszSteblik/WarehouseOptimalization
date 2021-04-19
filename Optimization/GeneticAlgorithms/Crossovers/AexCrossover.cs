@@ -51,6 +51,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 
                 if (Random.NextDouble() < ResolverRandomized.RandomizationProbability)
                 {
+                    _randomizedResolvesCount++;
                     nextVertex =
                         ResolverRandomized.ResolveConflict(selectedParent[indexOfCurrentVertexInSelectedParent],
                             availableVertexes);

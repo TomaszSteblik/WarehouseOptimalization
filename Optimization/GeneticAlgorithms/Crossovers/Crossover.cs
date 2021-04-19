@@ -10,6 +10,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
         protected ConflictResolver ResolverRandomized;
         protected readonly Random Random;
         protected int _resolveCount;
+        protected int _randomizedResolvesCount;
 
 
         public Crossover(ConflictResolver resolverConflict, ConflictResolver resolverRandomized, Random random)
@@ -20,11 +21,14 @@ namespace Optimization.GeneticAlgorithms.Crossovers
         }
 
         public int ResolveCount => _resolveCount;
-        
+
+        public int RandomizedResolvesCount => _randomizedResolvesCount;
+
         public abstract int[] GenerateOffspring(int[][] parents);
         public virtual int[][] GenerateOffsprings(int[][] parents, int numParentsForOneChild)
         {
             _resolveCount = 0;
+            _randomizedResolvesCount = 0;
             var parentsLength = parents.Length;
             var amountOfChildren = parentsLength / 2;
             int[][] offsprings = new int[amountOfChildren][];

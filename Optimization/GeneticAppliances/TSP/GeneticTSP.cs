@@ -38,7 +38,8 @@ namespace Optimization.GeneticAppliances.TSP
             var fitness = tsp.GetFitnessHistory();
             return new TSPResult(fitness, result)
             {
-                ResolveInEpoch = tsp.ResolveCountInEpoch
+                ResolveInEpoch = tsp.ResolveCountInEpoch,
+                RandomizedResolveInEpoch = tsp.RandomizedResolveCountInEpoch
             };
         }
     }
