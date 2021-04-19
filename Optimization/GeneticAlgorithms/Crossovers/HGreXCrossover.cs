@@ -31,8 +31,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                 for (var i = 0; i < parents.Length; i++)
                 {
                     var selectedParent = parents[i];
-                    var selectedParentAsList = selectedParent.ToList();
-                    var indexOfCurrentVertexInSelectedParent = selectedParentAsList.IndexOf(currentVertex);
+                    var indexOfCurrentVertexInSelectedParent = Array.IndexOf(selectedParent, currentVertex);
                     if (indexOfCurrentVertexInSelectedParent >= parentLength - 1 ||
                         offspring.Contains(selectedParent[indexOfCurrentVertexInSelectedParent + 1]))
                     {
@@ -47,16 +46,16 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                 for (int i = 0; i < feasibleParents.Count; i++)
                 {
                     if (DistancesMatrix[currentVertex][
-                        feasibleParents[i][feasibleParents[i].ToList().IndexOf(currentVertex) + 1]] < min)
+                        feasibleParents[i][Array.IndexOf(feasibleParents[i], currentVertex) + 1]] < min)
                     {
                         min = DistancesMatrix[currentVertex][
-                            feasibleParents[i][feasibleParents[i].ToList().IndexOf(currentVertex) + 1]];
+                            feasibleParents[i][Array.IndexOf(feasibleParents[i], currentVertex) + 1]];
                         minIndex = i;
                     }
                 }
                 
                 if(minIndex>=0)
-                    nextVertex = feasibleParents[minIndex][feasibleParents[minIndex].ToList().IndexOf(currentVertex) + 1];
+                    nextVertex = feasibleParents[minIndex][Array.IndexOf(feasibleParents[minIndex], currentVertex) + 1];
                 
                 _randomizationChances++;
                 if (Random.NextDouble() < ResolverRandomized.RandomizationProbability)

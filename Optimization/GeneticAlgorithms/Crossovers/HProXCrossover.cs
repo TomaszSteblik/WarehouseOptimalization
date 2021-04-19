@@ -30,8 +30,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                 for (var i = 0; i < parents.Length; i++)
                 {
                     var selectedParent = parents[i];
-                    var selectedParentAsList = selectedParent.ToList();
-                    var indexOfCurrentVertexInSelectedParent = selectedParentAsList.IndexOf(currentVertex);
+                    var indexOfCurrentVertexInSelectedParent = Array.IndexOf(selectedParent, currentVertex);
                     if (indexOfCurrentVertexInSelectedParent >= parentLength - 1 ||
                         offspring.Contains(selectedParent[indexOfCurrentVertexInSelectedParent + 1]))
                     {
@@ -42,12 +41,11 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 
                 double[] fitness = new double[feasibleParents.Count];
 
-                
                 for (int i = 0; i < feasibleParents.Count; i++)
                 {
                     fitness[i] =
                         1/DistancesMatrix[currentVertex][
-                            feasibleParents[i][feasibleParents[i].ToList().IndexOf(currentVertex) + 1]];
+                            feasibleParents[i][Array.IndexOf(feasibleParents[i], currentVertex) + 1]];
                 }
                 
 
@@ -58,7 +56,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                     approx += fitness[i];
                     if (approx >= sum)
                     {
-                        nextVertex = feasibleParents[i][feasibleParents[i].ToList().IndexOf(currentVertex) + 1];
+                        nextVertex = feasibleParents[i][Array.IndexOf(feasibleParents[i], currentVertex) + 1];
                         break;
 
                     }

@@ -25,8 +25,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                 {
                     var whichParent = Random.Next(0, feasibleParents.Count);
                     var selectedParent = feasibleParents[whichParent];
-                    var selectedParentAsList = selectedParent.ToList();
-                    var indexOfCurrentVertexInSelectedParent = selectedParentAsList.IndexOf(currentVertex);
+                    var indexOfCurrentVertexInSelectedParent = Array.IndexOf(selectedParent, currentVertex);
                     if (indexOfCurrentVertexInSelectedParent >= parentLength - 1 ||
                         offspring.Contains(selectedParent[indexOfCurrentVertexInSelectedParent + 1]))
                     {
