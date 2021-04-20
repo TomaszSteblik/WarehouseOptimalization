@@ -670,7 +670,7 @@ namespace OptimizationUI
         private string CreateDistanceLogsPerRunsParams(TSPResult[] results,string conflictResolver, string randomResolver)
         {
             var fitness = GetAverageFitnesses(results.Select(x => x.fitness).ToArray());
-            var z = results.Select(x => x.RandomizedResolvePercentInEpoch).ToArray();
+            var z = results.Select(x => x.ResolvePercentInEpoch).ToArray();
 
             var maxLenght = z.Max(x => x.Length);
             var transponsedZ = new List<List<double>>();
