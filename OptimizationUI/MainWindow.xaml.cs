@@ -615,7 +615,7 @@ namespace OptimizationUI
         }
 
         private void SaveDistanceArticleResultsToFile(string path,TSPResult[] results,
-            string conflictResolver, string randomResolver)
+            string conflictResolver, string randomResolver,int seed)
         {
             var headers =
                 "dataset;crossover;conflict_resolver;random_resolver;best_distance;avg_top_10%;median;avg_worst_10%;average;worst_distance;std_dev;avg_min_epoch;d*0.98_epoch\n";
@@ -665,7 +665,7 @@ namespace OptimizationUI
             
             var s2 = File.Exists("data_for_article.csv") ? File.Exists(path) ? s : s.Remove(0,headers.Length) : File.Exists(path) ? headers + s : s;
             File.AppendAllText(path,s);    
-            File.AppendAllText("data_for_article.csv",s2);    
+            File.AppendAllText($"data_for_article_{seed}.csv",s2);    
         }
         private string CreateDistanceLogsPerRunsParams(TSPResult[] results,string conflictResolver, string randomResolver)
         {
@@ -783,9 +783,9 @@ namespace OptimizationUI
                     
                                     s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
                                         Enum.GetName(parameters.RandomizedResolveMethod));
-                                    SaveDistanceArticleResultsToFile($"{seed}/{datasetName}_{Enum.GetName(crossoverMethod)}_data.csv", results, 
+                                    SaveDistanceArticleResultsToFile($"{seed}/{datasetName}_data.csv", results, 
                                         Enum.GetName(parameters.ConflictResolveMethod),
-                                        Enum.GetName(parameters.RandomizedResolveMethod));
+                                        Enum.GetName(parameters.RandomizedResolveMethod),seed);
                                 }
                         
                             }
