@@ -670,19 +670,16 @@ namespace OptimizationUI
         private string CreateDistanceLogsPerRunsParams(TSPResult[] results,string conflictResolver, string randomResolver)
         {
             var fitness = GetAverageFitnesses(results.Select(x => x.fitness).ToArray());
-            var z = results.Select(x => x.ResolvePercentInEpoch).ToArray();
+            var z = results.Select(x => x.RandomizedResolvePercentInEpoch).ToArray();
 
-            var transponsedZ = new double[z[0].Length][];
-            for (int i = 0; i < transponsedZ.Length; i++)
+            var maxLenght = z.Max(x => x.Length);
+            var transponsedZ = new List<List<double>>();
+            for (int i = 0; i < maxLenght; i++)
             {
-                transponsedZ[i] = new double[z.Length];
-            }
-
-            for (int i = 0; i < z[0].Length; i++)
-            {
+                transponsedZ.Add(new List<double>());
                 for (int j = 0; j < z.Length; j++)
                 {
-                    transponsedZ[i][j] = z[j][i];
+                    if(z[j].Length>i) transponsedZ[i].Add(z[j][i]);
                 }
             }
 
