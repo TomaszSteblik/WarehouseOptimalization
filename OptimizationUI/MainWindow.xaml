@@ -18,6 +18,13 @@
                                 <Button Margin=" 10 0 0 0" Content="Open" Width="50" Name="ReadDistanceDataPathButton" Click="ReadDistanceDataPathButton_OnClick"/>
                             </StackPanel>
                         </WrapPanel>
+                        <WrapPanel>
+                            <Label Content="Dataset directory path:"></Label>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox Width="400" Text="{Binding DatasetDirectoryPath}"/>
+                                <Button Margin=" 10 0 0 0" Content="Open" Width="50" Name="ReadDistanceDataSetPathButton" Click="ReadDistanceDataSetPathButton_OnClick"/>
+                            </StackPanel>
+                        </WrapPanel>
                         <WrapPanel Margin="0 5 0 5">
                             <Label Content="Parameters:"></Label>
                             <Button Width="50" Margin="10 0 10 0" Content="Load" Name="LoadDistanceParamsButton" Click="LoadDistanceParamsButton_OnClick"/>

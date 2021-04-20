@@ -17,6 +17,18 @@ namespace OptimizationUI
 {
     public class DistanceViewModel :OptimizationParameters, INotifyPropertyChanged
     {
+        private string _datasetDirectoryPath;
+
+        public string DatasetDirectoryPath
+        {
+            get => _datasetDirectoryPath;
+            set
+            {
+                _datasetDirectoryPath = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         private bool _use2opt = false;
         public override bool Use2opt
         {

@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="FolderBrowserForWPF" Version="1.2.0" />
       <PackageReference Include="InteractiveDataDisplay.NetCore.WPF" Version="1.0.2" />
     </ItemGroup>
 

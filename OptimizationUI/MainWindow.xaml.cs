@@ -724,7 +724,7 @@ namespace OptimizationUI
             }
             
 
-            var files = Directory.GetFiles("C:\\Users\\Tomek\\RiderProjects\\WarehouseOptimization1\\Data");
+            var files = Directory.GetFiles(_properties.DistanceViewModel.DatasetDirectoryPath);
             var runs = int.Parse(DistanceRunsTextBox.Text);
             var seed = DateTime.Now.Millisecond;
             _cancellationTokenSource = new CancellationTokenSource();
@@ -879,6 +879,16 @@ namespace OptimizationUI
                     _properties.DistanceViewModel.ProgressBarMaximum;
                 Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration -= BaseGeneticOnOnNextIteration();
             });
+        }
+
+        private void ReadDistanceDataSetPathButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var fileDialog = new FolderBrowserForWPF.Dialog();
+            if(fileDialog.ShowDialog() == true)
+            {
+                _properties.DistanceViewModel.DatasetDirectoryPath = fileDialog.FileName;
+            }
+            
         }
     }
     
