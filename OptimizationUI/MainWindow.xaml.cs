@@ -712,173 +712,106 @@ namespace OptimizationUI
 
         private async void DistanceArticleStartButton_OnClick(object sender, RoutedEventArgs e)
         {
-            
+
             DistanceStartButton.IsEnabled = false;
+
             EventHandler<int> BaseGeneticOnOnNextIteration()
             {
-                return (_,iteration) =>
+                return (_, iteration) =>
                 {
                     _properties.DistanceViewModel.ProgressBarValue++;
                     Console.WriteLine(iteration);
                 };
             }
-            
+
 
             var files = Directory.GetFiles(_properties.DistanceViewModel.DatasetDirectoryPath);
             var runs = int.Parse(DistanceRunsTextBox.Text);
-            var seed = DateTime.Now.Millisecond;
+            int seed = _properties.DistanceViewModel.CurrentSeed;
+            if (_properties.DistanceViewModel.RandomSeed)
+            {
+                Random random = new Random();
+                seed = random.Next(1, Int32.MaxValue);
+                _properties.DistanceViewModel.CurrentSeed = seed;
+            }
             _cancellationTokenSource = new CancellationTokenSource();
             CancellationToken ct = _cancellationTokenSource.Token;
             OptimizationParameters parameters = _properties.DistanceViewModel as OptimizationParameters;
-            
-            await Task.Run(() =>
+
+            var crossovers = new CrossoverMethod[4];
+            crossovers[0] = CrossoverMethod.Aex;
+            crossovers[1] = CrossoverMethod.HProX;
+            crossovers[2] = CrossoverMethod.HGreX;
+            crossovers[3] = CrossoverMethod.HRndX;
+
+            try
             {
-                Directory.CreateDirectory(seed.ToString());
-                SerializeParameters(seed+"/parameters.json");
-                
-                _properties.DistanceViewModel.ProgressBarMaximum = (runs*_properties.DistanceViewModel.MaxEpoch*9*files.Length) - 1;
-                _properties.DistanceViewModel.ProgressBarValue = 0;
-                Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration += BaseGeneticOnOnNextIteration();
-                
-                foreach (var dataset in files)
+                await Task.Run(() =>
                 {
-                    var datasetName = dataset.Split('\\')[^1]
-                        .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'));
-                    parameters.DataPath = dataset;
-                    var results = new TSPResult[runs];
-                    var fileName = seed+"/"+runs + "_" + dataset.Split('\\')[^1]
-                        .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'))+ "_"
-                                   + Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)+".csv";
-                    var s = "conflict_resolver;random_resolver;epoch;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation;resolver_percentage\n";
-
-                    parameters.RandomizedResolveMethod = ConflictResolveMethod.Random;
-                    parameters.ConflictResolveMethod = ConflictResolveMethod.Random;
-                    Parallel.For(0, runs, i =>
+                    Directory.CreateDirectory(seed.ToString());
+                    SerializeParameters(seed+"/parameters.json");
+                
+                    _properties.DistanceViewModel.ProgressBarMaximum = (runs*_properties.DistanceViewModel.MaxEpoch*9*4*files.Length) - 1;
+                    _properties.DistanceViewModel.ProgressBarValue = 0;
+                    Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration += BaseGeneticOnOnNextIteration();
+                
+                    foreach (var dataset in files)
                     {
-                        results[i] = OptimizationWork.TSP(parameters, ct, seed+i);
-                    });
-                    
-                    s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
-                        Enum.GetName(parameters.RandomizedResolveMethod));
-                    SaveDistanceArticleResultsToFile($"{seed}/{datasetName}_{Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)}_data.csv", results, 
-                        Enum.GetName(parameters.ConflictResolveMethod),
-                        Enum.GetName(parameters.RandomizedResolveMethod));
-                    
-                    parameters.RandomizedResolveMethod = ConflictResolveMethod.Random;
-                    parameters.ConflictResolveMethod = ConflictResolveMethod.NearestNeighbor;
-                    Parallel.For(0, runs, i =>
-                    {
-                        results[i] = OptimizationWork.TSP(parameters, ct, seed+i);
+                        var datasetName = dataset.Split('\\')[^1]
+                            .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'));
+                        parameters.DataPath = dataset;
+                        var results = new TSPResult[runs];
+                        
+                        foreach (var crossoverMethod in crossovers)
+                        {
+                            parameters.CrossoverMethod = crossoverMethod;
+                            
+                            var fileName = seed+"/"+runs + "_" + dataset.Split('\\')[^1]
+                                               .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'))+ "_"
+                                           + Enum.GetName(crossoverMethod)+".csv";
+                            var s = "conflict_resolver;random_resolver;epoch;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation;resolver_percentage\n";
 
-                    });
-                    s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
-                        Enum.GetName(parameters.RandomizedResolveMethod));
-                    SaveDistanceArticleResultsToFile($"{seed}/{datasetName}_{Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)}_data.csv", results, 
-                        Enum.GetName(parameters.ConflictResolveMethod),
-                        Enum.GetName(parameters.RandomizedResolveMethod));
-                    
-                    parameters.RandomizedResolveMethod = ConflictResolveMethod.NearestNeighbor;
-                    parameters.ConflictResolveMethod = ConflictResolveMethod.Random;
-                    Console.WriteLine("STARTED");
-                    Parallel.For(0, runs, i =>
-                    {
-                        results[i] = OptimizationWork.TSP(parameters, ct, seed+i);
+                            
+                            foreach (ConflictResolveMethod randomizedResolve in Enum.GetValues(typeof(ConflictResolveMethod)))
+                            {
+                                parameters.RandomizedResolveMethod = randomizedResolve;
 
-                    });
-                    s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
-                        Enum.GetName(parameters.RandomizedResolveMethod));
-                    SaveDistanceArticleResultsToFile($"{seed}/{datasetName}_{Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)}_data.csv", results, 
-                        Enum.GetName(parameters.ConflictResolveMethod),
-                        Enum.GetName(parameters.RandomizedResolveMethod));
+                                foreach (ConflictResolveMethod conflictResolve in Enum.GetValues(typeof(ConflictResolveMethod)))
+                                {
+                                    parameters.ConflictResolveMethod = conflictResolve;
+                                    Parallel.For(0, runs, i =>
+                                    {
+                                        results[i] = OptimizationWork.TSP(parameters, ct, seed+i);
+                                    });
                     
-                    parameters.RandomizedResolveMethod = ConflictResolveMethod.NearestNeighbor;
-                    parameters.ConflictResolveMethod = ConflictResolveMethod.NearestNeighbor;
-                    Parallel.For(0, runs, i =>
-                    {
-                        results[i] = OptimizationWork.TSP(parameters, ct, seed+i);
+                                    s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
+                                        Enum.GetName(parameters.RandomizedResolveMethod));
+                                    SaveDistanceArticleResultsToFile($"{seed}/{datasetName}_{Enum.GetName(crossoverMethod)}_data.csv", results, 
+                                        Enum.GetName(parameters.ConflictResolveMethod),
+                                        Enum.GetName(parameters.RandomizedResolveMethod));
+                                }
+                        
+                            }
+                            File.AppendAllText(fileName, s);
 
-                    });
-                    s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
-                        Enum.GetName(parameters.RandomizedResolveMethod));
-                    SaveDistanceArticleResultsToFile($"{seed}/{datasetName}_{Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)}_data.csv", results, 
-                        Enum.GetName(parameters.ConflictResolveMethod),
-                        Enum.GetName(parameters.RandomizedResolveMethod));
-                    
-                    parameters.RandomizedResolveMethod = ConflictResolveMethod.Random;
-                    parameters.ConflictResolveMethod = ConflictResolveMethod.Tournament;
-                    Parallel.For(0, runs, i =>
-                    {
-                        results[i] = OptimizationWork.TSP(parameters, ct, seed+i);
+                        }
 
-                    });
-                    s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
-                        Enum.GetName(parameters.RandomizedResolveMethod));
-                    SaveDistanceArticleResultsToFile($"{seed}/{datasetName}_{Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)}_data.csv", results, 
-                        Enum.GetName(parameters.ConflictResolveMethod),
-                        Enum.GetName(parameters.RandomizedResolveMethod));
-                    
-                    parameters.RandomizedResolveMethod = ConflictResolveMethod.Tournament;
-                    parameters.ConflictResolveMethod = ConflictResolveMethod.Random;
-                    Parallel.For(0, runs, i =>
-                    {
-                        results[i] = OptimizationWork.TSP(parameters, ct, seed+i);
+                        
+                    }
+                }, ct);
 
-                    });
-                    s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
-                        Enum.GetName(parameters.RandomizedResolveMethod));
-                    SaveDistanceArticleResultsToFile($"{seed}/{datasetName}_{Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)}_data.csv", results, 
-                        Enum.GetName(parameters.ConflictResolveMethod),
-                        Enum.GetName(parameters.RandomizedResolveMethod));
-                    
-                    parameters.RandomizedResolveMethod = ConflictResolveMethod.Tournament;
-                    parameters.ConflictResolveMethod = ConflictResolveMethod.NearestNeighbor;
-                    Parallel.For(0, runs, i =>
-                    {
-                        results[i] = OptimizationWork.TSP(parameters, ct, seed+i);
-
-                    });
-                    s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
-                        Enum.GetName(parameters.RandomizedResolveMethod));
-                    SaveDistanceArticleResultsToFile($"{seed}/{datasetName}_{Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)}_data.csv", results, 
-                        Enum.GetName(parameters.ConflictResolveMethod),
-                        Enum.GetName(parameters.RandomizedResolveMethod));
-                    
-                    parameters.RandomizedResolveMethod = ConflictResolveMethod.NearestNeighbor;
-                    parameters.ConflictResolveMethod = ConflictResolveMethod.Tournament;
-                    Parallel.For(0, runs, i =>
-                    {
-                        results[i] = OptimizationWork.TSP(parameters, ct, seed+i);
-
-                    });
-                    s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
-                        Enum.GetName(parameters.RandomizedResolveMethod));
-                    SaveDistanceArticleResultsToFile($"{seed}/{datasetName}_{Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)}_data.csv", results, 
-                        Enum.GetName(parameters.ConflictResolveMethod),
-                        Enum.GetName(parameters.RandomizedResolveMethod));
-                    
-                    parameters.RandomizedResolveMethod = ConflictResolveMethod.Tournament;
-                    parameters.ConflictResolveMethod = ConflictResolveMethod.Tournament;
-                    Parallel.For(0, runs, i =>
-                    {
-                        results[i] = OptimizationWork.TSP(parameters, ct, seed+i);
-
-                    });
-                    s += CreateDistanceLogsPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
-                        Enum.GetName(parameters.RandomizedResolveMethod));
-                    SaveDistanceArticleResultsToFile($"{seed}/{datasetName}_{Enum.GetName(_properties.DistanceViewModel.CrossoverMethod)}_data.csv", results, 
-                        Enum.GetName(parameters.ConflictResolveMethod),
-                        Enum.GetName(parameters.RandomizedResolveMethod));
-                    
-                   File.AppendAllText(fileName, s);
-                }
-            }, ct);
-
-            Dispatcher.Invoke(() =>
+                Dispatcher.Invoke(() =>
+                {
+                    _properties.DistanceViewModel.ProgressBarValue =
+                        _properties.DistanceViewModel.ProgressBarMaximum;
+                    Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration -= BaseGeneticOnOnNextIteration();
+                });
+            }
+            catch (AggregateException)
             {
-                _properties.DistanceViewModel.ProgressBarValue =
-                    _properties.DistanceViewModel.ProgressBarMaximum;
-                Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration -= BaseGeneticOnOnNextIteration();
-            });
+                DistanceResultLabel.Content = "Cancelled";
+            }
+            
         }
 
         private void ReadDistanceDataSetPathButton_OnClick(object sender, RoutedEventArgs e)
