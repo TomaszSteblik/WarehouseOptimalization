@@ -887,6 +887,8 @@ namespace OptimizationUI
             if(fileDialog.ShowDialog() == true)
             {
                 _properties.DistanceViewModel.DatasetDirectoryPath = fileDialog.FileName;
+                var files = Directory.GetFiles(fileDialog.FileName,"*.tsp");
+                _properties.DistanceViewModel.DataPath = files[0];
             }
             
         }
