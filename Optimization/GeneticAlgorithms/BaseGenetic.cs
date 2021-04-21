@@ -19,6 +19,7 @@ namespace Optimization.GeneticAlgorithms
     {
         private readonly Selection _selection;
         private readonly Crossover _crossover;
+        public Crossover Crossover { get => _crossover; }
         private readonly ConflictResolver _resolverConflict;
         private readonly ConflictResolver _resolverRandomized;
         private readonly Elimination _elimination;
@@ -49,7 +50,7 @@ namespace Optimization.GeneticAlgorithms
 
         public IModule GetModule(Type type)
         {
-            return _modules.First(x => x.GetType() == type);
+            return _modules.FirstOrDefault(x => x.GetType() == type);
         }
 
         public BaseGenetic(OptimizationParameters parameters, int[][] population,
@@ -83,43 +84,32 @@ namespace Optimization.GeneticAlgorithms
         {
             fitness = new double[_population.Length];
             int[] bestGene = new int[_population[0].Length];
-
-            try
+            var termination = (TerminationModule) GetModule(typeof(TerminationModule));
+            
+            for (int b = 0; b < _terminationValue; b++)
             {
-                for (int b = 0; b < _terminationValue; b++)
+                if (_ct.IsCancellationRequested)
                 {
-                    if (_ct.IsCancellationRequested)
-                    {
-                        _ct.ThrowIfCancellationRequested();
-                    }
-                    
-                    OnNextIteration?.Invoke(this,b);
-                    
-                    fitness = _calculateFitness(_population);
-
-                    Array.Sort(fitness,_population);
-
-                    RunModules();
-                
-                    int[][] parents = _selection.GenerateParents(_childrenPerGeneration * 2, fitness);
-                    int[][] offsprings = _crossover.GenerateOffsprings(parents, _parentsPerChild);
-                    
-                    var tsp = (TSPModule) GetModule(typeof(TSPModule));
-                    tsp?.AddResolveCount(_crossover.ResolveCount);
-                    tsp?.AddRandomizedResolveCount(_crossover.RandomizedResolvesCount);
-                    tsp?.AddConflictResolvesPercent(100.0 * _crossover.ResolveCount / _crossover.RandomizationChances);
-                    tsp?.AddRandomResolvesPercent(100.0 * _crossover.RandomizedResolvesCount / _crossover.RandomizationChances);
-                    
-                    _elimination.EliminateAndReplace(offsprings, fitness);
-                    _mutation.Mutate(_population);
-
-                    bestGene = _population[0];
-
+                    _ct.ThrowIfCancellationRequested();
                 }
-            }
-            catch (GeneticModuleExit)
-            {
-                return bestGene;
+
+                if(termination is not null)
+                    if (termination.RequestedStop) return bestGene;
+                    
+                OnNextIteration?.Invoke(this,b);
+                    
+                fitness = _calculateFitness(_population);
+                Array.Sort(fitness,_population);
+                int[][] parents = _selection.GenerateParents(_childrenPerGeneration * 2, fitness);
+                int[][] offsprings = _crossover.GenerateOffsprings(parents, _parentsPerChild);
+
+                RunModules();
+                
+                _elimination.EliminateAndReplace(offsprings, fitness);
+                _mutation.Mutate(_population);
+
+                bestGene = _population[0];
+
             }
             
             return bestGene;
@@ -140,6 +130,7 @@ namespace Optimization.GeneticAlgorithms
         {
             switch (name)
             {
+                case "crossover" : return _crossover;
                 case "fitness": return fitness;
                 case "population": return _population;
                 default: return null;

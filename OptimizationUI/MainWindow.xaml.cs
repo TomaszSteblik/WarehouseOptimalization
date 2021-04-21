@@ -108,9 +108,8 @@ namespace OptimizationUI
             CancellationToken ct = _cancellationTokenSource.Token;
             if ((OptimizationMethod) DistanceMethodComboBox.SelectedItem == OptimizationMethod.GeneticAlgorithm)
             {
-                try
-                {
-                    await Task.Run(() =>
+                
+                await Task.Run(() =>
                     {
                         Parallel.For(0, runs, i =>
                         {
@@ -126,7 +125,7 @@ namespace OptimizationUI
                         });
                     }, ct);
 
-                    Dispatcher.Invoke(() =>
+                Dispatcher.Invoke(() =>
                     {
                         _properties.DistanceViewModel.ProgressBarValue =
                             runs * _properties.DistanceViewModel.MaxEpoch - 1;
@@ -143,11 +142,7 @@ namespace OptimizationUI
                                 .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'))
                             );
                     });
-                }
-                catch (AggregateException)
-                {
-                    DistanceResultLabel.Content = "Cancelled";
-                }
+                
 
                 Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration -= BaseGeneticOnOnNextIteration();
             }
@@ -167,8 +162,7 @@ namespace OptimizationUI
             double result = -1d;
             double[][] fitness = null;
 
-            try
-            {
+            
                 await Task.Run(() =>
                 {
                     WarehouseParameters warehouseParameters = _properties.WarehouseViewModel as WarehouseParameters;
@@ -181,11 +175,7 @@ namespace OptimizationUI
                     WarehouseResultLabel.Content = $"Wynik: {result}";
                     WritePlotWarehouse(linesGridWarehouse, fitness);
                 });
-            }
-            catch (OperationCanceledException exception)
-            {
-                Dispatcher.Invoke(() => { WarehouseResultLabel.Content = "Cancelled"; });
-            }
+            
         }
 
 
@@ -741,8 +731,7 @@ namespace OptimizationUI
             crossovers[2] = CrossoverMethod.HGreX;
             crossovers[3] = CrossoverMethod.HRndX;
 
-            try
-            {
+            
                 await Task.Run(() =>
                 {
                     Directory.CreateDirectory(seed.ToString());
@@ -803,11 +792,7 @@ namespace OptimizationUI
                         _properties.DistanceViewModel.ProgressBarMaximum;
                     Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration -= BaseGeneticOnOnNextIteration();
                 });
-            }
-            catch (AggregateException)
-            {
-                DistanceResultLabel.Content = "Cancelled";
-            }
+            
             
         }
 

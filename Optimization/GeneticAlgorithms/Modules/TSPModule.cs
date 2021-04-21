@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Optimization.GeneticAlgorithms.Crossovers;
 
 namespace Optimization.GeneticAlgorithms.Modules
 {
@@ -11,11 +12,16 @@ namespace Optimization.GeneticAlgorithms.Modules
         private List<int> randomizedResolveCountInEpoch;
         private List<double> randomResolvePercents;
         private List<double> conflictResolvesPercents;
+        private Crossover _crossover;
         public override string GetDesiredObject()
         {
             return "fitness";
         }
 
+        public void LoadCrossoverOperator(Crossover crossover)
+        {
+            _crossover = crossover;
+        }
         public double[][] GetFitnessHistory() => fitnessHistory.ToArray();
 
         public int[] ResolveCountInEpoch => resolveCountInEpoch.ToArray();
@@ -60,6 +66,10 @@ namespace Optimization.GeneticAlgorithms.Modules
                 {
                     fitnessHistory[^1][i] = fitness[i];
                 }
+                AddResolveCount(_crossover.ResolveCount);
+                AddRandomizedResolveCount(_crossover.RandomizedResolvesCount);
+                AddConflictResolvesPercent(100.0 * _crossover.ResolveCount / _crossover.RandomizationChances);
+                AddRandomResolvesPercent(100.0 * _crossover.RandomizedResolvesCount / _crossover.RandomizationChances);
             };
         }
 

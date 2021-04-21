@@ -13,6 +13,7 @@ namespace Optimization.GeneticAppliances.TSP
     {
         private BaseGenetic _genetic;
         private bool _use2opt;
+        private TSPModule _tspModule;
         public GeneticTSP(int[] order, OptimizationParameters parameters, DelegateFitness.CalcFitness calcFitness, CancellationToken ct, Random random)
         {
             _use2opt = parameters.Use2opt;
@@ -25,7 +26,10 @@ namespace Optimization.GeneticAppliances.TSP
                 _genetic.LoadModule(new TerminationModule(parameters.StopAfterEpochCount));
             if(parameters.EnableCataclysm)
                 _genetic.LoadModule(new CataclysmModule(populationInitialization, parameters.DeathPercentage, parameters.CataclysmEpoch));
-            _genetic.LoadModule(new TSPModule());
+
+            _tspModule = new TSPModule();
+            _tspModule.LoadCrossoverOperator(_genetic.Crossover);
+            _genetic.LoadModule(_tspModule);
         }
 
         
@@ -34,14 +38,13 @@ namespace Optimization.GeneticAppliances.TSP
         {
             var result = _genetic.OptimizeForBestIndividual();
             if (_use2opt) result = Optimizer2Opt.Optimize(result);
-            var tsp = (TSPModule) _genetic.GetModule(typeof(TSPModule));
-            var fitness = tsp.GetFitnessHistory();
+            var fitness = _tspModule.GetFitnessHistory();
             return new TSPResult(fitness, result)
             {
-                ResolveInEpoch = tsp.ResolveCountInEpoch,
-                RandomizedResolveInEpoch = tsp.RandomizedResolveCountInEpoch,
-                ResolvePercentInEpoch = tsp.ConflictResolvesPercent,
-                RandomizedResolvePercentInEpoch = tsp.RandomResolvesPercent
+                ResolveInEpoch = _tspModule.ResolveCountInEpoch,
+                RandomizedResolveInEpoch = _tspModule.RandomizedResolveCountInEpoch,
+                ResolvePercentInEpoch = _tspModule.ConflictResolvesPercent,
+                RandomizedResolvePercentInEpoch = _tspModule.RandomResolvesPercent
             };
         }
     }
