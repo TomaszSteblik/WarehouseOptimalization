@@ -37,8 +37,5 @@ namespace Optimization.GeneticAlgorithms.Modules
             Action((T) obj);
         }
     }
-    
-    public class GeneticModuleExit : Exception { }
 
-    
 }
