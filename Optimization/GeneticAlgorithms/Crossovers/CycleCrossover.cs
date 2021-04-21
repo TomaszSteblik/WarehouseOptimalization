@@ -25,8 +25,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                 filledCheck[i] = 0;
             }
             int parent2Value;
-            while (counter < parentLength)
-            {
+
                 var parentsList = new List<int[]>(parents);
 
                 var whichParent1 = Random.Next(0, parentsList.Count);
@@ -44,7 +43,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                             offspring[j] = selectedParent2[j];
                         }
                     }
-                    break;
+
                 }
                 
 
@@ -59,8 +58,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                         break;
                     }
                 }
-                counter++;
-            }
+
 
             return offspring;
         }
