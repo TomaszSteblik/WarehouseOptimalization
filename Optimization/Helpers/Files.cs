@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 using System.Text;
 
@@ -101,8 +102,8 @@ namespace Optimization.Helpers
             for (int i = linesBeforeValues; i < nonEmptyLines; i++)
             {
                 string[] s = lines[i].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                x[i-linesBeforeValues] = double.Parse(s[1].Replace('.',','));
-                y[i-linesBeforeValues] = double.Parse(s[2].Replace('.',','));
+                x[i-linesBeforeValues] = double.Parse(s[1]);
+                y[i-linesBeforeValues] = double.Parse(s[2]);
             }
 
             for (int i = 0; i < x.Length; i++)

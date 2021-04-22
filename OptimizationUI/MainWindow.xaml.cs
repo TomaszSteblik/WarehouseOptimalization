@@ -44,6 +44,7 @@ namespace OptimizationUI
         public MainWindow()
         {
             InitializeComponent();
+            CultureInfo.CurrentCulture = new CultureInfo("en-US");
             DeserializeParameters("properties.json");
             DistancePanel.DataContext = _properties.DistanceViewModel;
             WarehouseFitnessPanel.DataContext =
