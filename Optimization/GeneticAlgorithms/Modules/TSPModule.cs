@@ -13,7 +13,7 @@ namespace Optimization.GeneticAlgorithms.Modules
         private List<double> randomResolvePercents;
         private List<double> conflictResolvesPercents;
         private Crossover _crossover;
-        public List<int> DifferencesInEpoch { get; set; }
+        public List<int[]> DifferencesInEpoch { get; set; }
         public override string GetDesiredObject()
         {
             return "fitness";
@@ -58,6 +58,7 @@ namespace Optimization.GeneticAlgorithms.Modules
             randomizedResolveCountInEpoch = new List<int>();
             conflictResolvesPercents = new List<double>();
             randomResolvePercents = new List<double>();
+            DifferencesInEpoch = new List<int[]>();
             
             Action = fitness =>
             {

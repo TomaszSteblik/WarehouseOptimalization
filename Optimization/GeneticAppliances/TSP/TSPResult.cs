@@ -16,7 +16,7 @@ namespace Optimization.GeneticAppliances.TSP
         
         public double[] RandomizedResolvePercentInEpoch { get; set; }
         
-        public int[] DifferencesInEpoch { get; set; }
+        public int[][] DifferencesInEpoch { get; set; }
 
         public double FinalFitness { get; }
         
