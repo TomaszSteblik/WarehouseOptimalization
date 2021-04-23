@@ -642,15 +642,15 @@ namespace OptimizationUI
             s += conflictResolver + ";";
             s += randomResolver + ";";
             //tego nie jestem do końca pewien, które wartości będą potrzebne - może lepiej ich naprodukować więcej, by mieć z czego wybierać:
-            s += results.Min(x => x.FinalFitness) + ";";  //najlepszy wynik
-            s += results.OrderBy(x => x.FinalFitness).Take((int)(0.1 * results.Length)).Average(x => x.FinalFitness) + ";"; //średnia z najlepszych 10%
-            s += results.OrderBy(x => x.FinalFitness).Skip((int)(0.5 * results.Length)).Take(1).Average(x => x.FinalFitness) + ";";  //mediana
-            s += results.OrderBy(x => x.FinalFitness).Skip((int)(0.9 * results.Length)).Take((int)(0.1 * results.Length)).Average(x => x.FinalFitness) + ";"; //średnia z najgorszych 10%
-            s += (int)results.Average(x => x.FinalFitness) + ";"; //średnia
-            s += results.Max(x => x.FinalFitness) + ";"; // najgorszy wynik
-            s += results.StandardDeviation(x => x.FinalFitness) + ";"; // odchylenie standardowe
-            s += averageMinEpoch + ";";
-            s += epochNumbersWhenSlowedDown.Average() + ";";
+            s += results.Min(x => x.FinalFitness).ToString("#.000") + ";";  //najlepszy wynik
+            s += results.OrderBy(x => x.FinalFitness).Take((int)(0.1 * results.Length)).Average(x => x.FinalFitness).ToString("#.000") + ";"; //średnia z najlepszych 10%
+            s += results.OrderBy(x => x.FinalFitness).Skip((int)(0.5 * results.Length)).Take(1).Average(x => x.FinalFitness).ToString("#.000") + ";";  //mediana
+            s += results.OrderBy(x => x.FinalFitness).Skip((int)(0.9 * results.Length)).Take((int)(0.1 * results.Length)).Average(x => x.FinalFitness).ToString("#.000") + ";"; //średnia z najgorszych 10%
+            s += results.Average(x => x.FinalFitness).ToString("#.000") + ";"; //średnia
+            s += results.Max(x => x.FinalFitness).ToString("#.000") + ";"; // najgorszy wynik
+            s += results.StandardDeviation(x => x.FinalFitness).ToString("#.000") + ";"; // odchylenie standardowe
+            s += averageMinEpoch.ToString("#.0") + ";";
+            s += epochNumbersWhenSlowedDown.Average().ToString("#.000") + ";";
             s += "\n";
             
             
@@ -684,14 +684,14 @@ namespace OptimizationUI
                 s += randomResolver+ ";";
                 s += i+ ";";
                 //tego nie jestem do końca pewien, które wartości będą potrzebne - może lepiej ich naprodukować więcej, by mieć z czego wybierać:
-                s += epochFitnesses.Min()+ ";";  //najlepszy wynik
-                s += epochFitnesses.OrderBy(x => x).Take((int)(0.1 * epochFitnesses.Length)).Average() + ";"; //średnia z najlepszych 10%
-                s += epochFitnesses.OrderBy(x => x).Skip((int) (0.5 * epochFitnesses.Length)).Take(1).Average() + ";";  //mediana
-                s += epochFitnesses.OrderBy(x => x).Skip((int)(0.9 * epochFitnesses.Length)).Take((int)(0.1 * epochFitnesses.Length)).Average() + ";"; //średnia z najgorszych 10%
-                s += (int)epochFitnesses.Average()+ ";"; //średnia
-                s += epochFitnesses.Max()+ ";"; // najgorszy wynik
-                s += epochFitnesses.StandardDeviation()+ ";"; // odchylenie standardowe
-                s += epochsPerc[i] + ";";
+                s += epochFitnesses.Min().ToString("#.000")+ ";";  //najlepszy wynik
+                s += epochFitnesses.OrderBy(x => x).Take((int)(0.1 * epochFitnesses.Length)).Average().ToString("#.000") + ";"; //średnia z najlepszych 10%
+                s += epochFitnesses.OrderBy(x => x).Skip((int) (0.5 * epochFitnesses.Length)).Take(1).Average().ToString("#.000") + ";";  //mediana
+                s += epochFitnesses.OrderBy(x => x).Skip((int)(0.9 * epochFitnesses.Length)).Take((int)(0.1 * epochFitnesses.Length)).Average().ToString("#.000") + ";"; //średnia z najgorszych 10%
+                s += epochFitnesses.Average().ToString("#.000")+ ";"; //średnia
+                s += epochFitnesses.Max().ToString("#.000")+ ";"; // najgorszy wynik
+                s += epochFitnesses.StandardDeviation().ToString("#.000")+ ";"; // odchylenie standardowe
+                s += epochsPerc[i].ToString("#.000") + ";";
                 s += "\n";
             }
 
@@ -756,7 +756,7 @@ namespace OptimizationUI
                             var fileName = seed+"/"+runs + "_" + dataset.Split('\\')[^1]
                                                .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'))+ "_"
                                            + Enum.GetName(crossoverMethod)+".csv";
-                            var s = "conflict_resolver;random_resolver;epoch;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation;resolver_percentage\n";
+                            var s = "conflict_resolver;random_resolver;epoch;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation;conflict_percentage\n";
 
                             
                             foreach (ConflictResolveMethod randomizedResolve in Enum.GetValues(typeof(ConflictResolveMethod)))

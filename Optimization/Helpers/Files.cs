@@ -110,7 +110,7 @@ namespace Optimization.Helpers
             {
                 for (int j = 0; j < x.Length; j++)
                 {
-                    matrix[i][j] = Math.Sqrt((x[i] - x[j]) * (x[i] - x[j]) + (y[i] - y[j]) * (y[i] - y[j]));
+                    matrix[i][j] = Math.Round(Math.Sqrt((x[i] - x[j]) * (x[i] - x[j]) + (y[i] - y[j]) * (y[i] - y[j])), 3);
                 }
             }
 
