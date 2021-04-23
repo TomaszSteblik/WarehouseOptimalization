@@ -44,7 +44,8 @@ namespace Optimization.GeneticAppliances.TSP
                 ResolveInEpoch = _tspModule.ResolveCountInEpoch,
                 RandomizedResolveInEpoch = _tspModule.RandomizedResolveCountInEpoch,
                 ResolvePercentInEpoch = _tspModule.ConflictResolvesPercent,
-                RandomizedResolvePercentInEpoch = _tspModule.RandomResolvesPercent
+                RandomizedResolvePercentInEpoch = _tspModule.RandomResolvesPercent,
+                DifferencesInEpoch = _tspModule.DifferencesInEpoch.ToArray()
             };
         }
     }

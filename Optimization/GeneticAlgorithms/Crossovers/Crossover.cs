@@ -13,6 +13,8 @@ namespace Optimization.GeneticAlgorithms.Crossovers
         protected int _randomizedResolvesCount;
         protected int _randomizationChances;
 
+        public int difference;
+
 
         public Crossover(ConflictResolver resolverConflict, ConflictResolver resolverRandomized, Random random)
         {
@@ -30,6 +32,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
         public abstract int[] GenerateOffspring(int[][] parents);
         public virtual int[][] GenerateOffsprings(int[][] parents, int numParentsForOneChild)
         {
+            difference = 0;
             _resolveCount = 0;
             _randomizedResolvesCount = 0;
             _randomizationChances = 0;
@@ -44,6 +47,15 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                 {
                     prnt[i] = parents[Random.Next(parents.Length)];
                 }
+
+                if (prnt.Length == 2)
+                {
+                    for (int i = 0; i < prnt[0].Length; i++)
+                    {
+                        difference += prnt[0][i] == prnt[1][i] ? 0 : 1;
+                    }
+                }
+                
 
                 offsprings[c] = GenerateOffspring(prnt);
             }
