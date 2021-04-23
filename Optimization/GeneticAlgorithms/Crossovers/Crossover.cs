@@ -13,7 +13,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
         protected int _randomizedResolvesCount;
         protected int _randomizationChances;
 
-        public int[] difference;
+        public double[] difference;
 
 
         public Crossover(ConflictResolver resolverConflict, ConflictResolver resolverRandomized, Random random)
@@ -37,7 +37,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
             _randomizationChances = 0;
             var parentsLength = parents.Length;
             var amountOfChildren = parentsLength / 2;
-            difference = new int[amountOfChildren];
+            difference = new double[amountOfChildren];
             int[][] offsprings = new int[amountOfChildren][];
 
             for (int c = 0; c < amountOfChildren; c++)

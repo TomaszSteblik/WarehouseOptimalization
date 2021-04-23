@@ -661,6 +661,7 @@ namespace OptimizationUI
         private string CreateDistanceLogsPerRunsParams(TSPResult[] results,string conflictResolver, string randomResolver)
         {
             var fitness = GetAverageFitnesses(results.Select(x => x.fitness).ToArray());
+            var differences = GetAverageFitnesses(results.Select(x => x.DifferencesInEpoch).ToArray());
             var z = results.Select(x => x.ResolvePercentInEpoch).ToArray();
 
             var maxLenght = z.Max(x => x.Length);
@@ -680,6 +681,7 @@ namespace OptimizationUI
             for (int i = 0; i < fitness.Length; i++)
             {
                 var epochFitnesses = fitness[i];
+                var difference = differences[i];
                 s += conflictResolver + ";";
                 s += randomResolver+ ";";
                 s += i+ ";";
@@ -692,7 +694,11 @@ namespace OptimizationUI
                 s += epochFitnesses.Max().ToString("#.000")+ ";"; // najgorszy wynik
                 s += epochFitnesses.StandardDeviation().ToString("#.000")+ ";"; // odchylenie standardowe
                 s += epochsPerc[i].ToString("#.000") + ";";
+                s += difference.Average().ToString("#.000") + ";";
+                s += difference.Count(x => x == 0).ToString("#.000") + ";"; //identyczne
+                s += difference.Count(x => x < Math.Max(2.1, 0.021 * results[0].BestGene.Length)).ToString("#.000"); //2% różnicy
                 s += "\n";
+
             }
 
             return s;
@@ -700,7 +706,7 @@ namespace OptimizationUI
 
         private async void DistanceArticleStartButton_OnClick(object sender, RoutedEventArgs e)
         {
-
+            this.Cursor = Cursors.Wait;
             DistanceStartButton.IsEnabled = false;
 
             EventHandler<int> BaseGeneticOnOnNextIteration()
@@ -738,10 +744,11 @@ namespace OptimizationUI
                     Directory.CreateDirectory(seed.ToString());
                     SerializeParameters(seed+"/parameters.json");
                 
-                    _properties.DistanceViewModel.ProgressBarMaximum = (runs*_properties.DistanceViewModel.MaxEpoch*9*4*files.Length) - 1;
+                    _properties.DistanceViewModel.ProgressBarMaximum = (runs*_properties.DistanceViewModel.MaxEpoch*9*crossovers.Length*files.Length) - 1;
                     _properties.DistanceViewModel.ProgressBarValue = 0;
                     Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration += BaseGeneticOnOnNextIteration();
-                
+                    
+
                     foreach (var dataset in files)
                     {
                         var datasetName = dataset.Split('\\')[^1]
@@ -756,7 +763,7 @@ namespace OptimizationUI
                             var fileName = seed+"/"+runs + "_" + dataset.Split('\\')[^1]
                                                .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'))+ "_"
                                            + Enum.GetName(crossoverMethod)+".csv";
-                            var s = "conflict_resolver;random_resolver;epoch;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation;conflict_percentage\n";
+                            var s = "conflict_resolver;random_resolver;epoch;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation;conflict_percentage;avgDiff;0Diff;02Diff\n";
 
                             
                             foreach (ConflictResolveMethod randomizedResolve in Enum.GetValues(typeof(ConflictResolveMethod)))
@@ -792,6 +799,7 @@ namespace OptimizationUI
                     _properties.DistanceViewModel.ProgressBarValue =
                         _properties.DistanceViewModel.ProgressBarMaximum;
                     Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration -= BaseGeneticOnOnNextIteration();
+                    this.Cursor = Cursors.Arrow;
                 });
             
             
