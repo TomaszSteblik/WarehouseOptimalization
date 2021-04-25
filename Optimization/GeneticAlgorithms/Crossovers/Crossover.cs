@@ -85,6 +85,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
         KPoint,
         MRC,
         MAC,
-        PMX
+        PMX,
+        ERX
     }
 }
