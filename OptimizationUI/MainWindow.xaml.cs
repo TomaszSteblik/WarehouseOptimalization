@@ -682,8 +682,6 @@ namespace OptimizationUI
             {
                 var epochFitnesses = fitness[i];
                 var difference = differences[i];
-                s += conflictResolver + ";";
-                s += randomResolver+ ";";
                 s += i+ ";";
                 //tego nie jestem do końca pewien, które wartości będą potrzebne - może lepiej ich naprodukować więcej, by mieć z czego wybierać:
                 s += epochFitnesses.Min().ToString("#.000")+ ";";  //najlepszy wynik
@@ -760,10 +758,7 @@ namespace OptimizationUI
                         {
                             parameters.CrossoverMethod = crossoverMethod;
                             
-                            var fileName = seed+"/"+runs + "_" + dataset.Split('\\')[^1]
-                                               .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'))+ "_"
-                                           + Enum.GetName(crossoverMethod)+".csv";
-                            var s = "conflict_resolver;random_resolver;epoch;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation;conflict_percentage;avgDiff;0Diff;02Diff\n";
+                            
 
                             
                             foreach (ConflictResolveMethod randomizedResolve in Enum.GetValues(typeof(ConflictResolveMethod)))
@@ -772,6 +767,11 @@ namespace OptimizationUI
 
                                 foreach (ConflictResolveMethod conflictResolve in Enum.GetValues(typeof(ConflictResolveMethod)))
                                 {
+                                    var fileName = seed+"/"+runs + "_" + dataset.Split('\\')[^1]
+                                                       .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'))+ "_"
+                                                   + Enum.GetName(crossoverMethod)+"_"+Enum.GetName(randomizedResolve)+"_"+Enum.GetName(conflictResolve)+".csv";
+                                    var s = "epoch;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation;conflict_percentage;avgDiff;0Diff;02Diff\n";
+
                                     parameters.ConflictResolveMethod = conflictResolve;
                                     Parallel.For(0, runs, i =>
                                     {
@@ -783,10 +783,11 @@ namespace OptimizationUI
                                     SaveDistanceArticleResultsToFile($"{seed}/{datasetName}_data.csv", results, 
                                         Enum.GetName(parameters.ConflictResolveMethod),
                                         Enum.GetName(parameters.RandomizedResolveMethod),seed);
+                                    File.AppendAllText(fileName, s);
+
                                 }
                         
                             }
-                            File.AppendAllText(fileName, s);
 
                         }
 
