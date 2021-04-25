@@ -402,6 +402,7 @@ namespace OptimizationUI
             linesGrid.Children.Add(lineCustom);
 
             distancesChart.Content = linesGrid;
+            legendItemsPanel.MasterPlot = lineAvg;
             distancesChart.UpdateLayout();
 
         }
@@ -415,8 +416,7 @@ namespace OptimizationUI
             var encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(bmp));
             
-            string name = "distances_chart_" + DateTime.Now + ".png";
-            name = name.Replace(" ", "_").Replace(":", ".");
+            string name = "distances_chart_" + DateTime.Now.Day + "-" + DateTime.Now.Month + "_" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".png";
             
             Assembly asm = Assembly.GetExecutingAssembly();
             string path = System.IO.Path.GetDirectoryName(asm.Location);
@@ -816,6 +816,78 @@ namespace OptimizationUI
                 _properties.DistanceViewModel.DataPath = files[0];
             }
             
+        }
+        private void Button_Click_CompareMethods(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = true;
+
+            if (openFileDialog.ShowDialog() != true)
+                return;
+
+            double[,][] fitnesses = new double[2,openFileDialog.FileNames.Length][];
+            string[] resolvers = new string[openFileDialog.FileNames.Length];
+
+            for (int i = 0; i < openFileDialog.FileNames.Length; i++)
+            {
+                string[] allLines = File.ReadAllLines(openFileDialog.FileNames[i]);
+                resolvers[i] = System.IO.Path.GetFileNameWithoutExtension(openFileDialog.FileNames[i].Substring(openFileDialog.FileNames[i].IndexOf("-")));
+
+                fitnesses[0, i] = new double[allLines.Length - 1];
+                fitnesses[1, i] = new double[allLines.Length - 1];
+
+                for (int j = 1; j < allLines.Length; j++)
+                {
+                    string[] thisLine = allLines[j].Split(';');
+                    fitnesses[0, i][j - 1] = Convert.ToDouble(thisLine[3]);
+                    fitnesses[1, i][j - 1] = Convert.ToDouble(thisLine[4]);
+                }
+            }
+              
+
+            WritePlotDistancesCompare(linesGridDistances, fitnesses, resolvers);
+        }
+
+
+        private void WritePlotDistancesCompare(Grid linesGrid, double[,][] fitness, string[] resolvers)
+        {
+            linesGrid.Children.Clear();
+            var x = Enumerable.Range(0, fitness[0,0].Length).ToArray();
+
+            LineGraph[,] lineGragh = new LineGraph[2,fitness.GetLength(1)];
+
+            Color[] colors = new Color[9];
+            colors[0] = Colors.Black;
+            colors[1] = Colors.Red;
+            colors[2] = Colors.LightBlue;
+            colors[3] = Colors.Green;
+            colors[4] = Colors.Navy;
+            colors[5] = Colors.Orange;
+            colors[6] = Colors.Gray;
+            colors[7] = Colors.LightGreen;
+            colors[8] = Colors.Brown;
+
+
+            int ii = 0;
+            for (int i = 0; i < fitness.GetLength(1); i++)
+            {
+               
+                lineGragh[0, i] = new LineGraph() { Stroke = new SolidColorBrush(colors[ii]), Description = resolvers[i] + "_min", StrokeThickness = 1 };
+                lineGragh[1, i] = new LineGraph() { Stroke = new SolidColorBrush(colors[ii]), Description = resolvers[i] + "_avg", StrokeThickness = 1 };
+
+                if (++ii == 8)
+                    ii = 0;
+                
+                lineGragh[0,i].Plot(x, fitness[0,i]);
+                lineGragh[1, i].Plot(x, fitness[1,i]);
+
+                linesGrid.Children.Add(lineGragh[0,i]);
+                linesGrid.Children.Add(lineGragh[1,i]);
+            }
+
+            distancesChart.Content = linesGrid;
+            legendItemsPanel.MasterPlot = lineGragh[0,0];
+            distancesChart.UpdateLayout();
         }
     }
     
