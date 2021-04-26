@@ -7,7 +7,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
 {
     internal class AexCrossover : Crossover
     {
-        public AexCrossover(ConflictResolver resolverConflict, ConflictResolver resolverRandomized, Random random) : base(resolverConflict, resolverRandomized,  random)
+        public AexCrossover(ConflictResolver resolverConflict, ConflictResolver resolverRandomized, Random random, bool mutateIfSame) : base(resolverConflict, resolverRandomized,  random, mutateIfSame)
         {
         }
         public override int[] GenerateOffspring(int[][] parents)

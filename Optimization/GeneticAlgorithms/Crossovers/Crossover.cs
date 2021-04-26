@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers;
+using Optimization.GeneticAlgorithms.Mutations;
 
 namespace Optimization.GeneticAlgorithms.Crossovers
 {
@@ -14,13 +15,15 @@ namespace Optimization.GeneticAlgorithms.Crossovers
         protected int _randomizationChances;
 
         public double[] difference;
+        protected bool MutateTheSame;
 
 
-        public Crossover(ConflictResolver resolverConflict, ConflictResolver resolverRandomized, Random random)
+        public Crossover(ConflictResolver resolverConflict, ConflictResolver resolverRandomized, Random random, bool mutateTheSame)
         {
             ResolverConflict = resolverConflict;
             ResolverRandomized = resolverRandomized;
             Random = random;
+            MutateTheSame = mutateTheSame;
         }
 
         public int ResolveCount => _resolveCount;
@@ -54,6 +57,12 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                     {
                         difference[c] += prnt[0][i] == prnt[1][i] ? 0 : 1;
                     }
+                }
+
+                if (difference[c] == 0 && MutateTheSame)
+                {
+                    var mutation = new RSMutation(1, parents, Random);
+                    mutation.Mutate(prnt[1]);
                 }
                 
 

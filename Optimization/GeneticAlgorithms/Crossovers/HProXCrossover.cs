@@ -9,7 +9,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
     internal class HProXCrossover : Crossover
     {
         private double[][] DistancesMatrix { get; }
-        public HProXCrossover(ConflictResolver resolverConflict, ConflictResolver resolverRandomized, Random random) : base(resolverConflict, resolverRandomized,  random)
+        public HProXCrossover(ConflictResolver resolverConflict, ConflictResolver resolverRandomized, Random random, bool mutateIfSame) : base(resolverConflict, resolverRandomized,  random, mutateIfSame)
         {
             DistancesMatrix = Distances.GetInstance().DistancesMatrix;
         }

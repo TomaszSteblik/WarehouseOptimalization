@@ -74,7 +74,7 @@ namespace Optimization.GeneticAlgorithms
             _resolverRandomized = GeneticFactory.CreateConflictResolver(parameters, parameters.RandomizedResolveMethod, random);
             
             _crossover = GeneticFactory.CreateCrossover(parameters.StartingId,parameters.CrossoverMethod,
-                parameters.MultiCrossovers, _resolverConflict, _resolverRandomized, random);
+                parameters.MultiCrossovers, _resolverConflict, _resolverRandomized, random, parameters.MutateParentIfTheSame);
             _elimination = GeneticFactory.CreateElimination(parameters, _population, random);
             _mutation = GeneticFactory.CreateMutation(parameters.MutationMethod,parameters.MultiMutations, _population,
                 _mutationProbability, random);

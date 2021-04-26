@@ -40,21 +40,21 @@ namespace Optimization.GeneticAlgorithms
         
         
         public static Crossover CreateCrossover(int startingId, CrossoverMethod crossoverMethod, 
-            CrossoverMethod[] crossoverMethods, ConflictResolver resolverConflict, ConflictResolver resolverRandomized, Random random)
+            CrossoverMethod[] crossoverMethods, ConflictResolver resolverConflict, ConflictResolver resolverRandomized, Random random, bool mutateIfSame)
         {
             Crossover crossover = crossoverMethod switch
             {
-                CrossoverMethod.Aex => new AexCrossover(resolverConflict, resolverRandomized,random),
-                CrossoverMethod.HGreX => new HGreXCrossover(resolverConflict, resolverRandomized,random),
-                CrossoverMethod.HRndX => new HRndXCrossover(resolverConflict, resolverRandomized,random),
-                CrossoverMethod.HProX => new HProXCrossover(resolverConflict, resolverRandomized,random),
-                CrossoverMethod.KPoint => new KPointCrossover(resolverConflict, resolverRandomized,random),
-                CrossoverMethod.Cycle => new CycleCrossover(resolverConflict, resolverRandomized,random),
-                CrossoverMethod.Order => new OrderCrossover(resolverConflict, resolverRandomized,random),
-                CrossoverMethod.MAC => new MACrossover(crossoverMethods, startingId, resolverConflict, resolverRandomized,random),
-                CrossoverMethod.MRC => new MRCrossover(crossoverMethods, startingId, resolverConflict, resolverRandomized,random),
-                CrossoverMethod.PMX => new PMXCrossover(resolverConflict,resolverRandomized, random),
-                CrossoverMethod.ERX => new ERXCrossover(resolverConflict, resolverRandomized, random),
+                CrossoverMethod.Aex => new AexCrossover(resolverConflict, resolverRandomized,random, mutateIfSame),
+                CrossoverMethod.HGreX => new HGreXCrossover(resolverConflict, resolverRandomized,random, mutateIfSame),
+                CrossoverMethod.HRndX => new HRndXCrossover(resolverConflict, resolverRandomized,random, mutateIfSame),
+                CrossoverMethod.HProX => new HProXCrossover(resolverConflict, resolverRandomized,random, mutateIfSame),
+                CrossoverMethod.KPoint => new KPointCrossover(resolverConflict, resolverRandomized,random, mutateIfSame),
+                CrossoverMethod.Cycle => new CycleCrossover(resolverConflict, resolverRandomized,random, mutateIfSame),
+                CrossoverMethod.Order => new OrderCrossover(resolverConflict, resolverRandomized,random, mutateIfSame),
+                CrossoverMethod.MAC => new MACrossover(crossoverMethods, startingId, resolverConflict, resolverRandomized,random, mutateIfSame),
+                CrossoverMethod.MRC => new MRCrossover(crossoverMethods, startingId, resolverConflict, resolverRandomized,random, mutateIfSame),
+                CrossoverMethod.PMX => new PMXCrossover(resolverConflict,resolverRandomized, random, mutateIfSame),
+                CrossoverMethod.ERX => new ERXCrossover(resolverConflict, resolverRandomized, random, mutateIfSame),
                 _ => throw new ArgumentException("Wrong crossover method name")
             };
             return crossover;

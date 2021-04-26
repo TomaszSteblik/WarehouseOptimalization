@@ -115,7 +115,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
             return offspring;
         }
 
-        public PMXCrossover(ConflictResolver resolver,ConflictResolver resolverRandomized, Random random) : base(resolver,resolverRandomized, random)
+        public PMXCrossover(ConflictResolver resolver,ConflictResolver resolverRandomized, Random random, bool mutateIfSame) : base(resolver, resolverRandomized,  random, mutateIfSame)
         {
         }
     }

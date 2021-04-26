@@ -17,6 +17,17 @@ namespace OptimizationUI
 {
     public class DistanceViewModel :OptimizationParameters, INotifyPropertyChanged
     {
+        private bool _mutateParentIfTheSame = false;
+        public override bool MutateParentIfTheSame
+        {
+            get => _mutateParentIfTheSame;
+            set
+            {
+                _mutateParentIfTheSame = value;
+                NotifyPropertyChanged();
+            }
+        }
+        
         private string _datasetDirectoryPath;
 
         public string DatasetDirectoryPath

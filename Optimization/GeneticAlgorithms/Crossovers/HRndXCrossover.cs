@@ -55,7 +55,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
             return offspring;
         }
 
-        public HRndXCrossover(ConflictResolver resolverConflict, ConflictResolver resolverRandomized, Random random) : base(resolverConflict, resolverRandomized,  random)
+        public HRndXCrossover(ConflictResolver resolverConflict, ConflictResolver resolverRandomized, Random random, bool mutateIfSame) : base(resolverConflict, resolverRandomized,  random, mutateIfSame)
         {
         }
     }

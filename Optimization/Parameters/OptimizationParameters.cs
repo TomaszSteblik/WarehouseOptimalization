@@ -33,6 +33,8 @@ namespace Optimization.Parameters
         public virtual string LogPath { get; set; }
         public virtual string ResultPath { get; set; }
         public virtual bool ResultToFile { get; set; }
+        
+        public virtual bool MutateParentIfTheSame { get; set; }
 
         public bool WriteCsv { get; set; } = true;
         public virtual string DataPath { get; set; }

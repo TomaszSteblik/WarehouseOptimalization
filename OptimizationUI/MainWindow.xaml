@@ -90,6 +90,7 @@
                                 <Label Content="Mutation method:"></Label>
                                 <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="DistanceMutationComboBox"
                                           SelectedItem="{Binding MutationMethod}"/>
+                                <CheckBox Content="Mutate before crossover if both parents are the same" IsChecked="{Binding Path=MutateParentIfTheSame}"></CheckBox>
                             </WrapPanel>
                             <ItemsControl Margin="50 0 0 0" ItemsSource="{Binding Path=MutationCheckBoxStates}" Visibility="{Binding IsMutationCheckBoxVisible}">
                                 <ItemsControl.ItemTemplate>
