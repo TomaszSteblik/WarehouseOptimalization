@@ -958,7 +958,7 @@ namespace OptimizationUI
             for (int i = 0; i < openFileDialog.FileNames.Length; i++)
             {
                 string[] allLines = File.ReadAllLines(openFileDialog.FileNames[i]);
-                resolvers[i] = System.IO.Path.GetFileNameWithoutExtension(openFileDialog.FileNames[i].Substring(openFileDialog.FileNames[i].IndexOf("-")));
+                resolvers[i] = System.IO.Path.GetFileNameWithoutExtension(openFileDialog.FileNames[i].Substring(openFileDialog.FileNames[i].IndexOf("\\")));
 
                 fitnesses[0, i] = new double[allLines.Length - 1];
                 fitnesses[1, i] = new double[allLines.Length - 1];
