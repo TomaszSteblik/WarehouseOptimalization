@@ -100,9 +100,16 @@ namespace Optimization.GeneticAlgorithms
                     
                 fitness = _calculateFitness(_population);
                 Array.Sort(fitness,_population);
+
+                var bestGeneCopy = (int[]) _population[0].Clone();
+                var bestFitness = fitness[0];
+
                 int[][] parents = _selection.GenerateParents(_childrenPerGeneration * 2, fitness);
                 int[][] offsprings = _crossover.GenerateOffsprings(parents, _parentsPerChild);
 
+                _population[0] = bestGeneCopy;
+                fitness[0] = bestFitness;
+                
                 RunModules();
                 
                 _elimination.EliminateAndReplace(offsprings, fitness);
