@@ -83,13 +83,14 @@ namespace OptimizationUI
             WarehouseFitnessEliminationComboBox.ItemsSource = eliminations;
             WarehouseFitnessMutationComboBox.ItemsSource = mutations;
 
-            if (!Directory.Exists(_properties.DistanceViewModel.ResultPath))
-                Directory.CreateDirectory(_properties.DistanceViewModel.ResultPath);
+            
 
         }
 
         private async void DistanceStartButtonClick(object sender, RoutedEventArgs e)
         {
+            if (!Directory.Exists(_properties.DistanceViewModel.ResultPath))
+                Directory.CreateDirectory(_properties.DistanceViewModel.ResultPath);
             DistanceStartButton.IsEnabled = false;
             EventHandler<int> BaseGeneticOnOnNextIteration()
             {
@@ -830,6 +831,8 @@ namespace OptimizationUI
 
         private async void DistanceArticleStartButton_OnClick(object sender, RoutedEventArgs e)
         {
+            if (!Directory.Exists(_properties.DistanceViewModel.ResultPath))
+                Directory.CreateDirectory(_properties.DistanceViewModel.ResultPath);
             this.Cursor = Cursors.Wait;
             DistanceStartButton.IsEnabled = false;
 
