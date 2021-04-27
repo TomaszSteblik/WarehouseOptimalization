@@ -83,6 +83,9 @@ namespace OptimizationUI
             WarehouseFitnessEliminationComboBox.ItemsSource = eliminations;
             WarehouseFitnessMutationComboBox.ItemsSource = mutations;
 
+            if (!Directory.Exists(_properties.DistanceViewModel.ResultPath))
+                Directory.CreateDirectory(_properties.DistanceViewModel.ResultPath);
+
         }
 
         private async void DistanceStartButtonClick(object sender, RoutedEventArgs e)
