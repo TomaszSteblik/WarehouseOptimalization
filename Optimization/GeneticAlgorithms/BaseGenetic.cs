@@ -101,13 +101,13 @@ namespace Optimization.GeneticAlgorithms
                 fitness = _calculateFitness(_population);
                 Array.Sort(fitness,_population);
 
-                var bestGeneCopy = (int[]) _population[0].Clone();
+                var bestGeneCopy = (int[]) _population[0].Clone(); //best gene can be changed by crossover, because it mutates genes when both parents are the same
                 var bestFitness = fitness[0];
 
                 int[][] parents = _selection.GenerateParents(_childrenPerGeneration * 2, fitness);
                 int[][] offsprings = _crossover.GenerateOffsprings(parents, _parentsPerChild);
 
-                _population[0] = bestGeneCopy;
+                _population[0] = bestGeneCopy; 
                 fitness[0] = bestFitness;
                 
                 RunModules();

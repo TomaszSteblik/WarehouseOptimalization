@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
 using System.Text.Json.Serialization;
 using System.Windows;
 using Optimization.GeneticAlgorithms.Crossovers;
@@ -17,7 +18,19 @@ namespace OptimizationUI
 {
     public class DistanceViewModel :OptimizationParameters, INotifyPropertyChanged
     {
-        private bool _mutateParentIfTheSame = false;
+        private string _resultPath = "..\\..\\..\\..\\Results";
+
+        public override string ResultPath
+        {
+            get => _resultPath;
+            set
+            {
+                _resultPath = value;
+                NotifyPropertyChanged();
+            }
+        }
+        
+        private bool _mutateParentIfTheSame = true;
         public override bool MutateParentIfTheSame
         {
             get => _mutateParentIfTheSame;
@@ -27,15 +40,28 @@ namespace OptimizationUI
                 NotifyPropertyChanged();
             }
         }
-        
-        private string _datasetDirectoryPath;
 
-        public string DatasetDirectoryPath
+        private string _selectedFilesString;
+
+        public string SelectedFilesString
         {
-            get => _datasetDirectoryPath;
+            get => _selectedFilesString;
             set
             {
-                _datasetDirectoryPath = value;
+                _selectedFilesString = value;
+                NotifyPropertyChanged();
+            }
+        }
+        
+        
+        private string[] _selectedFiles;
+
+        public string[] SelectedFiles
+        {
+            get => _selectedFiles;
+            set
+            {
+                _selectedFiles = value;
                 NotifyPropertyChanged();
             }
         }
@@ -278,7 +304,7 @@ namespace OptimizationUI
             }
         }
 
-        private int _childrenPerGeneration = 20;
+        private int _childrenPerGeneration = 80;
         public override int ChildrenPerGeneration
         {
             get
