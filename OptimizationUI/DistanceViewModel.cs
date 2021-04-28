@@ -587,6 +587,48 @@ namespace OptimizationUI
             }
         }
 
+        private bool _incrementMutationEnabledEnabled = false;
+
+        public override bool IncrementMutationEnabled
+        {
+            get
+            {
+                return _incrementMutationEnabledEnabled;
+            }
+            set
+            {
+                _incrementMutationEnabledEnabled = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private double _incrementMutationDelta = 1;
+
+        public override double IncrementMutationDelta
+        {
+            get => _incrementMutationDelta;
+            set
+            {
+                _incrementMutationDelta = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public Visibility IsIncrementalMutationDeltaVisible => _incrementMutationEnabledEnabled ? Visibility.Visible : Visibility.Collapsed;
+        private int _incrementMutationEpochs = 1;
+
+        public override int IncrementMutationEpochs
+        {
+            get
+            {
+                return _incrementMutationEpochs;
+            }
+            set
+            {
+                _incrementMutationEpochs = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         public DistanceViewModel(OptimizationParameters fitnessGeneticAlgorithmParameters)
         {

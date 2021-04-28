@@ -72,5 +72,8 @@ namespace Optimization.Parameters
         public virtual bool EnableCataclysm { get; set; }
         public virtual int CataclysmEpoch { get; set; }
         public virtual int DeathPercentage { get; set; }
+        public virtual bool IncrementMutationEnabled { get; set; }
+        public virtual double IncrementMutationDelta { get; set; }
+        public virtual int IncrementMutationEpochs { get; set; }
     }
 }

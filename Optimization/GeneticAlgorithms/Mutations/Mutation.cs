@@ -5,7 +5,7 @@ namespace Optimization.GeneticAlgorithms.Mutations
     internal abstract class Mutation
     {
         protected readonly Random Random;
-        private double _mutationProbability;
+        public double _mutationProbability;
         private int[][] _population;
 
         protected Mutation(double mutationProbability, int[][] population, Random random)

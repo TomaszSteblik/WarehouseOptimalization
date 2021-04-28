@@ -115,6 +115,13 @@
                                 <Label Content="Mutation probability (in per mil)"></Label>
                                 <TextBox Width="120" Text="{Binding MutationProbability}"></TextBox>
                             </WrapPanel>
+                            <CheckBox Content="Enable incremental mutation probability  " IsChecked="{Binding IncrementMutationEnabled}"/>
+                            <WrapPanel Visibility="{Binding IsIncrementalMutationDeltaVisible}">
+                                <Label Content="Increment value(in per mile)"></Label>
+                                <TextBox Width="120" Text="{Binding IncrementMutationDelta}"></TextBox>
+                                <Label Content="Increment after every (in epochs):"></Label>
+                                <TextBox Width="120" Text="{Binding IncrementMutationEpochs}"></TextBox>
+                            </WrapPanel>
                             <CheckBox Content="Enable cataclysm " IsChecked="{Binding EnableCataclysm}"></CheckBox>
                             <WrapPanel Margin="20 0 0 0" Visibility="{Binding IsCataclysmVisible}">
                                 <Label Content="Cataclysm epochs"></Label>

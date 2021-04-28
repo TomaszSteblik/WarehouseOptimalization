@@ -30,6 +30,9 @@ namespace Optimization.GeneticAlgorithms
         private readonly int _childrenPerGeneration;
         private readonly int _terminationValue;
         private readonly int _parentsPerChild;
+        private bool _incrementMutation = false;
+        private double _incrementMutationDelta = 0;
+        private double _incrementMutationEveryEpochs;
 
         
         private DelegateFitness.CalcFitness _calculateFitness;
@@ -65,6 +68,10 @@ namespace Optimization.GeneticAlgorithms
             _childrenPerGeneration = parameters.ChildrenPerGeneration;
             _terminationValue = parameters.MaxEpoch;
             _parentsPerChild = parameters.ParentsPerChildren;
+            
+            _incrementMutation = parameters.IncrementMutationEnabled; 
+            _incrementMutationDelta = parameters.IncrementMutationDelta;
+            _incrementMutationEveryEpochs = parameters.IncrementMutationEpochs;
 
             _calculateFitness = calculateFitness;
 
@@ -93,6 +100,10 @@ namespace Optimization.GeneticAlgorithms
                     _ct.ThrowIfCancellationRequested();
                 }
 
+
+                if (b % _incrementMutationEveryEpochs == 0)
+                    _mutation._mutationProbability += _incrementMutationDelta;
+
                 if(termination is not null)
                     if (termination.RequestedStop) return bestGene;
                     
@@ -114,6 +125,8 @@ namespace Optimization.GeneticAlgorithms
                 
                 _elimination.EliminateAndReplace(offsprings, fitness);
                 _mutation.Mutate(_population);
+                
+                
 
                 bestGene = _population[0];
 
