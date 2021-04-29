@@ -125,22 +125,40 @@ namespace OptimizationUI
                 
                 await Task.Run(() =>
                     {
-                        var fileName = seed+"/"+runs + "_" + _properties.DistanceViewModel.DataPath.Split("\\")[^1] +".csv";
-                        var s = "epoch;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation;conflict_percentage;avgDiff;0Diff;02Diff\n";
-
-                        Parallel.For(0, runs, i =>
-                        {
-                            results[i] = OptimizationWork.TSP(parameters, ct, seed + i);
-                            runFitnesses[i] = results[i].fitness;
-                        });
-                    
-                        s += CreateDistanceLogsBestPerRunsParams(results, Enum.GetName(parameters.ConflictResolveMethod),
-                            Enum.GetName(parameters.RandomizedResolveMethod));
-                        SaveDistanceArticleResultsToFile($"{seed}/data.csv", results, 
-                            Enum.GetName(parameters.ConflictResolveMethod),
-                            Enum.GetName(parameters.RandomizedResolveMethod),seed);
-                        File.AppendAllText(_properties.DistanceViewModel.ResultPath + "\\" + fileName, s);
                         
+                        foreach (var dataset in _properties.DistanceViewModel.SelectedFiles)
+                        {
+                            var s = "epoch;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation;conflict_percentage;avgDiff;0Diff;02Diff\n";
+                            _properties.DistanceViewModel.DataPath = dataset;
+                            var fileName = seed+"/"+runs + "_BEST_" + _properties.DistanceViewModel.DataPath.Split("\\")[^1] +".csv";
+                            var datasetName = dataset.Split('\\')[^1]
+                                .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'));
+                            parameters.DataPath = dataset;
+                            results = new TSPResult[runs];
+
+                            Parallel.For(0, runs, i =>
+                            {
+                                results[i] = OptimizationWork.TSP(parameters, ct, seed + i);
+                                runFitnesses[i] = results[i].fitness;
+                            });
+
+                            s += CreateDistanceLogsBestPerRunsParams(results,
+                                Enum.GetName(parameters.ConflictResolveMethod),
+                                Enum.GetName(parameters.RandomizedResolveMethod));
+                            SaveDistanceArticleResultsToFile($"{seed}/data.csv", results,
+                                Enum.GetName(parameters.ConflictResolveMethod),
+                                Enum.GetName(parameters.RandomizedResolveMethod), seed);
+                            File.AppendAllText(_properties.DistanceViewModel.ResultPath + "\\" + fileName, s);
+                            
+                            fileName = seed+"/"+runs + "_AVG_" + _properties.DistanceViewModel.DataPath.Split("\\")[^1] +".csv";
+                            
+                            s = "epoch;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation;conflict_percentage;avgDiff;0Diff;02Diff\n";
+                            s += CreateDistanceLogsPerRunsParams(results,
+                                Enum.GetName(parameters.ConflictResolveMethod),
+                                Enum.GetName(parameters.RandomizedResolveMethod));
+                            File.AppendAllText(_properties.DistanceViewModel.ResultPath + "\\" +fileName, s);
+                        }
+
                     }, ct);
 
                 Dispatcher.Invoke(() =>
@@ -737,9 +755,9 @@ namespace OptimizationUI
             s += "\n";
             
             
-            var s2 = File.Exists("data_for_article.csv") ? File.Exists(path) ? s : s.Remove(0,headers.Length) : File.Exists(path) ? headers + s : s;
+            //var s2 = File.Exists("data_for_article.csv") ? File.Exists(path) ? s : s.Remove(0,headers.Length) : File.Exists(path) ? headers + s : s;
             File.AppendAllText(_properties.DistanceViewModel.ResultPath + "\\" + path,s);    
-            File.AppendAllText($"{_properties.DistanceViewModel.ResultPath}\\data_for_article_{seed}.csv",s2);    
+            //File.AppendAllText($"{_properties.DistanceViewModel.ResultPath}\\data_for_article_{seed}.csv",s2);    
         }
         private string CreateDistanceLogsPerRunsParams(TSPResult[] results,string conflictResolver, string randomResolver)
         {
@@ -897,7 +915,7 @@ namespace OptimizationUI
                                 foreach (ConflictResolveMethod conflictResolve in Enum.GetValues(typeof(ConflictResolveMethod)))
                                 {
                                     var fileName = seed+"/"+runs + "_" + dataset.Split('\\')[^1]
-                                                       .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'))+ "_"
+                                                       .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'))+ "_BEST_"
                                                    + Enum.GetName(crossoverMethod)+"_"+Enum.GetName(randomizedResolve)+"_"+Enum.GetName(conflictResolve)+".csv";
                                     var s = "epoch;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation;conflict_percentage;avgDiff;0Diff;02Diff\n";
 
@@ -913,6 +931,16 @@ namespace OptimizationUI
                                         Enum.GetName(parameters.ConflictResolveMethod),
                                         Enum.GetName(parameters.RandomizedResolveMethod),seed);
                                     File.AppendAllText(_properties.DistanceViewModel.ResultPath + "\\" + fileName, s);
+                                    
+                                    fileName = seed+"/"+runs + "_" + dataset.Split('\\')[^1]
+                                                   .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'))+ "_AVG_"
+                                               + Enum.GetName(crossoverMethod)+"_"+Enum.GetName(randomizedResolve)+"_"+Enum.GetName(conflictResolve)+".csv";
+
+                                    s = "epoch;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation;conflict_percentage;avgDiff;0Diff;02Diff\n";
+                                    s += CreateDistanceLogsPerRunsParams(results,
+                                        Enum.GetName(parameters.ConflictResolveMethod),
+                                        Enum.GetName(parameters.RandomizedResolveMethod));
+                                    File.AppendAllText(_properties.DistanceViewModel.ResultPath + "\\" +fileName, s);
 
                                 }
                         
