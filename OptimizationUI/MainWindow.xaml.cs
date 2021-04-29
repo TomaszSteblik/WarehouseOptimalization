@@ -87,7 +87,7 @@ namespace OptimizationUI
 
         }
 
-        private async void DistanceStartButtonClick(object sender, RoutedEventArgs e)
+        private async void OtpimizeWithCurrentParametersButtonClick(object sender, RoutedEventArgs e)
         {
             if (!Directory.Exists(_properties.DistanceViewModel.ResultPath))
                 Directory.CreateDirectory(_properties.DistanceViewModel.ResultPath);
@@ -829,7 +829,7 @@ namespace OptimizationUI
             return s;
         }
 
-        private async void DistanceArticleStartButton_OnClick(object sender, RoutedEventArgs e)
+        private async void LoopAllParametersButton_OnClick(object sender, RoutedEventArgs e)
         {
             if (!Directory.Exists(_properties.DistanceViewModel.ResultPath))
                 Directory.CreateDirectory(_properties.DistanceViewModel.ResultPath);
