@@ -301,7 +301,7 @@ namespace OptimizationUI
         {
 
             int runs = runFitnesses.Length;
-            int epoch = runFitnesses[0].Length;
+            int epoch = runFitnesses[0][0].Length;
 
             var expandedFitness = GetExpandedFitesses(runFitnesses);
             
