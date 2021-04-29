@@ -877,6 +877,7 @@ namespace OptimizationUI
 
                     foreach (var dataset in _properties.DistanceViewModel.SelectedFiles)
                     {
+                        _properties.DistanceViewModel.DataPath = dataset;
                         var datasetName = dataset.Split('\\')[^1]
                             .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'));
                         parameters.DataPath = dataset;
