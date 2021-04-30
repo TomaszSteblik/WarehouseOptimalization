@@ -713,7 +713,7 @@ namespace OptimizationUI
                 "dataset;crossover;conflict_resolver;random_resolver;best_distance;avg_top_10%;median;avg_worst_10%;average;worst_distance;std_dev;avg_min_epoch;d*0.98_epoch\n";
             var dataset = _properties.DistanceViewModel.DataPath.Split('\\')[^1]
                 .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'));
-            var s = File.Exists(path) ? "" : headers;
+            var s = File.Exists(_properties.DistanceViewModel.ResultPath + "\\" + path) ? "" : headers;
             
             var averageMinEpoch = results.Select(x => x.EpochCount - x.fitness.Count(y => y[0] == x.fitness[^1][0])).Average();
             var z = results.Select(x => x.fitness).ToArray();
