@@ -67,7 +67,9 @@ namespace Optimization
         {
             seed = GetSeed(seed);
             var random = new Random(seed);
-            return WarehouseOptimizer.Optimize(warehouseParameters, ct, random);
+            var result = WarehouseOptimizer.Optimize(warehouseParameters, ct, random);
+            result.Seed = seed;
+            return result;
         }
 
         public static void KeyboardOptimization(OptimizationParameters optimizationParameters, int seed = 0)

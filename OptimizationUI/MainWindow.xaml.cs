@@ -204,7 +204,6 @@ namespace OptimizationUI
             {
                 WarehouseParameters warehouseParameters = _properties.WarehouseViewModel as WarehouseParameters;
                 result = Optimization.OptimizationWork.WarehouseOptimization(warehouseParameters, ct);
-                //fitness = ReadFitness();
             }, ct);
 
             Dispatcher.Invoke(() =>
