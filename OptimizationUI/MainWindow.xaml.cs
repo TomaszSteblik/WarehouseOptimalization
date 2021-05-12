@@ -198,12 +198,13 @@ namespace OptimizationUI
             CancellationToken ct = _cancellationTokenSource.Token;
             WarehouseResult result = null;
             double[][] fitness = null;
+            Random rnd = new Random();
 
 
             await Task.Run(() =>
             {
                 WarehouseParameters warehouseParameters = _properties.WarehouseViewModel as WarehouseParameters;
-                result = Optimization.OptimizationWork.WarehouseOptimization(warehouseParameters, ct);
+                result = Optimization.OptimizationWork.WarehouseOptimization(warehouseParameters, ct, rnd.Next(1, Int32.MaxValue));
             }, ct);
 
             Dispatcher.Invoke(() =>
@@ -217,7 +218,9 @@ namespace OptimizationUI
 
         private void SaveWarehouseResultToFile(WarehouseResult result)
         {
-            var filePath = $"Warehouse\\result-{result.Seed}.txt";
+            if (!Directory.Exists("../../../../WarehouseResults"))
+                Directory.CreateDirectory("../../../../WarehouseResults");
+            var filePath = $"../../../../WarehouseResults/{result.Seed}.txt";
             string s = "";
 
             s += $"BEST: ";
