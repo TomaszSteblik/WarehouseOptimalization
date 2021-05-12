@@ -43,7 +43,7 @@ namespace Optimization.GeneticAppliances.Warehouse
             var result = _genetic.OptimizeForBestIndividual();
             return new WarehouseResult()
             {
-                BestGene = result,
+                BestChromosome = result,
                 fitness = wm.GetFitnessHistory()
             };
         }

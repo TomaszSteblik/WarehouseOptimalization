@@ -210,8 +210,38 @@ namespace OptimizationUI
             {
                 WarehouseResultLabel.Content = $"Wynik: {result.FinalFitness}";
                 WritePlotWarehouse(linesGridWarehouse, result.fitness);
+                SaveWarehouseResultToFile(result);
             });
 
+        }
+
+        private void SaveWarehouseResultToFile(WarehouseResult result)
+        {
+            var filePath = $"Warehouse\\result-{result.Seed}.txt";
+            string s = "";
+
+            s += $"BEST: ";
+            foreach (var gene in result.BestChromosome)
+            {
+                s += $"{gene} ";
+            }
+
+            s += "\n";
+
+            s += $"FITNESS: {result.FinalFitness}\n\n";
+            for (int i = 0; i < result.FinalOrderPaths.Length; i++)
+            {
+                s += $"Order nr.{i}: ";
+                foreach (var gene in result.FinalOrderPaths[i])
+                {
+                    s += $"{gene} ";
+                }
+
+                s += "\n";
+            }
+            
+            
+            File.WriteAllText(filePath,s);
         }
 
 
