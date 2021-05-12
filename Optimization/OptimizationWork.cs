@@ -63,7 +63,7 @@ namespace Optimization
             PathFinding.ShortestPath.Find(PointsArrayGenerator.GeneratePointsToVisit(matrix.Length), optimizationParameters,calcFitness, CancellationToken.None, random);
         }
 
-        public static double WarehouseOptimization(WarehouseParameters warehouseParameters, CancellationToken ct, int seed = 0)
+        public static WarehouseResult WarehouseOptimization(WarehouseParameters warehouseParameters, CancellationToken ct, int seed = 0)
         {
             seed = GetSeed(seed);
             var random = new Random(seed);

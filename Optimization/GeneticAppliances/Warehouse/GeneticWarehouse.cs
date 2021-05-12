@@ -13,11 +13,12 @@ using Optimization.Parameters;
 
 namespace Optimization.GeneticAppliances.Warehouse
 {
-    internal class GeneticWarehouse : IGeneticAppliance
+    internal class GeneticWarehouse
     {
 
         private int _warehouseSize;
         private BaseGenetic _genetic;
+        private WarehouseModule wm;
 
         public GeneticWarehouse(OptimizationParameters optimizationParameters, int warehouseSize,
             DelegateFitness.CalcFitness calcFitness, CancellationToken ct, Random random)
@@ -32,12 +33,19 @@ namespace Optimization.GeneticAppliances.Warehouse
             var populationInitialization = new StandardPathInitialization(random);
             var population = populationInitialization.InitializePopulation( itemsToSort, optimizationParameters.PopulationSize, 0);
             _genetic = new BaseGenetic(optimizationParameters, population, calcFitness, ct, random);
+             wm = new WarehouseModule();
+            _genetic.LoadModule(wm);
 
         }
 
-        public int[] Run()
+        public WarehouseResult Run()
         {
-            return _genetic.OptimizeForBestIndividual();
+            var result = _genetic.OptimizeForBestIndividual();
+            return new WarehouseResult()
+            {
+                BestGene = result,
+                fitness = wm.GetFitnessHistory()
+            };
         }
 
         

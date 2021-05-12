@@ -29,6 +29,7 @@ using Optimization.GeneticAlgorithms.Initialization;
 using Optimization.GeneticAlgorithms.Mutations;
 using Optimization.GeneticAlgorithms.Selections;
 using Optimization.GeneticAppliances.TSP;
+using Optimization.GeneticAppliances.Warehouse;
 using Optimization.Parameters;
 
 namespace OptimizationUI
@@ -195,7 +196,7 @@ namespace OptimizationUI
         {
             _cancellationTokenSource = new CancellationTokenSource();
             CancellationToken ct = _cancellationTokenSource.Token;
-            double result = -1d;
+            WarehouseResult result = null;
             double[][] fitness = null;
 
 
@@ -203,13 +204,13 @@ namespace OptimizationUI
             {
                 WarehouseParameters warehouseParameters = _properties.WarehouseViewModel as WarehouseParameters;
                 result = Optimization.OptimizationWork.WarehouseOptimization(warehouseParameters, ct);
-                fitness = ReadFitness();
+                //fitness = ReadFitness();
             }, ct);
 
             Dispatcher.Invoke(() =>
             {
-                WarehouseResultLabel.Content = $"Wynik: {result}";
-                WritePlotWarehouse(linesGridWarehouse, fitness);
+                WarehouseResultLabel.Content = $"Wynik: {result.FinalFitness}";
+                WritePlotWarehouse(linesGridWarehouse, result.fitness);
             });
 
         }
