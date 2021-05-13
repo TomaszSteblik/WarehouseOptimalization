@@ -8,7 +8,9 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
     {
         Random,
         NearestNeighbor,
-        Tournament
+        Tournament, 
+        WarehouseSingleProductFrequency,
+        WarehousePairwiseProductFrequency,
     }
     public abstract class ConflictResolver
     {
