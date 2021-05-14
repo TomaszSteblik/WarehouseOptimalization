@@ -57,6 +57,7 @@ namespace Optimization.GeneticAlgorithms
                 CrossoverMethod.MRC => new MRCrossover(crossoverMethods, startingId, resolverConflict, resolverRandomized,random, mutateIfSame),
                 CrossoverMethod.PMX => new PMXCrossover(resolverConflict,resolverRandomized, random, mutateIfSame),
                 CrossoverMethod.ERX => new ERXCrossover(resolverConflict, resolverRandomized, random, mutateIfSame),
+                CrossoverMethod.HGA => new HGreXCrossover(resolverConflict, resolverRandomized, random, mutateIfSame),
                 _ => throw new ArgumentException("Wrong crossover method name")
             };
             return crossover;
