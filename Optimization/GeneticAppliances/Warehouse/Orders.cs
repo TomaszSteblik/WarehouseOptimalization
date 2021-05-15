@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using Optimization.Helpers;
 
 namespace Optimization.GeneticAppliances.Warehouse
 {
@@ -11,111 +13,64 @@ namespace Optimization.GeneticAppliances.Warehouse
         private int[] orderRepeats;
         private int _ordersCount;
 
-        public int HighestProductNumber;
-
         public int OrdersCount => _ordersCount;
         public int[][] OrdersList => orders;
         public int[] OrderRepeats => orderRepeats;
 
-        public static Dictionary<int, int> ProductFrequencies;
-        public static int[][] ProductsNamesInTheSameOrder;
-        public static int[][] ProductsFrequenciesInTheSameOrder;
+        [Description("How many times given product appears in all orders (calculation includes orders repetition)" +
+                     " At 0 index is warehouse entrance, it should be set to 0")]
+        public static int[] ProductFrequency { get; private set; }
+        [Description("How many times given products pair appear in all orders (calculation includes orders repetition)." +
+                     " At 0 index is warehouse entrance, it should be set to 0")]
+        public static int[][] ProductsTogetherFrequency { get; private set; }
 
-        public Orders(string ordersPath)
+        public Orders(string ordersPath, int warehouseSize)
         {
-            ProductFrequencies = new Dictionary<int, int>();
-            ProductsNamesInTheSameOrder = null;
-            ProductsFrequenciesInTheSameOrder = null;
 
-            string[] fileLines = File.ReadAllLines(ordersPath);
+            var fileLines = File.ReadAllLines(ordersPath);
             _ordersCount = fileLines.Length;
             orders = new int[_ordersCount][];
             orderRepeats = new int[_ordersCount];
+            
             for (int i = 0; i < _ordersCount; i++)
             {
-                int[] tmp = Array.ConvertAll(fileLines[i].Split(" ", StringSplitOptions.RemoveEmptyEntries), int.Parse);
-                orders[i] = new int[tmp.Length];
-                orderRepeats[i] = tmp[tmp.Length - 1];
-                orders[i][0] = 0; //warehouse entry is at position 0.
-
-                for (int j = 1; j < tmp.Length; j++)
+                int[] tmp = Array.ConvertAll(fileLines[i].Split(" "
+                    , StringSplitOptions.RemoveEmptyEntries), int.Parse);
+                orders[i] = new int[tmp.Length + 1];
+                orders[i][0] = 0;
+                for (int j = 1; j < tmp.Length + 1; j++)
                 {
                     orders[i][j] = tmp[j - 1];
-                    if (ProductFrequencies.ContainsKey(tmp[j - 1]))
-                        ProductFrequencies[tmp[j - 1]] += orderRepeats[i];
-                    else
-                        ProductFrequencies.Add(tmp[j - 1], orderRepeats[i]);
                 }
-
             }
 
-            GetProductCoexistence();
-        }
+            for (int i = 0; i < _ordersCount; i++)
+            {
+                List<int> tmp = orders[i].ToList();
+                orderRepeats[i] = tmp[^1];
+                tmp.RemoveAt(tmp.Count - 1);
+                tmp = tmp.Distinct().ToList();
+                orders[i] = tmp.ToArray();
+            }
+            
+            
+            //calculating frequency
 
+            
+            ProductsTogetherFrequency = new int[warehouseSize][];
+            ProductFrequency = new int[warehouseSize];
+            for (var i = 1; i < warehouseSize; i++)
+            {
+                ProductFrequency[i] = orders.Sum(x => 
+                    (x.Contains(i) ? 1 : 0)*orderRepeats[Array.IndexOf(orders,x)]);
 
-        public void GetProductCoexistence()
-        {
-            HighestProductNumber = ProductFrequencies.Keys.Max();
-            if (HighestProductNumber > 2 * ProductFrequencies.Count)
-                throw new Exception("HighestProductNumber(" + HighestProductNumber + ") > ProductFrequencies.Count+1(" + 2 * ProductFrequencies.Count + ")");
-
-            ProductsNamesInTheSameOrder = new int[HighestProductNumber + 1][];
-            ProductsFrequenciesInTheSameOrder = new int[HighestProductNumber + 1][];
-        
-
-                foreach (KeyValuePair<int, int> product in ProductFrequencies)
+                ProductsTogetherFrequency[i] = new int[warehouseSize];
+                for (var j = 1; j < warehouseSize; j++)
                 {
-                    Dictionary<int, int> productsInTheSameOrderTmp = new Dictionary<int, int>();
-                    for (int i = 0; i < _ordersCount; i++)
-                    {
-
-                        bool isContained = false;
-                        for (int j = 0; j < orders[i].Length; j++)
-                        {
-                            if (product.Key == orders[i][j])
-                            {
-                                isContained = true;
-                                if (!productsInTheSameOrderTmp.ContainsKey(orders[i][j]))
-                                    productsInTheSameOrderTmp.Add(orders[i][j], 0);
-                                break;
-                            }
-                        }
-                        if (isContained)
-                        {
-                            for (int j = 0; j < orders[i].Length; j++)
-                            {
-                                if (product.Key != orders[i][j])
-                                {
-                                    if (productsInTheSameOrderTmp.ContainsKey(orders[i][j]))
-                                        productsInTheSameOrderTmp[orders[i][j]] += orderRepeats[i];
-                                    else
-                                        productsInTheSameOrderTmp.Add(orders[i][j], orderRepeats[i]);
-                                }
-                            }
-
-                        }
-                    }
-
-
-                    ProductsNamesInTheSameOrder[product.Key] = new int[productsInTheSameOrderTmp.Count];
-                    ProductsFrequenciesInTheSameOrder[product.Key] = new int[productsInTheSameOrderTmp.Count];
-
-                    int x2 = 0;
-                    foreach (KeyValuePair<int, int> product2 in productsInTheSameOrderTmp)
-                    {
-                        ProductsNamesInTheSameOrder[product.Key][x2] = product2.Key;
-                        ProductsFrequenciesInTheSameOrder[product.Key][x2] = product2.Value;
-                        x2++;
-                    }
-
-                    Array.Sort(ProductsFrequenciesInTheSameOrder[product.Key], ProductsNamesInTheSameOrder[product.Key]);
-                    Array.Reverse(ProductsFrequenciesInTheSameOrder[product.Key]);
-                    Array.Reverse(ProductsNamesInTheSameOrder[product.Key]);
+                    ProductsTogetherFrequency[i][j] = orders.Sum(x => 
+                        ((x.Contains(i)&&x.Contains(j)) ? 1 : 0)*orderRepeats[Array.IndexOf(orders,x)]);
                 }
-
-
-
+            }
         }
-
     }
 }

@@ -204,6 +204,12 @@ namespace OptimizationUI
             await Task.Run(() =>
             {
                 WarehouseParameters warehouseParameters = _properties.WarehouseViewModel as WarehouseParameters;
+                warehouseParameters.WarehouseGeneticAlgorithmParameters.ConflictResolveMethod =
+                    ConflictResolveMethod.WarehouseSingleProductFrequency;
+                warehouseParameters.WarehouseGeneticAlgorithmParameters.RandomizedResolveMethod =
+                    ConflictResolveMethod.WarehouseSingleProductFrequency;
+                warehouseParameters.WarehouseGeneticAlgorithmParameters.ResolveRandomizationProbability = 0.6;
+                warehouseParameters.FitnessGeneticAlgorithmParameters.Use2opt = true;
                 result = Optimization.OptimizationWork.WarehouseOptimization(warehouseParameters, ct, rnd.Next(1, Int32.MaxValue));
             }, ct);
 

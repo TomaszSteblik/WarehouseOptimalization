@@ -18,7 +18,7 @@ namespace Optimization.GeneticAppliances.Warehouse
             WarehouseManager warehouseManager = new WarehouseManager();
             double[][] distancesMatrix = warehouseManager.CreateWarehouseDistancesMatrix(warehouseParameters.WarehousePath);
             Distances.Create(distancesMatrix);
-            Orders orders = new Orders(warehouseParameters.OrdersPath);
+            Orders orders = new Orders(warehouseParameters.OrdersPath, warehouseManager.WarehouseSize);
             
             GeneticWarehouse geneticWarehouse = new GeneticWarehouse(warehouseParameters.WarehouseGeneticAlgorithmParameters,
                 warehouseManager.WarehouseSize,

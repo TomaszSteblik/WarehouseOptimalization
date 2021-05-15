@@ -16,22 +16,19 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
         public override int ResolveConflict(int currentPoint, List<int> availableVertexes)
         {
 
-            int cnt = availableVertexes.Count;
-            int numCandidates = 1+(int)(0.5 * cnt);
-
-
-
+            int pointCount = availableVertexes.Count;
+            int numCandidates = 1+(int)(0.25 * pointCount);
             double minDistance = Double.MaxValue;
             int bestCandidate = -1;
 
 
             for (int k = 0; k < numCandidates; k++)
             {
-                int candidate = Random.Next(1, cnt);
-                if (distanceMatrix[currentPoint][availableVertexes[k]] < minDistance)
+                int candidate = Random.Next(1, pointCount);
+                if (distanceMatrix[currentPoint][availableVertexes[candidate]] < minDistance)
                 {
-                    minDistance = distanceMatrix[currentPoint][availableVertexes[k]];
-                    bestCandidate = availableVertexes[k];
+                    minDistance = distanceMatrix[currentPoint][availableVertexes[candidate]];
+                    bestCandidate = availableVertexes[candidate];
                 }
             }
 

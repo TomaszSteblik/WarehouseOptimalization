@@ -15,7 +15,21 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
 
         public override int ResolveConflict(int currentPoint, List<int> availableVertexes)
         {
-            return NearestNeighbor.FindNearestNeighbor(currentPoint, _distancesMatrix, availableVertexes);
+            int pointCount = availableVertexes.Count;
+            double minDistance = Double.MaxValue;
+            int bestCandidate = -1;
+
+
+            for (int k = 0; k < pointCount; k++)
+            {
+                if (_distancesMatrix[currentPoint][availableVertexes[k]] < minDistance)
+                {
+                    minDistance = _distancesMatrix[currentPoint][availableVertexes[k]];
+                    bestCandidate = availableVertexes[k];
+                }
+            }
+
+            return bestCandidate;
         }
     }
 }
