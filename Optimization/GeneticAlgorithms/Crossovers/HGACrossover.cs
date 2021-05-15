@@ -28,41 +28,95 @@ namespace Optimization.GeneticAlgorithms.Crossovers
             {
                 var feasibleParents = new List<int[]>(parents);
                 var nextVertex = -1;
-                for (var i = 0; i < parents.Length; i++)
-                {
-                    var selectedParent = parents[i];
-                    var indexOfCurrentVertexInSelectedParent = Array.IndexOf(selectedParent, currentVertex);
-                    if (indexOfCurrentVertexInSelectedParent >= parentLength - 1 ||
-                        offspring.Contains(selectedParent[indexOfCurrentVertexInSelectedParent + 1]))
-                    {
-                        feasibleParents.Remove(selectedParent);
-                    }
-                }
+                //for (var i = 0; i < parents.Length; i++)
+                //{
+                //    var selectedParent = parents[i];
+                //    var indexOfCurrentVertexInSelectedParent = Array.IndexOf(selectedParent, currentVertex);
+                //    if (indexOfCurrentVertexInSelectedParent >= parentLength - 1 ||
+                //        offspring.Contains(selectedParent[indexOfCurrentVertexInSelectedParent + 1]))
+                //    {
+                //        feasibleParents.Remove(selectedParent);
+                //    }
+                //}
 
 
-                var min = double.MaxValue;
-                int minIndex = -1;
+                //var min = double.MaxValue;
+                //int minIndex = -1;
+
+                //for (int i = 0; i < feasibleParents.Count; i++)
+                //{
+                //    if (DistancesMatrix[currentVertex][
+                //        feasibleParents[i][Array.IndexOf(feasibleParents[i], currentVertex) + 1]] < min)
+                //    {
+                //        min = DistancesMatrix[currentVertex][
+                //            feasibleParents[i][Array.IndexOf(feasibleParents[i], currentVertex) + 1]];
+                //        minIndex = i;
+                //    }
+                //}
+
+
+                Dictionary<int, double> fitness = new Dictionary<int, double>();
 
                 for (int i = 0; i < feasibleParents.Count; i++)
                 {
-                    if (DistancesMatrix[currentVertex][
-                        feasibleParents[i][Array.IndexOf(feasibleParents[i], currentVertex) + 1]] < min)
+                    if (Array.IndexOf(feasibleParents[i], currentVertex) < (parentLength - 1))
                     {
-                        min = DistancesMatrix[currentVertex][
-                            feasibleParents[i][Array.IndexOf(feasibleParents[i], currentVertex) + 1]];
-                        minIndex = i;
+                        if (!fitness.ContainsKey(feasibleParents[i][Array.IndexOf(feasibleParents[i], currentVertex) + 1]))
+                        {
+                            fitness.Add(feasibleParents[i][Array.IndexOf(feasibleParents[i], currentVertex) + 1],
+                                   DistancesMatrix[currentVertex][feasibleParents[i][Array.IndexOf
+                                   (feasibleParents[i], currentVertex) + 1]]);
+                        }
                     }
-                    if (DistancesMatrix[currentVertex][
-                        feasibleParents[i][Array.IndexOf(feasibleParents[i], currentVertex) - 1]] < min)
+                    if (Array.IndexOf(feasibleParents[i], currentVertex) != 0)
                     {
-                        min = DistancesMatrix[currentVertex][
-                            feasibleParents[i][Array.IndexOf(feasibleParents[i], currentVertex) - 1]];
-                        minIndex = i;
+                        if (!fitness.ContainsKey(feasibleParents[i][Array.IndexOf(feasibleParents[i], currentVertex) - 1]))
+                        {
+                            fitness.Add(feasibleParents[i][Array.IndexOf(feasibleParents[i], currentVertex) - 1],
+                                        DistancesMatrix[currentVertex][feasibleParents[i][Array.IndexOf
+                                        (feasibleParents[i], currentVertex) - 1]]);
+                        }
+                    }
+
+
+                }
+                foreach (var elem in fitness)
+                {
+                    if (offspring.ToList().Contains(elem.Key))
+                    {
+                        fitness.Remove(elem.Key);
                     }
                 }
+                if (fitness.Count() == 0)
+                {
+                    bool flag = false;
+                    while (flag = false)
+                    {
+                        var rand = new Random();
+                        int randomParent = rand.Next(parents.Count());
+                        int randomElem = rand.Next(parentLength);
+                        flag = true;
+                        for (int i = 0; i < parentLength; i++)
+                        {
+                            if (offspring[i] == parents[randomParent][randomElem])
+                            {
+                                flag = false;
+                                break;
+                            }
+                        }
+                        if (flag)
+                        {
+                            nextVertex = parents[randomParent][randomElem];
+                        }
+                    }
+                }
+                else
+                {
+                    int minimalValue = fitness.Aggregate((l, r) => l.Value < r.Value ? l : r).Key;
+                    nextVertex = minimalValue;
+                }
+                
 
-                if (minIndex >= 0)
-                    nextVertex = feasibleParents[minIndex][Array.IndexOf(feasibleParents[minIndex], currentVertex) + 1];
 
                 _randomizationChances++;
                 if (Random.NextDouble() < ResolverRandomized.RandomizationProbability)
