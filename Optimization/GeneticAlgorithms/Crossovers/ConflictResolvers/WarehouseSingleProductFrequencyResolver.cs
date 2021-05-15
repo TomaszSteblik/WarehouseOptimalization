@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Optimization.GeneticAppliances.Warehouse;
 
 
@@ -13,10 +14,12 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
 
         public override int ResolveConflict(int currentPoint, List<int> availableVertexes)
         {
-            int cnt = availableVertexes.Count;
-            int numCandidates = cnt/2;
-            if (cnt>16)
-               numCandidates = 8;
+            int pointCount = availableVertexes.Count;
+            int numberOfCandidates = pointCount > 16 ? 8 : pointCount / 2;
+            if (pointCount == 1) numberOfCandidates = 1;
+
+            var candidates = availableVertexes.OrderBy(x => Random.Next()).Take(numberOfCandidates);
+            return candidates.OrderByDescending(x => Orders.ProductFrequency[x]).ToArray()[0];
 /*
             double maxProductFrequency = -1;
             int bestCandidate = -1;
@@ -35,7 +38,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
                 }
             }
 */
-            return default; //bestCandidate;
+            //return default; //bestCandidate;
         }
     }
     

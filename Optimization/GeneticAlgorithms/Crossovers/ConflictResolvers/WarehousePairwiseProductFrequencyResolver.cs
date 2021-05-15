@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Optimization.GeneticAppliances.Warehouse;
 
 
@@ -13,25 +14,30 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
 
         public override int ResolveConflict(int currentPoint, List<int> availableVertexes)
         {
-            int cnt = availableVertexes.Count;
-            int numCandidates = cnt / 2;
-            if (cnt > 16)
-                numCandidates = 8;
+            int pointCount = availableVertexes.Count;
+            int numberOfCandidates = pointCount > 16 ? 8 : pointCount / 2;
+            if (pointCount == 1) numberOfCandidates = 1;
 
-            double maxProductFrequency = -1;
-            int bestCandidate = -1;
+            var candidates = availableVertexes.OrderBy(x => Random.Next()).Take(numberOfCandidates);
 
-            for (int k = 0; k < numCandidates; k++)
-            {
-                int candidate = Random.Next(1, cnt);
-                if (Orders.ProductFrequency[candidate] > maxProductFrequency)
-                {
-                    maxProductFrequency = Orders.ProductFrequency[candidate];
-                    bestCandidate = availableVertexes[candidate];
-                }
-            }
+            if (currentPoint == 0) return candidates.ToArray()[0];
+            
+            return candidates.OrderBy(x => Orders.ProductsTogetherFrequency[currentPoint][x]).ToArray()[0];
 
-            return bestCandidate;
+            // double maxProductFrequency = -1;
+            // int bestCandidate = -1;
+            //
+            // for (int k = 0; k < numCandidates; k++)
+            // {
+            //     int candidate = Random.Next(1, cnt);
+            //     if (Orders.ProductFrequency[candidate] > maxProductFrequency)
+            //     {
+            //         maxProductFrequency = Orders.ProductFrequency[candidate];
+            //         bestCandidate = availableVertexes[candidate];
+            //     }
+            // }
+            //
+            // return bestCandidate;
         }
     }
 }
