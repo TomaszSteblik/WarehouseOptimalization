@@ -208,7 +208,7 @@ namespace OptimizationUI
                     ConflictResolveMethod.WarehouseSingleProductFrequency;
                 warehouseParameters.WarehouseGeneticAlgorithmParameters.RandomizedResolveMethod =
                     ConflictResolveMethod.WarehousePairwiseProductFrequency;
-                warehouseParameters.WarehouseGeneticAlgorithmParameters.ResolveRandomizationProbability = 0.5;
+                warehouseParameters.WarehouseGeneticAlgorithmParameters.ResolveRandomizationProbability = 0.1;
                 result = Optimization.OptimizationWork.WarehouseOptimization(warehouseParameters, ct, rnd.Next(1, Int32.MaxValue));
             }, ct);
 

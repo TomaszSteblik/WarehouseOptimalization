@@ -22,7 +22,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
 
             if (currentPoint == 0) return candidates.ToArray()[0];
             
-            return candidates.OrderBy(x => Orders.ProductsTogetherFrequency[currentPoint][x]).ToArray()[0];
+            return candidates.OrderByDescending(x => Orders.ProductsTogetherFrequency[currentPoint][x]).ToArray()[0];
 
             // double maxProductFrequency = -1;
             // int bestCandidate = -1;
