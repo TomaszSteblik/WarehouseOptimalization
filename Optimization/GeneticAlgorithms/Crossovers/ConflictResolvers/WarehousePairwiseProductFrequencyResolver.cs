@@ -16,11 +16,21 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
         {
             int pointCount = availableVertexes.Count;
 
-            var candidates = availableVertexes.OrderBy(x => Random.Next());
-
-            if (currentPoint == 0) return candidates.ToArray()[0];
+            if (currentPoint == 0) return availableVertexes[0];
+            var bestCandidate = availableVertexes[0];
+            var bestFrequency = Orders.ProductsTogetherFrequency[currentPoint][bestCandidate];
             
-            return candidates.OrderByDescending(x => Orders.ProductsTogetherFrequency[currentPoint][x]).ToArray()[0];
+            for (int i = 1; i < pointCount; i++)
+            {
+                var frequency = Orders.ProductsTogetherFrequency[currentPoint][availableVertexes[i]];
+                if (frequency > bestFrequency)
+                {
+                    bestCandidate = availableVertexes[i];
+                    bestFrequency = frequency;
+                }
+            }
+
+            return bestCandidate;
 
             // double maxProductFrequency = -1;
             // int bestCandidate = -1;

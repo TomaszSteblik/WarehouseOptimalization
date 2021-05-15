@@ -29,7 +29,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
             var candidates = new int[numCandidates];
             for (int i = 0; i < numCandidates; i++)
             {
-                candidates[i] = availableVertexes[Random.Next(0, availableVertexes.Count)];
+                candidates[i] = availableVertexes[Random.Next(0, pointCount)];
             }
 
             var bestCandidate = candidates[0];

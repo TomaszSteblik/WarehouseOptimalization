@@ -15,14 +15,30 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
         public override int ResolveConflict(int currentPoint, List<int> availableVertexes)
         {
             int pointCount = availableVertexes.Count;
-            int numberOfCandidates = pointCount > 16 ? 8 : pointCount / 2;
-            if (pointCount == 1) numberOfCandidates = 1;
+            int numberOfCandidates =1+(int)(0.25 * pointCount);
 
-            var candidates = availableVertexes.OrderBy(x => Random.Next()).Take(numberOfCandidates);
+            var candidates = new int[numberOfCandidates];
+            for (int i = 0; i < numberOfCandidates; i++)
+            {
+                candidates[i] = availableVertexes[Random.Next(0, pointCount)];
+            }
 
-            if (currentPoint == 0) return candidates.ToArray()[0];
+
+            if (currentPoint == 0) return availableVertexes[0];
+            var bestCandidate = availableVertexes[0];
+            var bestFrequency = Orders.ProductsTogetherFrequency[currentPoint][bestCandidate];
             
-            return candidates.OrderByDescending(x => Orders.ProductsTogetherFrequency[currentPoint][x]).ToArray()[0];
+            for (int i = 1; i < numberOfCandidates; i++)
+            {
+                var frequency = Orders.ProductsTogetherFrequency[currentPoint][candidates[i]];
+                if (frequency > bestFrequency)
+                {
+                    bestCandidate = candidates[i];
+                    bestFrequency = frequency;
+                }
+            }
+
+            return bestCandidate;
 
             // double maxProductFrequency = -1;
             // int bestCandidate = -1;
