@@ -24,13 +24,14 @@ namespace Optimization.GeneticAppliances.Warehouse
                      " At 0 index is warehouse entrance, it should be set to 0")]
         public static int[][] ProductsTogetherFrequency { get; private set; }
 
-        public Orders(string ordersPath)
+        public Orders(string ordersPath, int warehouseSize)
         {
 
             var fileLines = File.ReadAllLines(ordersPath);
             _ordersCount = fileLines.Length;
             orders = new int[_ordersCount][];
             orderRepeats = new int[_ordersCount];
+            
             for (int i = 0; i < _ordersCount; i++)
             {
                 int[] tmp = Array.ConvertAll(fileLines[i].Split(" "
@@ -55,18 +56,16 @@ namespace Optimization.GeneticAppliances.Warehouse
             
             //calculating frequency
 
-            var distances = Distances.GetInstance().DistancesMatrix;
-            var productsCount = distances.Length;
             
-            ProductsTogetherFrequency = new int[productsCount][];
-            ProductFrequency = new int[productsCount];
-            for (var i = 1; i < productsCount; i++)
+            ProductsTogetherFrequency = new int[warehouseSize][];
+            ProductFrequency = new int[warehouseSize];
+            for (var i = 1; i < warehouseSize; i++)
             {
                 ProductFrequency[i] = orders.Sum(x => 
                     (x.Contains(i) ? 1 : 0)*orderRepeats[Array.IndexOf(orders,x)]);
 
-                ProductsTogetherFrequency[i] = new int[productsCount];
-                for (var j = 1; j < productsCount; j++)
+                ProductsTogetherFrequency[i] = new int[warehouseSize];
+                for (var j = 1; j < warehouseSize; j++)
                 {
                     ProductsTogetherFrequency[i][j] = orders.Sum(x => 
                         ((x.Contains(i)&&x.Contains(j)) ? 1 : 0)*orderRepeats[Array.IndexOf(orders,x)]);
