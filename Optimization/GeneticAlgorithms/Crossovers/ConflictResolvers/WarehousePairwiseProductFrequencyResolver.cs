@@ -15,10 +15,8 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
         public override int ResolveConflict(int currentPoint, List<int> availableVertexes)
         {
             int pointCount = availableVertexes.Count;
-            int numberOfCandidates = pointCount > 16 ? 8 : pointCount / 2;
-            if (pointCount == 1) numberOfCandidates = 1;
 
-            var candidates = availableVertexes.OrderBy(x => Random.Next()).Take(numberOfCandidates);
+            var candidates = availableVertexes.OrderBy(x => Random.Next());
 
             if (currentPoint == 0) return candidates.ToArray()[0];
             
