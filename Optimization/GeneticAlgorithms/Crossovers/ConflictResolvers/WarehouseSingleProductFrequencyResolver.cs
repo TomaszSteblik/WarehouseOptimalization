@@ -17,7 +17,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
             int numCandidates = cnt/2;
             if (cnt>16)
                numCandidates = 8;
-
+/*
             double maxProductFrequency = -1;
             int bestCandidate = -1;
             //proportional to the distance matrix distance
@@ -34,8 +34,8 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
                     bestCandidate = availableVertexes[candidate];
                 }
             }
-
-            return bestCandidate;
+*/
+            return default; //bestCandidate;
         }
     }
     

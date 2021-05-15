@@ -24,9 +24,9 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
             for (int k = 0; k < numCandidates; k++)
             {
                 int candidate = Random.Next(1, cnt);
-                if (Orders.ProductFrequencies[candidate] > maxProductFrequency)
+                if (Orders.ProductFrequency[candidate] > maxProductFrequency)
                 {
-                    maxProductFrequency = Orders.ProductFrequencies[candidate];
+                    maxProductFrequency = Orders.ProductFrequency[candidate];
                     bestCandidate = availableVertexes[candidate];
                 }
             }
