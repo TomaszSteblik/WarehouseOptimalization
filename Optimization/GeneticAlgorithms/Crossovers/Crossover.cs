@@ -95,6 +95,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers
         MRC,
         MAC,
         PMX,
-        ERX
+        ERX,
+        HGA
     }
 }
