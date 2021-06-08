@@ -24,7 +24,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
 
             for (int k = 0; k < numCandidates; k++)
             {
-                int candidate = Random.Next(1, pointCount);
+                int candidate = Random.Next(0, pointCount);
                 if (distanceMatrix[currentPoint][availableVertexes[candidate]] < minDistance)
                 {
                     minDistance = distanceMatrix[currentPoint][availableVertexes[candidate]];
