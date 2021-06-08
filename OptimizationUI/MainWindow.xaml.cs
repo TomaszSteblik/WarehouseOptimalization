@@ -800,12 +800,14 @@ namespace OptimizationUI
             s += randomResolver + ";";
             //tego nie jestem do końca pewien, które wartości będą potrzebne - może lepiej ich naprodukować więcej, by mieć z czego wybierać:
             s += results.Min(x => x.FinalFitness).ToString("#.000") + ";";  //najlepszy wynik
+            //TODO: Zainicjowac liste Smin, narazie komentujemy ten fragment kodu
             //Smin[pri].Add(results.Min(x => x.FinalFitness).ToString("#.000"));
 
             s += results.OrderBy(x => x.FinalFitness).Take((int)(0.1 * results.Length)).Average(x => x.FinalFitness).ToString("#.000") + ";"; //średnia z najlepszych 10%
             s += results.OrderBy(x => x.FinalFitness).Skip((int)(0.5 * results.Length)).Take(1).Average(x => x.FinalFitness).ToString("#.000") + ";";  //mediana
             s += results.OrderBy(x => x.FinalFitness).Skip((int)(0.9 * results.Length)).Take((int)(0.1 * results.Length)).Average(x => x.FinalFitness).ToString("#.000") + ";"; //średnia z najgorszych 10%
             s += results.Average(x => x.FinalFitness).ToString("#.000") + ";"; //średnia
+            //TODO: Zainicjowac liste Smin, narazie komentujemy ten fragment kodu
             //Savg[pri].Add(results.Average(x => x.FinalFitness).ToString("#.000"));
 
             s += results.Max(x => x.FinalFitness).ToString("#.000") + ";"; // najgorszy wynik
