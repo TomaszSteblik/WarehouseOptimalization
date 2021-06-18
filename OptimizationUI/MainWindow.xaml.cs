@@ -31,6 +31,7 @@ using Optimization.GeneticAlgorithms.Selections;
 using Optimization.GeneticAppliances.TSP;
 using Optimization.GeneticAppliances.Warehouse;
 using Optimization.Parameters;
+using OptimizationUI.Models;
 
 namespace OptimizationUI
 {
@@ -47,12 +48,12 @@ namespace OptimizationUI
             InitializeComponent();
             CultureInfo.CurrentCulture = new CultureInfo("en-US");
             DeserializeParameters("properties.json");
-            DistancePanel.DataContext = _properties.DistanceViewModel;
+            DistancePanel.DataContext = _properties.Distance;
             WarehouseFitnessPanel.DataContext =
-                _properties.WarehouseViewModel.FitnessGeneticAlgorithmParameters as DistanceViewModel;
+                _properties.Warehouse.FitnessGeneticAlgorithmParameters as Distance;
             WarehouseStackPanel.DataContext =
-                _properties.WarehouseViewModel.WarehouseGeneticAlgorithmParameters as DistanceViewModel;
-            WarehousePanel.DataContext = _properties.WarehouseViewModel;
+                _properties.Warehouse.WarehouseGeneticAlgorithmParameters as Distance;
+            WarehousePanel.DataContext = _properties.Warehouse;
 
             var methods = Enum.GetValues(typeof(OptimizationMethod)).Cast<OptimizationMethod>().ToList();
             var selections = Enum.GetValues(typeof(SelectionMethod)).Cast<SelectionMethod>().ToList();
@@ -90,50 +91,50 @@ namespace OptimizationUI
 
         private async void OtpimizeWithCurrentParametersButtonClick(object sender, RoutedEventArgs e)
         {
-            if (!Directory.Exists(_properties.DistanceViewModel.ResultPath))
-                Directory.CreateDirectory(_properties.DistanceViewModel.ResultPath);
+            if (!Directory.Exists(_properties.Distance.ResultPath))
+                Directory.CreateDirectory(_properties.Distance.ResultPath);
             DistanceStartButton.IsEnabled = false;
             EventHandler<int> BaseGeneticOnOnNextIteration()
             {
                 return (sender, iteration) =>
                 {
-                    _properties.DistanceViewModel.ProgressBarValue++;
+                    _properties.Distance.ProgressBarValue++;
                 };
             }
-            _properties.DistanceViewModel.DataPath = _properties.DistanceViewModel.SelectedFiles[0];
+            _properties.Distance.DataPath = _properties.Distance.SelectedFiles[0];
 
-            OptimizationParameters parameters = _properties.DistanceViewModel as OptimizationParameters;
+            OptimizationParameters parameters = _properties.Distance as OptimizationParameters;
             int runs = Int32.Parse(DistanceRunsTextBox.Text);
-            int seed = _properties.DistanceViewModel.CurrentSeed;
-            if (_properties.DistanceViewModel.RandomSeed)
+            int seed = _properties.Distance.CurrentSeed;
+            if (_properties.Distance.RandomSeed)
             {
                 Random random = new Random();
                 seed = random.Next(1, Int32.MaxValue);
-                _properties.DistanceViewModel.CurrentSeed = seed;
+                _properties.Distance.CurrentSeed = seed;
             }
             TSPResult[] results = new TSPResult[runs];
             double[][][] runFitnesses = new double[runs][][];
 
             _cancellationTokenSource = new CancellationTokenSource();
-            _properties.DistanceViewModel.ProgressBarMaximum = runs * _properties.DistanceViewModel.MaxEpoch - 1;
-            _properties.DistanceViewModel.ProgressBarValue = 0;
+            _properties.Distance.ProgressBarMaximum = runs * _properties.Distance.MaxEpoch - 1;
+            _properties.Distance.ProgressBarValue = 0;
             Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration += BaseGeneticOnOnNextIteration();
             CancellationToken ct = _cancellationTokenSource.Token;
             if ((OptimizationMethod)DistanceMethodComboBox.SelectedItem == OptimizationMethod.GeneticAlgorithm)
             {
-                Directory.CreateDirectory(_properties.DistanceViewModel.ResultPath + "\\" + seed.ToString());
-                SerializeParameters(_properties.DistanceViewModel.ResultPath + "\\" + seed + "/parameters.json");
+                Directory.CreateDirectory(_properties.Distance.ResultPath + "\\" + seed.ToString());
+                SerializeParameters(_properties.Distance.ResultPath + "\\" + seed + "/parameters.json");
 
                 await Task.Run(() =>
                     {
 
-                        foreach (var dataset in _properties.DistanceViewModel.SelectedFiles)
+                        foreach (var dataset in _properties.Distance.SelectedFiles)
                         {
                             var s = "epoch;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation;conflict_percentage;avgDiff;0Diff;02Diff\n";
-                            _properties.DistanceViewModel.DataPath = dataset;
-                            var fileName = seed + "/" + runs + "_BEST_" + _properties.DistanceViewModel.DataPath.Split("\\")[^1] + ".txt";
+                            _properties.Distance.DataPath = dataset;
+                            var fileName = seed + "/" + runs + "_BEST_" + _properties.Distance.DataPath.Split("\\")[^1] + ".txt";
                             var datasetName = dataset.Split('\\')[^1]
-                                .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'));
+                                .Remove(_properties.Distance.DataPath.Split('\\')[^1].IndexOf('.'));
                             parameters.DataPath = dataset;
                             results = new TSPResult[runs];
 
@@ -149,34 +150,34 @@ namespace OptimizationUI
                             SaveDistanceArticleResultsToFile($"{seed}/data.txt", results,
                                 Enum.GetName(parameters.ConflictResolveMethod),
                                 Enum.GetName(parameters.RandomizedResolveMethod), seed);
-                            File.AppendAllText(_properties.DistanceViewModel.ResultPath + "\\" + fileName, s);
+                            File.AppendAllText(_properties.Distance.ResultPath + "\\" + fileName, s);
 
-                            fileName = seed + "/" + runs + "_AVG_" + _properties.DistanceViewModel.DataPath.Split("\\")[^1] + ".txt";
+                            fileName = seed + "/" + runs + "_AVG_" + _properties.Distance.DataPath.Split("\\")[^1] + ".txt";
 
                             s = "epoch;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation;conflict_percentage;avgDiff;0Diff;02Diff\n";
                             s += CreateDistanceLogsPerRunsParams(results,
                                 Enum.GetName(parameters.ConflictResolveMethod),
                                 Enum.GetName(parameters.RandomizedResolveMethod));
-                            File.AppendAllText(_properties.DistanceViewModel.ResultPath + "\\" + fileName, s);
+                            File.AppendAllText(_properties.Distance.ResultPath + "\\" + fileName, s);
                         }
 
                     }, ct);
 
                 Dispatcher.Invoke(() =>
                     {
-                        _properties.DistanceViewModel.ProgressBarValue =
-                            runs * _properties.DistanceViewModel.MaxEpoch - 1;
+                        _properties.Distance.ProgressBarValue =
+                            runs * _properties.Distance.MaxEpoch - 1;
                         DistanceResultLabel.Content =
                             $"Avg: {results.Average(x => x.FinalFitness)}  " +
                             $"Max: {results.Max(x => x.FinalFitness)}  " +
                             $"Min: {results.Min(x => x.FinalFitness)}  " +
                             $"Avg epoch count: {results.Average(x => x.EpochCount)}";
-                        _properties.DistanceViewModel.CurrentSeed = results[0].Seed;
+                        _properties.Distance.CurrentSeed = results[0].Seed;
                         WritePlotDistances(linesGridDistances, GetBestFitnesses(runFitnesses));
 
                         SaveDistanceResultsToDataCsv(results, runs,
-                            _properties.DistanceViewModel.DataPath.Split('\\')[^1]
-                                .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'))
+                            _properties.Distance.DataPath.Split('\\')[^1]
+                                .Remove(_properties.Distance.DataPath.Split('\\')[^1].IndexOf('.'))
                             );
                     });
 
@@ -203,7 +204,7 @@ namespace OptimizationUI
 
             await Task.Run(() =>
             {
-                WarehouseParameters warehouseParameters = _properties.WarehouseViewModel as WarehouseParameters;
+                WarehouseParameters warehouseParameters = _properties.Warehouse as WarehouseParameters;
                 warehouseParameters.WarehouseGeneticAlgorithmParameters.ConflictResolveMethod =
                     ConflictResolveMethod.WarehouseSingleProductFrequency;
                 warehouseParameters.WarehouseGeneticAlgorithmParameters.RandomizedResolveMethod =
@@ -299,10 +300,10 @@ namespace OptimizationUI
             {
                 string jsonString = File.ReadAllText(location);
                 _properties = JsonSerializer.Deserialize<Properties>(jsonString);
-                _properties.WarehouseViewModel.FitnessGeneticAlgorithmParameters =
-                    new DistanceViewModel(_properties.WarehouseViewModel.FitnessGeneticAlgorithmParameters);
-                _properties.WarehouseViewModel.WarehouseGeneticAlgorithmParameters =
-                    new DistanceViewModel(_properties.WarehouseViewModel.WarehouseGeneticAlgorithmParameters);
+                _properties.Warehouse.FitnessGeneticAlgorithmParameters =
+                    new Distance(_properties.Warehouse.FitnessGeneticAlgorithmParameters);
+                _properties.Warehouse.WarehouseGeneticAlgorithmParameters =
+                    new Distance(_properties.Warehouse.WarehouseGeneticAlgorithmParameters);
             }
             else
             {
@@ -331,8 +332,8 @@ namespace OptimizationUI
             fileDialog.Multiselect = true;
             fileDialog.InitialDirectory = sb.ToString();
             fileDialog.ShowDialog();
-            _properties.DistanceViewModel.SelectedFiles = fileDialog.FileNames;
-            _properties.DistanceViewModel.SelectedFilesString = GetFilesString();
+            _properties.Distance.SelectedFiles = fileDialog.FileNames;
+            _properties.Distance.SelectedFilesString = GetFilesString();
 
         }
 
@@ -342,7 +343,7 @@ namespace OptimizationUI
             fileDialog.Filter = "txt files (*.txt)|*.txt";
             fileDialog.RestoreDirectory = true;
             fileDialog.ShowDialog();
-            _properties.WarehouseViewModel.WarehousePath = fileDialog.FileName;
+            _properties.Warehouse.WarehousePath = fileDialog.FileName;
         }
 
         private void WarehouseOrdersPathButton_OnClick(object sender, RoutedEventArgs e)
@@ -351,7 +352,7 @@ namespace OptimizationUI
             fileDialog.Filter = "txt files (*.txt)|*.txt";
             fileDialog.RestoreDirectory = true;
             fileDialog.ShowDialog();
-            _properties.WarehouseViewModel.OrdersPath = fileDialog.FileName;
+            _properties.Warehouse.OrdersPath = fileDialog.FileName;
         }
 
         private double[][] GetBestFitnesses(double[][][] runFitnesses)
@@ -531,10 +532,10 @@ namespace OptimizationUI
             lineWorst.Plot(x, a);
             lineCustom.Plot(x, m);
 
-            lineBest.Visibility = _properties.DistanceViewModel.ShowBest ? Visibility.Visible : Visibility.Hidden;
-            lineAvg.Visibility = _properties.DistanceViewModel.ShowAvg ? Visibility.Visible : Visibility.Hidden;
-            lineWorst.Visibility = _properties.DistanceViewModel.ShowWorst ? Visibility.Visible : Visibility.Hidden;
-            lineCustom.Visibility = _properties.DistanceViewModel.ShowCustom ? Visibility.Visible : Visibility.Hidden;
+            lineBest.Visibility = _properties.Distance.ShowBest ? Visibility.Visible : Visibility.Hidden;
+            lineAvg.Visibility = _properties.Distance.ShowAvg ? Visibility.Visible : Visibility.Hidden;
+            lineWorst.Visibility = _properties.Distance.ShowWorst ? Visibility.Visible : Visibility.Hidden;
+            lineCustom.Visibility = _properties.Distance.ShowCustom ? Visibility.Visible : Visibility.Hidden;
 
             linesGrid.Children.Add(lineBest);
             linesGrid.Children.Add(lineAvg);
@@ -635,10 +636,10 @@ namespace OptimizationUI
             lineWorst.Plot(x, a);
             lineCustom.Plot(x, m);
 
-            lineBest.Visibility = _properties.WarehouseViewModel.ShowBest ? Visibility.Visible : Visibility.Hidden;
-            lineAvg.Visibility = _properties.WarehouseViewModel.ShowAvg ? Visibility.Visible : Visibility.Hidden;
-            lineWorst.Visibility = _properties.WarehouseViewModel.ShowWorst ? Visibility.Visible : Visibility.Hidden;
-            lineCustom.Visibility = _properties.WarehouseViewModel.ShowCustom ? Visibility.Visible : Visibility.Hidden;
+            lineBest.Visibility = _properties.Warehouse.ShowBest ? Visibility.Visible : Visibility.Hidden;
+            lineAvg.Visibility = _properties.Warehouse.ShowAvg ? Visibility.Visible : Visibility.Hidden;
+            lineWorst.Visibility = _properties.Warehouse.ShowWorst ? Visibility.Visible : Visibility.Hidden;
+            lineCustom.Visibility = _properties.Warehouse.ShowCustom ? Visibility.Visible : Visibility.Hidden;
 
             linesGrid.Children.Add(lineBest);
             linesGrid.Children.Add(lineAvg);
@@ -651,13 +652,13 @@ namespace OptimizationUI
             if (linesGrid.Children.Count > 0)
             {
                 linesGrid.Children[0].Visibility =
-                    _properties.DistanceViewModel.ShowBest ? Visibility.Visible : Visibility.Hidden;
+                    _properties.Distance.ShowBest ? Visibility.Visible : Visibility.Hidden;
                 linesGrid.Children[1].Visibility =
-                    _properties.DistanceViewModel.ShowAvg ? Visibility.Visible : Visibility.Hidden;
+                    _properties.Distance.ShowAvg ? Visibility.Visible : Visibility.Hidden;
                 linesGrid.Children[2].Visibility =
-                    _properties.DistanceViewModel.ShowWorst ? Visibility.Visible : Visibility.Hidden;
+                    _properties.Distance.ShowWorst ? Visibility.Visible : Visibility.Hidden;
                 linesGrid.Children[3].Visibility =
-                    _properties.DistanceViewModel.ShowCustom ? Visibility.Visible : Visibility.Hidden;
+                    _properties.Distance.ShowCustom ? Visibility.Visible : Visibility.Hidden;
             }
         }
 
@@ -666,13 +667,13 @@ namespace OptimizationUI
             if (linesGrid.Children.Count > 0)
             {
                 linesGrid.Children[0].Visibility =
-                    _properties.WarehouseViewModel.ShowBest ? Visibility.Visible : Visibility.Hidden;
+                    _properties.Warehouse.ShowBest ? Visibility.Visible : Visibility.Hidden;
                 linesGrid.Children[1].Visibility =
-                    _properties.WarehouseViewModel.ShowAvg ? Visibility.Visible : Visibility.Hidden;
+                    _properties.Warehouse.ShowAvg ? Visibility.Visible : Visibility.Hidden;
                 linesGrid.Children[2].Visibility =
-                    _properties.WarehouseViewModel.ShowWorst ? Visibility.Visible : Visibility.Hidden;
+                    _properties.Warehouse.ShowWorst ? Visibility.Visible : Visibility.Hidden;
                 linesGrid.Children[3].Visibility =
-                    _properties.WarehouseViewModel.ShowCustom ? Visibility.Visible : Visibility.Hidden;
+                    _properties.Warehouse.ShowCustom ? Visibility.Visible : Visibility.Hidden;
             }
         }
 
@@ -683,12 +684,12 @@ namespace OptimizationUI
             fileDialog.RestoreDirectory = true;
             fileDialog.ShowDialog();
             DeserializeParameters(fileDialog.FileName);
-            DistancePanel.DataContext = _properties.DistanceViewModel;
+            DistancePanel.DataContext = _properties.Distance;
             WarehouseFitnessPanel.DataContext =
-                _properties.WarehouseViewModel.FitnessGeneticAlgorithmParameters as DistanceViewModel;
+                _properties.Warehouse.FitnessGeneticAlgorithmParameters as Distance;
             WarehouseStackPanel.DataContext =
-                _properties.WarehouseViewModel.WarehouseGeneticAlgorithmParameters as DistanceViewModel;
-            WarehousePanel.DataContext = _properties.WarehouseViewModel;
+                _properties.Warehouse.WarehouseGeneticAlgorithmParameters as Distance;
+            WarehousePanel.DataContext = _properties.Warehouse;
         }
 
         private void SaveDistanceParamsButton_OnClick(object sender, RoutedEventArgs e)
@@ -702,13 +703,13 @@ namespace OptimizationUI
 
         private void SaveDistanceResultsToDataCsv(TSPResult[] results, int runs, string dataset, string id = "default")
         {
-            var line = File.Exists(_properties.DistanceViewModel.ResultPath + "\\data.txt") ? new StringBuilder() : new StringBuilder("algorithm;dataset;id;runs;distance;d_epoch;d*0.98_epoch;seed\n");
+            var line = File.Exists(_properties.Distance.ResultPath + "\\data.txt") ? new StringBuilder() : new StringBuilder("algorithm;dataset;id;runs;distance;d_epoch;d*0.98_epoch;seed\n");
 
-            line.Append(Enum.GetName(_properties.DistanceViewModel.CrossoverMethod));
-            if (_properties.DistanceViewModel.CrossoverMethod == CrossoverMethod.MAC || _properties.DistanceViewModel.CrossoverMethod == CrossoverMethod.MRC)
+            line.Append(Enum.GetName(_properties.Distance.CrossoverMethod));
+            if (_properties.Distance.CrossoverMethod == CrossoverMethod.MAC || _properties.Distance.CrossoverMethod == CrossoverMethod.MRC)
             {
                 line.Append('(');
-                foreach (var crossoverMethod in _properties.DistanceViewModel.MultiCrossovers)
+                foreach (var crossoverMethod in _properties.Distance.MultiCrossovers)
                 {
                     line.Append($"{Enum.GetName(crossoverMethod)} ");
                 }
@@ -742,7 +743,7 @@ namespace OptimizationUI
 
 
             line.Append($";{dataset};{id};{runs};{results.Average(x => x.FinalFitness)};{averageMinEpoch};{epochNumbersWhenSlowedDown.Average()};{results[0].Seed}\n");
-            File.AppendAllText(_properties.DistanceViewModel.ResultPath + "\\data.txt", line.ToString());
+            File.AppendAllText(_properties.Distance.ResultPath + "\\data.txt", line.ToString());
         }
 
         int xt = 0;
@@ -755,12 +756,12 @@ namespace OptimizationUI
 
             var headers =
             "dataset;crossover;conflict_resolver;random_resolver;best_distance;avg_top_10%;median;avg_worst_10%;average;worst_distance;std_dev;avg_min_epoch;d*0.98_epoch\n";
-            var dataset = _properties.DistanceViewModel.DataPath.Split('\\')[^1]
-                .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'));
+            var dataset = _properties.Distance.DataPath.Split('\\')[^1]
+                .Remove(_properties.Distance.DataPath.Split('\\')[^1].IndexOf('.'));
 
-            string ft = _properties.DistanceViewModel.ResultPath + @"\data_" +
-                System.IO.Path.GetFileNameWithoutExtension(_properties.DistanceViewModel.DataPath) + "_" + _properties.DistanceViewModel.ResolveRandomizationProbability +
-                 "_" + _properties.DistanceViewModel.MaxEpoch + ".txt";
+            string ft = _properties.Distance.ResultPath + @"\data_" +
+                System.IO.Path.GetFileNameWithoutExtension(_properties.Distance.DataPath) + "_" + _properties.Distance.ResolveRandomizationProbability +
+                 "_" + _properties.Distance.MaxEpoch + ".txt";
 
 
             var s = "";
@@ -795,7 +796,7 @@ namespace OptimizationUI
 
 
             s += dataset + ";";
-            s += Enum.GetName(_properties.DistanceViewModel.CrossoverMethod) + ";";
+            s += Enum.GetName(_properties.Distance.CrossoverMethod) + ";";
             s += conflictResolver + ";";
             s += randomResolver + ";";
             //tego nie jestem do końca pewien, które wartości będą potrzebne - może lepiej ich naprodukować więcej, by mieć z czego wybierać:
@@ -912,8 +913,8 @@ namespace OptimizationUI
             Cursor cursor = this.Cursor;
             this.Cursor = Cursors.Wait;
 
-            if (!Directory.Exists(_properties.DistanceViewModel.ResultPath))
-                Directory.CreateDirectory(_properties.DistanceViewModel.ResultPath);
+            if (!Directory.Exists(_properties.Distance.ResultPath))
+                Directory.CreateDirectory(_properties.Distance.ResultPath);
 
             DistanceStartButton.IsEnabled = false;
 
@@ -921,23 +922,23 @@ namespace OptimizationUI
             {
                 return (_, iteration) =>
                 {
-                    _properties.DistanceViewModel.ProgressBarValue++;
+                    _properties.Distance.ProgressBarValue++;
                     //Console.WriteLine(iteration);
                 };
             }
 
 
             var runs = int.Parse(DistanceRunsTextBox.Text);
-            int seed = _properties.DistanceViewModel.CurrentSeed;
-            if (_properties.DistanceViewModel.RandomSeed)
+            int seed = _properties.Distance.CurrentSeed;
+            if (_properties.Distance.RandomSeed)
             {
                 Random random = new Random();
                 seed = random.Next(1, Int32.MaxValue);
-                _properties.DistanceViewModel.CurrentSeed = seed;
+                _properties.Distance.CurrentSeed = seed;
             }
             _cancellationTokenSource = new CancellationTokenSource();
             CancellationToken ct = _cancellationTokenSource.Token;
-            OptimizationParameters parameters = _properties.DistanceViewModel as OptimizationParameters;
+            OptimizationParameters parameters = _properties.Distance as OptimizationParameters;
 
             var crossovers = new CrossoverMethod[4];
             crossovers[0] = CrossoverMethod.Aex;
@@ -948,20 +949,20 @@ namespace OptimizationUI
 
             await Task.Run(() =>
             {
-                Directory.CreateDirectory(_properties.DistanceViewModel.ResultPath + "\\" + seed.ToString());
-                SerializeParameters(_properties.DistanceViewModel.ResultPath + "\\" + seed + "/parameters.json");
+                Directory.CreateDirectory(_properties.Distance.ResultPath + "\\" + seed.ToString());
+                SerializeParameters(_properties.Distance.ResultPath + "\\" + seed + "/parameters.json");
 
-                _properties.DistanceViewModel.ProgressBarMaximum = (runs * _properties.DistanceViewModel.MaxEpoch * 9 * crossovers.Length * _properties.DistanceViewModel.SelectedFiles.Length) - 1;
-                _properties.DistanceViewModel.ProgressBarValue = 0;
+                _properties.Distance.ProgressBarMaximum = (runs * _properties.Distance.MaxEpoch * 9 * crossovers.Length * _properties.Distance.SelectedFiles.Length) - 1;
+                _properties.Distance.ProgressBarValue = 0;
                 Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration += BaseGeneticOnOnNextIteration();
                 List<string> operationType = new List<string>();
                 int ren = -1;
 
-                foreach (var dataset in _properties.DistanceViewModel.SelectedFiles)
+                foreach (var dataset in _properties.Distance.SelectedFiles)
                 {
-                    _properties.DistanceViewModel.DataPath = dataset;
+                    _properties.Distance.DataPath = dataset;
                     var datasetName = dataset.Split('\\')[^1]
-                            .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.'));
+                            .Remove(_properties.Distance.DataPath.Split('\\')[^1].IndexOf('.'));
                     parameters.DataPath = dataset;
                     var results = new TSPResult[runs];
 
@@ -977,7 +978,7 @@ namespace OptimizationUI
 
                         xt = 0;
                         parameters.ResolveRandomizationProbability = pr[pri];
-                        _properties.DistanceViewModel.ResolveRandomizationProbability = pr[pri];
+                        _properties.Distance.ResolveRandomizationProbability = pr[pri];
 
                         ren++;
                         foreach (var crossoverMethod in crossovers)
@@ -991,7 +992,7 @@ namespace OptimizationUI
                                 foreach (ConflictResolveMethod conflictResolve in Enum.GetValues(typeof(ConflictResolveMethod)))
                                 {
                                     var fileName = seed + "/" + runs + "_" + dataset.Split('\\')[^1]
-                                                       .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.')) + "_BEST_"
+                                                       .Remove(_properties.Distance.DataPath.Split('\\')[^1].IndexOf('.')) + "_BEST_"
                                                    + Enum.GetName(crossoverMethod) + "_" + Enum.GetName(randomizedResolve) + "_" + Enum.GetName(conflictResolve) + ".txt";
                                     var s = "epoch;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation;conflict_percentage;avgDiff;0Diff;02Diff\n";
 
@@ -1014,17 +1015,17 @@ namespace OptimizationUI
 
                                     SaveDistanceArticleResultsToFile(n0, results, n1, n2, seed, pri);
 
-                                    File.AppendAllText(_properties.DistanceViewModel.ResultPath + "\\" + fileName, s);
+                                    File.AppendAllText(_properties.Distance.ResultPath + "\\" + fileName, s);
 
                                     fileName = seed + "/" + runs + "_" + dataset.Split('\\')[^1]
-                                                   .Remove(_properties.DistanceViewModel.DataPath.Split('\\')[^1].IndexOf('.')) + "_AVG_"
+                                                   .Remove(_properties.Distance.DataPath.Split('\\')[^1].IndexOf('.')) + "_AVG_"
                                                + Enum.GetName(crossoverMethod) + "_" + Enum.GetName(randomizedResolve) + "_" + Enum.GetName(conflictResolve) + ".txt";
 
 
                                     s += CreateDistanceLogsPerRunsParams(results,
                                         Enum.GetName(parameters.ConflictResolveMethod),
                                         Enum.GetName(parameters.RandomizedResolveMethod));
-                                    File.AppendAllText(_properties.DistanceViewModel.ResultPath + "\\" + fileName, s);
+                                    File.AppendAllText(_properties.Distance.ResultPath + "\\" + fileName, s);
 
                                 }
 
@@ -1051,7 +1052,7 @@ namespace OptimizationUI
                         fresAvg += "\r\n";
                     }
 
-                    string f1 = _properties.DistanceViewModel.ResultPath + @"\" + System.IO.Path.GetFileNameWithoutExtension(dataset) + "_" + _properties.DistanceViewModel.MaxEpoch;
+                    string f1 = _properties.Distance.ResultPath + @"\" + System.IO.Path.GetFileNameWithoutExtension(dataset) + "_" + _properties.Distance.MaxEpoch;
 
                     File.WriteAllText(f1 + "_fresMin.txt", fresMin);
                     File.WriteAllText(f1 + "_fresAvg.txt", fresAvg);
@@ -1061,7 +1062,7 @@ namespace OptimizationUI
             }, ct);
 
 
-            _properties.DistanceViewModel.ProgressBarValue = 0;
+            _properties.Distance.ProgressBarValue = 0;
             this.Cursor = cursor;
 
         }
@@ -1071,7 +1072,7 @@ namespace OptimizationUI
             var fileDialog = new FolderBrowserForWPF.Dialog();
             if (fileDialog.ShowDialog() == true)
             {
-                _properties.DistanceViewModel.ResultPath = fileDialog.FileName;
+                _properties.Distance.ResultPath = fileDialog.FileName;
 
             }
 
@@ -1152,7 +1153,7 @@ namespace OptimizationUI
         private string GetFilesString()
         {
             StringBuilder sb = new StringBuilder();
-            foreach (var file in _properties.DistanceViewModel.SelectedFiles)
+            foreach (var file in _properties.Distance.SelectedFiles)
             {
                 sb.Append($"{file.Split("\\")[^1]}, ");
             }

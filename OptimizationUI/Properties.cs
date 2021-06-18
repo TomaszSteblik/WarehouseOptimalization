@@ -1,25 +1,26 @@
 ﻿using System.Text.Json.Serialization;
+using OptimizationUI.Models;
 
 namespace OptimizationUI
 {
     public class Properties
     {
-        public Properties(WarehouseViewModel warehouseViewModel, DistanceViewModel distanceViewModel)
+        public Properties(Warehouse warehouse, Distance distance)
         {
-            WarehouseViewModel = warehouseViewModel;
-            DistanceViewModel = distanceViewModel;
+            Warehouse = warehouse;
+            Distance = distance;
         }
         [JsonInclude]
-        public WarehouseViewModel WarehouseViewModel;
+        public Warehouse Warehouse;
         [JsonInclude]
-        public DistanceViewModel DistanceViewModel;
+        public Distance Distance;
 
         public Properties()
         {
-            WarehouseViewModel = new WarehouseViewModel();
-            WarehouseViewModel.FitnessGeneticAlgorithmParameters = new DistanceViewModel();
-            WarehouseViewModel.WarehouseGeneticAlgorithmParameters = new DistanceViewModel();
-            DistanceViewModel = new DistanceViewModel();
+            Warehouse = new Warehouse();
+            Warehouse.FitnessGeneticAlgorithmParameters = new Distance();
+            Warehouse.WarehouseGeneticAlgorithmParameters = new Distance();
+            Distance = new Distance();
         }
     }
 }

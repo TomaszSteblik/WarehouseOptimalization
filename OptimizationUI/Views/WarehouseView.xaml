@@ -1,0 +1,174 @@
+﻿<UserControl x:Class="OptimizationUI.Views.WarehouseView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:OptimizationUI.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <StackPanel Background="#FFE5E5E5" Name="WarehousePanel">
+        <WrapPanel>
+            <Label Content="Warehouse path: "></Label>
+            
+            <StackPanel Orientation="Horizontal">
+                <TextBox Width="400" Text="{Binding WarehousePath}"></TextBox>
+                <Button Margin="10 0 0 0" Width="50" Content="Open" Name="WarehouseMagPathButton" Click="WarehouseMagPathButton_OnClick"></Button>
+            </StackPanel>
+        </WrapPanel>
+        <WrapPanel>
+            <Label Content="Orders path: "></Label>
+            <StackPanel Orientation="Horizontal">
+                <TextBox Width="400" Text="{Binding OrdersPath}"></TextBox>
+                <Button Margin="10 0 0 0" Width="50" Content="Open" Name="WarehouseOrdersPathButton" Click="WarehouseOrdersPathButton_OnClick"></Button>
+            </StackPanel>
+        </WrapPanel>
+        <Label Content="Warehouse parameters: "></Label>
+        <StackPanel Name="WarehouseStackPanel">
+            <StackPanel Margin="50 0 0 0">
+                <WrapPanel>
+                    <Label Content="Selection method:"></Label>
+                    <ComboBox Width="120" ItemsSource="{Binding Path=SelectionMethod}" Name="WarehouseSelectionComboBox"
+                          SelectedItem="{Binding SelectionMethod}"/>
+                </WrapPanel>
+                <WrapPanel>
+                    <Label Content="Crossover method:"></Label>
+                    <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="WarehouseCrossoverComboBox"
+                          SelectedItem="{Binding CrossoverMethod}"/>
+                </WrapPanel>
+                <ItemsControl Margin="50 0 0 0" ItemsSource="{Binding Path=CrossoverCheckBoxStates}" Visibility="{Binding IsCrossoverCheckBoxVisible}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding Path=CheckBoxValue}" Content="{Binding Path=CheckBoxText}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <WrapPanel>
+                    <Label Content="Elimination method:"></Label>
+                    <ComboBox Width="120" ItemsSource="{Binding Path=EliminationMethod}" Name="WarehouseEliminationComboBox"
+                          SelectedItem="{Binding EliminationMethod}"/>
+                </WrapPanel>
+                <WrapPanel>
+                    <Label Content="Mutation method:"></Label>
+                    <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="WarehouseMutationComboBox"
+                          SelectedItem="{Binding MutationMethod}"/>
+                </WrapPanel>
+                <ItemsControl Margin="50 0 0 0" ItemsSource="{Binding Path=MutationCheckBoxStates}" Visibility="{Binding IsMutationCheckBoxVisible}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding Path=CheckBoxValue}" Content="{Binding Path=CheckBoxText}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <WrapPanel>
+                    <Label Content="Population size:"></Label>
+                    <TextBox Width="120" Text="{Binding PopulationSize}"></TextBox>
+                </WrapPanel>
+                <WrapPanel>
+                    <Label Content="Children per generation:"></Label>
+                    <TextBox Width="120" Text="{Binding ChildrenPerGeneration}"></TextBox>
+                </WrapPanel>
+                <WrapPanel>
+                    <Label Content="Parents per children:"></Label>
+                    <TextBox Width="120" Text="{Binding ParentsPerChildren}"></TextBox>
+                </WrapPanel>
+                <WrapPanel>
+                    <Label Content="Mutation probability (in per mil)"></Label>
+                    <TextBox Width="120" Text="{Binding MutationProbability}"></TextBox>
+                </WrapPanel>
+                <WrapPanel>
+                    <Label Content="Max epochs:"></Label>
+                    <TextBox Width="120" Text="{Binding MaxEpoch}"></TextBox>
+                </WrapPanel>
+        </StackPanel>
+        </StackPanel>
+        <Label Content="Fitness calculation: "></Label>
+        <StackPanel Name="WarehouseFitnessPanel" Margin="50 0 0 0">
+            <WrapPanel>
+            <Label Content="Optimization method:"></Label>
+            <ComboBox Width="120" ItemsSource="{Binding Path=OptimizationMethod}" Name="WarehouseFitnessMethodComboBox"
+                      SelectedItem="{Binding OptimizationMethod}"/>
+        </WrapPanel>
+            <StackPanel  Visibility="{Binding IsAllVisible}">
+                <WrapPanel>
+                    <Label Content="Selection method:"></Label>
+                    <ComboBox Width="120" ItemsSource="{Binding Path=SelectionMethod}" Name="WarehouseFitnessSelectionComboBox"
+                              SelectedItem="{Binding SelectionMethod}"/>
+                </WrapPanel>
+                <WrapPanel>
+                    <Label Content="Crossover method:"></Label>
+                    <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="WarehouseFitnessCrossoverComboBox"
+                              SelectedItem="{Binding CrossoverMethod}"/>
+                </WrapPanel>
+                <ItemsControl Margin="50 0 0 0" ItemsSource="{Binding Path=CrossoverCheckBoxStates}" Visibility="{Binding IsCrossoverCheckBoxVisible}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding Path=CheckBoxValue}" Content="{Binding Path=CheckBoxText}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <WrapPanel>
+                    <Label Content="Elimination method:"></Label>
+                    <ComboBox Width="120" ItemsSource="{Binding Path=EliminationMethod}" Name="WarehouseFitnessEliminationComboBox"
+                              SelectedItem="{Binding EliminationMethod}"/>
+                </WrapPanel>
+                <WrapPanel>
+                    <Label Content="Mutation method:"></Label>
+                    <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="WarehouseFitnessMutationComboBox"
+                              SelectedItem="{Binding MutationMethod}"/>
+                </WrapPanel>
+                <ItemsControl Margin="50 0 0 0" ItemsSource="{Binding Path=MutationCheckBoxStates}" Visibility="{Binding IsMutationCheckBoxVisible}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding Path=CheckBoxValue}" Content="{Binding Path=CheckBoxText}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <WrapPanel>
+                    <Label Content="Population size:"></Label>
+                    <TextBox Width="120" Text="{Binding PopulationSize}"></TextBox>
+                </WrapPanel>
+                <WrapPanel>
+                    <Label Content="Children per generation:"></Label>
+                    <TextBox Width="120" Text="{Binding ChildrenPerGeneration}"></TextBox>
+                </WrapPanel>
+                <WrapPanel>
+                    <Label Content="Parents per children:"></Label>
+                    <TextBox Width="120" Text="{Binding ParentsPerChildren}"></TextBox>
+                </WrapPanel>
+                <WrapPanel>
+                    <Label Content="Mutation probability (in per mil)"></Label>
+                    <TextBox Width="120" Text="{Binding MutationProbability}"></TextBox>
+                </WrapPanel>
+                <WrapPanel>
+                    <Label Content="Max epochs:"></Label>
+                    <TextBox Width="120" Text="{Binding MaxEpoch}"></TextBox>
+                </WrapPanel>
+            </StackPanel>
+        </StackPanel>
+        <Button Content="Start" Click="ButtonBase_OnClick"></Button>
+        <Button Content="Cancel" Click="CancelWarehouse"></Button>
+        <Label HorizontalAlignment="Center" FontSize="20" Name="WarehouseResultLabel"></Label>
+        <WrapPanel HorizontalAlignment="Center">
+            <wpf:Chart BottomTitle="epoch" LeftTitle="fitness" Width="400" Height="350" Name="warehouseChart">
+                <Grid Name="linesGridWarehouse"/>
+            </wpf:Chart>
+            
+            <StackPanel Margin="5 5 0 0">
+                <CheckBox Content="Show best fitness line" IsChecked="{Binding ShowBest}" Margin=" 0 5 0 0" Click="RefreshWarehouseGraph"></CheckBox>
+                <CheckBox Content="Show avg fitness line" IsChecked="{Binding ShowAvg}" Margin=" 0 5 0 0" Click="RefreshWarehouseGraph"></CheckBox>
+                <CheckBox Content="Show worst fitness line" IsChecked="{Binding ShowWorst}" Margin=" 0 5 0 0" Click="RefreshWarehouseGraph"></CheckBox>
+                <CheckBox Content="Show custom fitness line" IsChecked="{Binding ShowCustom}" Margin=" 0 5 0 0" Click="RefreshWarehouseGraph"></CheckBox>
+                <WrapPanel>
+                    <Label Content="Percent: "></Label>
+                    <TextBox Width="40" Name="WarehousePercentText" Text="50"></TextBox>
+                </WrapPanel>
+                <WrapPanel>
+                    <Label Content="Individuals after: "></Label>
+                    <TextBox Width="40" Name="WarehouseIndividualsText" Text="1"></TextBox>
+                </WrapPanel>
+                <Button Content="Save to file" Click="RenderChartWarehouse" Margin="0 10 0 0 "></Button>
+                <TextBlock TextWrapping="Wrap" Name="WarehouseSavingChartLabel" Width="200"></TextBlock>
+            </StackPanel>
+        </WrapPanel>
+    </StackPanel>
+</UserControl>
