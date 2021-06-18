@@ -12,64 +12,71 @@
                 <Label Content="Selected datasets:"></Label>
                 <StackPanel Orientation="Horizontal">
                     <TextBox Width="400" Text="{Binding SelectedFilesString}" IsReadOnly="True"/>
-                    <Button Margin=" 10 0 0 0" Content="Open" Width="50" Command="{Binding ReadDistanceDataPathCommand}"/>
+                    <Button Margin=" 10 0 0 0" Content="Open" Width="50" 
+                            Command="{Binding ReadDistanceDataPathCommand}" 
+                            CommandParameter="{Binding}"/>
                 </StackPanel>
             </WrapPanel>
             <WrapPanel>
                 <Label Content="Results path:"></Label>
                 <StackPanel Orientation="Horizontal">
                     <TextBox Width="400" Text="{Binding DistanceParameters.ResultPath}"/>
-                    <Button Margin=" 10 0 0 0" Content="Open" Width="50" Command="{Binding ReadDistanceResultPathCommand}"/>
+                    <Button Margin=" 10 0 0 0" Content="Open" Width="50" 
+                            Command="{Binding ReadDistanceResultPathCommand}"
+                            CommandParameter="{Binding DistanceParameters.ResultPath}"/>
                 </StackPanel>
             </WrapPanel>
-            <WrapPanel Margin="0 5 0 5">
-                <Label Content="Parameters:"></Label>
-                <Button Width="50" Margin="10 0 10 0" Content="Load" Click="LoadDistanceParamsButton_OnClick"/>
-                <Button Width="50" Content="Save" Click="SaveDistanceParamsButton_OnClick"/>
-            </WrapPanel>
-            <CheckBox Content="Use 2 opt" IsChecked="{Binding Use2opt}"></CheckBox>
+            <CheckBox Content="Use 2 opt" IsChecked="{Binding DistanceParameters.Use2opt}"></CheckBox>
             <WrapPanel>
                 <Label Content="Number of runs:"></Label>
-                <TextBox Width="120" Text="10"></TextBox>
+                <TextBox Width="120" Text="{Binding Runs}"/>
                 <Label Content="Seed:"></Label>
-                <TextBox Width="120" Text="{Binding CurrentSeed}" IsReadOnly="{Binding RandomSeed}"></TextBox>
+                <TextBox Width="120" Text="{Binding CurrentSeed}" IsReadOnly="{Binding RandomSeed}"/>
                 <CheckBox Content="Random seed" IsChecked="{Binding RandomSeed}"></CheckBox>
             </WrapPanel>
             <WrapPanel>
                 <Label Content="Optimization method:"></Label>
-                <ComboBox Width="120" ItemsSource="{Binding Path=OptimizationMethod}"
-                          SelectedItem="{Binding OptimizationMethod}"/>
+                <ComboBox Width="120" 
+                          SelectedItem="{Binding DistanceParameters.OptimizationMethod}"
+                          ItemsSource="{Binding Methods}" />
             </WrapPanel>
             <StackPanel  Visibility="{Binding IsAllVisible}">
                 <WrapPanel>
                     <Label Content="Population initialization method:"></Label>
-                    <ComboBox Width="200" ItemsSource="{Binding Path=PopulationInitializationMethod}"
-                              SelectedItem="{Binding PopulationInitializationMethod}"/>
-                              
+                    <ComboBox ItemsSource="{Binding Initializations}" 
+                              Width="200" 
+                              SelectedItem="{Binding DistanceParameters.PopulationInitializationMethod}"/>
                 </WrapPanel>
                 <WrapPanel>
                     <Label Content="Selection method:"></Label>
-                    <ComboBox Width="120" ItemsSource="{Binding Path=SelectionMethod}" Name="DistanceSelectionComboBox"
-                              SelectedItem="{Binding SelectionMethod}"/>
-                    <Label Content="Tournament participants:" Visibility="{Binding IsTournamentSelectionSelected}"></Label>
-                    <TextBox Width="120" Visibility="{Binding IsTournamentSelectionSelected}" Text="{Binding TournamentSelectionParticipantsCount}"></TextBox>
+                    <ComboBox Width="120" 
+                              SelectedItem="{Binding DistanceParameters.SelectionMethod}"
+                              ItemsSource="{Binding Selections}"/>
+                    <Label Content="Tournament participants:" Visibility="{Binding IsTournamentSelectionSelected}"/>
+                    <TextBox Width="120" Visibility="{Binding IsTournamentSelectionSelected}" 
+                             Text="{Binding DistanceParameters.TournamentSelectionParticipantsCount}"/>
                 </WrapPanel>
                 <WrapPanel>
-                    <Label Content="Crossover method:"></Label>
-                    <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="DistanceCrossoverComboBox"
-                              SelectedItem="{Binding CrossoverMethod}"/>
-                    <Label Content="Conflict resolve method:"></Label>
-                    <ComboBox Width="120" ItemsSource="{Binding Path= ConflictResolveMethod}" Name="DistanceConflictResolveComboBox"
-                              SelectedItem="{Binding ConflictResolveMethod}"></ComboBox>
+                    <Label Content="Crossover method:"/>
+                    <ComboBox Width="120" 
+                              SelectedItem="{Binding DistanceParameters.CrossoverMethod}"
+                              ItemsSource="{Binding Crossovers}"/>
+                    <Label Content="Conflict resolve method:"/>
+                    <ComboBox Width="120" 
+                              SelectedItem="{Binding DistanceParameters.ConflictResolveMethod}"
+                              ItemsSource="{Binding ConflictResolvers}"/>
                 </WrapPanel>
                 <WrapPanel>
-                    <Label Content="Randomized resolve method:"></Label>
-                    <ComboBox Width="120" ItemsSource="{Binding Path= ConflictResolveMethod}" Name="DistanceRandomizedResolveComboBox"
-                              SelectedItem="{Binding RandomizedResolveMethod}"></ComboBox>
+                    <Label Content="Randomized resolve method:"/>
+                    <ComboBox Width="120" 
+                              SelectedItem="{Binding DistanceParameters.RandomizedResolveMethod}"
+                              ItemsSource="{Binding ConflictResolvers}"/>
                     <Label Content="Probability:"></Label>
-                    <TextBox Width="120" Text="{Binding ResolveRandomizationProbability}"></TextBox>
+                    <TextBox Width="120" Text="{Binding DistanceParameters.ResolveRandomizationProbability}"/>
                 </WrapPanel>
-                <ItemsControl Margin="50 0 0 0" ItemsSource="{Binding Path=CrossoverCheckBoxStates}" Visibility="{Binding IsCrossoverCheckBoxVisible}">
+                <ItemsControl Margin="50 0 0 0" 
+                              ItemsSource="{Binding Path=DistanceParameters.CrossoverCheckBoxStates}" 
+                              Visibility="{Binding IsCrossoverCheckBoxVisible}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <CheckBox IsChecked="{Binding Path=CheckBoxValue}" Content="{Binding Path=CheckBoxText}" />
@@ -77,19 +84,24 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
                 <WrapPanel>
-                    <Label Content="Elimination method:"></Label>
-                    <ComboBox Width="120" ItemsSource="{Binding Path=EliminationMethod}" Name="DistanceEliminationComboBox"
-                              SelectedItem="{Binding EliminationMethod}"/>
-                    <Label Content="Tournament participants:" Visibility="{Binding IsTournamentEliminationSelected}"></Label>
-                    <TextBox Width="120" Visibility="{Binding IsTournamentEliminationSelected}" Text="{Binding TournamentEliminationParticipantsCount}"></TextBox>
+                    <Label Content="Elimination method:"/>
+                    <ComboBox Width="120" 
+                              SelectedItem="{Binding DistanceParameters.EliminationMethod}"
+                              ItemsSource="{Binding Eliminations}"/>
+                    <Label Content="Tournament participants:" Visibility="{Binding IsTournamentEliminationSelected}"/>
+                    <TextBox Width="120" Visibility="{Binding IsTournamentEliminationSelected}" 
+                             Text="{Binding DistanceParameters.TournamentEliminationParticipantsCount}"/>
                 </WrapPanel>
                 <WrapPanel>
                     <Label Content="Mutation method:"></Label>
-                    <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="DistanceMutationComboBox"
-                              SelectedItem="{Binding MutationMethod}"/>
-                    <CheckBox Content="Mutate before crossover if both parents are the same" IsChecked="{Binding Path=MutateParentIfTheSame}"></CheckBox>
+                    <ComboBox Width="120" 
+                              SelectedItem="{Binding DistanceParameters.MutationMethod}"
+                              ItemsSource="{Binding Mutations}"/>
+                    <CheckBox Content="Mutate before crossover if both parents are the same" 
+                              IsChecked="{Binding Path=DistanceParameters.MutateParentIfTheSame}"/>
                 </WrapPanel>
-                <ItemsControl Margin="50 0 0 0" ItemsSource="{Binding Path=MutationCheckBoxStates}" Visibility="{Binding IsMutationCheckBoxVisible}">
+                <ItemsControl Margin="50 0 0 0" ItemsSource="{Binding Path=DistanceParameters.MutationCheckBoxStates}" 
+                              Visibility="{Binding IsMutationCheckBoxVisible}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <CheckBox IsChecked="{Binding Path=CheckBoxValue}" Content="{Binding Path=CheckBoxText}" />
@@ -97,76 +109,56 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
                 <WrapPanel>
-                    <Label Content="Population size:"></Label>
-                    <TextBox Width="120" Text="{Binding PopulationSize}"></TextBox>
+                    <Label Content="Population size:"/>
+                    <TextBox Width="120" Text="{Binding DistanceParameters.PopulationSize}"/>
                 </WrapPanel>
                 <WrapPanel>
-                    <Label Content="Children per generation:"></Label>
-                    <TextBox Width="120" Text="{Binding ChildrenPerGeneration}"></TextBox>
+                    <Label Content="Children per generation:"/>
+                    <TextBox Width="120" Text="{Binding DistanceParameters.ChildrenPerGeneration}"/>
                 </WrapPanel>
                 <WrapPanel>
-                    <Label Content="Parents per children:"></Label>
-                    <TextBox Width="120" Text="{Binding ParentsPerChildren}"></TextBox>
+                    <Label Content="Parents per children:"/>
+                    <TextBox Width="120" Text="{Binding DistanceParameters.ParentsPerChildren}"/>
                 </WrapPanel>
                 <WrapPanel>
-                    <Label Content="Mutation probability (in per mil)"></Label>
-                    <TextBox Width="120" Text="{Binding MutationProbability}"></TextBox>
+                    <Label Content="Mutation probability (in per mil)"/>
+                    <TextBox Width="120" Text="{Binding DistanceParameters.MutationProbability}"/>
                 </WrapPanel>
-                <CheckBox Content="Enable incremental mutation probability  " IsChecked="{Binding IncrementMutationEnabled}"/>
+                <CheckBox Content="Enable incremental mutation probability  " 
+                          IsChecked="{Binding DistanceParameters.IncrementMutationEnabled}"/>
                 <WrapPanel Visibility="{Binding IsIncrementalMutationDeltaVisible}">
-                    <Label Content="Increment value(in per mile)"></Label>
-                    <TextBox Width="120" Text="{Binding IncrementMutationDelta}"></TextBox>
-                    <Label Content="Increment after every (in epochs):"></Label>
-                    <TextBox Width="120" Text="{Binding IncrementMutationEpochs}"></TextBox>
+                    <Label Content="Increment value(in per mile)"/>
+                    <TextBox Width="120" Text="{Binding DistanceParameters.IncrementMutationDelta}"/>
+                    <Label Content="Increment after every (in epochs):"/>
+                    <TextBox Width="120" Text="{Binding DistanceParameters.IncrementMutationEpochs}"/>
                 </WrapPanel>
-                <CheckBox Content="Enable cataclysm " IsChecked="{Binding EnableCataclysm}"></CheckBox>
+                <CheckBox Content="Enable cataclysm " IsChecked="{Binding DistanceParameters.EnableCataclysm}"/>
                 <WrapPanel Margin="20 0 0 0" Visibility="{Binding IsCataclysmVisible}">
-                    <Label Content="Cataclysm epochs"></Label>
-                    <TextBox Width="120" Text="{Binding CataclysmEpoch}"></TextBox>
-                    <Label Content="Cataclysm death %"></Label>
-                    <TextBox Width="120" Text="{Binding DeathPercentage}"></TextBox>
-                    
+                    <Label Content="Cataclysm epochs"/>
+                    <TextBox Width="120" Text="{Binding DistanceParameters.CataclysmEpoch}"/>
+                    <Label Content="Cataclysm death %"/>
+                    <TextBox Width="120" Text="{Binding DistanceParameters.DeathPercentage}"/>
                 </WrapPanel>
                 <WrapPanel>
                     <Label Content="Max Epochs:"></Label>
-                    <TextBox Width="120" Text="{Binding MaxEpoch}"></TextBox>
-                    <CheckBox Content="After epochs without improvement " IsChecked="{Binding StopAfterEpochsWithoutChange}"></CheckBox>
-                    <TextBox Width="120" Text="{Binding StopAfterEpochCount}"></TextBox>
+                    <TextBox Width="120" Text="{Binding DistanceParameters.MaxEpoch}"/>
+                    <CheckBox Content="After epochs without improvement " 
+                              IsChecked="{Binding DistanceParameters.StopAfterEpochsWithoutChange}"/>
+                    <TextBox Width="120" Text="{Binding DistanceParameters.StopAfterEpochCount}"/>
                 </WrapPanel>
             </StackPanel>
-            <Button Margin="30 5 30 0" Content="Optimize Only With Current Parameters" Click="OtpimizeWithCurrentParametersButtonClick" Name="DistanceStartButton"/>
-            <Button Margin="30 5 30 0" Content="Loop All Parameters" Click="LoopAllParametersButton_OnClick" Name="DistanceArticleStartButton"/>                        <Button Margin="30 5 30 0" Content="Cancel" Click="CancelDistance"></Button>
-            <ProgressBar Margin="30 5 30 0" Height="20" Name="DistanceProgressBar" Value="{Binding ProgressBarValue}" Maximum="{Binding ProgressBarMaximum}"></ProgressBar>
+            <Button Margin="30 5 30 0" Content="Optimize Only With Current Parameters" 
+                    Command="{Binding OptimizeWithCurrentParametersCommand}"
+                    CommandParameter="{Binding DistanceParameters}"
+                    IsEnabled="{Binding IsDistanceStartButtonEnabled}"/>
+            <Button Margin="30 5 30 0" Content="Loop All Parameters" Command="{Binding LoopAllParametersCommand}"
+                    IsEnabled="{Binding IsDistanceStartButtonEnabled}"/>                        
+            <Button Margin="30 5 30 0" Content="Cancel" Command="{Binding CancelCommand}"
+                    CommandParameter="{Binding CancellationTokenSource}"/>
+            <ProgressBar Margin="30 5 30 0" Height="20" 
+                         Value="{Binding ProgressBarValue}" 
+                         Maximum="{Binding ProgressBarMaximum}"/>
             <Label Name="DistanceResultLabel"></Label>
-            <WrapPanel HorizontalAlignment="Center">
-                
-                <wpf:Chart BottomTitle="epoch" LeftTitle="fitness" Width="400" Height="350" Name="distancesChart" LegendVisibility="Collapsed">
-                    <Grid Name="linesGridDistances">
-                    </Grid>
-                </wpf:Chart>
-                <wpf:LegendItemsPanel Margin="10,10,10,10" Name="legendItemsPanel"/>
-                
-                <StackPanel Margin="5 5 0 0">
-                    <CheckBox Content="Show best fitness line" IsChecked="{Binding ShowBest}" Margin=" 0 5 0 0" Click="RefreshDistanceGraph"></CheckBox>
-                    <CheckBox Content="Show avg fitness line" IsChecked="{Binding ShowAvg}" Margin=" 0 5 0 0" Click="RefreshDistanceGraph"></CheckBox>
-                    <CheckBox Content="Show worst fitness line" IsChecked="{Binding ShowWorst}" Margin=" 0 5 0 0" Click="RefreshDistanceGraph"></CheckBox>
-                    <CheckBox Content="Show custom fitness line" IsChecked="{Binding ShowCustom}" Margin=" 0 5 0 0" Click="RefreshDistanceGraph"></CheckBox>
-                    <WrapPanel>
-                        <Label Content="Percent: "></Label>
-                        <TextBox Width="40" Name="DistancesPercentText" Text="50"></TextBox>
-                    </WrapPanel>
-                    <WrapPanel>
-                        <Label Content="Individuals after: "></Label>
-                        <TextBox Width="40" Name="DistancesIndividualsText" Text="1"></TextBox>
-                    </WrapPanel>
-                    <Button Content="Compare methods" Click="Button_Click_CompareMethods"></Button>
-                    <Button Content="Save to file" Click="RenderChartDistances" Margin="0 10 0 0 "></Button>
-                    <Button Content="Generate fresMin avg file" Name="FresMinAvgButton" Click="FresMinAvgButton_OnClick"></Button>
-                    <TextBlock TextWrapping="Wrap" Name="DistanceSavingChartLabel" Width="200"></TextBlock>
-                </StackPanel>
-                
-            </WrapPanel>
-             
         </StackPanel>
     </ScrollViewer>
 </UserControl>

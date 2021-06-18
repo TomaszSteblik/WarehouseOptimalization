@@ -2,23 +2,30 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using Optimization.GeneticAlgorithms.Crossovers;
+using Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers;
 using Optimization.GeneticAlgorithms.Eliminations;
+using Optimization.GeneticAlgorithms.Initialization;
 using Optimization.GeneticAlgorithms.Mutations;
 using Optimization.GeneticAlgorithms.Selections;
 using Optimization.Parameters;
+using OptimizationUI.Commands;
 using OptimizationUI.Models;
 
 namespace OptimizationUI.ViewModels
 {
     public class DistanceViewModel : INotifyPropertyChanged
     {
+        #region Fields
+        
         public event PropertyChangedEventHandler PropertyChanged;
 
-        #region Properties
+        #endregion
 
+        #region Properties
         
         public Distance DistanceParameters { get; set; }
         public int ProgressBarValue { get; set; } = 0;
@@ -27,7 +34,12 @@ namespace OptimizationUI.ViewModels
         public int CurrentSeed { get; set; }
         public string SelectedFilesString { get; set; }
         public string[] SelectedFiles { get; set; }
-
+        public CancellationTokenSource CancellationTokenSource { get; set; }
+        public int Runs { get; set; } = 10;
+        public int xt { get; set; } = 10;
+        public List<string>[] Smin { get; set; } = new List<string>[11];
+        public List<string>[] Savg { get; set; } = new List<string>[11];
+        
         #endregion
 
         #region ChartProperties
@@ -36,6 +48,26 @@ namespace OptimizationUI.ViewModels
         public bool ShowBest { get; set; } = true;
         public bool ShowAvg { get; set; } = true;
         public bool ShowWorst { get; set; } = true;
+
+        #endregion
+
+        #region UiProperties
+
+        public bool IsDistanceStartButtonEnabled { get; set; }
+        public List<OptimizationMethod> Methods { get; set; } = 
+            Enum.GetValues(typeof(OptimizationMethod)).Cast<OptimizationMethod>().ToList();
+        public List<SelectionMethod> Selections { get; set; } = 
+            Enum.GetValues(typeof(SelectionMethod)).Cast<SelectionMethod>().ToList();
+        public List<CrossoverMethod> Crossovers { get; set; } = 
+            Enum.GetValues(typeof(CrossoverMethod)).Cast<CrossoverMethod>().ToList();
+        public List<EliminationMethod> Eliminations { get; set; } = 
+            Enum.GetValues(typeof(EliminationMethod)).Cast<EliminationMethod>().ToList();
+        public List<MutationMethod> Mutations { get; set; } = 
+            Enum.GetValues(typeof(MutationMethod)).Cast<MutationMethod>().ToList();
+        public List<PopulationInitializationMethod> Initializations { get; set; } = 
+            Enum.GetValues(typeof(PopulationInitializationMethod)).Cast<PopulationInitializationMethod>().ToList();
+        public List<ConflictResolveMethod> ConflictResolvers { get; set; } =
+            Enum.GetValues(typeof(ConflictResolveMethod)).Cast<ConflictResolveMethod>().ToList();
 
         #endregion
 
@@ -73,6 +105,9 @@ namespace OptimizationUI.ViewModels
 
         public ICommand ReadDistanceDataPathCommand { get; set; }
         public ICommand ReadDistanceResultPathCommand { get; set; }
+        public ICommand OptimizeWithCurrentParametersCommand { get; set; }
+        public ICommand LoopAllParametersCommand { get; set; }
+        public ICommand CancelCommand { get; set; }
         
         #endregion
 
@@ -95,6 +130,8 @@ namespace OptimizationUI.ViewModels
             {
                 DistanceParameters.MutationCheckBoxStates.Add(new CheckBoxState(mutationsName,true));
             }
+
+            SetupCommands();
         }
 
         public DistanceViewModel(OptimizationParameters fitnessGeneticAlgorithmParameters)
@@ -137,6 +174,17 @@ namespace OptimizationUI.ViewModels
                     fitnessGeneticAlgorithmParameters.MultiMutations
                         .Contains<MutationMethod>((MutationMethod) Enum.Parse(typeof(MutationMethod),mutationsName))));
             }
+
+            SetupCommands();
+        }
+
+        private void SetupCommands()
+        {
+            ReadDistanceDataPathCommand = new ReadDistanceDataPathCommand();
+            LoopAllParametersCommand = new LoopAllParametersCommand();
+            ReadDistanceResultPathCommand = new ReadDistanceResultPathCommand();
+
+            CancelCommand = new CancelCommand();
         }
     }
 }
