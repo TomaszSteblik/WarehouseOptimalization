@@ -151,7 +151,9 @@
                     Command="{Binding OptimizeWithCurrentParametersCommand}"
                     CommandParameter="{Binding DistanceParameters}"
                     IsEnabled="{Binding IsDistanceStartButtonEnabled}"/>
-            <Button Margin="30 5 30 0" Content="Loop All Parameters" Command="{Binding LoopAllParametersCommand}"
+            <Button Margin="30 5 30 0" Content="Loop All Parameters" 
+                    Command="{Binding LoopAllParametersCommand}"
+                    CommandParameter="{Binding }"
                     IsEnabled="{Binding IsDistanceStartButtonEnabled}"/>                        
             <Button Margin="30 5 30 0" Content="Cancel" Command="{Binding CancelCommand}"
                     CommandParameter="{Binding CancellationTokenSource}"/>

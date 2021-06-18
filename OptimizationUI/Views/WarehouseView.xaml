@@ -11,29 +11,32 @@
             <Label Content="Warehouse path: "></Label>
             
             <StackPanel Orientation="Horizontal">
-                <TextBox Width="400" Text="{Binding WarehousePath}"></TextBox>
-                <Button Margin="10 0 0 0" Width="50" Content="Open" Name="WarehouseMagPathButton" Click="WarehouseMagPathButton_OnClick"></Button>
+                <TextBox Width="400" Text="{Binding Warehouse.WarehousePath}"/>
+                <Button Margin="10 0 0 0" Width="50" Content="Open" 
+                        Command="{Binding WarehouseMagPathCommand}" 
+                        CommandParameter="{Binding Warehouse}"/>
             </StackPanel>
         </WrapPanel>
         <WrapPanel>
             <Label Content="Orders path: "></Label>
             <StackPanel Orientation="Horizontal">
-                <TextBox Width="400" Text="{Binding OrdersPath}"></TextBox>
-                <Button Margin="10 0 0 0" Width="50" Content="Open" Name="WarehouseOrdersPathButton" Click="WarehouseOrdersPathButton_OnClick"></Button>
+                <TextBox Width="400" Text="{Binding Warehouse.OrdersPath}"></TextBox>
+                <Button Margin="10 0 0 0" Width="50" Content="Open" Command="{Binding WarehouseOrdersPathCommand}"
+                        CommandParameter="{Binding Warehouse}"/>
             </StackPanel>
         </WrapPanel>
         <Label Content="Warehouse parameters: "></Label>
-        <StackPanel Name="WarehouseStackPanel">
+        <StackPanel>
             <StackPanel Margin="50 0 0 0">
                 <WrapPanel>
-                    <Label Content="Selection method:"></Label>
-                    <ComboBox Width="120" ItemsSource="{Binding Path=SelectionMethod}" Name="WarehouseSelectionComboBox"
-                          SelectedItem="{Binding SelectionMethod}"/>
+                    <Label Content="Selection method:"/>
+                    <ComboBox Width="120" ItemsSource="{Binding Path=Selections}"
+                          SelectedItem="{Binding Warehouse.WarehouseGeneticAlgorithmParameters.SelectionMethod}"/>
                 </WrapPanel>
                 <WrapPanel>
-                    <Label Content="Crossover method:"></Label>
-                    <ComboBox Width="120" ItemsSource="{Binding Path=CrossoverMethod}" Name="WarehouseCrossoverComboBox"
-                          SelectedItem="{Binding CrossoverMethod}"/>
+                    <Label Content="Crossover method:"/>
+                    <ComboBox Width="120" ItemsSource="{Binding Path=Crossovers}"
+                          SelectedItem="{Binding Warehouse.WarehouseGeneticAlgorithmParameters.CrossoverMethod}"/>
                 </WrapPanel>
                 <ItemsControl Margin="50 0 0 0" ItemsSource="{Binding Path=CrossoverCheckBoxStates}" Visibility="{Binding IsCrossoverCheckBoxVisible}">
                     <ItemsControl.ItemTemplate>
@@ -145,8 +148,8 @@
                 </WrapPanel>
             </StackPanel>
         </StackPanel>
-        <Button Content="Start" Click="ButtonBase_OnClick"></Button>
-        <Button Content="Cancel" Click="CancelWarehouse"></Button>
+        <Button Content="Start" Command="{Binding RunWarehouseCommand}" CommandParameter="{Binding Warehouse}"></Button>
+        <Button Content="Cancel" Command="{Binding CancelCommand}" CommandParameter="{Binding CancellationTokenSource}"/>
         <Label HorizontalAlignment="Center" FontSize="20" Name="WarehouseResultLabel"></Label>
         
     </StackPanel>

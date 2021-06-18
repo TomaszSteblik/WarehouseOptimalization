@@ -53,7 +53,7 @@ namespace OptimizationUI.ViewModels
 
         #region UiProperties
 
-        public bool IsDistanceStartButtonEnabled { get; set; }
+        public bool IsDistanceStartButtonEnabled { get; set; } = true;
         public List<OptimizationMethod> Methods { get; set; } = 
             Enum.GetValues(typeof(OptimizationMethod)).Cast<OptimizationMethod>().ToList();
         public List<SelectionMethod> Selections { get; set; } = 
@@ -118,11 +118,13 @@ namespace OptimizationUI.ViewModels
             var crossoversNames = Enum.GetNames(typeof(CrossoverMethod)).ToList();
             crossoversNames.Remove("MRC");
             crossoversNames.Remove("MAC");
+            DistanceParameters.CrossoverCheckBoxStates = new List<CheckBoxState>();
             foreach (var crossoverName in crossoversNames)
             {
                 DistanceParameters.CrossoverCheckBoxStates.Add(new CheckBoxState(crossoverName, true));
             }
-            
+
+            DistanceParameters.MutationCheckBoxStates = new List<CheckBoxState>();
             var mutationsNames = Enum.GetNames(typeof(MutationMethod)).ToList();
             mutationsNames.Remove("MRM");
             mutationsNames.Remove("MAM");

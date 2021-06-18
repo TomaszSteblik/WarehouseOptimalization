@@ -28,7 +28,7 @@ namespace OptimizationUI.Commands
             List<string>[] Smin;
 
             if (!Directory.Exists(vm?.DistanceParameters.ResultPath))
-                Directory.CreateDirectory(vm?.DistanceParameters?.ResultPath ?? string.Empty);
+                Directory.CreateDirectory(vm.DistanceParameters.ResultPath);
 
             vm.IsDistanceStartButtonEnabled = false;
 

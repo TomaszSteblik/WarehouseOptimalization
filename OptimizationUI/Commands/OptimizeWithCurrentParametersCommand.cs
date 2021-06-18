@@ -104,10 +104,10 @@ namespace OptimizationUI.Commands
                 //    $"Avg epoch count: {results.Average(x => x.EpochCount)}";
                 vm.CurrentSeed = results[0].Seed;
 
-                SaveDistanceResultsToDataCsv(results, runs,
-                    vm.DistanceParameters.DataPath.Split('\\')[^1]
-                        .Remove(vm.DistanceParameters.DataPath.Split('\\')[^1].IndexOf('.'))
-                );
+                //SaveDistanceResultsToDataCsv(results, runs,
+                 //   vm.DistanceParameters.DataPath.Split('\\')[^1]
+                  //      .Remove(vm.DistanceParameters.DataPath.Split('\\')[^1].IndexOf('.'))
+                //);
 
 
                 Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration -= BaseGeneticOnOnNextIteration();
