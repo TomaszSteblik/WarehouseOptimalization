@@ -15,14 +15,14 @@ namespace OptimizationUI.Commands
         public void Execute(object? parameter)
         {
 
-            var fileDialog = new OpenFileDialog
-            {
-                Filter = "txt files (*.txt)|*.txt", 
-                RestoreDirectory = true
-            };
-            fileDialog.ShowDialog();
-            var warehouse = parameter as Warehouse;
-            warehouse.WarehousePath = fileDialog.FileName;
+            // var fileDialog = new OpenFileDialog
+            // {
+            //     Filter = "txt files (*.txt)|*.txt", 
+            //     RestoreDirectory = true
+            // };
+            // fileDialog.ShowDialog();
+            // var warehouse = parameter as Warehouse;
+            // warehouse.WarehousePath = fileDialog.FileName;
         }
 
         public event EventHandler? CanExecuteChanged;

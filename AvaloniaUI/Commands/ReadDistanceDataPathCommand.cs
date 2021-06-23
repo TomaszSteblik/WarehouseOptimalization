@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Microsoft.Win32;
-using OptimizationUI.Models;
-using OptimizationUI.ViewModels;
+using AvaloniaUI.Models;
+using AvaloniaUI.ViewModels;
 
-namespace OptimizationUI.Commands
+namespace AvaloniaUI.Commands
 {
     public class ReadDistanceDataPathCommand : ICommand
     {
@@ -15,7 +20,7 @@ namespace OptimizationUI.Commands
             return true;
         }
 
-        public void Execute(object? parameter)
+        public async void Execute(object? parameter)
         {
             var distance = parameter as DistanceViewModel;
             
@@ -31,13 +36,22 @@ namespace OptimizationUI.Commands
 
             sb.Append("Data");
 
-            // OpenFileDialog fileDialog = new OpenFileDialog();
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            var filters = new List<FileDialogFilter>();
+            var extenstions = new List<string>();
+            extenstions.Add("txt");
+            extenstions.Add("tsp");
+            
+            filters.Add(new FileDialogFilter
+            {
+                Extensions = extenstions
+            });
             // fileDialog.Filter = "All files (*.*)|*.*|txt files (*.txt)|*.txt|tsp files (*.tsp)|*.tsp";
             // fileDialog.RestoreDirectory = true;
             // fileDialog.Multiselect = true;
-            // fileDialog.InitialDirectory = sb.ToString();
-            // fileDialog.ShowDialog();
-            // distance.SelectedFiles = fileDialog.FileNames;
+            fileDialog.Directory = sb.ToString();
+            var app = Application.Current.ApplicationLifetime as ClassicDesktopStyleApplicationLifetime;
+            distance.SelectedFiles =(await fileDialog.ShowAsync(app?.MainWindow));
             distance.SelectedFilesString = GetFilesString(distance.SelectedFiles);
         }
         

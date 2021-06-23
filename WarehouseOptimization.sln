@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optimization", "Optimizatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptimizationUI", "OptimizationUI\OptimizationUI.csproj", "{1F4B2369-E278-4D1B-8057-F5692B56ECCD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaloniaUI", "AvaloniaUI\AvaloniaUI.csproj", "{8920DC27-EDDE-4F26-BD06-7C8CBC0F7F33}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{1F4B2369-E278-4D1B-8057-F5692B56ECCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F4B2369-E278-4D1B-8057-F5692B56ECCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F4B2369-E278-4D1B-8057-F5692B56ECCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8920DC27-EDDE-4F26-BD06-7C8CBC0F7F33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8920DC27-EDDE-4F26-BD06-7C8CBC0F7F33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8920DC27-EDDE-4F26-BD06-7C8CBC0F7F33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8920DC27-EDDE-4F26-BD06-7C8CBC0F7F33}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

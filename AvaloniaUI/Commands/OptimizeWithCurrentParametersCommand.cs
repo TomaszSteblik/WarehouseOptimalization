@@ -7,9 +7,9 @@ using System.Windows.Input;
 using Optimization;
 using Optimization.GeneticAppliances.TSP;
 using Optimization.Parameters;
-using OptimizationUI.ViewModels;
+using AvaloniaUI.ViewModels;
 
-namespace OptimizationUI.Commands
+namespace AvaloniaUI.Commands
 {
     public class OptimizeWithCurrentParametersCommand : ICommand
     {

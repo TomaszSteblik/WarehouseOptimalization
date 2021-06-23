@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Windows.Input;
 using Microsoft.Win32;
-using OptimizationUI.Models;
+using AvaloniaUI.Models;
 
-namespace OptimizationUI.Commands
+namespace AvaloniaUI.Commands
 {
-    public class WarehouseOrdersPathCommand : ICommand
+    public class WarehouseMagPathCommand : ICommand
     {
         public bool CanExecute(object? parameter)
         {
@@ -14,6 +14,7 @@ namespace OptimizationUI.Commands
 
         public void Execute(object? parameter)
         {
+
             // var fileDialog = new OpenFileDialog
             // {
             //     Filter = "txt files (*.txt)|*.txt", 
@@ -21,7 +22,7 @@ namespace OptimizationUI.Commands
             // };
             // fileDialog.ShowDialog();
             // var warehouse = parameter as Warehouse;
-            // warehouse.OrdersPath = fileDialog.FileName;
+            // warehouse.WarehousePath = fileDialog.FileName;
         }
 
         public event EventHandler? CanExecuteChanged;

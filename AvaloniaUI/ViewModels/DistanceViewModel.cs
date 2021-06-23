@@ -12,16 +12,17 @@ using Optimization.GeneticAlgorithms.Initialization;
 using Optimization.GeneticAlgorithms.Mutations;
 using Optimization.GeneticAlgorithms.Selections;
 using Optimization.Parameters;
-using OptimizationUI.Commands;
-using OptimizationUI.Models;
+using AvaloniaUI.Commands;
+using AvaloniaUI.Models;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
-namespace OptimizationUI.ViewModels
+namespace AvaloniaUI.ViewModels
 {
-    public class DistanceViewModel : INotifyPropertyChanged
+    public class DistanceViewModel : ReactiveObject
     {
         #region Fields
         
-        public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
 
@@ -31,8 +32,8 @@ namespace OptimizationUI.ViewModels
         public int ProgressBarValue { get; set; } = 0;
         public int ProgressBarMaximum { get; set; } = 100;
         public bool RandomSeed { get; set; } = true;
-        public int CurrentSeed { get; set; }
-        public string SelectedFilesString { get; set; }
+        [Reactive]public int CurrentSeed { get; set; }
+        [Reactive]public string SelectedFilesString { get; set; }
         public string[] SelectedFiles { get; set; }
         public CancellationTokenSource CancellationTokenSource { get; set; }
         public int Runs { get; set; } = 10;
