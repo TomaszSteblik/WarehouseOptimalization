@@ -20,6 +20,8 @@ namespace OptimizationUI.ViewModels
         #region Properties
 
         public Warehouse Warehouse { get; set; }
+        public Distance FitnessGeneticAlgorithmParameters { get; set; }
+        public Distance WarehouseGeneticAlgorithmParameters { get; set; }
         public CancellationTokenSource CancelationTokenSource { get; set; }
 
 
@@ -64,6 +66,10 @@ namespace OptimizationUI.ViewModels
         public WarehouseViewModel()
         {
             Warehouse = new Warehouse();
+            FitnessGeneticAlgorithmParameters = new Distance();
+            WarehouseGeneticAlgorithmParameters = new Distance();
+            Warehouse.FitnessGeneticAlgorithmParameters = FitnessGeneticAlgorithmParameters;
+            Warehouse.WarehouseGeneticAlgorithmParameters = WarehouseGeneticAlgorithmParameters;
         }
 
         private void SetupCommands()

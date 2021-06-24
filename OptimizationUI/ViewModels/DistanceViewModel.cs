@@ -71,9 +71,6 @@ namespace OptimizationUI.ViewModels
         public DistanceViewModel()
         {
             DistanceParameters = new Distance();
-            
-            
-
             SetupCommands();
         }
 
@@ -94,29 +91,6 @@ namespace OptimizationUI.ViewModels
                 ChildrenPerGeneration = fitnessGeneticAlgorithmParameters.ChildrenPerGeneration,
                 ParentsPerChildren = fitnessGeneticAlgorithmParameters.ParentsPerChildren
             };
-
-
-
-            var crossoversNames = Enum.GetNames(typeof(CrossoverMethod)).ToList();
-            crossoversNames.Remove("MRC");
-            crossoversNames.Remove("MAC");
-            foreach (var crossoverName in crossoversNames)
-            {
-                DistanceParameters.CrossoverCheckBoxStates.Add(new CheckBoxState(crossoverName, 
-                    fitnessGeneticAlgorithmParameters.MultiCrossovers
-                        .Contains<CrossoverMethod>((CrossoverMethod) Enum.Parse(typeof(CrossoverMethod),crossoverName))));
-            }
-            
-            
-            var mutationsNames = Enum.GetNames(typeof(MutationMethod)).ToList();
-            mutationsNames.Remove("MRM");
-            mutationsNames.Remove("MAM");
-            foreach (var mutationsName in mutationsNames)
-            {
-                DistanceParameters.MutationCheckBoxStates.Add(new CheckBoxState(mutationsName,
-                    fitnessGeneticAlgorithmParameters.MultiMutations
-                        .Contains<MutationMethod>((MutationMethod) Enum.Parse(typeof(MutationMethod),mutationsName))));
-            }
 
             SetupCommands();
         }

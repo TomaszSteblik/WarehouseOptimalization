@@ -1,3 +1,0 @@
-dataset;crossover;conflict_resolver;random_resolver;best_distance;avg_top_10%;median;avg_worst_10%;average;worst_distance;std_dev;avg_min_epoch;d*0.98_epoch
-be52;Aex;Random;Random;10450.881;10450.881;10951.154;11370.392;10894.703;11370.392;274.075;191.0;180.500;
-be52;Aex;NearestNeighbor;Random;7571.955;7571.955;7813.668;7926.953;7809.790;7926.953;105.570;170.7;116.300;

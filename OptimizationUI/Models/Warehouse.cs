@@ -9,9 +9,16 @@ namespace OptimizationUI.Models
         
         public override string WarehousePath { get; set; } = "";
         public override string OrdersPath { get; set; } = "";
-        
-        
+
+        public override OptimizationParameters FitnessGeneticAlgorithmParameters { get; set; }
+        public override OptimizationParameters WarehouseGeneticAlgorithmParameters { get; set; }
+
+
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public Warehouse()
+        {
+        }
        
     }
 }

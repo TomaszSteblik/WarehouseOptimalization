@@ -10,9 +10,7 @@ namespace OptimizationUI.ViewModels
         public MainViewModel()
         {
             DistanceViewModel = new DistanceViewModel();
-            var warehouseViewModel = new WarehouseViewModel();
-            warehouseViewModel.Warehouse.FitnessGeneticAlgorithmParameters = new Distance();
-            warehouseViewModel.Warehouse.WarehouseGeneticAlgorithmParameters = new Distance();
+            WarehouseViewModel = new WarehouseViewModel();
         }
 
         public MainViewModel(WarehouseViewModel warehouseViewModel, DistanceViewModel distanceViewModel)
