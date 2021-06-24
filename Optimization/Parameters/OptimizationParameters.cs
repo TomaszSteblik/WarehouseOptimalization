@@ -75,5 +75,8 @@ namespace Optimization.Parameters
         public virtual bool IncrementMutationEnabled { get; set; }
         public virtual double IncrementMutationDelta { get; set; }
         public virtual int IncrementMutationEpochs { get; set; }
+        
+        public virtual int ConflictParticipants { get; set; }
+        public virtual int RandomizedParticipants { get; set; }
     }
 }

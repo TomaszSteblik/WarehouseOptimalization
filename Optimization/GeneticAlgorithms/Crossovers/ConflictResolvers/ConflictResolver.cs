@@ -10,9 +10,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
         NearestNeighbor,
         Tournament, 
         WarehouseSingleProductFrequency,
-        WarehouseSingleProductFrequencyTournament,
         WarehousePairwiseProductFrequency,
-        WarehousePairwiseProductFrequencyTournament,
     }
     public abstract class ConflictResolver
     {

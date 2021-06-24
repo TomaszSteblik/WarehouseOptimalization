@@ -1,0 +1,129 @@
+﻿<UserControl x:Class="OptimizationUI.Controls.GeneticAlgorithmParametersControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:OptimizationUI.Controls"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <StackPanel>
+        <CheckBox Content="Use 2 opt" IsChecked="{Binding Use2opt}"></CheckBox>
+        <WrapPanel>
+            <Label Content="Optimization method:"></Label>
+            <ComboBox Width="120" 
+                      SelectedItem="{Binding OptimizationMethod}"
+                      ItemsSource="{Binding Methods}" />
+        </WrapPanel>
+        <StackPanel  Visibility="{Binding IsAllVisible}">
+            <WrapPanel>
+                <Label Content="Population initialization method:"></Label>
+                <ComboBox ItemsSource="{Binding Initializations}" 
+                          Width="200" 
+                          SelectedItem="{Binding PopulationInitializationMethod}"/>
+            </WrapPanel>
+            <WrapPanel>
+                <Label Content="Selection method:"></Label>
+                <ComboBox Width="120" 
+                          SelectedItem="{Binding SelectionMethod}"
+                          ItemsSource="{Binding Selections}"/>
+                <Label Content="Tournament participants:" Visibility="{Binding IsTournamentSelectionSelected}"/>
+                <TextBox Width="120" Visibility="{Binding IsTournamentSelectionSelected}" 
+                         Text="{Binding TournamentSelectionParticipantsCount}"/>
+            </WrapPanel>
+            <WrapPanel>
+                <Label Content="Crossover method:"/>
+                <ComboBox Width="120" 
+                          SelectedItem="{Binding CrossoverMethod}"
+                          ItemsSource="{Binding Crossovers}"/>
+                <Label Content="Conflict resolve method:"/>
+                <ComboBox Width="120" 
+                          SelectedItem="{Binding ConflictResolveMethod}"
+                          ItemsSource="{Binding ConflictResolvers}"/>
+                <Label Content="Participants:"></Label>
+                <TextBox Width="120" Text="{Binding ConflictParticipants}"/>
+            </WrapPanel>
+            <WrapPanel>
+                <Label Content="Randomized resolve method:"/>
+                <ComboBox Width="120" 
+                          SelectedItem="{Binding RandomizedResolveMethod}"
+                          ItemsSource="{Binding ConflictResolvers}"/>
+                <Label Content="Probability:"></Label>
+                <TextBox Width="120" Text="{Binding ResolveRandomizationProbability}"/>
+                <Label Content="Participants:"></Label>
+                <TextBox Width="120" Text="{Binding RandomizedParticipants}"/>
+            </WrapPanel>
+            <ItemsControl Margin="50 0 0 0" 
+                          ItemsSource="{Binding Path=CrossoverCheckBoxStates}" 
+                          Visibility="{Binding IsCrossoverCheckBoxVisible}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox IsChecked="{Binding Path=CheckBoxValue}" Content="{Binding Path=CheckBoxText}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <WrapPanel>
+                <Label Content="Elimination method:"/>
+                <ComboBox Width="120" 
+                          SelectedItem="{Binding EliminationMethod}"
+                          ItemsSource="{Binding Eliminations}"/>
+                <Label Content="Tournament participants:" Visibility="{Binding IsTournamentEliminationSelected}"/>
+                <TextBox Width="120" Visibility="{Binding IsTournamentEliminationSelected}" 
+                         Text="{Binding TournamentEliminationParticipantsCount}"/>
+            </WrapPanel>
+            <WrapPanel>
+                <Label Content="Mutation method:"></Label>
+                <ComboBox Width="120" 
+                          SelectedItem="{Binding MutationMethod}"
+                          ItemsSource="{Binding Mutations}"/>
+                <CheckBox Content="Mutate before crossover if both parents are the same" 
+                          IsChecked="{Binding Path=MutateParentIfTheSame}"/>
+            </WrapPanel>
+            <ItemsControl Margin="50 0 0 0" ItemsSource="{Binding Path=MutationCheckBoxStates}" 
+                          Visibility="{Binding IsMutationCheckBoxVisible}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox IsChecked="{Binding Path=CheckBoxValue}" Content="{Binding Path=CheckBoxText}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <WrapPanel>
+                <Label Content="Population size:"/>
+                <TextBox Width="120" Text="{Binding PopulationSize}"/>
+            </WrapPanel>
+            <WrapPanel>
+                <Label Content="Children per generation:"/>
+                <TextBox Width="120" Text="{Binding ChildrenPerGeneration}"/>
+            </WrapPanel>
+            <WrapPanel>
+                <Label Content="Parents per children:"/>
+                <TextBox Width="120" Text="{Binding ParentsPerChildren}"/>
+            </WrapPanel>
+            <WrapPanel>
+                <Label Content="Mutation probability (in per mil)"/>
+                <TextBox Width="120" Text="{Binding MutationProbability}"/>
+            </WrapPanel>
+            <CheckBox Content="Enable incremental mutation probability  " 
+                      IsChecked="{Binding IncrementMutationEnabled}"/>
+            <WrapPanel Visibility="{Binding IsIncrementalMutationDeltaVisible}">
+                <Label Content="Increment value(in per mile)"/>
+                <TextBox Width="120" Text="{Binding IncrementMutationDelta}"/>
+                <Label Content="Increment after every (in epochs):"/>
+                <TextBox Width="120" Text="{Binding IncrementMutationEpochs}"/>
+            </WrapPanel>
+            <CheckBox Content="Enable cataclysm " IsChecked="{Binding EnableCataclysm}"/>
+            <WrapPanel Margin="20 0 0 0" Visibility="{Binding IsCataclysmVisible}">
+                <Label Content="Cataclysm epochs"/>
+                <TextBox Width="120" Text="{Binding CataclysmEpoch}"/>
+                <Label Content="Cataclysm death %"/>
+                <TextBox Width="120" Text="{Binding DeathPercentage}"/>
+            </WrapPanel>
+            <WrapPanel>
+                <Label Content="Max Epochs:"></Label>
+                <TextBox Width="120" Text="{Binding MaxEpoch}"/>
+                <CheckBox Content="After epochs without improvement " 
+                          IsChecked="{Binding StopAfterEpochsWithoutChange}"/>
+                <TextBox Width="120" Text="{Binding StopAfterEpochCount}"/>
+            </WrapPanel>
+        </StackPanel>
+    </StackPanel>
+</UserControl>
