@@ -32,9 +32,9 @@
             <controls:GeneticAlgorithmParametersControl DataContext="{Binding WarehouseGeneticAlgorithmParameters}"/>
             <Label Content="Fitness calculation: "></Label>
             <controls:GeneticAlgorithmParametersControl DataContext="{Binding FitnessGeneticAlgorithmParameters}"/>
-            <Button Content="Start" Command="{Binding RunWarehouseCommand}" CommandParameter="{Binding Warehouse}"></Button>
+            <Button Content="Start" Command="{Binding RunWarehouseCommand}" CommandParameter="{Binding }"/>
             <Button Content="Cancel" Command="{Binding CancelCommand}" CommandParameter="{Binding CancellationTokenSource}"/>
-            <Label HorizontalAlignment="Center" FontSize="20" Name="WarehouseResultLabel"></Label>
+            <Label HorizontalAlignment="Center" FontSize="20" Name="WarehouseResultLabel" Content="{Binding Result}"/>
         
         </StackPanel>
     </ScrollViewer>

@@ -38,20 +38,7 @@ namespace OptimizationUI.ViewModels
         
         #region UiProperties
 
-        public List<OptimizationMethod> Methods { get; set; } = 
-            Enum.GetValues(typeof(OptimizationMethod)).Cast<OptimizationMethod>().ToList();
-        public List<SelectionMethod> Selections { get; set; } = 
-            Enum.GetValues(typeof(SelectionMethod)).Cast<SelectionMethod>().ToList();
-        public List<CrossoverMethod> Crossovers { get; set; } = 
-            Enum.GetValues(typeof(CrossoverMethod)).Cast<CrossoverMethod>().ToList();
-        public List<EliminationMethod> Eliminations { get; set; } = 
-            Enum.GetValues(typeof(EliminationMethod)).Cast<EliminationMethod>().ToList();
-        public List<MutationMethod> Mutations { get; set; } = 
-            Enum.GetValues(typeof(MutationMethod)).Cast<MutationMethod>().ToList();
-        public List<PopulationInitializationMethod> Initializations { get; set; } = 
-            Enum.GetValues(typeof(PopulationInitializationMethod)).Cast<PopulationInitializationMethod>().ToList();
-        public List<ConflictResolveMethod> ConflictResolvers { get; set; } =
-            Enum.GetValues(typeof(ConflictResolveMethod)).Cast<ConflictResolveMethod>().ToList();
+        public string Result { get; set; }
 
         #endregion
         
@@ -60,6 +47,7 @@ namespace OptimizationUI.ViewModels
         public ICommand CancelCommand { get; set; }
         public ICommand WarehouseMagPathCommand { get; set; }
         public ICommand WarehouseOrdersPathCommand { get; set; }
+        public ICommand RunWarehouseCommand { get; set; }
 
         #endregion
 
@@ -79,6 +67,7 @@ namespace OptimizationUI.ViewModels
             CancelCommand = new CancelCommand();
             WarehouseMagPathCommand = new WarehouseMagPathCommand();
             WarehouseOrdersPathCommand = new WarehouseOrdersPathCommand();
+            RunWarehouseCommand = new RunWarehouseCommand();
         }
 
     }

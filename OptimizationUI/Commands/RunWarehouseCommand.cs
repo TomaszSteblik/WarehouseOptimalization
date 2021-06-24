@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers;
 using Optimization.GeneticAppliances.Warehouse;
@@ -26,6 +27,7 @@ namespace OptimizationUI.Commands
             double[][] fitness = null;
             Random rnd = new Random();
 
+            Application.Current.MainWindow.Cursor = Cursors.Wait;
 
             await Task.Run(() =>
             {
@@ -39,7 +41,8 @@ namespace OptimizationUI.Commands
                 result = Optimization.OptimizationWork.WarehouseOptimization(warehouseParameters, ct, rnd.Next(1, Int32.MaxValue));
             }, ct);
             
-            //WarehouseResultLabel.Content = $"Wynik: {result.FinalFitness}";
+            vm.Result = $"Wynik: {result.FinalFitness}";
+            Application.Current.MainWindow.Cursor = Cursors.Arrow;
             Logger.SaveWarehouseResultToFile(result);
         }
 
