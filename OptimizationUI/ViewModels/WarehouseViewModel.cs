@@ -70,6 +70,8 @@ namespace OptimizationUI.ViewModels
             WarehouseGeneticAlgorithmParameters = new Distance();
             Warehouse.FitnessGeneticAlgorithmParameters = FitnessGeneticAlgorithmParameters;
             Warehouse.WarehouseGeneticAlgorithmParameters = WarehouseGeneticAlgorithmParameters;
+            
+            SetupCommands();
         }
 
         private void SetupCommands()

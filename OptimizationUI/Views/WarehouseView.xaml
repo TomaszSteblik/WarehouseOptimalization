@@ -23,7 +23,8 @@
                 <Label Content="Orders path: "></Label>
                 <StackPanel Orientation="Horizontal">
                     <TextBox Width="400" Text="{Binding Warehouse.OrdersPath}"></TextBox>
-                    <Button Margin="10 0 0 0" Width="50" Content="Open" Command="{Binding WarehouseOrdersPathCommand}"
+                    <Button Margin="10 0 0 0" Width="50" Content="Open" 
+                            Command="{Binding WarehouseOrdersPathCommand}"
                             CommandParameter="{Binding Warehouse}"/>
                 </StackPanel>
             </WrapPanel>
