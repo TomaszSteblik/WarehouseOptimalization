@@ -61,14 +61,15 @@ namespace OptimizationUI.Commands
             crossovers[2] = CrossoverMethod.HGreX;
             crossovers[3] = CrossoverMethod.HRndX;
 
+            Application.Current.MainWindow.Cursor = Cursors.Wait;
+
 
             await Task.Run(() =>
             {
                 Directory.CreateDirectory(vm.DistanceParameters.ResultPath + "\\" + seed.ToString());
                 //SerializeParameters(vm.DistanceParameters.ResultPath + "\\" + seed + "/parameters.json");
 
-                vm.ProgressBarMaximum = (runs * vm.DistanceParameters.MaxEpoch * 9 * crossovers.Length * vm.SelectedFiles.Length) - 1;
-                vm.ProgressBarValue = 0;
+               
                 Optimization.GeneticAlgorithms.BaseGenetic.OnNextIteration += BaseGeneticOnOnNextIteration();
                 var operationType = new List<string>();
                 var ren = -1;
@@ -83,6 +84,11 @@ namespace OptimizationUI.Commands
                     
 
                     double[] pr = { 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0 };
+                    
+                    vm.ProgressBarMaximum = (runs * vm.DistanceParameters.MaxEpoch * 9 * crossovers.Length 
+                        * vm.SelectedFiles.Length * Enum.GetValues(typeof(ConflictResolveMethod)).Length 
+                        * Enum.GetValues(typeof(ConflictResolveMethod)).Length * pr.Length) - 1;
+                    vm.ProgressBarValue = 0;
 
                     for (int pri = 0; pri < pr.Length; pri++)
                     {
@@ -101,9 +107,14 @@ namespace OptimizationUI.Commands
                             foreach (ConflictResolveMethod randomizedResolve in Enum.GetValues(typeof(ConflictResolveMethod)))
                             {
                                 parameters.RandomizedResolveMethod = randomizedResolve;
+                                if(randomizedResolve.ToString().Contains("Warehouse"))
+                                    continue;
 
                                 foreach (ConflictResolveMethod conflictResolve in Enum.GetValues(typeof(ConflictResolveMethod)))
                                 {
+                                    if(conflictResolve.ToString().Contains("Warehouse"))
+                                        continue;
+                                    
                                     var fileName = seed + "/" + runs + "_" + dataset.Split('\\')[^1]
                                                        .Remove(vm.DistanceParameters.DataPath.Split('\\')[^1].IndexOf('.')) + "_BEST_"
                                                    + Enum.GetName(crossoverMethod) + "_" + Enum.GetName(randomizedResolve) + "_" + Enum.GetName(conflictResolve) + ".txt";
@@ -176,7 +187,7 @@ namespace OptimizationUI.Commands
 
 
             vm.ProgressBarValue = 0;
-            //this.Cursor = cursor;
+            Application.Current.MainWindow.Cursor = Cursors.Arrow;
         }
         
         public event EventHandler? CanExecuteChanged;

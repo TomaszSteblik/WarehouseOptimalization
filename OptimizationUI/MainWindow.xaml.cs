@@ -19,7 +19,6 @@ namespace OptimizationUI
 {
     public partial class MainWindow : Window
     {
-        private CancellationTokenSource _cancellationTokenSource;
 
         public MainWindow()
         {
@@ -30,12 +29,5 @@ namespace OptimizationUI
             
         }
         
-
-        private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            
-            
-
-        }
     }
 }

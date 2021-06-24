@@ -80,8 +80,78 @@ namespace OptimizationUI.Models
         public override double IncrementMutationDelta { get; set; } = 1;
         public override int IncrementMutationEpochs { get; set; } = 1;
         
+        #region Visibilities
+
+        public Visibility IsCrossoverCheckBoxVisible => 
+            CrossoverMethod is CrossoverMethod.MAC or CrossoverMethod.MRC 
+                ? Visibility.Visible : Visibility.Collapsed;
+        
+        public Visibility IsMutationCheckBoxVisible => 
+            MutationMethod is MutationMethod.MAM or MutationMethod.MRM 
+                ? Visibility.Visible : Visibility.Collapsed;
+        
+        public Visibility IsCataclysmVisible => 
+            EnableCataclysm ? Visibility.Visible : Visibility.Collapsed;
+
+        public Visibility IsIncrementalMutationDeltaVisible => 
+            IncrementMutationEnabled ? Visibility.Visible : Visibility.Collapsed;
+        
+        public Visibility IsTournamentSelectionSelected => 
+            SelectionMethod == SelectionMethod.Tournament 
+                ? Visibility.Visible : Visibility.Collapsed;
+
+        public Visibility IsTournamentEliminationSelected => 
+            EliminationMethod == EliminationMethod.Tournament 
+                ? Visibility.Visible : Visibility.Collapsed;
+
+        public Visibility IsAllVisible => 
+            OptimizationMethod == OptimizationMethod.GeneticAlgorithm 
+                ? Visibility.Visible : Visibility.Collapsed;
+
+        #endregion
+        
+        #region CheckboxItems
+        
+        public List<OptimizationMethod> Methods { get; set; } = 
+            Enum.GetValues(typeof(OptimizationMethod)).Cast<OptimizationMethod>().ToList();
+        public List<SelectionMethod> Selections { get; set; } = 
+            Enum.GetValues(typeof(SelectionMethod)).Cast<SelectionMethod>().ToList();
+        public List<CrossoverMethod> Crossovers { get; set; } = 
+            Enum.GetValues(typeof(CrossoverMethod)).Cast<CrossoverMethod>().ToList();
+        public List<EliminationMethod> Eliminations { get; set; } = 
+            Enum.GetValues(typeof(EliminationMethod)).Cast<EliminationMethod>().ToList();
+        public List<MutationMethod> Mutations { get; set; } = 
+            Enum.GetValues(typeof(MutationMethod)).Cast<MutationMethod>().ToList();
+        public List<PopulationInitializationMethod> Initializations { get; set; } = 
+            Enum.GetValues(typeof(PopulationInitializationMethod)).Cast<PopulationInitializationMethod>().ToList();
+        public List<ConflictResolveMethod> ConflictResolvers { get; set; } =
+            Enum.GetValues(typeof(ConflictResolveMethod)).Cast<ConflictResolveMethod>().ToList();
+        
+        #endregion
+
         
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public Distance()
+        {
+            var crossoversNames = Enum.GetNames(typeof(CrossoverMethod)).ToList();
+            crossoversNames.Remove("MRC");
+            crossoversNames.Remove("MAC");
+            CrossoverCheckBoxStates = new List<CheckBoxState>();
+            foreach (var crossoverName in crossoversNames)
+            {
+                CrossoverCheckBoxStates.Add(new CheckBoxState(crossoverName, true));
+            }
+
+            MutationCheckBoxStates = new List<CheckBoxState>();
+            var mutationsNames = Enum.GetNames(typeof(MutationMethod)).ToList();
+            mutationsNames.Remove("MRM");
+            mutationsNames.Remove("MAM");
+            foreach (var mutationsName in mutationsNames)
+            {
+                MutationCheckBoxStates.Add(new CheckBoxState(mutationsName,true));
+            }
+        }
         
     }
 

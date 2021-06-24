@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Optimization;
@@ -57,6 +58,9 @@ namespace OptimizationUI.Commands
                 Directory.CreateDirectory(vm.DistanceParameters.ResultPath + "\\" + seed.ToString());
                 //SerializeParameters(vm.DistanceParameters.ResultPath + "\\" + seed + "/parameters.json");
 
+                Application.Current.MainWindow.Cursor = Cursors.Wait;
+                
+                
                 await Task.Run(() =>
                     {
 
@@ -97,11 +101,11 @@ namespace OptimizationUI.Commands
 
                 vm.ProgressBarValue =
                     runs * vm.DistanceParameters.MaxEpoch - 1;
-                //DistanceResultLabel.Content =
-                //    $"Avg: {results.Average(x => x.FinalFitness)}  " +
-                //    $"Max: {results.Max(x => x.FinalFitness)}  " +
-                //    $"Min: {results.Min(x => x.FinalFitness)}  " +
-                //    $"Avg epoch count: {results.Average(x => x.EpochCount)}";
+                vm.Result =
+                    $"Avg: {results.Average(x => x.FinalFitness)}  " +
+                    $"Max: {results.Max(x => x.FinalFitness)}  " +
+                    $"Min: {results.Min(x => x.FinalFitness)}  " +
+                    $"Avg epoch count: {results.Average(x => x.EpochCount)}";
                 vm.CurrentSeed = results[0].Seed;
 
                 //SaveDistanceResultsToDataCsv(results, runs,
@@ -115,10 +119,12 @@ namespace OptimizationUI.Commands
             else
             {
                 double result = OptimizationWork.FindShortestPath(parameters);
-                //DistanceResultLabel.Content =
-                //    $"Result: {result}";
+                vm.Result =
+                    $"Result: {result}";
             }
             vm.IsDistanceStartButtonEnabled = true;
+            Application.Current.MainWindow.Cursor = Cursors.Arrow;
+
         }
 
         public event EventHandler? CanExecuteChanged;

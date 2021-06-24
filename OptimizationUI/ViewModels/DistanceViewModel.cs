@@ -54,53 +54,10 @@ namespace OptimizationUI.ViewModels
         #region UiProperties
 
         public bool IsDistanceStartButtonEnabled { get; set; } = true;
-        public List<OptimizationMethod> Methods { get; set; } = 
-            Enum.GetValues(typeof(OptimizationMethod)).Cast<OptimizationMethod>().ToList();
-        public List<SelectionMethod> Selections { get; set; } = 
-            Enum.GetValues(typeof(SelectionMethod)).Cast<SelectionMethod>().ToList();
-        public List<CrossoverMethod> Crossovers { get; set; } = 
-            Enum.GetValues(typeof(CrossoverMethod)).Cast<CrossoverMethod>().ToList();
-        public List<EliminationMethod> Eliminations { get; set; } = 
-            Enum.GetValues(typeof(EliminationMethod)).Cast<EliminationMethod>().ToList();
-        public List<MutationMethod> Mutations { get; set; } = 
-            Enum.GetValues(typeof(MutationMethod)).Cast<MutationMethod>().ToList();
-        public List<PopulationInitializationMethod> Initializations { get; set; } = 
-            Enum.GetValues(typeof(PopulationInitializationMethod)).Cast<PopulationInitializationMethod>().ToList();
-        public List<ConflictResolveMethod> ConflictResolvers { get; set; } =
-            Enum.GetValues(typeof(ConflictResolveMethod)).Cast<ConflictResolveMethod>().ToList();
+        public string Result { get; set; }
 
         #endregion
 
-        #region Visibilities
-
-        public Visibility IsCrossoverCheckBoxVisible => 
-            DistanceParameters.CrossoverMethod is CrossoverMethod.MAC or CrossoverMethod.MRC 
-                ? Visibility.Visible : Visibility.Collapsed;
-        
-        public Visibility IsMutationCheckBoxVisible => 
-            DistanceParameters.MutationMethod is MutationMethod.MAM or MutationMethod.MRM 
-                ? Visibility.Visible : Visibility.Collapsed;
-        
-        public Visibility IsCataclysmVisible => 
-            DistanceParameters.EnableCataclysm ? Visibility.Visible : Visibility.Collapsed;
-
-        public Visibility IsIncrementalMutationDeltaVisible => 
-            DistanceParameters.IncrementMutationEnabled ? Visibility.Visible : Visibility.Collapsed;
-        
-        public Visibility IsTournamentSelectionSelected => 
-            DistanceParameters.SelectionMethod == SelectionMethod.Tournament 
-                ? Visibility.Visible : Visibility.Collapsed;
-
-        public Visibility IsTournamentEliminationSelected => 
-            DistanceParameters.EliminationMethod == EliminationMethod.Tournament 
-                ? Visibility.Visible : Visibility.Collapsed;
-
-        public Visibility IsAllVisible => 
-            DistanceParameters.OptimizationMethod == OptimizationMethod.GeneticAlgorithm 
-                ? Visibility.Visible : Visibility.Collapsed;
-
-        #endregion
-        
         #region Commands
 
         public ICommand ReadDistanceDataPathCommand { get; set; }
@@ -115,23 +72,7 @@ namespace OptimizationUI.ViewModels
         {
             DistanceParameters = new Distance();
             
-            var crossoversNames = Enum.GetNames(typeof(CrossoverMethod)).ToList();
-            crossoversNames.Remove("MRC");
-            crossoversNames.Remove("MAC");
-            DistanceParameters.CrossoverCheckBoxStates = new List<CheckBoxState>();
-            foreach (var crossoverName in crossoversNames)
-            {
-                DistanceParameters.CrossoverCheckBoxStates.Add(new CheckBoxState(crossoverName, true));
-            }
-
-            DistanceParameters.MutationCheckBoxStates = new List<CheckBoxState>();
-            var mutationsNames = Enum.GetNames(typeof(MutationMethod)).ToList();
-            mutationsNames.Remove("MRM");
-            mutationsNames.Remove("MAM");
-            foreach (var mutationsName in mutationsNames)
-            {
-                DistanceParameters.MutationCheckBoxStates.Add(new CheckBoxState(mutationsName,true));
-            }
+            
 
             SetupCommands();
         }
@@ -185,7 +126,8 @@ namespace OptimizationUI.ViewModels
             ReadDistanceDataPathCommand = new ReadDistanceDataPathCommand();
             LoopAllParametersCommand = new LoopAllParametersCommand();
             ReadDistanceResultPathCommand = new ReadDistanceResultPathCommand();
-
+            OptimizeWithCurrentParametersCommand = new OptimizeWithCurrentParametersCommand();
+            
             CancelCommand = new CancelCommand();
         }
     }
