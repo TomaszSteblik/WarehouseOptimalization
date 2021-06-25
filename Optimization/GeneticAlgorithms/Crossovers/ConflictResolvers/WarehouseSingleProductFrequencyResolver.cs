@@ -9,11 +9,13 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
 {
     class WarehouseSingleProductFrequencyResolver : ConflictResolver
     {
+        private int _participantsCount;
         private double[][] _distancesMatrix;
         private int[] _warehousePointsByLocation;
         private int[] _productsByFrequency;
-        public WarehouseSingleProductFrequencyResolver(Random random, double probability) : base(random, probability)
+        public WarehouseSingleProductFrequencyResolver(Random random, double probability, int participantsCount) : base(random, probability)
         {
+            _participantsCount = participantsCount;
             _distancesMatrix = Distances.GetInstance().DistancesMatrix;
             _warehousePointsByLocation = Enumerable.Range(0, _distancesMatrix.Length)
                 .OrderBy(x => _distancesMatrix[0][x]).ToArray();
@@ -24,20 +26,28 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
         public override int ResolveConflict(int currentPoint, List<int> availableVertexes)
         {
             int pointCount = availableVertexes.Count;
+            int numCandidates = _participantsCount < pointCount ? _participantsCount : pointCount;
+            if (_participantsCount == 0) numCandidates = pointCount;
 
-            var bestCandidate = availableVertexes[0];
+            var candidates = new int[numCandidates];
+            for (int i = 0; i < numCandidates; i++)
+            {
+                candidates[i] = availableVertexes[Random.Next(0, pointCount)];
+            }
+
+            var bestCandidate = candidates[0];
             var currentLocationInChromosome = Orders.ProductFrequency.Length - pointCount - 1;
             var locationIndex = Array.IndexOf(_warehousePointsByLocation, currentLocationInChromosome);
             var bestFit =
-                Math.Abs(Array.IndexOf(_productsByFrequency, availableVertexes[0]) - locationIndex);
+                Math.Abs(Array.IndexOf(_productsByFrequency, candidates[0]) - locationIndex);
 
-            for (int i = 0; i < availableVertexes.Count; i++)
+            for (int i = 0; i < candidates.Length; i++)
             {
-                var candidateIndex = Array.IndexOf(_productsByFrequency, availableVertexes[i]);
+                var candidateIndex = Array.IndexOf(_productsByFrequency, candidates[i]);
                 var currentFit = Math.Abs(candidateIndex - locationIndex);
                 if (currentFit < bestFit)
                 {
-                    bestCandidate = availableVertexes[i];
+                    bestCandidate = candidates[i];
                     bestFit = currentFit;
                 }
             }

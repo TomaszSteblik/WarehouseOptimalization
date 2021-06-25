@@ -39,6 +39,8 @@
                 <ComboBox Width="120" 
                           SelectedItem="{Binding ConflictResolveMethod}"
                           ItemsSource="{Binding ConflictResolvers}"/>
+                <Label Content="Participants:"></Label>
+                <TextBox Width="120" Text="{Binding ConflictParticipants}"/>
             </WrapPanel>
             <WrapPanel>
                 <Label Content="Randomized resolve method:"/>
@@ -47,6 +49,8 @@
                           ItemsSource="{Binding ConflictResolvers}"/>
                 <Label Content="Probability:"></Label>
                 <TextBox Width="120" Text="{Binding ResolveRandomizationProbability}"/>
+                <Label Content="Participants:"></Label>
+                <TextBox Width="120" Text="{Binding RandomizedParticipants}"/>
             </WrapPanel>
             <ItemsControl Margin="50 0 0 0" 
                           ItemsSource="{Binding Path=CrossoverCheckBoxStates}" 

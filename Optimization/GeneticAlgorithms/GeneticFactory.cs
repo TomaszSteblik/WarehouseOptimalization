@@ -26,17 +26,15 @@ namespace Optimization.GeneticAlgorithms
             return initialization;
         }
 
-        public static ConflictResolver CreateConflictResolver(OptimizationParameters parameters, ConflictResolveMethod method, Random random)
+        public static ConflictResolver CreateConflictResolver(OptimizationParameters parameters, ConflictResolveMethod method, Random random,  int tournamentParticipants)
         {
             ConflictResolver resolver = method switch
             {
                 ConflictResolveMethod.Random => new RandomResolver(random, parameters.ResolveRandomizationProbability),
                 ConflictResolveMethod.NearestNeighbor => new NearestNeighborResolver(random, parameters.ResolveRandomizationProbability),
                 ConflictResolveMethod.Tournament => new TournamentResolver(random, parameters.ResolveRandomizationProbability),
-                ConflictResolveMethod.WarehouseSingleProductFrequency => new WarehouseSingleProductFrequencyResolver(random, parameters.ResolveRandomizationProbability),
-                ConflictResolveMethod.WarehouseSingleProductFrequencyTournament => new WarehouseSingleProductFrequencyTournamentResolver(random, parameters.ResolveRandomizationProbability),
-                ConflictResolveMethod.WarehousePairwiseProductFrequency => new WarehousePairwiseProductFrequencyResolver(random, parameters.ResolveRandomizationProbability),
-                ConflictResolveMethod.WarehousePairwiseProductFrequencyTournament => new WarehousePairwiseProductFrequencyTournamentResolver(random, parameters.ResolveRandomizationProbability),
+                ConflictResolveMethod.WarehouseSingleProductFrequency => new WarehouseSingleProductFrequencyResolver(random, parameters.ResolveRandomizationProbability, tournamentParticipants),
+                ConflictResolveMethod.WarehousePairwiseProductFrequency => new WarehousePairwiseProductFrequencyResolver(random, parameters.ResolveRandomizationProbability, tournamentParticipants),
                 _ => throw new ArgumentException("Wrong conflict resolve method name")
             };
             return resolver;

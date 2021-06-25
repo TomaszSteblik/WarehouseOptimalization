@@ -26,20 +26,22 @@ namespace OptimizationUI.Commands
             WarehouseResult result = null;
             double[][] fitness = null;
             Random rnd = new Random();
+            var sum = 0d;
 
             Application.Current.MainWindow.Cursor = Cursors.Wait;
-
-            await Task.Run(() =>
+            for (int i = 0; i<10; i++)
             {
-                var warehouseParameters = vm.Warehouse;
-                warehouseParameters.WarehouseGeneticAlgorithmParameters.ConflictResolveMethod =
-                    ConflictResolveMethod.WarehouseSingleProductFrequency;
-                warehouseParameters.WarehouseGeneticAlgorithmParameters.RandomizedResolveMethod =
-                    ConflictResolveMethod.WarehouseSingleProductFrequency;
-                warehouseParameters.WarehouseGeneticAlgorithmParameters.ResolveRandomizationProbability = 0.6;
-                warehouseParameters.FitnessGeneticAlgorithmParameters.Use2opt = true;
-                result = Optimization.OptimizationWork.WarehouseOptimization(warehouseParameters, ct, rnd.Next(1, Int32.MaxValue));
-            }, ct);
+                await Task.Run(() =>
+                {
+                    var warehouseParameters = vm.Warehouse;
+                
+                    result = Optimization.OptimizationWork.WarehouseOptimization(warehouseParameters, ct, rnd.Next(1, Int32.MaxValue));
+                }, ct);
+                sum += result.FinalFitness;
+
+            }
+
+            result!.FinalFitness = sum / 10;
             
             vm.Result = $"Wynik: {result.FinalFitness}";
             Application.Current.MainWindow.Cursor = Cursors.Arrow;

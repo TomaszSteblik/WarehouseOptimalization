@@ -36,6 +36,8 @@ namespace OptimizationUI.Models
         public override string DataPath { get; set; } = "";
         public List<CheckBoxState> CrossoverCheckBoxStates { get; set; }
         public List<CheckBoxState> MutationCheckBoxStates { get; set; }
+        
+        
         public override CrossoverMethod[] MultiCrossovers
         {
             get
