@@ -40,6 +40,8 @@ namespace Optimization.GeneticAppliances.Warehouse
             var result = Fitness.CalculateAllOrdersFitness(orders, z.BestChromosome, warehouseParameters.FitnessGeneticAlgorithmParameters, random);
             z.FinalFitness = result.Sum(x => x.Fitness);
             z.FinalOrderPaths = result.Select(x => x.Path).ToArray();
+            z.AvgFitnessInEpoch = z.fitness.Select(x => x.Average()).ToArray();
+            z.BestFitnessInEpoch = z.fitness.Select(x => x.Min()).ToArray();
             return z;
         }
     }

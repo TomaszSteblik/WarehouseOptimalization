@@ -35,6 +35,7 @@ namespace Optimization.GeneticAlgorithms
                 ConflictResolveMethod.Tournament => new TournamentResolver(random, parameters.ResolveRandomizationProbability),
                 ConflictResolveMethod.WarehouseSingleProductFrequency => new WarehouseSingleProductFrequencyResolver(random, parameters.ResolveRandomizationProbability, tournamentParticipants),
                 ConflictResolveMethod.WarehousePairwiseProductFrequency => new WarehousePairwiseProductFrequencyResolver(random, parameters.ResolveRandomizationProbability, tournamentParticipants),
+                ConflictResolveMethod.WarehouseSigleAndPairwiseResolver => new WarehouseSigleAndPairwiseResolver(random, parameters.ResolveRandomizationProbability, tournamentParticipants),
                 _ => throw new ArgumentException("Wrong conflict resolve method name")
             };
             return resolver;

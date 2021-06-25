@@ -5,10 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:OptimizationUI.Views"
              xmlns:controls="clr-namespace:OptimizationUI.Controls"
+             xmlns:oxy="http://oxyplot.org/wpf"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <ScrollViewer>
         <StackPanel Background="#FFE5E5E5" Name="WarehousePanel">
+            <WrapPanel>
+                <Label>Runs </Label>
+                <TextBox Name="RunsTextBox" Text="{Binding Runs}" Width="100"></TextBox>
+            </WrapPanel>
             <WrapPanel>
                 <Label Content="Warehouse path: "></Label>
             
@@ -35,8 +40,9 @@
             <Button Content="Start" Command="{Binding RunWarehouseCommand}" CommandParameter="{Binding }"/>
             <Button Content="Cancel" Command="{Binding CancelCommand}" CommandParameter="{Binding CancellationTokenSource}"/>
             <Label HorizontalAlignment="Center" FontSize="20" Name="WarehouseResultLabel" Content="{Binding Result}"/>
-        
+            <oxy:PlotView Height="500" Width="500" Name="OxyPlotView" Model="{Binding PlotModel}"></oxy:PlotView>
         </StackPanel>
+        
     </ScrollViewer>
     
 </UserControl>

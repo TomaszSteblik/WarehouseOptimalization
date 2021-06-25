@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows.Input;
 using Optimization.GeneticAlgorithms.Crossovers;
@@ -10,12 +12,15 @@ using Optimization.GeneticAlgorithms.Initialization;
 using Optimization.GeneticAlgorithms.Mutations;
 using Optimization.GeneticAlgorithms.Selections;
 using Optimization.Parameters;
+using OptimizationUI.Annotations;
 using OptimizationUI.Commands;
 using OptimizationUI.Models;
+using OxyPlot;
+using OxyPlot.Wpf;
 
 namespace OptimizationUI.ViewModels
 {
-    public class WarehouseViewModel
+    public class WarehouseViewModel : INotifyPropertyChanged
     {
         #region Properties
 
@@ -24,11 +29,34 @@ namespace OptimizationUI.ViewModels
         public Distance WarehouseGeneticAlgorithmParameters { get; set; }
         public CancellationTokenSource CancelationTokenSource { get; set; }
 
+        public int Runs
+        {
+            get => _runs;
+            set
+            {
+                _runs = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public PlotModel PlotModel
+        {
+            get => _plotModel;
+            set
+            {
+                _plotModel = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         #endregion
         
         #region ChartProperties
 
+        private int _runs = 10;
+
+        private PlotModel _plotModel;
         public bool ShowCustom { get; set; } = true;
         public bool ShowBest { get; set; } = true;
         public bool ShowAvg { get; set; } = true;
@@ -70,5 +98,12 @@ namespace OptimizationUI.ViewModels
             RunWarehouseCommand = new RunWarehouseCommand();
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }
