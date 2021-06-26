@@ -11,6 +11,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
         Tournament, 
         WarehouseSingleProductFrequency,
         WarehousePairwiseProductFrequency,
+        WarehouseSigleAndPairwiseResolver
     }
     public abstract class ConflictResolver
     {
