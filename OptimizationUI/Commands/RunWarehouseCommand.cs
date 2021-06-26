@@ -25,6 +25,13 @@ namespace OptimizationUI.Commands
         {
             var vm = parameter as WarehouseViewModel;
             var runs = vm.Runs;
+            var epochs = vm.Warehouse.WarehouseGeneticAlgorithmParameters.MaxEpoch;
+            var dataSet = vm.Warehouse.WarehousePath.Split(@"\").Last();
+            var randomizedResolver =
+                vm.Warehouse.WarehouseGeneticAlgorithmParameters.RandomizedResolveMethod.ToString();
+            var conflictResolver = vm.Warehouse.WarehouseGeneticAlgorithmParameters.ConflictResolveMethod.ToString();
+
+            var name = epochs + "_" + dataSet + "_" + conflictResolver + "_" + randomizedResolver;
             
             vm.CancelationTokenSource = new CancellationTokenSource();
             CancellationToken ct = vm.CancelationTokenSource.Token;
@@ -85,7 +92,7 @@ namespace OptimizationUI.Commands
             
             
             
-            Logger.SaveWarehouseResultToFile(result, tmpPlotModel);
+            Logger.SaveWarehouseResultToFile(result, tmpPlotModel, name);
         }
         private double[][] GetBestFitnesses(double[][][] runFitnesses)
         {

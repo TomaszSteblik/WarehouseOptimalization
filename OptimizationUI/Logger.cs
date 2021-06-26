@@ -327,11 +327,11 @@ namespace OptimizationUI
             File.AppendAllLines("fresMinAvg"+DateTime.Now.Ticks+".txt",lines);
         }
         
-        public static void SaveWarehouseResultToFile(WarehouseResult result, PlotModel plotModel)
+        public static void SaveWarehouseResultToFile(WarehouseResult result, PlotModel plotModel, string name)
         {
             if (!Directory.Exists("../../../../WarehouseResults"))
                 Directory.CreateDirectory("../../../../WarehouseResults");
-            var filePath = $"../../../../WarehouseResults/{result.Seed}.txt";
+            var filePath = $"../../../../WarehouseResults/{name}_{result.Seed}.txt";
             string s = "";
 
             s += $"BEST: ";
@@ -355,7 +355,7 @@ namespace OptimizationUI
             }
             
             var pngExporter = new PngExporter { Width = 500, Height = 500, Background = OxyColors.White };
-            pngExporter.ExportToFile(plotModel, $"../../../../WarehouseResults/{result.Seed}.png");
+            pngExporter.ExportToFile(plotModel, $"../../../../WarehouseResults/{name}_{result.Seed}.png");
             
             
             File.WriteAllText(filePath,s);
