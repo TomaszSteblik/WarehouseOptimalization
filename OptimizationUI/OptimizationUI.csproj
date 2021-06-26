@@ -13,6 +13,7 @@
     <ItemGroup>
       <PackageReference Include="FolderBrowserForWPF" Version="1.2.0" />
       <PackageReference Include="InteractiveDataDisplay.NetCore.WPF" Version="1.0.2" />
+      <PackageReference Include="OxyPlot.Wpf" Version="2.0.0" />
       <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" />
     </ItemGroup>
 

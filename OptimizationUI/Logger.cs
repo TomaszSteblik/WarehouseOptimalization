@@ -10,6 +10,8 @@ using Optimization.GeneticAppliances.TSP;
 using Optimization.GeneticAppliances.Warehouse;
 using OptimizationUI.Models;
 using OptimizationUI.ViewModels;
+using OxyPlot;
+using OxyPlot.Wpf;
 
 namespace OptimizationUI
 {
@@ -325,7 +327,7 @@ namespace OptimizationUI
             File.AppendAllLines("fresMinAvg"+DateTime.Now.Ticks+".txt",lines);
         }
         
-        public static void SaveWarehouseResultToFile(WarehouseResult result)
+        public static void SaveWarehouseResultToFile(WarehouseResult result, PlotModel plotModel)
         {
             if (!Directory.Exists("../../../../WarehouseResults"))
                 Directory.CreateDirectory("../../../../WarehouseResults");
@@ -351,6 +353,9 @@ namespace OptimizationUI
 
                 s += "\n";
             }
+            
+            var pngExporter = new PngExporter { Width = 500, Height = 500, Background = OxyColors.White };
+            pngExporter.ExportToFile(plotModel, $"../../../../WarehouseResults/{result.Seed}.png");
             
             
             File.WriteAllText(filePath,s);
