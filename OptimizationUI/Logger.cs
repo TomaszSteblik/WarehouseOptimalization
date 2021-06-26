@@ -327,7 +327,9 @@ namespace OptimizationUI
             File.AppendAllLines("fresMinAvg"+DateTime.Now.Ticks+".txt",lines);
         }
         
-        public static void SaveWarehouseResultToFile(WarehouseResult result, PlotModel plotModel, string name)
+        
+        
+        public static void SaveWarehouseResultToFile(WarehouseResult result, PlotModel plotModel, string name, string str)
         {
             if (!Directory.Exists("../../../../WarehouseResults"))
                 Directory.CreateDirectory("../../../../WarehouseResults");
@@ -353,6 +355,8 @@ namespace OptimizationUI
 
                 s += "\n";
             }
+
+            s += str;
             
             var pngExporter = new PngExporter { Width = 500, Height = 500, Background = OxyColors.White };
             pngExporter.ExportToFile(plotModel, $"../../../../WarehouseResults/{name}_{result.Seed}.png");

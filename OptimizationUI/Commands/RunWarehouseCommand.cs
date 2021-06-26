@@ -89,10 +89,10 @@ namespace OptimizationUI.Commands
             tmpPlotModel.Series.Add(avgSeries);
 
             vm.PlotModel = tmpPlotModel;
+
+            var s = CreateDistanceLogsBestPerRunsParams(results, conflictResolver, randomizedResolver);
             
-            
-            
-            Logger.SaveWarehouseResultToFile(result, tmpPlotModel, name);
+            Logger.SaveWarehouseResultToFile(result, tmpPlotModel, name, s);
         }
         private double[][] GetBestFitnesses(double[][][] runFitnesses)
         {
@@ -120,6 +120,33 @@ namespace OptimizationUI.Commands
 
             return fitness;
         }
+        
+        private string CreateDistanceLogsBestPerRunsParams(WarehouseResult[] results, string conflictResolver, string randomResolver)
+        {
+            var fitness = GetBestFitnesses(results.Select(x => x.fitness).ToArray());
+            
+
+
+            string s = "epoch;best_distance;avg_best_10%;median;avg_worst_10%;avg;worst_distance;std_deviation;conflict_percentage;avgDiff;0Diff;02Diff\n";;
+
+            for (int i = 0; i < fitness[0].Length; i++)
+            {
+                s += i + ";";
+                //tego nie jestem do końca pewien, które wartości będą potrzebne - może lepiej ich naprodukować więcej, by mieć z czego wybierać:
+                s += fitness.Min(x => x[i]).ToString("#.000") + ";";  //najlepszy wynik
+                s += fitness.OrderBy(x => x[i]).Take((int)(0.1 * fitness.Length)).Average(x => x[i]).ToString("#.000") + ";"; //średnia z najlepszych 10%
+                s += fitness.OrderBy(x => x[i]).Skip((int)(0.5 * fitness.Length)).Take(1).Average(x => x[i]).ToString("#.000") + ";";  //mediana
+                s += fitness.OrderBy(x => x[i]).Skip((int)(0.9 * fitness.Length)).Take((int)(0.1 * fitness.Length)).Average(x => x[i]).ToString("#.000") + ";"; //średnia z najgorszych 10%
+                s += fitness.Average(x => x[i]).ToString("#.000") + ";"; //średnia
+                s += fitness.Max(x => x[i]).ToString("#.000") + ";"; // najgorszy wynik
+                s += fitness.StandardDeviation(x => x[i]).ToString("#.000") + ";"; // odchylenie standardowe
+                s += "\n";
+
+            }
+
+            return s;
+        }
+
 
         private double[][][] GetExpandedFitesses(double[][][] runFitnesses)
         {
