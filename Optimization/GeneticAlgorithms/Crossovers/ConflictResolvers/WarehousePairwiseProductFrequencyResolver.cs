@@ -44,7 +44,7 @@ namespace Optimization.GeneticAlgorithms.Crossovers.ConflictResolvers
             if(indexOfCurrent + 1 != _warehousePointsByLocation.Length)
                 if (_warehousePointsByLocation[indexOfCurrent] != _warehousePointsByLocation[indexOfCurrent + 1] - 1)
                 {
-                    return availableVertexes[0];
+                    return -1;
                 }
             
             for (int i = 1; i < numberOfCandidates; i++)

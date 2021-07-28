@@ -37,7 +37,8 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                     var selected = parents[j % parentsNumber][j];
                     if (Random.NextDouble() < ResolverRandomized.RandomizationProbability)
                     {
-                        selected = ResolverRandomized.ResolveConflict(offspring[j - 1], available);
+                        var resolverResult = ResolverRandomized.ResolveConflict(offspring[j - 1], available);
+                        if (resolverResult != -1) selected = resolverResult;
                     }
                     available.Remove(selected);
                     offspring[iterator++] = selected;

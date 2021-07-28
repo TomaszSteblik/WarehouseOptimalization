@@ -48,9 +48,10 @@ namespace Optimization.GeneticAlgorithms.Crossovers
                 if (Random.NextDouble() < ResolverRandomized.RandomizationProbability)
                 {
                     _randomizedResolvesCount++;
-                    nextVertex =
-                        ResolverRandomized.ResolveConflict(selectedParent[indexOfCurrentVertexInSelectedParent],
-                            availableVertexes);
+                    var resolverResult = ResolverRandomized.ResolveConflict(selectedParent[indexOfCurrentVertexInSelectedParent],
+                        availableVertexes);
+                    if (resolverResult != -1) nextVertex = resolverResult;
+
                 }
 
                 if (nextVertex == -1)
