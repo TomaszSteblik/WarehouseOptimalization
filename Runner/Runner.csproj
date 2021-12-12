@@ -19,4 +19,7 @@
 	<PackageReference Include="ReactiveUI.Fody" Version="17.1.9" />
         <PackageReference Include="SkiaSharp" Version="2.88.0-preview.127" />
     </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Optimization\Optimization.csproj" />
+    </ItemGroup>
 </Project>

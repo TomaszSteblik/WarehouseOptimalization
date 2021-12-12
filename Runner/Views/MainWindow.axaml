@@ -15,9 +15,14 @@
     
     <StackPanel>
         <WrapPanel>
-            <TextBox Text="{Binding DataFilePath}" Width="300"></TextBox>
-            <Button Click="SelectFile">Select file</Button>
+            <TextBox Text="{Binding DataFilePath}" Width="500" Margin="10"></TextBox>
+            <Button Command="{Binding SelectData}" CommandParameter="{Binding}" Padding="10">Select file</Button>
         </WrapPanel>
+        <WrapPanel>
+            <TextBlock Text="{Binding Result}" Margin="10" Width="200"></TextBlock>
+            <Button Command="{Binding RunDistances}" CommandParameter="{Binding}" Margin="10">Run</Button>
+        </WrapPanel>
+        
     </StackPanel>
     
 
