@@ -6,12 +6,19 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Runner.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="Runner">
+        Title="Runner"
+        Background="#3b3b3b">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    
+    <StackPanel>
+        <WrapPanel>
+            <TextBox Text="{Binding DataFilePath}" Width="300"></TextBox>
+            <Button Click="SelectFile">Select file</Button>
+        </WrapPanel>
+    </StackPanel>
+    
 
 </Window>

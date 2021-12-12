@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Avalonia;
+using Avalonia.Interactivity;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Runner.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : AvaloniaObject
     {
-        public string Greeting => "Welcome to Avalonia!";
+        [Reactive] public string DataFilePath { get; set; } = "test";
+        public string Result { get; set; }
     }
 }
