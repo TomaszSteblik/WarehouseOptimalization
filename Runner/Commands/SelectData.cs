@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
@@ -16,14 +17,34 @@ public class SelectData : ICommand
 
     public async void Execute(object? parameter)
     {
-        var vm = parameter as MainWindowViewModel;
+        var vm = parameter as ParametersViewModel;
         var fileDialog = new OpenFileDialog();
+        fileDialog.AllowMultiple = true;
         var app = Application.Current.ApplicationLifetime as ClassicDesktopStyleApplicationLifetime;
         var result = await fileDialog.ShowAsync(app?.MainWindow);
         if (result is not null && result.Length > 0)
         {
-            vm.DataFilePath = result[0];
+            vm.SelectedFiles = result;
+            vm.SelectedFilesString = GetFilesString(result);
         }
+    }
+    
+    private string GetFilesString(string[] distanceSelectedFiles)
+    {
+        StringBuilder sb = new StringBuilder();
+        foreach (var file in distanceSelectedFiles)
+        {
+            if (OperatingSystem.IsWindows())
+            {
+                sb.Append($"{file.Split("\\")[^1].Replace(".tsp", "")}, ");
+            }
+            else
+            {
+                sb.Append($"{file.Split("/")[^1].Replace(".tsp", "")}, ");
+            }
+        }
+
+        return sb.ToString();
     }
 
     public event EventHandler? CanExecuteChanged;

@@ -2,7 +2,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:Runner.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Runner.Views.ParametersView">
-    <Label HorizontalAlignment="Center">Tutaj parametry</Label>
+    
+    <Design.DataContext>
+        <viewModels:ParametersViewModel/>
+    </Design.DataContext>
+    
+    <StackPanel Margin="4">
+        <WrapPanel HorizontalAlignment="Stretch">
+            <Label Padding="4 4 24 4" HorizontalAlignment="Center" VerticalAlignment="Center" >Data: </Label>
+            <Button Height="28" Background="Transparent" Command="{Binding SelectData}" CommandParameter="{Binding}">
+                <Image Source="/Assets/file.png"></Image>
+            </Button>
+        </WrapPanel>
+        
+        <TextBlock Text="{Binding SelectedFilesString}" ></TextBlock>
+    </StackPanel>
+    
 </UserControl>

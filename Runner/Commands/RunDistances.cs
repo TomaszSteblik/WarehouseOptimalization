@@ -20,7 +20,7 @@ public class RunDistances : ICommand
     public void Execute(object? parameter)
     {
         var vm = parameter as MainWindowViewModel;
-        if (vm.DataFilePath == "") return;
+        //if (vm.DataFilePath == "") return;
         var param = new OptimizationParameters
         {
             SelectionMethod = SelectionMethod.RouletteWheel,
@@ -29,10 +29,10 @@ public class RunDistances : ICommand
             MaxEpoch = 300,
             ChildrenPerGeneration = 50,
             PopulationSize = 100,
-            DataPath = vm.DataFilePath
+            //DataPath = vm.DataFilePath
         };
         var result = OptimizationWork.TSP(param, CancellationToken.None);
-        vm.Result = result.FinalFitness.ToString();
+        //vm.Result = result.FinalFitness.ToString();
     }
 
     public event EventHandler? CanExecuteChanged;

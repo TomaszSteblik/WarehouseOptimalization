@@ -13,14 +13,10 @@ namespace Runner.ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
 
-        public MainWindowViewModel()
+        public ParametersViewModel ParametersViewModel { get; }
+        public MainWindowViewModel(ParametersViewModel parametersViewModel)
         {
-            SelectData = new SelectData();
-            RunDistances = new RunDistances();
+            ParametersViewModel = parametersViewModel;
         }
-        public ICommand SelectData { get; set; }
-        public ICommand RunDistances { get; set; }
-        [Reactive] public string? DataFilePath { get; set; } = "";
-        [Reactive] public string Result { get; set; } = "";
     }
 }
