@@ -2,7 +2,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:Runner.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Runner.Views.ControlView">
-    <Label HorizontalAlignment="Center">Tutaj przyciski uruchomienia stop itd</Label>
+    
+    <Design.DataContext>
+        <viewModels:ControlViewModel/>
+    </Design.DataContext>
+    
+    <WrapPanel HorizontalAlignment="Center" Margin="4">
+        <Button Height="28" Background="Transparent">
+            <Image Source="/Assets/run.png"></Image>
+        </Button>
+        <Button Height="28" Background="Transparent">
+            <Image Source="/Assets/stop.png"></Image>
+        </Button>
+    </WrapPanel>
+    
 </UserControl>

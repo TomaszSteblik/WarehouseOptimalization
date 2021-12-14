@@ -15,7 +15,7 @@
     </Design.DataContext>
     
     <Grid ColumnDefinitions="*, 1,  6*, 1, *" RowDefinitions="2*, 18*, 1,  2*">
-        <views:ControlView Grid.Row="0" Grid.Column="2"/>
+        <views:ControlView DataContext="{Binding ControlViewModel}" Grid.Row="0" Grid.Column="2"/>
         <views:ParametersView DataContext="{Binding ParametersViewModel}" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"/>
         <GridSplitter Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" Background="#3d3d3d" ResizeDirection="Columns"/>
         <views:DataView Grid.Row="1" Grid.Column="2"/>

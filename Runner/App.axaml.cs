@@ -18,9 +18,10 @@ namespace Runner
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 var parametersVM = new ParametersViewModel();
+                var controlVM = new ControlViewModel();
                 desktop.MainWindow = new MainWindow
                 {
-                    DataContext = new MainWindowViewModel(parametersVM),
+                    DataContext = new MainWindowViewModel(parametersVM, controlVM),
                 };
             }
 
