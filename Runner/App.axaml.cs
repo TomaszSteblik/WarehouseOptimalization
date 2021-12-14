@@ -21,6 +21,8 @@ namespace Runner
                 {
                     DataContext = new MainWindowViewModel(),
                 };
+                desktop.MainWindow.Width = 1920;
+                desktop.MainWindow.Height = 1080;
             }
 
             base.OnFrameworkInitializationCompleted();

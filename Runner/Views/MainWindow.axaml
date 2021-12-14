@@ -3,27 +3,24 @@
         xmlns:vm="using:Runner.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:Runner.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Runner.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="Runner"
-        Background="#3b3b3b">
+        Background="#2b2b2b">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
     
-    <StackPanel>
-        <WrapPanel>
-            <TextBox Text="{Binding DataFilePath}" Width="500" Margin="10"></TextBox>
-            <Button Command="{Binding SelectData}" CommandParameter="{Binding}" Padding="10">Select file</Button>
-        </WrapPanel>
-        <WrapPanel>
-            <TextBlock Text="{Binding Result}" Margin="10" Width="200"></TextBlock>
-            <Button Command="{Binding RunDistances}" CommandParameter="{Binding}" Margin="10">Run</Button>
-        </WrapPanel>
-        
-    </StackPanel>
-    
+    <Grid ColumnDefinitions="*, 1,  6*, 1, *" RowDefinitions="9*, 1,  *">
+        <views:ParametersView Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"/>
+        <GridSplitter Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Background="#3d3d3d" ResizeDirection="Columns"/>
+        <views:LogView Grid.Row="2" Grid.Column="2"/>
+        <GridSplitter Grid.Row="0" Grid.Column="3" Grid.RowSpan="3" Background="#3d3d3d" ResizeDirection="Columns"/>
+        <GridSplitter Grid.Row="1" Grid.Column="2" Background="#3d3d3d" ResizeDirection="Rows"/>
+        <views:HistoryView Grid.Row="0" Grid.Column="4" Grid.RowSpan="2"/>
+    </Grid>
 
 </Window>
