@@ -4,12 +4,19 @@ using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Runner.Models;
 using Runner.ViewModels;
 
 namespace Runner.Commands;
 
 public class SelectData : ICommand
 {
+    public ParametersModel parameters;
+
+    public SelectData(ParametersModel model)
+    {
+        parameters = model;
+    }
     public bool CanExecute(object? parameter)
     {
         return true;
@@ -24,7 +31,7 @@ public class SelectData : ICommand
         var result = await fileDialog.ShowAsync(app?.MainWindow);
         if (result is not null && result.Length > 0)
         {
-            vm.SelectedFiles = result;
+            parameters.SelectedFiles = result;
             vm.SelectedFilesString = GetFilesString(result);
         }
     }

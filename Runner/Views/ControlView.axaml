@@ -11,7 +11,7 @@
     </Design.DataContext>
     
     <WrapPanel HorizontalAlignment="Center" Margin="4">
-        <Button Height="28" Background="Transparent">
+        <Button Height="28" Background="Transparent" Command="{Binding RunDistances}" CommandParameter="">
             <Image Source="/Assets/run.png"></Image>
         </Button>
         <Button Height="28" Background="Transparent">

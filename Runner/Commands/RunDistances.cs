@@ -6,12 +6,20 @@ using Optimization.GeneticAlgorithms.Crossovers;
 using Optimization.GeneticAlgorithms.Eliminations;
 using Optimization.GeneticAlgorithms.Selections;
 using Optimization.Parameters;
+using Runner.Models;
 using Runner.ViewModels;
 
 namespace Runner.Commands;
 
 public class RunDistances : ICommand
 {
+    private ParametersModel paramaters;
+
+    public RunDistances(ParametersModel model)
+    {
+        paramaters = model;
+    }
+    
     public bool CanExecute(object? parameter)
     {
         return true;
@@ -19,8 +27,8 @@ public class RunDistances : ICommand
 
     public void Execute(object? parameter)
     {
-        var vm = parameter as MainWindowViewModel;
-        //if (vm.DataFilePath == "") return;
+        
+        if (paramaters.SelectedFiles[0] == "") return;
         var param = new OptimizationParameters
         {
             SelectionMethod = SelectionMethod.RouletteWheel,
@@ -29,9 +37,10 @@ public class RunDistances : ICommand
             MaxEpoch = 300,
             ChildrenPerGeneration = 50,
             PopulationSize = 100,
-            //DataPath = vm.DataFilePath
+            DataPath = paramaters.SelectedFiles[0]
         };
         var result = OptimizationWork.TSP(param, CancellationToken.None);
+        Console.WriteLine(result.FinalFitness);
         //vm.Result = result.FinalFitness.ToString();
     }
 
