@@ -4,5 +4,5 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Runner.Views.LogView">
-    Welcome to Avalonia!
+    <Label HorizontalAlignment="Center">Tutaj info typu ile juz poszlo co odpalono</Label>
 </UserControl>

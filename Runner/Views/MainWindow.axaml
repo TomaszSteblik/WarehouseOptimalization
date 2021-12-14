@@ -14,13 +14,15 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
     
-    <Grid ColumnDefinitions="*, 1,  6*, 1, *" RowDefinitions="9*, 1,  *">
+    <Grid ColumnDefinitions="*, 1,  6*, 1, *" RowDefinitions="2*, 18*, 1,  2*">
+        <views:ControlView Grid.Row="0" Grid.Column="2"/>
         <views:ParametersView Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"/>
-        <GridSplitter Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Background="#3d3d3d" ResizeDirection="Columns"/>
-        <views:LogView Grid.Row="2" Grid.Column="2"/>
-        <GridSplitter Grid.Row="0" Grid.Column="3" Grid.RowSpan="3" Background="#3d3d3d" ResizeDirection="Columns"/>
-        <GridSplitter Grid.Row="1" Grid.Column="2" Background="#3d3d3d" ResizeDirection="Rows"/>
-        <views:HistoryView Grid.Row="0" Grid.Column="4" Grid.RowSpan="2"/>
+        <GridSplitter Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" Background="#3d3d3d" ResizeDirection="Columns"/>
+        <views:DataView Grid.Row="1" Grid.Column="2"/>
+        <views:LogView Grid.Row="3" Grid.Column="2"/>
+        <GridSplitter Grid.Row="0" Grid.Column="3" Grid.RowSpan="4" Background="#3d3d3d" ResizeDirection="Columns"/>
+        <GridSplitter Grid.Row="2" Grid.Column="2" Background="#3d3d3d" ResizeDirection="Rows"/>
+        <views:HistoryView Grid.Row="0" Grid.Column="4" Grid.RowSpan="3"/>
     </Grid>
 
 </Window>
