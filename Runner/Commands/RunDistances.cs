@@ -31,18 +31,9 @@ public class RunDistances : ICommand
     {
         if(_parametersModel.SelectedFiles is null) return;
         if (_parametersModel.SelectedFiles[0] == "") return;
-        var param = new OptimizationParameters
-        {
-            SelectionMethod = SelectionMethod.RouletteWheel,
-            EliminationMethod = EliminationMethod.Elitism,
-            CrossoverMethod = CrossoverMethod.HProX,
-            MaxEpoch = 300,
-            ChildrenPerGeneration = 50,
-            PopulationSize = 100,
-            DataPath = _parametersModel.SelectedFiles[0]
-        };
+        _parametersModel.DataPath = _parametersModel.SelectedFiles[0];
         _logModel.AppendLog("test");
-        var result = OptimizationWork.TSP(param, CancellationToken.None);
+        var result = OptimizationWork.TSP(_parametersModel, CancellationToken.None);
         _logModel.AppendLog(result.FinalFitness.ToString());
         //vm.Result = result.FinalFitness.ToString();
     }

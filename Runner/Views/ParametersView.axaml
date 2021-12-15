@@ -10,7 +10,7 @@
         <viewModels:ParametersViewModel/>
     </Design.DataContext>
     <ScrollViewer>
-        <StackPanel Margin="4">
+        <StackPanel Margin="4" >
             <WrapPanel HorizontalAlignment="Stretch">
                 <Label Padding="4 4 24 4" HorizontalAlignment="Center" VerticalAlignment="Center" >Data: </Label>
                 <Button Height="28" Background="Transparent" Command="{Binding SelectData}" CommandParameter="{Binding}">
@@ -31,6 +31,15 @@
         
             <Label>Elimination: </Label>
             <ComboBox Items="{Binding Eliminations}" SelectedItem="{Binding ParametersModel.SelectedElimination}"></ComboBox>
+            
+            <Label>Population size: </Label>
+            <TextBox Width="50" HorizontalAlignment="Left" Text="{Binding ParametersModel.PopulationSize}"></TextBox>
+            
+            <Label>Children per epoch: </Label>
+            <TextBox Width="50" HorizontalAlignment="Left" Text="{Binding ParametersModel.ChildrenPerGeneration}"></TextBox>
+            
+            <Label>Epoch count: </Label>
+            <TextBox Width="50" HorizontalAlignment="Left" Text="{Binding ParametersModel.MaxEpoch}"></TextBox>
         </StackPanel>
     </ScrollViewer>
     
