@@ -37,7 +37,7 @@ public class RunDistances : ICommand
         var dataset = OperatingSystem.IsWindows()
             ? _parametersModel.DataPath.Split("\\")[^1]
             : _parametersModel.DataPath.Split("/")[^1];
-        _logModel.AppendLog($"Started TSP on {dataset} dataset, {_parametersModel.CrossoverMethod}");
+        _logModel.AppendLog($"Started TSP on {dataset} dataset");
         TSPResult result = null;
         _ = await Task.Run(async () => result = OptimizationWork.TSP(_parametersModel, CancellationToken.None));
         if (result is not null)
