@@ -16,6 +16,6 @@ public class ConsoleLogModel : ReactiveObject
     
     public void AppendLog(string text)
     {
-        ConsoleLog += $"[{DateTime.Now:HH:mm:ss}]" + text + Environment.NewLine;
+        ConsoleLog = $"[{DateTime.Now:HH:mm:ss}]" + text + Environment.NewLine + ConsoleLog;
     }
 }
