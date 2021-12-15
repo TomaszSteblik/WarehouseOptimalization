@@ -21,16 +21,16 @@
             <TextBlock Text="{Binding SelectedFilesString}" ></TextBlock>
         
             <Label>Selection: </Label>
-            <ComboBox Items="{Binding Selections}" SelectedItem="{Binding ParametersModel.SelectedSelection}"></ComboBox>
+            <ComboBox Items="{Binding Selections}" SelectedItem="{Binding ParametersModel.SelectionMethod}"></ComboBox>
         
             <Label>Crossover: </Label>
-            <ComboBox Items="{Binding Crossovers}" SelectedItem="{Binding ParametersModel.SelectedCrossover}"></ComboBox>
+            <ComboBox Items="{Binding Crossovers}" SelectedItem="{Binding ParametersModel.CrossoverMethod}"></ComboBox>
         
             <Label>Mutation: </Label>
-            <ComboBox Items="{Binding Mutations}" SelectedItem="{Binding ParametersModel.SelectedMutation}"></ComboBox>
+            <ComboBox Items="{Binding Mutations}" SelectedItem="{Binding ParametersModel.MutationMethod}"></ComboBox>
         
             <Label>Elimination: </Label>
-            <ComboBox Items="{Binding Eliminations}" SelectedItem="{Binding ParametersModel.SelectedElimination}"></ComboBox>
+            <ComboBox Items="{Binding Eliminations}" SelectedItem="{Binding ParametersModel.EliminationMethod}"></ComboBox>
             
             <Label>Population size: </Label>
             <TextBox Width="50" HorizontalAlignment="Left" Text="{Binding ParametersModel.PopulationSize}"></TextBox>
