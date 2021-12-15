@@ -9,16 +9,31 @@
     <Design.DataContext>
         <viewModels:ParametersViewModel/>
     </Design.DataContext>
-    
-    <StackPanel Margin="4">
-        <WrapPanel HorizontalAlignment="Stretch">
-            <Label Padding="4 4 24 4" HorizontalAlignment="Center" VerticalAlignment="Center" >Data: </Label>
-            <Button Height="28" Background="Transparent" Command="{Binding SelectData}" CommandParameter="{Binding}">
-                <Image Source="/Assets/file.png"></Image>
-            </Button>
-        </WrapPanel>
+    <ScrollViewer>
+        <StackPanel Margin="4">
+            <WrapPanel HorizontalAlignment="Stretch">
+                <Label Padding="4 4 24 4" HorizontalAlignment="Center" VerticalAlignment="Center" >Data: </Label>
+                <Button Height="28" Background="Transparent" Command="{Binding SelectData}" CommandParameter="{Binding}">
+                    <Image Source="/Assets/file.png"></Image>
+                </Button>
+            </WrapPanel>
         
-        <TextBlock Text="{Binding SelectedFilesString}" ></TextBlock>
-    </StackPanel>
+            <TextBlock Text="{Binding SelectedFilesString}" ></TextBlock>
+        
+            <Label>Selection: </Label>
+            <ComboBox Items="{Binding Selections}" SelectedItem="{Binding ParametersModel.SelectedSelection}"></ComboBox>
+        
+            <Label>Crossover: </Label>
+            <ComboBox Items="{Binding Crossovers}" SelectedItem="{Binding ParametersModel.SelectedCrossover}"></ComboBox>
+        
+            <Label>Mutation: </Label>
+            <ComboBox Items="{Binding Mutations}" SelectedItem="{Binding ParametersModel.SelectedMutation}"></ComboBox>
+        
+            <Label>Elimination: </Label>
+            <ComboBox Items="{Binding Eliminations}" SelectedItem="{Binding ParametersModel.SelectedElimination}"></ComboBox>
+        </StackPanel>
+    </ScrollViewer>
+    
+    
     
 </UserControl>
