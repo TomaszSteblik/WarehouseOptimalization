@@ -11,13 +11,16 @@ namespace Runner.ViewModels;
 public class ControlViewModel : ViewModelBase
 {
     public ParametersModel ParametersModel { get; set; }
+    public ConsoleLogModel LogModel { get; set; }
     public ICommand RunDistances { get; set; }
     public List<OptimizationTask> Tasks { get; set; } = Enum.GetValues(typeof(OptimizationTask)).Cast<OptimizationTask>().ToList();
     public OptimizationTask SelectedTask { get; set; } = OptimizationTask.TSP;
 
-    public ControlViewModel(ParametersModel parametersModel)
+    public ControlViewModel(ParametersModel parametersModel, ConsoleLogModel logModel)
     {
         ParametersModel = parametersModel;
-        RunDistances = new RunDistances(parametersModel);
+        LogModel = logModel;
+
+        RunDistances = new RunDistances(parametersModel, logModel);
     }
 }

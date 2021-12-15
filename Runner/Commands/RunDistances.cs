@@ -13,11 +13,13 @@ namespace Runner.Commands;
 
 public class RunDistances : ICommand
 {
-    private ParametersModel paramaters;
+    private ParametersModel _parametersModel;
+    private ConsoleLogModel _logModel;
 
-    public RunDistances(ParametersModel model)
+    public RunDistances(ParametersModel parametersModel, ConsoleLogModel logModel)
     {
-        paramaters = model;
+        _parametersModel = parametersModel;
+        _logModel = logModel;
     }
     
     public bool CanExecute(object? parameter)
@@ -27,8 +29,8 @@ public class RunDistances : ICommand
 
     public void Execute(object? parameter)
     {
-        
-        if (paramaters.SelectedFiles[0] == "") return;
+        if(_parametersModel.SelectedFiles is null) return;
+        if (_parametersModel.SelectedFiles[0] == "") return;
         var param = new OptimizationParameters
         {
             SelectionMethod = SelectionMethod.RouletteWheel,
@@ -37,10 +39,11 @@ public class RunDistances : ICommand
             MaxEpoch = 300,
             ChildrenPerGeneration = 50,
             PopulationSize = 100,
-            DataPath = paramaters.SelectedFiles[0]
+            DataPath = _parametersModel.SelectedFiles[0]
         };
+        _logModel.AppendLog("test");
         var result = OptimizationWork.TSP(param, CancellationToken.None);
-        Console.WriteLine(result.FinalFitness);
+        _logModel.AppendLog(result.FinalFitness.ToString());
         //vm.Result = result.FinalFitness.ToString();
     }
 

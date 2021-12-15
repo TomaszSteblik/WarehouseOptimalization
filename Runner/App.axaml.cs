@@ -19,11 +19,13 @@ namespace Runner
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 var parametersModel = new ParametersModel();
+                var logModel = new ConsoleLogModel();
                 var parametersVM = new ParametersViewModel(parametersModel);
-                var controlVM = new ControlViewModel(parametersModel);
+                var controlVM = new ControlViewModel(parametersModel, logModel);
+                var logVM = new LogViewModel(logModel);
                 desktop.MainWindow = new MainWindow
                 {
-                    DataContext = new MainWindowViewModel(parametersVM, controlVM),
+                    DataContext = new MainWindowViewModel(parametersVM, controlVM, logVM),
                 };
             }
 

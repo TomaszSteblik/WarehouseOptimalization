@@ -15,8 +15,10 @@ namespace Runner.ViewModels
 
         public ParametersViewModel ParametersViewModel { get; }
         public ControlViewModel ControlViewModel { get; }
-        public MainWindowViewModel(ParametersViewModel parametersViewModel, ControlViewModel controlViewModel)
+        public LogViewModel LogViewModel { get; }
+        public MainWindowViewModel(ParametersViewModel parametersViewModel, ControlViewModel controlViewModel, LogViewModel logViewModel)
         {
+            LogViewModel = logViewModel;
             ParametersViewModel = parametersViewModel;
             ControlViewModel = controlViewModel;
         }
