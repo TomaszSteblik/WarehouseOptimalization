@@ -11,6 +11,7 @@
     </Design.DataContext>
     
     <WrapPanel HorizontalAlignment="Center" Margin="4">
+        <ComboBox Items="{Binding Tasks}" SelectedItem="{Binding SelectedTask}"></ComboBox>
         <Button Height="28" Background="Transparent" Command="{Binding RunDistances}" CommandParameter="">
             <Image Source="/Assets/run.png"></Image>
         </Button>

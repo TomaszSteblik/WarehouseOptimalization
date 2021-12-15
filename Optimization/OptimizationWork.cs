@@ -10,6 +10,12 @@ using Optimization.Parameters;
 
 namespace Optimization
 {
+    public enum OptimizationTask
+    {
+        TSP,
+        Warehouse
+    }
+    
     public static class OptimizationWork
     {
         public static double FindShortestPath(OptimizationParameters optimizationParameters, int seed = 0)
