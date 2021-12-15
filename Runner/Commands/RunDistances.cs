@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -32,21 +33,26 @@ public class RunDistances : ICommand
     public async void Execute(object? parameter)
     {
         if(_parametersModel.SelectedFiles is null) return;
-        if (_parametersModel.SelectedFiles[0] == "") return;
-        _parametersModel.DataPath = _parametersModel.SelectedFiles[0];
-        var dataset = OperatingSystem.IsWindows()
-            ? _parametersModel.DataPath.Split("\\")[^1]
-            : _parametersModel.DataPath.Split("/")[^1];
-        _logModel.AppendLog($"Started TSP on {dataset} dataset");
-        TSPResult result = null;
-        _ = await Task.Run(async () => result = OptimizationWork.TSP(_parametersModel, CancellationToken.None));
-        if (result is not null)
-        {
-            _logModel.AppendLog("Result: " + result.FinalFitness.ToString("0.##"));
+        if(_parametersModel.SelectedFiles.Length < 1) return;
 
+        foreach (var dataset in _parametersModel.SelectedFiles)
+        {
+            _parametersModel.DataPath = dataset;
+            var datasetName = OperatingSystem.IsWindows()
+                ? _parametersModel.DataPath.Split("\\")[^1]
+                : _parametersModel.DataPath.Split("/")[^1];
+            
+            _logModel.AppendLog($"Started TSP on {datasetName} dataset");
+            TSPResult result = null;
+            _ = await Task.Run(async () => result = OptimizationWork.TSP(_parametersModel, CancellationToken.None));
+            if (result is not null)
+            {
+                _logModel.AppendLog("Result: " + result.FinalFitness.ToString("0.##"));
+
+            }
         }
-        //vm.Result = result.FinalFitness.ToString();
     }
+
 
     public event EventHandler? CanExecuteChanged;
 }
